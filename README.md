@@ -1,8 +1,8 @@
 # Sistema EN
 
-Sistema para la empresa: ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARIAS
-Lenguaje de programacion: Java
-IDE usado: Neatbeans 17
+Sistema para la empresa: ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARIAS <br>
+Lenguaje de programacion: **Java** <br>
+IDE usado: **Neatbeans 17** <br>
 
 ## Documentos
 
