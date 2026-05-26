@@ -1,0 +1,97 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package sistema_en;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+/**
+ *
+ * @author ares
+ */
+public class Trabajo {
+    private int id_trabajo;
+    private String motivo;
+    private LocalDate fecha;
+    private LocalTime hora;
+    
+    public Trabajo(){
+        
+    }
+    
+    public void Editar(){
+        
+    }
+    
+    public void Eliminar(){
+        
+    }
+    
+    public void Buscar(){
+        
+    }
+    
+    public void Agregar(){
+        
+    }
+
+    /**
+     * @return the id_trabajo
+     */
+    public int getId_trabajo() {
+        return id_trabajo;
+    }
+
+    /**
+     * @param id_trabajo the id_trabajo to set
+     */
+    public void setId_trabajo(int id_trabajo) {
+        this.id_trabajo = id_trabajo;
+    }
+
+    /**
+     * @return the motivo
+     */
+    public String getMotivo() {
+        return motivo;
+    }
+
+    /**
+     * @param motivo the motivo to set
+     */
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    /**
+     * @return the fecha
+     */
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    /**
+     * @param fecha the fecha to set
+     */
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    /**
+     * @return the hora
+     */
+    public LocalTime getHora() {
+        return hora;
+    }
+
+    /**
+     * @param hora the hora to set
+     */
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
+    }
+    
+    
+}
