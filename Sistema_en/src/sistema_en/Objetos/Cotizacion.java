@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistema_en;
+package sistema_en.Objetos;
+
+import sistema_en.Objetos.Trabajo;
 
 /**
  *
@@ -11,14 +13,14 @@ package sistema_en;
 public class Cotizacion {
     
     
-    private Trabajo id_trabajo;
+    public Trabajo id_trabajo;
     private int id_cotizacion;
     private String concepto;
     private float precio;
     
     private String estado;
     
-    public Cotizacion(){
+    public Cotizacion(String informacionCompleta){
         
     }
     

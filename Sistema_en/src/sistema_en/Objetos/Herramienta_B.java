@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistema_en;
+package sistema_en.Objetos;
 
 /**
  *
  * @author ares
  */
-public class herramienta_b {
+public class Herramienta_B {
     private int id_herramienta_b;
     private int cantidad;
     private Herramienta id_herramienta;
     
-    public herramienta_b(){
+    public Herramienta_B(){
         
     }
     public void Editar(){

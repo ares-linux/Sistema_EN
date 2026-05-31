@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package sistema_en;
+package sistema_en.Objetos;
 
 import java.time.LocalDate;
 
@@ -10,7 +10,7 @@ import java.time.LocalDate;
  *
  * @author ares
  */
-public class herramientas_C {
+public class Herramientas_C {
     private int id_herramienta_C;
     private String ubicacion;
     private float p_compra;
@@ -22,7 +22,7 @@ public class herramientas_C {
     private String estado;
     private Herramienta id_herramienta;
     
-    public herramientas_C(){
+    public Herramientas_C(){
         
     }
     public void Editar(){
