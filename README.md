@@ -6,7 +6,6 @@ IDE usado: **Neatbeans 17** <br>
 
 ## Documentos
 
-**Documento del proyecto**: https://docs.google.com/document/d/12SmmYQNZkl061AGfaZCFyhDZNq0S0iST_AfJR-TUHPg/edit?tab=t.0 <br>
 **Pagina web del proyecto**: https://ares-linux.github.io/herramientas-equipo/
 
 ---
@@ -31,9 +30,9 @@ Sigue estos pasos **cada vez** que vayas a iniciar una nueva actividad.
 
 ### Paso 1: Limpiar y actualizar tu casa
 
-Antes de inventar algo nuevo, asegúrate de tener el código más reciente que tus compañeros hayan subido a GitHub.
+Antes de inventar o intentar algo nuevo, asegúrate de tener el código más reciente que se haya subido a GitHub.
 
-1. Abre la terminal en la carpeta de tu proyecto (puedes usar **Git Bash**, la terminal de VS Code o la consola de Windows).
+1. Abre la terminal en la carpeta del proyecto (usa **Git Bash** ).
 2. Muévete a la rama principal:
 ```bash
 git checkout main
@@ -68,8 +67,6 @@ git checkout -b feature/tu-tarea-aqui
 
 *(Sabrás que funcionó porque en la terminal de Git Bash el texto azul cambiará de `[main]` a `[feature/tu-tarea-aqui]`)*.
 
-> 💡 **¿Usas VS Code? Forma visual y rápida:**
-> En la esquina inferior izquierda de VS Code, dale clic a la palabra **main**. Se abrirá un menú arriba; selecciona **"Create new branch..."**, escribe el nombre de tu rama y presiona Enter. ¡Listo!
 
 ### Paso 3: Haz tu tarea y guarda tus cambios
 
@@ -82,7 +79,7 @@ git add .
 ```
 
 
-2. Ponle un título a lo que hiciste (un mensaje claro):
+2. Ponle un título a lo que hiciste (un mensaje claro), ingresa tu nombre para identificar quien hizo el cambio y que ha realizado cada uno:
 ```bash
 git commit -m "Agregada la interfaz de la pantalla de login"
 
@@ -104,8 +101,8 @@ Una vez que subas tu rama, tu trabajo ya está en internet, pero **aún no se ha
 1. Entra a nuestra página del repositorio en GitHub.
 2. Verás un cuadro amarillo brillante que dice algo como: `feature/tu-tarea-aqui had recent pushes...`.
 3. Haz clic en el botón verde **"Compare & pull request"**.
-4. Escribe una breve descripción de lo que hiciste y avísale a alguno de los otros dos compañeros por el grupo para que revise tu código.
-5. Si tu compañero ve que todo funciona, él le dará al botón **"Merge pull request"**.
+4. Escribe una breve descripción de lo que hiciste y avísale a alguno de los dos por el grupo para que revise el código que escribiste.
+5. Si alguno ve que todo funciona, él le dará al botón **"Merge pull request"**.
 
 ¡Felicidades! Tu código ahora forma parte oficialmente del proyecto.
 
