@@ -53,8 +53,7 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         t_nombre = new javax.swing.JTextField();
-        t_puesto = new javax.swing.JTextField();
-        t_fecha_nac = new javax.swing.JTextField();
+        t_acta_nac = new javax.swing.JTextField();
         t_nss = new javax.swing.JTextField();
         t_curp = new javax.swing.JTextField();
         t_rfc = new javax.swing.JTextField();
@@ -67,6 +66,15 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         t_id = new javax.swing.JTextField();
         C_sexo = new javax.swing.JComboBox<>();
+        C_puesto = new javax.swing.JComboBox<>();
+        b_acta_nac = new javax.swing.JButton();
+        b_curp = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        t_ine = new javax.swing.JTextField();
+        b_ine = new javax.swing.JButton();
+        t_comprobante_d = new javax.swing.JTextField();
+        b_comprobante_d = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -80,69 +88,70 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 36, -1, -1));
 
         jLabel2.setText("Nombre");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, -1, -1));
 
         jLabel3.setText("Sexo");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, -1, -1));
 
         jLabel4.setText("puesto");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, -1, -1));
 
-        jLabel5.setText("fecha_nac");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
+        jLabel5.setText("Acta_nac");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, -1, -1));
 
         jLabel6.setText("nss");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 320, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, -1, -1));
 
         jLabel7.setText("curp");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 400, -1, -1));
 
         jLabel8.setText("rfc");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 400, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
 
         jLabel9.setText("foto");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 440, -1, -1));
 
         t_nombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_nombreKeyPressed(evt);
             }
         });
-        getContentPane().add(t_nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 150, 250, -1));
+        getContentPane().add(t_nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 150, 250, -1));
 
-        t_puesto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                t_puestoActionPerformed(evt);
-            }
-        });
-        t_puesto.addKeyListener(new java.awt.event.KeyAdapter() {
+        t_acta_nac.setEditable(false);
+        t_acta_nac.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                t_puestoKeyPressed(evt);
+                t_acta_nacKeyPressed(evt);
             }
         });
-        getContentPane().add(t_puesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 230, 250, -1));
-
-        t_fecha_nac.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                t_fecha_nacKeyPressed(evt);
-            }
-        });
-        getContentPane().add(t_fecha_nac, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, 248, -1));
+        getContentPane().add(t_acta_nac, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, 248, -1));
 
         t_nss.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_nssKeyPressed(evt);
             }
         });
-        getContentPane().add(t_nss, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, 248, -1));
+        getContentPane().add(t_nss, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 248, -1));
 
+        t_curp.setEditable(false);
         t_curp.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_curpKeyPressed(evt);
             }
         });
-        getContentPane().add(t_curp, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 360, 248, -1));
-        getContentPane().add(t_rfc, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 400, 248, -1));
+        getContentPane().add(t_curp, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 400, 248, -1));
+
+        t_rfc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                t_rfcActionPerformed(evt);
+            }
+        });
+        t_rfc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_rfcKeyPressed(evt);
+            }
+        });
+        getContentPane().add(t_rfc, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 280, 248, -1));
 
         t_foto.setEditable(false);
         t_foto.addActionListener(new java.awt.event.ActionListener() {
@@ -150,7 +159,7 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
                 t_fotoActionPerformed(evt);
             }
         });
-        getContentPane().add(t_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 440, 248, -1));
+        getContentPane().add(t_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 440, 248, -1));
 
         b_foto.setText("...");
         b_foto.addActionListener(new java.awt.event.ActionListener() {
@@ -158,7 +167,7 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
                 b_fotoActionPerformed(evt);
             }
         });
-        getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 440, -1, -1));
+        getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 440, -1, -1));
 
         e_foto.setToolTipText("Foto del empleado");
         e_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -191,14 +200,37 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, 510, -1));
 
         C_sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
-        getContentPane().add(C_sexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 250, -1));
+        getContentPane().add(C_sexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, 250, -1));
+
+        C_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Medio oficial", "Oficial", "Cabo" }));
+        getContentPane().add(C_puesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 250, -1));
+
+        b_acta_nac.setText("...");
+        getContentPane().add(b_acta_nac, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 360, -1, -1));
+
+        b_curp.setText("...");
+        getContentPane().add(b_curp, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 400, -1, -1));
+
+        jLabel10.setText("INE");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 480, -1, -1));
+
+        t_ine.setEditable(false);
+        getContentPane().add(t_ine, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 480, 250, -1));
+
+        b_ine.setText("...");
+        getContentPane().add(b_ine, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 480, -1, -1));
+
+        t_comprobante_d.setEditable(false);
+        getContentPane().add(t_comprobante_d, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 520, 250, -1));
+
+        b_comprobante_d.setText("...");
+        getContentPane().add(b_comprobante_d, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 520, -1, -1));
+
+        jLabel12.setText("C_domicilio");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, -1, 20));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void t_puestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_puestoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_t_puestoActionPerformed
 
     public void cargar_foto(){
         
@@ -214,19 +246,21 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
     }
     
     public void llenar_tabla(){
-        String [] info = new String [10];
+        String [] info = new String [12];
     
         // 2. Emparejamos de forma estricta los índices con las columnas de la captura
         info[0] = this.t_id.getText();                    // id_trabajador
         info[1] = this.t_nombre.getText();                // nombre
         info[2] = "Activo";                               // estado (Valor por defecto)
         info[3] = this.C_sexo.getSelectedItem().toString(); // sexo
-        info[4] = this.t_puesto.getText();                // puesto
-        info[5] = this.t_fecha_nac.getText();             // fecha_nac
+        info[4] = this.C_puesto.getSelectedItem().toString();              // puesto
+        info[5] = this.t_acta_nac.getText();             // fecha_nac
         info[6] = this.t_nss.getText();                   // nss
         info[7] = this.t_curp.getText();                  // curp
         info[8] = this.t_rfc.getText();                   // rfc
         info[9] = this.t_foto.getText();                  // foto
+        info[10] = this.t_ine.getText();
+        info[11] = this.t_comprobante_d.getText();
         
 
         // 2. Insertar la fila estructurada en el componente de la ventana principal
@@ -239,6 +273,22 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         this.trabajadores.Tabla_trabajadores.repaint();
         }
     
+    public void bloquear_botones(){
+        b_foto.setEnabled(false);
+        b_acta_nac.setEnabled(false);
+        b_curp.setEnabled(false);
+        b_ine.setEnabled(false);
+        b_comprobante_d.setEnabled(false);
+    }
+    
+    public void desbloquear_botones(){
+        b_foto.setEnabled(true);
+        b_acta_nac.setEnabled(true);
+        b_curp.setEnabled(true);
+        b_ine.setEnabled(true);
+        b_comprobante_d.setEnabled(true);
+    }
+    
     private void t_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_fotoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_t_fotoActionPerformed
@@ -246,84 +296,65 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
         bloquear_text();
-        b_foto.setEnabled(false);
+        bloquear_botones();
     }//GEN-LAST:event_formWindowOpened
 
     private void t_nombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombreKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_puesto.requestFocus();
+        this.t_rfc.requestFocus();
            
         }
     }//GEN-LAST:event_t_nombreKeyPressed
 
-    private void t_puestoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_puestoKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_fecha_nac.requestFocus();
-           
-        }
-    }//GEN-LAST:event_t_puestoKeyPressed
-
-    private void t_fecha_nacKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_fecha_nacKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_nss.requestFocus();
-           
-        }
-    }//GEN-LAST:event_t_fecha_nacKeyPressed
+    private void t_acta_nacKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_acta_nacKeyPressed
+        
+    }//GEN-LAST:event_t_acta_nacKeyPressed
 
     private void t_nssKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nssKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_curp.requestFocus();
-           
-        }
+        
     }//GEN-LAST:event_t_nssKeyPressed
 
     private void t_curpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_curpKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_rfc.requestFocus();
-           
-        }
+        
     }//GEN-LAST:event_t_curpKeyPressed
 
     public void bloquear_text(){
         this.t_nombre.setEnabled(false);
         this.C_sexo.setEnabled(false);
-        this.t_puesto.setEnabled(false);
-        this.t_fecha_nac.setEnabled(false);
+        this.C_puesto.setEnabled(false);
+        this.t_acta_nac.setEnabled(false);
         this.t_nss.setEnabled(false);
         this.t_curp.setEnabled(false);
         this.t_rfc.setEnabled(false);
         this.t_foto.setEnabled(false);
+        this.t_ine.setEnabled(false);
+        this.t_comprobante_d.setEnabled(false);
     }
     
     public void desbloquear_text(){
         this.t_nombre.setEnabled(true);
         this.C_sexo.setEnabled(true);
-        this.t_puesto.setEnabled(true);
-        this.t_fecha_nac.setEnabled(true);
+        this.C_puesto.setEnabled(true);
+        this.t_acta_nac.setEnabled(true);
         this.t_nss.setEnabled(true);
         this.t_curp.setEnabled(true);
         this.t_rfc.setEnabled(true);
         this.t_foto.setEnabled(true);
+        this.t_ine.setEnabled(true);
+        this.t_comprobante_d.setEnabled(true);
     }
     
     public void limpiar_text(){
         this.t_nombre.setText("");
-        this.t_puesto.setText("");
-        this.t_fecha_nac.setText("");
+        this.t_acta_nac.setText("");
         this.t_nss.setText("");
         this.t_curp.setText("");
         this.t_rfc.setText("");
         this.t_foto.setText("");
+        this.t_ine.setText("");
+        this.t_comprobante_d.setText("");
     }
     
     private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
@@ -353,7 +384,7 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
 
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
         b_cerrar.setEnabled(false);
-        b_foto.setEnabled(true);
+        desbloquear_botones();
         // Evaluamos el estado del botón usando .equals() en lugar de ==
     if (b_nuevo.getText().equals("Nuevo")) {
         // 1. Cambiamos el texto del botón a Guardar
@@ -372,12 +403,13 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         
         // Validamos que los campos obligatorios no estén vacíos
         if(t_nombre.getText().trim().isEmpty() ||
-           t_puesto.getText().trim().isEmpty() ||
-           t_fecha_nac.getText().trim().isEmpty() || 
+           t_acta_nac.getText().trim().isEmpty() || 
            t_nss.getText().trim().isEmpty() ||
            t_curp.getText().trim().isEmpty() ||
            t_rfc.getText().trim().isEmpty() ||
-           t_foto.getText().trim().isEmpty()
+           t_foto.getText().trim().isEmpty() ||
+           t_ine.getText().trim().isEmpty() ||
+           t_comprobante_d.getText().trim().isEmpty()
            ) {
             
             // Opcional: puedes agregar un JOptionPane aquí avisando que faltan campos
@@ -396,6 +428,7 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         javax.swing.JOptionPane.showMessageDialog(this,"Empleado registrado");
                 
         // Restablecemos el estado del formulario para un próximo registro
+        bloquear_botones();
         b_cerrar.setEnabled(true);
         b_nuevo.setText("Nuevo");
         b_foto.setEnabled(false);
@@ -404,6 +437,19 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         
     }
     }//GEN-LAST:event_b_nuevoActionPerformed
+
+    private void t_rfcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_rfcActionPerformed
+        
+    }//GEN-LAST:event_t_rfcActionPerformed
+
+    private void t_rfcKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_rfcKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_nss.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_rfcKeyPressed
 
     /**
      * @param args the command line arguments
@@ -442,13 +488,20 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> C_puesto;
     private javax.swing.JComboBox<String> C_sexo;
+    private javax.swing.JButton b_acta_nac;
     private javax.swing.JButton b_cerrar;
+    private javax.swing.JButton b_comprobante_d;
+    private javax.swing.JButton b_curp;
     private javax.swing.JButton b_foto;
+    private javax.swing.JButton b_ine;
     private javax.swing.JButton b_nuevo;
     private javax.swing.JLabel e_foto;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -458,13 +511,14 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel l_foto;
+    private javax.swing.JTextField t_acta_nac;
+    private javax.swing.JTextField t_comprobante_d;
     private javax.swing.JTextField t_curp;
-    private javax.swing.JTextField t_fecha_nac;
     private javax.swing.JTextField t_foto;
     private javax.swing.JTextField t_id;
+    private javax.swing.JTextField t_ine;
     private javax.swing.JTextField t_nombre;
     private javax.swing.JTextField t_nss;
-    private javax.swing.JTextField t_puesto;
     private javax.swing.JTextField t_rfc;
     // End of variables declaration//GEN-END:variables
 }

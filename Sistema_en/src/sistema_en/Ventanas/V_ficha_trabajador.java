@@ -46,6 +46,10 @@ public class V_ficha_trabajador extends javax.swing.JFrame {
         t_curp = new javax.swing.JTextField();
         t_rfc = new javax.swing.JTextField();
         t_nss = new javax.swing.JTextField();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -113,13 +117,17 @@ public class V_ficha_trabajador extends javax.swing.JFrame {
         getContentPane().add(t_curp, new org.netbeans.lib.awtextra.AbsoluteConstraints(473, 241, 250, -1));
         getContentPane().add(t_rfc, new org.netbeans.lib.awtextra.AbsoluteConstraints(473, 282, 250, -1));
         getContentPane().add(t_nss, new org.netbeans.lib.awtextra.AbsoluteConstraints(473, 323, 250, -1));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 370, 250, -1));
+
+        jLabel2.setText("Puesto");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, -1, -1));
+
+        jLabel10.setText("INE");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 410, -1, -1));
+        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 410, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void t_fecha_nacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_fecha_nacActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_t_fecha_nacActionPerformed
 
     private void t_curpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_curpActionPerformed
         // TODO add your handling code here:
@@ -128,6 +136,10 @@ public class V_ficha_trabajador extends javax.swing.JFrame {
     private void t_sexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_sexoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_t_sexoActionPerformed
+
+    private void t_fecha_nacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_fecha_nacActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_fecha_nacActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,6 +182,8 @@ public class V_ficha_trabajador extends javax.swing.JFrame {
     private javax.swing.JButton b_foto;
     private javax.swing.JLabel e_foto;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -177,6 +191,8 @@ public class V_ficha_trabajador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField t_curp;
     private javax.swing.JTextField t_fecha_nac;
     private javax.swing.JTextField t_foto;

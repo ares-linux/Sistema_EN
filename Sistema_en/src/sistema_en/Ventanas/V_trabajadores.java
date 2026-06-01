@@ -49,7 +49,7 @@ public class V_trabajadores extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id_trabajador", "nombre", "estado", "sexo", "puesto", "fecha_nac", "nss", "curp", "rfc", "foto"
+                "id trabajador", "nombre", "estado", "sexo", "puesto", "fecha nac", "nss", "curp", "rfc", "foto", "ine", "Comprobante d"
             }
         ));
         jScrollPane1.setViewportView(Tabla_trabajadores);

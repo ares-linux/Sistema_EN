@@ -70,6 +70,10 @@ public V_cotizacion(String idTrabajo) {
         t_precio = new javax.swing.JTextField();
         b_añadir = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        t_subtotal = new javax.swing.JTextField();
+        jLabelIVA = new javax.swing.JLabel();
+        t_iva = new javax.swing.JTextField();
+        jLabelTotal = new javax.swing.JLabel();
         t_total = new javax.swing.JTextField();
         b_guardar = new javax.swing.JButton();
         b_guardar_pdf = new javax.swing.JButton();
@@ -140,11 +144,23 @@ public V_cotizacion(String idTrabajo) {
         });
         getContentPane().add(b_añadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 180, -1, -1));
 
-        jLabel6.setText("Total");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 390, -1, -1));
+        jLabel6.setText("Subtotal");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 390, -1, -1));
+
+        t_subtotal.setEditable(false);
+        getContentPane().add(t_subtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 410, 80, -1));
+
+        jLabelIVA.setText("IVA (16%)");
+        getContentPane().add(jLabelIVA, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 390, -1, -1));
+
+        t_iva.setEditable(false);
+        getContentPane().add(t_iva, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 410, 80, -1));
+
+        jLabelTotal.setText("Total");
+        getContentPane().add(jLabelTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 390, -1, -1));
 
         t_total.setEditable(false);
-        getContentPane().add(t_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 410, 270, -1));
+        getContentPane().add(t_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 410, 90, -1));
 
         b_guardar.setText("Guardar");
         b_guardar.addActionListener(new java.awt.event.ActionListener() {
@@ -270,8 +286,14 @@ for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
     }
 }
 
-// Finalmente, mostramos el resultado en una etiqueta (JLabel) o campo de texto
-t_total.setText(String.valueOf(totalSuma));
+// Finalmente, mostramos el resultado en los campos correspondientes
+double subtotal = totalSuma;
+double iva = subtotal * 0.16;
+double totalConIva = subtotal + iva;
+
+t_subtotal.setText(String.format(java.util.Locale.US, "%.2f", subtotal));
+t_iva.setText(String.format(java.util.Locale.US, "%.2f", iva));
+t_total.setText(String.format(java.util.Locale.US, "%.2f", totalConIva));
     }
     
     private void b_materialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_materialesActionPerformed
@@ -430,13 +452,13 @@ t_total.setText(String.valueOf(totalSuma));
 
             // Encabezado del ticket / cotización
             pw.println("==================================================");
-            pw.println("         ██████████      ███        ███");
-            pw.println("         ███             ████       ███");
-            pw.println("         ███             █████      ███");
-            pw.println("         █████████       ███ ██     ███");
-            pw.println("         ███             ███  ██    ███");
-            pw.println("         ███             ███   ██   ███");
-            pw.println("         ██████████      ███    ███████");
+            pw.println("     ██████████      ███        ███");
+            pw.println("     ███             ████       ███");
+            pw.println("     ███             █████      ███");
+            pw.println("     █████████       ███ ██     ███");
+            pw.println("     ███             ███  ██    ███");
+            pw.println("     ███             ███   ██   ███");
+            pw.println("     ██████████      ███    ███████");
             pw.println("                 ESTIBEN NAVARRO                  ");
             pw.println("           SOLUCIONES HIDRO-SANITARIAS            ");
             pw.println("==================================================");
@@ -455,52 +477,47 @@ t_total.setText(String.valueOf(totalSuma));
             pw.printf("%-35s %12s%n", "CONCEPTO", "PRECIO");
             pw.println("--------------------------------------------------");
 
-            // 4. Recorrer las filas del JTable e imprimirlas en el TXT
-int totalFilas = Tabla_conceptos.getRowCount();
-for (int i = 0; i < totalFilas; i++) {
-    String concepto = Tabla_conceptos.getValueAt(i, 0) != null ? Tabla_conceptos.getValueAt(i, 0).toString() : "";
-    String precioStr = Tabla_conceptos.getValueAt(i, 1) != null ? Tabla_conceptos.getValueAt(i, 1).toString() : "0.0";
-    
-    double precio = 0.0;
-    try {
-        precio = Double.parseDouble(precioStr);
-    } catch (NumberFormatException e) {
-        // En caso de error, se mantiene en 0.0
-    }
+            // 4. Recorrer las filas del JTable e imprimirlas en el TXT con ajuste de palabra inteligente
+            int totalFilas = Tabla_conceptos.getRowCount();
+            for (int i = 0; i < totalFilas; i++) {
+                String concepto = Tabla_conceptos.getValueAt(i, 0) != null ? Tabla_conceptos.getValueAt(i, 0).toString() : "";
+                String precioStr = Tabla_conceptos.getValueAt(i, 1) != null ? Tabla_conceptos.getValueAt(i, 1).toString() : "0.0";
+                
+                double precio = 0.0;
+                try {
+                    precio = Double.parseDouble(precioStr);
+                } catch (NumberFormatException e) {
+                    // En caso de error, se mantiene en 0.0
+                }
 
-    // SI EL TEXTO ES LARGO: Lo dividimos en bloques de 33 caracteres usando tu lógica del \n
-    if (concepto.length() > 33) {
-        int posicion = 0;
-        while (posicion < concepto.length()) {
-            int fin = Math.min(posicion + 33, concepto.length());
-            String pedazo = concepto.substring(posicion, fin);
-            
-            // ¿Es el último pedazo del texto largo?
-            if (fin == concepto.length()) {
-                // Imprime el último pedazo y le pega el precio a la derecha en la misma línea
-                pw.printf("%-35s $%11.2f%n", pedazo, precio);
-            } else {
-                // Imprime el pedazo actual y hace el salto de línea (\n)
-                pw.println(pedazo);
+                java.util.List<String> lineasConcepto = wrapText(concepto, 33);
+                if (lineasConcepto.isEmpty()) {
+                    lineasConcepto.add("");
+                }
+                
+                // Imprimir líneas previas (sin precio)
+                for (int j = 0; j < lineasConcepto.size() - 1; j++) {
+                    pw.println(lineasConcepto.get(j));
+                }
+                // Imprimir la última línea junto con el precio alineado y formateado
+                String ultimaLinea = lineasConcepto.get(lineasConcepto.size() - 1);
+                pw.printf("%-35s $%,11.2f%n", ultimaLinea, precio);
             }
-            posicion += 33;
-        }
-    } else {
-        // SI EL TEXTO ES CORTO: Se imprime normal en una sola línea
-        pw.printf("%-35s $%11.2f%n", concepto, precio);
-    }
-}
 
             // 5. Total final
             pw.println("--------------------------------------------------");
-            double totalSuma = 0.0;
+            double subtotal = 0.0;
             try {
-                totalSuma = Double.parseDouble(t_total.getText().isEmpty() ? "0.0" : t_total.getText());
+                subtotal = Double.parseDouble(t_subtotal.getText().isEmpty() ? "0.0" : t_subtotal.getText());
             } catch (NumberFormatException e) {
-                // Manejo por si el total de la interfaz está vacío o mal formateado
+                // Manejo por si el subtotal de la interfaz está vacío o mal formateado
             }
+            double iva = subtotal * 0.16;
+            double totalConIva = subtotal + iva;
             
-            pw.printf("%-35s $%11.2f%n", "TOTAL A PAGAR:", totalSuma);
+            pw.printf("%-35s $%,11.2f%n", "SUBTOTAL:", subtotal);
+            pw.printf("%-35s $%,11.2f%n", "IVA (16%):", iva);
+            pw.printf("%-35s $%,11.2f%n", "TOTAL A PAGAR:", totalConIva);
             pw.println("==================================================");
             pw.println();
             pw.println("         ¡Gracias por su confianza!               ");
@@ -567,13 +584,47 @@ for (int i = 0; i < totalFilas; i++) {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelIVA;
+    private javax.swing.JLabel jLabelTotal;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel l_foto;
     private java.awt.ScrollPane scrollPane1;
     private javax.swing.JTextField t_concepto;
+    private javax.swing.JTextField t_iva;
     private javax.swing.JTextField t_numero_cotizacion;
     private javax.swing.JTextField t_numero_trabajo;
     private javax.swing.JTextField t_precio;
+    private javax.swing.JTextField t_subtotal;
     private javax.swing.JTextField t_total;
     // End of variables declaration//GEN-END:variables
+
+    private java.util.List<String> wrapText(String text, int limit) {
+        java.util.List<String> lines = new java.util.ArrayList<>();
+        if (text == null || text.trim().isEmpty()) {
+            lines.add("");
+            return lines;
+        }
+        String[] words = text.split(" ");
+        StringBuilder currentLine = new StringBuilder();
+
+        for (String word : words) {
+            if (currentLine.length() + word.length() + 1 <= limit) {
+                if (currentLine.length() > 0) {
+                    currentLine.append(" ");
+                }
+                currentLine.append(word);
+            } else {
+                if (currentLine.length() > 0) {
+                    lines.add(currentLine.toString());
+                    currentLine = new StringBuilder(word);
+                } else {
+                    lines.add(word);
+                }
+            }
+        }
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString());
+        }
+        return lines;
+    }
 }

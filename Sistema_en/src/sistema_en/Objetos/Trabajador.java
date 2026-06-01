@@ -14,11 +14,12 @@ public class Trabajador {
     private String sexo;
     private String foto;
     private String puesto;
-    private String fecha_nac;
+    private String acta_nac;
     private String NSS;
     private String CURP;
     private String rfc;
     private String estado;
+    private String INE;
     
     public Trabajador(){
         
@@ -110,19 +111,7 @@ public class Trabajador {
         this.puesto = puesto;
     }
 
-    /**
-     * @return the fecha_nac
-     */
-    public String getFecha_nac() {
-        return fecha_nac;
-    }
-
-    /**
-     * @param fecha_nac the fecha_nac to set
-     */
-    public void setFecha_nac(String fecha_nac) {
-        this.fecha_nac = fecha_nac;
-    }
+    
 
     /**
      * @return the NSS
@@ -178,6 +167,34 @@ public class Trabajador {
      */
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    /**
+     * @return the INE
+     */
+    public String getINE() {
+        return INE;
+    }
+
+    /**
+     * @param INE the INE to set
+     */
+    public void setINE(String INE) {
+        this.INE = INE;
+    }
+
+    /**
+     * @return the acta_nac
+     */
+    public String getActa_nac() {
+        return acta_nac;
+    }
+
+    /**
+     * @param acta_nac the acta_nac to set
+     */
+    public void setActa_nac(String acta_nac) {
+        this.acta_nac = acta_nac;
     }
     
     
