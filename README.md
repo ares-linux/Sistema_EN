@@ -3,6 +3,7 @@
 Sistema para la empresa: ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARIAS <br>
 Lenguaje de programacion: **Java** <br>
 IDE usado: **Neatbeans 17** <br>
+Librerias externas usadas: *JCalendar*
 
 ## Documentos
 
