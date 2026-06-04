@@ -4,7 +4,7 @@
  */
 package sistema_en.Controles;
 
-import sistema_en.Objetos.Material;
+//import sistema_en.Objetos.Material;
 import sistema_en.Objetos.Trabajo;
 
 /**
@@ -14,7 +14,7 @@ import sistema_en.Objetos.Trabajo;
 public class Cotizacion_Material {
     private int id_cotizacion_material;
     private Trabajo id_trabajo;
-    private Material id_material;
+   //private Material id_material;
     private float precio_al_momento;
     private int cantidad;
     
@@ -69,16 +69,16 @@ public class Cotizacion_Material {
     /**
      * @return the id_material
      */
-    public Material getId_material() {
-        return id_material;
-    }
+    //public Material getId_material() {
+        //return id_material;
+    //}
 
     /**
      * @param id_material the id_material to set
      */
-    public void setId_material(Material id_material) {
-        this.id_material = id_material;
-    }
+    //public void setId_material(Material id_material) {
+       // this.id_material = id_material;
+   // }
 
     /**
      * @return the precio_al_momento
