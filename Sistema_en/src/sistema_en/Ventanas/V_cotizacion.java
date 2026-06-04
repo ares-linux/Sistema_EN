@@ -20,7 +20,11 @@ import java.util.Date;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 //import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
+<<<<<<< Updated upstream
 //zahid es un imbesil
+=======
+
+>>>>>>> Stashed changes
 /**
  *
  * @author ares
