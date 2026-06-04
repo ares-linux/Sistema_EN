@@ -4,7 +4,7 @@
  */
 package sistema_en.Controles;
 
-import sistema_en.Objetos.Material;
+//import sistema_en.Objetos.Material;
 import sistema_en.Objetos.Trabajador;
 
 /**
@@ -14,7 +14,7 @@ import sistema_en.Objetos.Trabajador;
 public class Salida_Material {
     private int id_salida_material;
     private Trabajador id_trabajador;
-    private Material  id_material;
+    //private Material  id_material;
     private String fecha;
     private String hora;
     private int cantidad;
@@ -69,16 +69,16 @@ public class Salida_Material {
     /**
      * @return the id_material
      */
-    public Material getId_material() {
-        return id_material;
-    }
+    //public Material getId_material() {
+        //return id_material;
+   // }
 
     /**
      * @param id_material the id_material to set
      */
-    public void setId_material(Material id_material) {
-        this.id_material = id_material;
-    }
+    //public void setId_material(Material id_material) {
+       // this.id_material = id_material;
+    //}
 
     /**
      * @return the fecha
