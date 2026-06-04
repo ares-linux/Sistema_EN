@@ -337,9 +337,8 @@ public class V_registrar_trabajo extends javax.swing.JFrame {
         limpiar_text();
         desbloquear_text();
         
-        // 3. Generamos el ID único para este nuevo registro
-        String idUnico = java.util.UUID.randomUUID().toString();
-        this.t_id.setText(idUnico);
+        // 3. Dejamos el ID vacío ya que la base de datos lo generará automáticamente
+        this.t_id.setText("");
         
     } else {
         // Bloque de Guardado (Segundo Clic)
@@ -355,16 +354,19 @@ public class V_registrar_trabajo extends javax.swing.JFrame {
             return; 
         }
         
-        // Comprobamos si la referencia a la ventana externa existe antes de intentar escribir en ella
+        // Comprobamos si la referencia a la ventana externa existe antes de intentar guardar y refrescar
         if (this.trabajos != null) {
-            llenar_tabla();
+            // TODO: Guardar en la base de datos aquí: e.g. TrabajoDAO.insertar(...)
+            
+            // Refrescamos la tabla consultando la base de datos
+            this.trabajos.cargarTrabajosDesdeBD();
         } else {
             System.out.println("Error: La referencia a 'V_trabajos' es nula. Asegúrate de pasar 'this' en el constructor.");
         }
         
         int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea hacer una cotizacion? puede hacerla despues", "Confirmar accion", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
         if (respuesta == javax.swing.JOptionPane.YES_OPTION){
-            //javax.swing.JOptionPane.showMessageDialog(this,"Cotizacion");
+            // TODO: Obtener el ID generado por la base de datos tras la inserción
             String idGenerado = t_id.getText();
             V_cotizacion cotizacion = new V_cotizacion(idGenerado);
             cotizacion.setVisible(true);
@@ -375,8 +377,6 @@ public class V_registrar_trabajo extends javax.swing.JFrame {
         b_nuevo.setText("Nuevo");
         bloquear_text();
         
-        
-
         
         //this.dispose();
     }

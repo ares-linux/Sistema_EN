@@ -394,9 +394,8 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
         limpiar_text();
         desbloquear_text();
         
-        // 3. Generamos el ID único para este nuevo registro
-        String idUnico = java.util.UUID.randomUUID().toString();
-        this.t_id.setText(idUnico);
+        // 3. Dejamos el ID vacío ya que la base de datos lo generará automáticamente
+        this.t_id.setText("");
         
     } else {
         // Bloque de Guardado (Segundo Clic)
@@ -417,11 +416,14 @@ public class V_registrar_trabajador extends javax.swing.JFrame {
             return; 
         }
         
-        // Comprobamos si la referencia a la ventana externa existe antes de intentar escribir en ella
+        // Comprobamos si la referencia a la ventana externa existe antes de intentar guardar y refrescar
         if (this.trabajadores != null) {
-            llenar_tabla();
+            // TODO: Guardar en la base de datos aquí: e.g. TrabajadorDAO.insertar(...)
+            
+            // Refrescamos la tabla consultando la base de datos
+            this.trabajadores.cargarTrabajadoresDesdeBD();
         } else {
-            System.out.println("Error: La referencia a 'V_trabajos' es nula. Asegúrate de pasar 'this' en el constructor.");
+            System.out.println("Error: La referencia a 'V_trabajadores' es nula. Asegúrate de pasar 'this' en el constructor.");
         }
         
         

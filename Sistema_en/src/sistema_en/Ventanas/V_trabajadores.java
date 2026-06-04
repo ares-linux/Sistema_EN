@@ -99,6 +99,13 @@ public class V_trabajadores extends javax.swing.JFrame {
         trabajador.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void cargarTrabajadoresDesdeBD() {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) Tabla_trabajadores.getModel();
+        modelo.setRowCount(0); // Limpiar la tabla
+        
+        // TODO: Consultar la base de datos para llenar la tabla de trabajadores
+    }
+
     /**
      * @param args the command line arguments
      */

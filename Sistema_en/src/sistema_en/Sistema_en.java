@@ -7,16 +7,12 @@ package sistema_en;
 import sistema_en.Ventanas.V_menu;
 import java.awt.Color;
 import javax.swing.JFrame;
-import java.util.ArrayList;
-import sistema_en.Objetos.Cotizacion;
 
 /**
  *
  * @author ares
  */
 public class Sistema_en {
-    
-    public static ArrayList<Cotizacion> listaCotizacionesTemporal = new ArrayList<>();
 
     /**
      * @param args the command line arguments

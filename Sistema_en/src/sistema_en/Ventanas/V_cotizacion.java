@@ -228,8 +228,8 @@ public V_cotizacion(String idTrabajo) {
     }
     
     public void id(){
-        String idUnico = java.util.UUID.randomUUID().toString();
-        this.t_numero_cotizacion.setText(idUnico);
+        // ID se autogenerará en la base de datos
+        this.t_numero_cotizacion.setText("");
     }
     
     public void limpiar_text(){

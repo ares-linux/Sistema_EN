@@ -112,6 +112,13 @@ public class V_trabajos extends javax.swing.JFrame {
         reg.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void cargarTrabajosDesdeBD() {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) Tabla_trabajos.getModel();
+        modelo.setRowCount(0); // Limpiar la tabla
+        
+        // TODO: Consultar la base de datos para llenar la tabla de trabajos
+    }
+
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         
     }//GEN-LAST:event_b_editarActionPerformed
@@ -136,17 +143,9 @@ public class V_trabajos extends javax.swing.JFrame {
         
         if (filaSeleccionada != -1) {
             String id          = Tabla_trabajos.getValueAt(filaSeleccionada, 0).toString();
-            String estado      = Tabla_trabajos.getValueAt(filaSeleccionada, 1).toString();
-            String cliente     = Tabla_trabajos.getValueAt(filaSeleccionada, 2).toString();
-            String descripcion = Tabla_trabajos.getValueAt(filaSeleccionada, 6).toString();
-            String hora        = Tabla_trabajos.getValueAt(filaSeleccionada, 7).toString();
-            String fecha       = Tabla_trabajos.getValueAt(filaSeleccionada, 8).toString();
-            String direccion   = Tabla_trabajos.getValueAt(filaSeleccionada, 5).toString();
             
-            V_ficha_trabajo ficha = new V_ficha_trabajo();
-            
-            // Enviamos todo directo al método
-            ficha.cargar_Datos_Ficha(id, fecha, hora, estado, cliente, descripcion, direccion);
+            // Pasamos solo el ID al constructor de la ficha para que busque de la base de datos
+            V_ficha_trabajo ficha = new V_ficha_trabajo(id);
             
             ficha.setVisible(true);
         }

@@ -6,14 +6,39 @@ package sistema_en.Ventanas;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import sistema_en.Objetos.Cotizacion;
-import sistema_en.Sistema_en;
 
 /**
  *
  * @author ares
  */
 public class V_ficha_trabajo extends javax.swing.JFrame {
+
+    private String idTrabajo;
+
+    // Constructor personalizado para cargar los datos desde la base de datos
+    public V_ficha_trabajo(String idTrabajo) {
+        initComponents();
+        this.idTrabajo = idTrabajo;
+        this.t_id.setText(idTrabajo);
+        
+        // TODO: Consultar la base de datos usando 'idTrabajo' para obtener los datos de la ficha.
+        // Ejemplo:
+        // Connection con = Conexion.getConexion();
+        // PreparedStatement ps = con.prepareStatement("SELECT * FROM trabajos WHERE id = ?");
+        // ps.setString(1, idTrabajo);
+        // ResultSet rs = ps.executeQuery();
+        // if(rs.next()) {
+        //     cargar_Datos_Ficha(
+        //         rs.getString("id"),
+        //         rs.getString("fecha"),
+        //         rs.getString("hora"),
+        //         rs.getString("estado"),
+        //         rs.getString("cliente"),
+        //         rs.getString("descripcion"),
+        //         rs.getString("direccion")
+        //     );
+        // }
+    }
 
     /**
      * Creates new form V_ficha_trabajo
@@ -168,28 +193,11 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
     private void b_presupuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_presupuestoActionPerformed
         String idTrabajoFicha = t_id.getText(); // ID actual de la ficha
     
-    // Buscar si ya guardamos una cotización para este trabajo en la lista estática
-    Cotizacion cotizacionEncontrada = null;
-    for (Cotizacion cot : Sistema_en.listaCotizacionesTemporal) {
-        if (cot.getId_trabajo().equals(idTrabajoFicha)) {
-            cotizacionEncontrada = cot;
-            break;
-        }
-    }
-
-    // Abrir la ventana de cotización
-    V_cotizacion ventana = new V_cotizacion(idTrabajoFicha);
-    
-    // SI LA ENCONTRÓ: Rellenamos los campos de la ventana antes de mostrarla
-    if (cotizacionEncontrada != null) {
-        // Aquí pasas los datos guardados a los componentes de la ventana de cotización
-        // Ejemplo: ventana.txtTotal.setText(String.valueOf(cotizacionEncontrada.getTotal()));
-        // NOTA: Para que esto funcione, las variables de tus campos de texto en V_cotizacion 
-        // deben estar en propiedades como "public" o accesibles mediante métodos.
-    }
-
-    ventana.setVisible(true);
-    ventana.setLocationRelativeTo(null);
+        // Abrir la ventana de cotización
+        V_cotizacion ventana = new V_cotizacion(idTrabajoFicha);
+        
+        ventana.setVisible(true);
+        ventana.setLocationRelativeTo(null);
     }//GEN-LAST:event_b_presupuestoActionPerformed
 
     /**
