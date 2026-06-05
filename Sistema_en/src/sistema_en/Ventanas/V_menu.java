@@ -47,7 +47,6 @@ public class V_menu extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         M_registrar_trabajo = new javax.swing.JMenuItem();
         M_registrar_empleado = new javax.swing.JMenuItem();
-        M_pasar_asistencias = new javax.swing.JMenuItem();
         M_pagar_sueldos = new javax.swing.JMenuItem();
         M_Tablas_rentabilidad = new javax.swing.JMenuItem();
         M_cerrar_programa = new javax.swing.JMenuItem();
@@ -99,14 +98,6 @@ public class V_menu extends javax.swing.JFrame {
             }
         });
         jMenu1.add(M_registrar_empleado);
-
-        M_pasar_asistencias.setText("Pasar asistencias");
-        M_pasar_asistencias.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                M_pasar_asistenciasActionPerformed(evt);
-            }
-        });
-        jMenu1.add(M_pasar_asistencias);
 
         M_pagar_sueldos.setText("Pagar sueldos");
         M_pagar_sueldos.addActionListener(new java.awt.event.ActionListener() {
@@ -214,11 +205,6 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
         ventanaTrabajadoresGlobal.setVisible(true);
     }//GEN-LAST:event_M_trabajadoresActionPerformed
 
-    private void M_pasar_asistenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_pasar_asistenciasActionPerformed
-        V_asistencias asistencias = new V_asistencias();
-        asistencias.setVisible(true);
-    }//GEN-LAST:event_M_pasar_asistenciasActionPerformed
-
     private void M_pagar_sueldosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_pagar_sueldosActionPerformed
         V_sueldos sueldos = new V_sueldos();
         sueldos.setVisible(true);
@@ -268,7 +254,6 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
     private javax.swing.JMenuItem M_cerrar_programa;
     private javax.swing.JMenuItem M_gastos;
     private javax.swing.JMenuItem M_pagar_sueldos;
-    private javax.swing.JMenuItem M_pasar_asistencias;
     private javax.swing.JMenuItem M_registrar_empleado;
     private javax.swing.JMenuItem M_registrar_trabajo;
     private javax.swing.JMenuItem M_trabajadores;
