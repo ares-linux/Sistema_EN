@@ -52,14 +52,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_registrar_empleadoActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="M_pasar_asistencias">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Pasar asistencias"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_pasar_asistenciasActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="M_pagar_sueldos">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Pagar sueldos"/>
