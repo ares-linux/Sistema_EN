@@ -7,6 +7,9 @@ Sistema para la empresa: ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARIAS <br>
 Lenguaje de programacion: **Java** <br>
 IDE usado: **Neatbeans 17** <br>
 Librerias externas usadas: *JCalendar*
+<p align="left">
+<img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green">
+</p>
 
 ## Documentos
 
