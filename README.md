@@ -1,5 +1,8 @@
 # Sistema EN
 
+<img width="520" height="261" alt="logo 2 0" src="https://github.com/user-attachments/assets/04061dcc-7484-4573-a746-a85d29977daf" />
+
+
 Sistema para la empresa: ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARIAS <br>
 Lenguaje de programacion: **Java** <br>
 IDE usado: **Neatbeans 17** <br>
