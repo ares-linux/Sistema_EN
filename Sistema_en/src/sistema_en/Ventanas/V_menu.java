@@ -14,8 +14,7 @@ import javax.swing.ImageIcon;
  */
 public class V_menu extends javax.swing.JFrame {
     
-    V_trabajos ventanaTrabajosGlobal = new V_trabajos();
-    V_trabajadores ventanaTrabajadoresGlobal = new V_trabajadores();
+    
 
     /**
      * Creates new form V_menu
@@ -45,16 +44,8 @@ public class V_menu extends javax.swing.JFrame {
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        M_registrar_trabajo = new javax.swing.JMenuItem();
-        M_registrar_empleado = new javax.swing.JMenuItem();
-        M_pagar_sueldos = new javax.swing.JMenuItem();
-        M_Tablas_rentabilidad = new javax.swing.JMenuItem();
         M_cerrar_programa = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        M_trabajos = new javax.swing.JMenuItem();
-        M_trabajadores = new javax.swing.JMenuItem();
-        M_almacen = new javax.swing.JMenuItem();
-        M_gastos = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -83,33 +74,6 @@ public class V_menu extends javax.swing.JFrame {
 
         jMenu1.setText("Operacion");
 
-        M_registrar_trabajo.setText("Registrar trabajo");
-        M_registrar_trabajo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                M_registrar_trabajoActionPerformed(evt);
-            }
-        });
-        jMenu1.add(M_registrar_trabajo);
-
-        M_registrar_empleado.setText("Registrar empleado");
-        M_registrar_empleado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                M_registrar_empleadoActionPerformed(evt);
-            }
-        });
-        jMenu1.add(M_registrar_empleado);
-
-        M_pagar_sueldos.setText("Pagar sueldos");
-        M_pagar_sueldos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                M_pagar_sueldosActionPerformed(evt);
-            }
-        });
-        jMenu1.add(M_pagar_sueldos);
-
-        M_Tablas_rentabilidad.setText("Tablas");
-        jMenu1.add(M_Tablas_rentabilidad);
-
         M_cerrar_programa.setText("Cerrar el programa");
         M_cerrar_programa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,45 +85,12 @@ public class V_menu extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Registros");
-
-        M_trabajos.setText("Trabajos");
-        M_trabajos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                M_trabajosActionPerformed(evt);
-            }
-        });
-        jMenu2.add(M_trabajos);
-
-        M_trabajadores.setText("Trabajadores");
-        M_trabajadores.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                M_trabajadoresActionPerformed(evt);
-            }
-        });
-        jMenu2.add(M_trabajadores);
-
-        M_almacen.setText("Almacen");
-        M_almacen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                M_almacenActionPerformed(evt);
-            }
-        });
-        jMenu2.add(M_almacen);
-
-        M_gastos.setText("jMenuItem3");
-        jMenu2.add(M_gastos);
-
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void M_registrar_trabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_registrar_trabajoActionPerformed
-        V_registrar_trabajo trabajo = new V_registrar_trabajo(ventanaTrabajosGlobal);
-        trabajo.setVisible(true);
-    }//GEN-LAST:event_M_registrar_trabajoActionPerformed
 
     public void cargar_foto(){
         
@@ -174,25 +105,9 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
     }
     }
     
-    private void M_trabajosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_trabajosActionPerformed
-        ventanaTrabajosGlobal.setVisible(true);
-    }//GEN-LAST:event_M_trabajosActionPerformed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
     }//GEN-LAST:event_formWindowOpened
-
-    private void M_registrar_empleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_registrar_empleadoActionPerformed
-        // Pasamos la ventana de trabajadores global para que se comuniquen correctamente
-        V_registrar_trabajador trabajador = new V_registrar_trabajador(ventanaTrabajadoresGlobal);
-    
-        // Centramos la ventana de registro con respecto al menú principal
-        trabajador.setLocationRelativeTo(this);
-    
-        // Hacemos visible el formulario
-        trabajador.setVisible(true);
-        
-    }//GEN-LAST:event_M_registrar_empleadoActionPerformed
 
     private void M_cerrar_programaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_cerrar_programaActionPerformed
         int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea cerrar el programa?", "Confirmar accion", javax.swing.JOptionPane.YES_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
@@ -200,19 +115,6 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
             System.exit(0);
         }
     }//GEN-LAST:event_M_cerrar_programaActionPerformed
-
-    private void M_trabajadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_trabajadoresActionPerformed
-        ventanaTrabajadoresGlobal.setVisible(true);
-    }//GEN-LAST:event_M_trabajadoresActionPerformed
-
-    private void M_pagar_sueldosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_pagar_sueldosActionPerformed
-        V_sueldos sueldos = new V_sueldos();
-        sueldos.setVisible(true);
-    }//GEN-LAST:event_M_pagar_sueldosActionPerformed
-
-    private void M_almacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_almacenActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_M_almacenActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,15 +151,7 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem M_Tablas_rentabilidad;
-    private javax.swing.JMenuItem M_almacen;
     private javax.swing.JMenuItem M_cerrar_programa;
-    private javax.swing.JMenuItem M_gastos;
-    private javax.swing.JMenuItem M_pagar_sueldos;
-    private javax.swing.JMenuItem M_registrar_empleado;
-    private javax.swing.JMenuItem M_registrar_trabajo;
-    private javax.swing.JMenuItem M_trabajadores;
-    private javax.swing.JMenuItem M_trabajos;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;

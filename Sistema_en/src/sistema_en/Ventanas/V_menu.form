@@ -36,35 +36,6 @@
             <Property name="text" type="java.lang.String" value="Operacion"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="M_registrar_trabajo">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Registrar trabajo"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_registrar_trabajoActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="M_registrar_empleado">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Registrar empleado"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_registrar_empleadoActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="M_pagar_sueldos">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Pagar sueldos"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_pagar_sueldosActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="M_Tablas_rentabilidad">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Tablas"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="M_cerrar_programa">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cerrar el programa"/>
@@ -79,37 +50,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Registros"/>
           </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="M_trabajos">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Trabajos"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_trabajosActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="M_trabajadores">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Trabajadores"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_trabajadoresActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="M_almacen">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Almacen"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_almacenActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="M_gastos">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jMenuItem3"/>
-              </Properties>
-            </MenuItem>
-          </SubComponents>
         </Menu>
       </SubComponents>
     </Menu>
