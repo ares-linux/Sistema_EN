@@ -45,7 +45,9 @@ public class V_menu extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         M_cerrar_programa = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        m_empleado = new javax.swing.JMenuItem();
+        m_trabajo = new javax.swing.JMenuItem();
+        m_herramienta = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -82,10 +84,31 @@ public class V_menu extends javax.swing.JFrame {
         });
         jMenu1.add(M_cerrar_programa);
 
-        jMenuBar1.add(jMenu1);
+        m_empleado.setText("Registrar empleado");
+        m_empleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_empleadoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(m_empleado);
 
-        jMenu2.setText("Registros");
-        jMenuBar1.add(jMenu2);
+        m_trabajo.setText("Registrar trabajo");
+        m_trabajo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_trabajoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(m_trabajo);
+
+        m_herramienta.setText("Registrar herramienta");
+        m_herramienta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_herramientaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(m_herramienta);
+
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -115,6 +138,21 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
             System.exit(0);
         }
     }//GEN-LAST:event_M_cerrar_programaActionPerformed
+
+    private void m_herramientaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_herramientaActionPerformed
+        V_R_Herramienta herramienta = new V_R_Herramienta();
+        herramienta.setVisible(true);
+    }//GEN-LAST:event_m_herramientaActionPerformed
+
+    private void m_empleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_empleadoActionPerformed
+        V_R_Empleado empleado = new V_R_Empleado();
+        empleado.setVisible(true);
+    }//GEN-LAST:event_m_empleadoActionPerformed
+
+    private void m_trabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_trabajoActionPerformed
+        V_R_Trabajo trabajo = new V_R_Trabajo();
+        trabajo.setVisible(true);
+    }//GEN-LAST:event_m_trabajoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -157,13 +195,15 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
     private javax.swing.Box.Filler filler3;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;
     private javax.swing.JLabel l_foto;
+    private javax.swing.JMenuItem m_empleado;
+    private javax.swing.JMenuItem m_herramienta;
+    private javax.swing.JMenuItem m_trabajo;
     // End of variables declaration//GEN-END:variables
 }
 
