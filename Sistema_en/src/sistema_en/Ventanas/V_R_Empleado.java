@@ -4,11 +4,23 @@
  */
 package sistema_en.Ventanas;
 
+import java.awt.Image;
+import java.awt.event.KeyEvent;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import sistema_en.Objetos.Trabajador;
+
 /**
  *
  * @author zahid
  */
 public class V_R_Empleado extends javax.swing.JFrame {
+    
+    Trabajador trabajador = new Trabajador();
+    int fila;
 
     /**
      * Creates new form V_REmpleado
@@ -53,12 +65,19 @@ public class V_R_Empleado extends javax.swing.JFrame {
         b_editar = new javax.swing.JButton();
         c_sexo = new javax.swing.JComboBox<>();
         c_puesto = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        t_id = new javax.swing.JTextField();
 
         jButton2.setText("...");
 
         jButton1.setText("...");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Registrar empleado");
@@ -66,82 +85,376 @@ public class V_R_Empleado extends javax.swing.JFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         jLabel3.setText("Nombre");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, -1, -1));
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
 
         jLabel5.setText("Sexo");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
-        getContentPane().add(t_nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, 310, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, -1, -1));
+
+        t_nombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                t_nombreActionPerformed(evt);
+            }
+        });
+        t_nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_nombreKeyPressed(evt);
+            }
+        });
+        getContentPane().add(t_nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, 310, -1));
 
         jLabel6.setText("Puesto");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, -1, 20));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, -1, 20));
 
         jLabel7.setText("Rfc");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, -1, -1));
-        getContentPane().add(t_rfc, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 310, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, -1, -1));
+
+        t_rfc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_rfcKeyPressed(evt);
+            }
+        });
+        getContentPane().add(t_rfc, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 270, 310, -1));
 
         t_foto.setEditable(false);
-        getContentPane().add(t_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 270, -1));
+        getContentPane().add(t_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, 270, -1));
 
         jLabel8.setText("Foto");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 390, -1, -1));
 
         l_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 70, 260, 270));
+        getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 260, 270));
 
         jLabel10.setText("Curp");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, -1));
-        getContentPane().add(t_curp, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, 310, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, -1));
+
+        t_curp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_curpKeyPressed(evt);
+            }
+        });
+        getContentPane().add(t_curp, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 310, -1));
 
         jLabel11.setText("F_nacimienta");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
 
         t_f_nac.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 t_f_nacActionPerformed(evt);
             }
         });
-        getContentPane().add(t_f_nac, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 300, 310, -1));
+        getContentPane().add(t_f_nac, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 350, 310, -1));
 
         Tabla_empleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nombre", "Sexo", "Puesto", "Rfc", "Curp", "F_nacimiento", "Foto"
+                "id", "Nombre", "Sexo", "Puesto", "Rfc", "Curp", "F_nacimiento", "Foto"
             }
         ));
+        Tabla_empleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_empleadosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Tabla_empleados);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, 720, 180));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 720, 180));
 
         b_nuevo.setText("Nuevo");
-        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 380, -1, -1));
+        b_nuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_nuevoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 430, -1, -1));
 
         b_eliminar.setText("Eliminar");
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 380, -1, -1));
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 430, -1, -1));
 
         b_buscar.setText("Buscar");
-        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 380, -1, -1));
+        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 430, -1, -1));
 
         b_foto.setText("jButton4");
-        getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 340, 30, -1));
+        b_foto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_fotoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 390, 30, -1));
 
         b_editar.setText("Editar");
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 380, -1, -1));
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 430, -1, -1));
 
         c_sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
-        getContentPane().add(c_sexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, 310, -1));
+        getContentPane().add(c_sexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 310, -1));
 
         c_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Oficial", "Medio oficial", "Cabo" }));
-        getContentPane().add(c_puesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 310, -1));
+        getContentPane().add(c_puesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 310, -1));
+
+        jLabel9.setText("Id");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, -1, -1));
+        getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 310, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void bloquear_botones(){
+        b_eliminar.setEnabled(false);
+        b_editar.setEnabled(false);
+        b_buscar.setEnabled(false);
+    }
+    
+    public void desbloquear_botones(){
+        b_eliminar.setEnabled(true);
+        b_editar.setEnabled(true);
+        b_buscar.setEnabled(true);
+    }
+    
+    public void limpiar_text(){
+        t_nombre.setText("");
+        t_rfc.setText("");
+        t_curp.setText("");
+        t_f_nac.setText("");
+        t_foto.setText("src/Imagenes/signo-de-pregunta.png");
+        cargar_foto();
+    }
+    
+    public void desbloquear_text(){
+        this.t_nombre.setEnabled(true);
+        this.c_sexo.setEnabled(true);
+        this.c_puesto.setEnabled(true);
+        this.t_rfc.setEnabled(true);
+        this.t_curp.setEnabled(true);
+        this.t_f_nac.setEnabled(true);
+    }
+    
+    public void bloquear_text(){
+        this.t_nombre.setEnabled(false);
+        this.c_sexo.setEnabled(false);
+        this.c_puesto.setEnabled(false);
+        this.t_rfc.setEnabled(false);
+        this.t_curp.setEnabled(false);
+        this.t_f_nac.setEnabled(false);
+        this.t_foto.setEnabled(false);
+    }
+    
+    public void llenar_text(){
+        //this.t_id.setText(trabajador.getId_trabajador());
+        this.t_nombre.setText(trabajador.getNombre());
+        this.c_sexo.setSelectedItem(trabajador.getSexo());
+        this.c_puesto.setSelectedItem(trabajador.getPuesto());
+        this.t_rfc.setText(trabajador.getRfc());
+        this.t_curp.setText(trabajador.getCURP());
+        this.t_f_nac.setText(trabajador.getF_nac());
+        this.t_foto.setText(trabajador.getFoto());
+    }
+    
+    public void cargar_datos_tabla(int indice){
+        this.t_id.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 0)));
+        this.t_nombre.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 1)));
+        this.c_sexo.setSelectedItem(String.valueOf(this.Tabla_empleados.getValueAt(indice, 2)));
+        this.c_puesto.setSelectedItem(String.valueOf(this.Tabla_empleados.getValueAt(indice, 3)));
+        this.t_rfc.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 4)));
+        this.t_curp.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 5)));
+        this.t_f_nac.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 6)));
+        this.t_foto.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 7)));
+        this.cargar_foto();
+    }
+    
+    public void cargar_foto(){
+        
+        ImageIcon iconoOriginal = new ImageIcon(t_foto.getText());
+
+Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Image.SCALE_SMOOTH);
+    l_foto.setIcon(new ImageIcon(imagenEscalada));
+    
+    if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+    System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
+    
+    }
+    }
+    
+    public void llenar_tabla(){
+        String [] info = new String [8];
+        info[0] = t_id.getText();
+        info[1] = t_nombre.getText();
+        info[2] = (c_sexo.getSelectedItem() != null) ? c_sexo.getSelectedItem().toString() : "";
+        info[3] = (c_puesto.getSelectedItem() != null) ? c_puesto.getSelectedItem().toString() : "";
+        info[4] = t_rfc.getText();
+        info[5] = t_curp.getText();
+        info[6] = t_f_nac.getText();
+        info[7] = t_foto.getText();
+        
+        DefaultTableModel modelo=(DefaultTableModel) this.Tabla_empleados.getModel();//crea una variable de tipo modelo de tabla 
+        modelo.addRow(info);//agrega una fila al modelo de tabla
+        this.Tabla_empleados.setModel(modelo);
+    }
+    
+    public void editar_tabla(){
+        DefaultTableModel modelo =(DefaultTableModel) this.Tabla_empleados.getModel();
+        modelo.setValueAt(this.t_id.getText(), fila, 0);
+        modelo.setValueAt(this.t_nombre.getText(), fila, 1);
+        modelo.setValueAt(this.c_sexo.getSelectedItem(), fila, 2);
+        modelo.setValueAt(this.c_puesto.getSelectedItem(), fila, 3);
+        modelo.setValueAt(this.t_rfc.getText(), fila, 4);
+        modelo.setValueAt(this.t_curp.getText(), fila, 5);
+        modelo.setValueAt(this.t_f_nac.getText(), fila, 6);
+        modelo.setValueAt(this.t_foto.getText(), fila, 7);
+        this.Tabla_empleados.setModel(modelo); 
+    }
+    
     private void t_f_nacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_f_nacActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_t_f_nacActionPerformed
+
+    private void t_nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_nombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_nombreActionPerformed
+
+    private void t_nombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombreKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_rfc.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_nombreKeyPressed
+
+    private void t_rfcKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_rfcKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_curp.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_rfcKeyPressed
+
+    private void t_curpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_curpKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_f_nac.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_curpKeyPressed
+
+    private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
+        String ruta = "/home/ares/NetBeansProjects/Ventacar_ares/src/Imagenes/";
+    JFileChooser foto = new JFileChooser("c:\\fotossoft\\empleados\\");
+    FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
+    foto.setFileFilter(filtrado);
+    
+    int respuesta = foto.showOpenDialog(this);
+    
+    if (respuesta == JFileChooser.APPROVE_OPTION)
+    {
+        ruta = foto.getSelectedFile().getPath();
+        this.t_foto.setText(ruta);
+        // this.doble_diagonal();
+        ImageIcon img = new ImageIcon(ruta);
+        Icon micono = new ImageIcon(img.getImage().getScaledInstance(this.l_foto.getWidth(), this.l_foto.getHeight(), Image.SCALE_DEFAULT));
+        this.l_foto.setIcon(micono);
+        this.t_foto.setText(ruta);
+    }
+    }//GEN-LAST:event_b_fotoActionPerformed
+
+    private void Tabla_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_empleadosMouseClicked
+        fila = this.Tabla_empleados.rowAtPoint(evt.getPoint());
+        cargar_datos_tabla(fila);
+        //int indice = this.Tabla_empleados.rowAtPoint(evt.getPoint());
+        //cargar_datos_tabla(indice);
+    }//GEN-LAST:event_Tabla_empleadosMouseClicked
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+                  
+    llenar_text();
+    cargar_foto();
+    //llenar_tabla();
+    bloquear_text();
+    b_foto.setEnabled(false);
+    
+    }//GEN-LAST:event_formWindowOpened
+
+    private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
+        
+        fila= Tabla_empleados.getSelectedRow();
+        
+        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_empleados.getModel();
+        if (this.Tabla_empleados.getRowCount()>0){
+            if(fila == -1){
+                return;
+            }
+            modelo2.removeRow(fila);
+            this.Tabla_empleados.setModel(modelo2);
+            fila = fila-1;
+            if (fila<0)
+            {
+                limpiar_text();
+            }
+            else
+            {
+                cargar_datos_tabla(fila);
+            }
+        }
+    }//GEN-LAST:event_b_eliminarActionPerformed
+
+    private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
+        desbloquear_text();
+        this.b_foto.setEnabled(true);
+
+        if ("Nuevo".equals(b_nuevo.getText()))
+        {
+            b_nuevo.setText("Guardar");
+            limpiar_text();
+            bloquear_botones();
+        }
+        else
+        {
+            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_rfc.getText().trim().isEmpty() || t_f_nac.getText().trim().isEmpty() || t_curp.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            {
+                return;
+            }
+            b_nuevo.setText("Nuevo");
+            llenar_tabla();
+            desbloquear_botones();
+        }
+    }//GEN-LAST:event_b_nuevoActionPerformed
+
+    private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
+        if ("Editar".equals(b_editar.getText()))
+        {
+            b_editar.setText("Guardar");
+            b_nuevo.setEnabled(false);
+            b_eliminar.setEnabled(false);
+            b_buscar.setEnabled(false);
+            desbloquear_text();
+        }
+        else
+        {
+            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_rfc.getText().trim().isEmpty() || t_curp.getText().trim().isEmpty() || t_f_nac.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            {
+                return;
+            }
+            b_editar.setText("Editar");
+            editar_tabla();
+            b_nuevo.setEnabled(true);
+            b_eliminar.setEnabled(true);
+            b_buscar.setEnabled(true);
+            bloquear_text();
+        }
+    }//GEN-LAST:event_b_editarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,11 +513,13 @@ public class V_R_Empleado extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel l_foto;
     private javax.swing.JTextField t_curp;
     private javax.swing.JTextField t_f_nac;
     private javax.swing.JTextField t_foto;
+    private javax.swing.JTextField t_id;
     private javax.swing.JTextField t_nombre;
     private javax.swing.JTextField t_rfc;
     // End of variables declaration//GEN-END:variables

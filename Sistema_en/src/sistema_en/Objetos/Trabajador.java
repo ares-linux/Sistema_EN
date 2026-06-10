@@ -14,15 +14,13 @@ public class Trabajador {
     private String sexo;
     private String foto;
     private String puesto;
-    private String acta_nac;
-    private String NSS;
+    private String f_nac;
     private String CURP;
     private String rfc;
     private String estado;
-    private String INE;
     
     public Trabajador(){
-        
+        foto = "/home/ares/NetBeansProjects/Sistema_EN/Sistema_en/src/Imagenes/signo-de-pregunta.png";
     }
     
     public void Editar(){
@@ -111,22 +109,6 @@ public class Trabajador {
         this.puesto = puesto;
     }
 
-    
-
-    /**
-     * @return the NSS
-     */
-    public String getNSS() {
-        return NSS;
-    }
-
-    /**
-     * @param NSS the NSS to set
-     */
-    public void setNSS(String NSS) {
-        this.NSS = NSS;
-    }
-
     /**
      * @return the CURP
      */
@@ -170,32 +152,16 @@ public class Trabajador {
     }
 
     /**
-     * @return the INE
+     * @return the f_nac
      */
-    public String getINE() {
-        return INE;
+    public String getF_nac() {
+        return f_nac;
     }
 
     /**
-     * @param INE the INE to set
+     * @param f_nac the f_nac to set
      */
-    public void setINE(String INE) {
-        this.INE = INE;
+    public void setF_nac(String f_nac) {
+        this.f_nac = f_nac;
     }
-
-    /**
-     * @return the acta_nac
-     */
-    public String getActa_nac() {
-        return acta_nac;
-    }
-
-    /**
-     * @param acta_nac the acta_nac to set
-     */
-    public void setActa_nac(String acta_nac) {
-        this.acta_nac = acta_nac;
-    }
-    
-    
 }
