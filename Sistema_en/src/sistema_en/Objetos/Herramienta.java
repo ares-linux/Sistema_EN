@@ -10,9 +10,9 @@ package sistema_en.Objetos;
  */
 public class Herramienta {
     private int id_herramienta;
-    private String nombre;
-    private String marca;
-    private String categoria;
+    private String t_herramienta;
+    private String n_serie;
+    private String foto;
     
     public Herramienta(){
         
@@ -45,45 +45,46 @@ public class Herramienta {
     }
 
     /**
-     * @return the nombre
+     * @return the t_herramienta
      */
-    public String getNombre() {
-        return nombre;
+    public String getT_herramienta() {
+        return t_herramienta;
     }
 
     /**
-     * @param nombre the nombre to set
+     * @param t_herramienta the t_herramienta to set
      */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setT_herramienta(String t_herramienta) {
+        this.t_herramienta = t_herramienta;
     }
 
     /**
-     * @return the marca
+     * @return the n_serie
      */
-    public String getMarca() {
-        return marca;
+    public String getN_serie() {
+        return n_serie;
     }
 
     /**
-     * @param marca the marca to set
+     * @param n_serie the n_serie to set
      */
-    public void setMarca(String marca) {
-        this.marca = marca;
+    public void setN_serie(String n_serie) {
+        this.n_serie = n_serie;
     }
 
     /**
-     * @return the categoria
+     * @return the foto
      */
-    public String getCategoria() {
-        return categoria;
+    public String getFoto() {
+        return foto;
     }
 
     /**
-     * @param categoria the categoria to set
+     * @param foto the foto to set
      */
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
+
     
 }

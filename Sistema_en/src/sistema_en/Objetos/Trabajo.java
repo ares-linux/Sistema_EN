@@ -13,7 +13,7 @@ import java.time.LocalTime;
  */
 public class Trabajo {
     private int id_trabajo;
-    private String motivo;
+    private String descripcion;
     private LocalDate fecha;
     private LocalTime hora;
     
@@ -52,20 +52,6 @@ public class Trabajo {
     }
 
     /**
-     * @return the motivo
-     */
-    public String getMotivo() {
-        return motivo;
-    }
-
-    /**
-     * @param motivo the motivo to set
-     */
-    public void setMotivo(String motivo) {
-        this.motivo = motivo;
-    }
-
-    /**
      * @return the fecha
      */
     public LocalDate getFecha() {
@@ -91,6 +77,20 @@ public class Trabajo {
      */
     public void setHora(LocalTime hora) {
         this.hora = hora;
+    }
+
+    /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     
     

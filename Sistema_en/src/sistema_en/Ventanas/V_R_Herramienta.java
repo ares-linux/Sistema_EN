@@ -4,12 +4,23 @@
  */
 package sistema_en.Ventanas;
 
+import java.awt.Image;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import sistema_en.Objetos.Herramienta;
+
 /**
  *
  * @author zahid
  */
 public class V_R_Herramienta extends javax.swing.JFrame {
 
+    Herramienta herramienta = new Herramienta();
+    int fila;
+    
     /**
      * Creates new form V_Rherramienta
      */
@@ -36,17 +47,22 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         h_foto = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         b_foto = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        t_foto = new javax.swing.JTextField();
         b_nuevo = new javax.swing.JButton();
         b_eliminar = new javax.swing.JButton();
         b_buscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Tabla_herramientas = new javax.swing.JTable();
         b_editar = new javax.swing.JButton();
 
         jLabel5.setText("jLabel5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         c_tipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -70,19 +86,36 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
 
         b_foto.setText("jButton1");
+        b_foto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_fotoActionPerformed(evt);
+            }
+        });
         getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 30, -1));
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 180, -1));
+
+        t_foto.setEditable(false);
+        getContentPane().add(t_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 180, -1));
 
         b_nuevo.setText("Nuevo");
+        b_nuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_nuevoActionPerformed(evt);
+            }
+        });
         getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, -1));
 
         b_eliminar.setText("Eliminar");
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
         getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, -1, -1));
 
         b_buscar.setText("Buscar");
         getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, -1, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Tabla_herramientas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -90,16 +123,204 @@ public class V_R_Herramienta extends javax.swing.JFrame {
                 "Tipo de herramienta", "Numero de serie", "Foto"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        Tabla_herramientas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_herramientasMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Tabla_herramientas);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 520, 170));
 
         b_editar.setText("Editar");
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
         getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 80, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
+        String ruta = "/home/ares/NetBeansProjects/Ventacar_ares/src/Imagenes/";
+    JFileChooser foto = new JFileChooser("c:\\fotossoft\\empleados\\");
+    FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
+    foto.setFileFilter(filtrado);
+    
+    int respuesta = foto.showOpenDialog(this);
+    
+    if (respuesta == JFileChooser.APPROVE_OPTION)
+    {
+        ruta = foto.getSelectedFile().getPath();
+        this.t_foto.setText(ruta);
+        // this.doble_diagonal();
+        ImageIcon img = new ImageIcon(ruta);
+        Icon micono = new ImageIcon(img.getImage().getScaledInstance(this.h_foto.getWidth(), this.h_foto.getHeight(), Image.SCALE_DEFAULT));
+        this.h_foto.setIcon(micono);
+        this.t_foto.setText(ruta);
+    }  
+    }//GEN-LAST:event_b_fotoActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+    llenar_text();
+    cargar_foto();
+    //llenar_tabla();
+    bloquear_text();
+    b_foto.setEnabled(false);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void Tabla_herramientasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_herramientasMouseClicked
+        fila = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
+        cargar_datos_tabla(fila);
+        //int indice = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
+        //cargar_datos_tabla(indice);
+    }//GEN-LAST:event_Tabla_herramientasMouseClicked
+
+    private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
+        if ("Editar".equals(b_editar.getText()))
+        {
+            b_editar.setText("Guardar");
+            b_nuevo.setEnabled(false);
+            b_eliminar.setEnabled(false);
+            b_buscar.setEnabled(false);
+            desbloquear_text();
+        }
+        else
+        {
+            if(t_n_serie.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            {
+                return;
+            }
+            b_editar.setText("Editar");
+            editar_tabla();
+            b_nuevo.setEnabled(true);
+            b_eliminar.setEnabled(true);
+            b_buscar.setEnabled(true);
+            bloquear_text();
+        }
+    }//GEN-LAST:event_b_editarActionPerformed
+
+    private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
+        desbloquear_text();
+        this.b_foto.setEnabled(true);
+
+        if ("Nuevo".equals(b_nuevo.getText()))
+        {
+            b_nuevo.setText("Guardar");
+            limpiar_text();
+            bloquear_botones();
+        }
+        else
+        {
+            if(t_n_serie.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            {
+                return;
+            }
+            b_nuevo.setText("Nuevo");
+            llenar_tabla();
+            desbloquear_botones();
+        }
+    }//GEN-LAST:event_b_nuevoActionPerformed
+
+    private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
+        
+        fila= Tabla_herramientas.getSelectedRow();
+        
+        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_herramientas.getModel();
+        if (this.Tabla_herramientas.getRowCount()>0){
+            if(fila == -1){
+                return;
+            }
+            modelo2.removeRow(fila);
+            this.Tabla_herramientas.setModel(modelo2);
+            fila = fila-1;
+            if (fila<0)
+            {
+                limpiar_text();
+            }
+            else
+            {
+                cargar_datos_tabla(fila);
+            }
+        }
+    }//GEN-LAST:event_b_eliminarActionPerformed
+
+    public void bloquear_botones(){
+        b_eliminar.setEnabled(false);
+        b_editar.setEnabled(false);
+        b_buscar.setEnabled(false);
+    }
+    
+    public void desbloquear_botones(){
+        b_eliminar.setEnabled(true);
+        b_editar.setEnabled(true);
+        b_buscar.setEnabled(true);
+    }
+    
+    public void limpiar_text(){
+        t_n_serie.setText("");
+        t_foto.setText("src/Imagenes/signo-de-pregunta.png");
+        cargar_foto();
+    }
+    
+    public void bloquear_text(){
+        c_tipo.setEnabled(false);
+        t_n_serie.setEnabled(false);
+        t_foto.setEnabled(false);
+    }   
+    
+    public void desbloquear_text(){
+        c_tipo.setEnabled(true);
+        t_n_serie.setEnabled(true);
+    }
+    
+    public void cargar_foto(){
+        
+        ImageIcon iconoOriginal = new ImageIcon(t_foto.getText());
+
+Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(250, 280, Image.SCALE_SMOOTH);
+    h_foto.setIcon(new ImageIcon(imagenEscalada));
+    
+    if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+    System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
+    
+    }
+    }
+    
+    public void llenar_text(){
+        this.c_tipo.setSelectedItem(herramienta.getT_herramienta());
+        this.t_n_serie.setText(herramienta.getN_serie());
+        this.t_foto.setText(herramienta.getFoto());
+    }
+    
+    public void cargar_datos_tabla(int indice){
+        this.c_tipo.setSelectedItem(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 0)));
+        this.t_n_serie.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 1)));
+        this.t_foto.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 2)));
+        cargar_foto();
+    }
+    
+    public void llenar_tabla(){
+        String [] info = new String [3];
+        info[0] = c_tipo.getSelectedItem().toString();
+        info[1] = t_n_serie.getText();
+        info[2] = t_foto.getText();
+        DefaultTableModel modelo=(DefaultTableModel) this.Tabla_herramientas.getModel();//crea una variable de tipo modelo de tabla 
+        modelo.addRow(info);//agrega una fila al modelo de tabla
+        this.Tabla_herramientas.setModel(modelo);
+    }
+    
+    public void editar_tabla(){
+        DefaultTableModel modelo =(DefaultTableModel) this.Tabla_herramientas.getModel();
+        modelo.setValueAt(this.c_tipo.getSelectedItem(), fila, 0);
+        modelo.setValueAt(this.t_n_serie.getText(), fila, 1);
+        modelo.setValueAt(this.t_foto.getText(), fila, 2);
+    }
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -137,6 +358,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Tabla_herramientas;
     private javax.swing.JButton b_buscar;
     private javax.swing.JButton b_editar;
     private javax.swing.JButton b_eliminar;
@@ -151,8 +373,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField t_foto;
     private javax.swing.JTextField t_n_serie;
     // End of variables declaration//GEN-END:variables
 }

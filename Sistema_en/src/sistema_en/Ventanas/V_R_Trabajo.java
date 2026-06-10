@@ -4,14 +4,22 @@
  */
 package sistema_en.Ventanas;
 
+import java.awt.event.KeyEvent;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import javax.swing.table.DefaultTableModel;
+import sistema_en.Objetos.Cliente;
+import sistema_en.Objetos.Trabajo;
 
 /**
  *
  * @author zahid
  */
 public class V_R_Trabajo extends javax.swing.JFrame {
+    
+    Trabajo trabajo = new Trabajo();
+    Cliente cliente = new Cliente();
+    int fila;
 
     /**
      * Creates new form V_Rtrabajo
@@ -49,6 +57,8 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         b_eliminar = new javax.swing.JButton();
         b_buscar = new javax.swing.JButton();
         b_editar = new javax.swing.JButton();
+        t_id = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -62,71 +72,329 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, -1, 20));
 
         jLabel2.setText("Nombre de cliente");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
-        getContentPane().add(t_nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 350, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, -1, -1));
+
+        t_nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_nombreKeyPressed(evt);
+            }
+        });
+        getContentPane().add(t_nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 350, -1));
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, -1, -1));
 
         jLabel4.setText("Telefono");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 60, -1));
-        getContentPane().add(t_telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 350, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 60, -1));
+
+        t_telefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_telefonoKeyPressed(evt);
+            }
+        });
+        getContentPane().add(t_telefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 350, -1));
 
         jLabel5.setText("Direccion");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, -1, -1));
-        getContentPane().add(t_direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, 350, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, -1, -1));
+
+        t_direccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_direccionKeyPressed(evt);
+            }
+        });
+        getContentPane().add(t_direccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 190, 350, -1));
 
         jLabel6.setText("Descripcion de trabajo");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, -1, -1));
-        getContentPane().add(t_descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 200, 350, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
+        getContentPane().add(t_descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 230, 350, -1));
 
         jLabel7.setText("Fecha");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 40, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, 40, -1));
 
         t_fecha_r.setEditable(false);
-        getContentPane().add(t_fecha_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, 350, -1));
+        getContentPane().add(t_fecha_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 270, 350, -1));
 
         jLabel8.setText("Hora");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 280, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, -1, -1));
 
         t_hora_r.setEditable(false);
-        getContentPane().add(t_hora_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 280, 350, -1));
+        getContentPane().add(t_hora_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, 350, -1));
 
         Tabla_trabajos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nombre ", "Telefono", "Direccion", "Descripcion", "Fecha", "Hora"
+                "Id", "Nombre ", "Telefono", "Direccion", "Descripcion", "Fecha", "Hora"
             }
         ));
+        Tabla_trabajos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_trabajosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Tabla_trabajos);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 500, 180));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 610, 180));
 
         b_nuevo.setText("Nuevo");
-        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
+        b_nuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_nuevoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
 
         b_eliminar.setText("Eliminar");
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 330, -1, -1));
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, -1, -1));
 
         b_buscar.setText("Buscar");
-        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, -1, -1));
+        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 360, -1, -1));
 
         b_editar.setText("Editar");
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 330, -1, -1));
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 360, -1, -1));
+
+        t_id.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_idKeyPressed(evt);
+            }
+        });
+        getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 350, -1));
+
+        jLabel9.setText("id");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        t_nombre.requestFocus();
+    public void bloquear_text(){
+        t_id.setEnabled(false);
+        t_nombre.setEnabled(false);
+        t_telefono.setEnabled(false);
+        t_direccion.setEnabled(false);
+        t_descripcion.setEnabled(false);
+    }
+    
+    public void desbloquear_text(){
+        t_id.setEnabled(true);
+        t_nombre.setEnabled(true);
+        t_telefono.setEnabled(true);
+        t_direccion.setEnabled(true);
+        t_descripcion.setEnabled(true);
+    }
+    
+    public void bloquear_botones(){
+        b_eliminar.setEnabled(false);
+        b_buscar.setEnabled(false);
+        b_editar.setEnabled(false);
+    }
+    
+    public void desbloquear_botones(){
+        b_eliminar.setEnabled(true);
+        b_buscar.setEnabled(true);
+        b_editar.setEnabled(true);
+    }
+    
+    public void limpiar_text(){
+        t_id.setText("");
+        t_nombre.setText("");
+        t_telefono.setText("");
+        t_direccion.setText("");
+        t_descripcion.setText("");
+        t_fecha_r.setText("");
+        t_hora_r.setText("");
+    }
+    
+    public void editar_tabla(){
+        DefaultTableModel modelo =(DefaultTableModel) this.Tabla_trabajos.getModel();
+        modelo.setValueAt(this.t_id.getText(), fila, 0);
+        modelo.setValueAt(this.t_nombre.getText(), fila, 1);
+        modelo.setValueAt( this.t_telefono.getText(), fila, 2);
+        modelo.setValueAt(this.t_direccion.getText(), fila, 3);
+        modelo.setValueAt(this.t_descripcion.getText(), fila, 4);
+        modelo.setValueAt(this.t_fecha_r.getText(), fila, 5);
+        modelo.setValueAt(this.t_hora_r.getText(), fila, 6);
+        
+    }
+    
+    public void llenar_tabla(){
+        String [] info = new String [7];
+        info[0] = t_id.getText();
+        info[1] = t_nombre.getText();
+        info[2] = t_telefono.getText();
+        info[3] = t_direccion.getText();
+        info[4] = t_descripcion.getText();
+        info[5] = t_fecha_r.getText();
+        info[6] = t_hora_r.getText();
+        
+        DefaultTableModel modelo=(DefaultTableModel) this.Tabla_trabajos.getModel();
+        modelo.addRow(info);
+        this.Tabla_trabajos.setModel(modelo);
+    }
+    
+    public void cargar_datos_tabla(int indice){
+        this.t_id.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 0)));
+        this.t_nombre.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 1)));
+        this.t_telefono.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 2)));
+        this.t_direccion.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 3)));
+        this.t_descripcion.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 4)));
+        this.t_fecha_r.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 5)));
+        this.t_hora_r.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 6)));
+    }
+    
+    public void llenar_text(){
+        this.t_id.setText(String.valueOf(trabajo.getId_trabajo()));
+        this.t_nombre.setText(cliente.getNombre_c());
+        this.t_telefono.setText(cliente.getTelefono());
+        this.t_direccion.setText(cliente.getDireccion());
+        this.t_descripcion.setText(trabajo.getDescripcion());
+        //this.t_fecha_r.setText(String.valueOf(trabajo.getFecha()));
+        //this.t_hora_r.setText(String.valueOf(trabajo.getHora()));
+    }
+    
+    public void hora_fecha(){
         t_fecha_r.setText(java.time.LocalDate.now().toString());
-        
         LocalTime horaactual = LocalTime.now();
-        
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
         String horaFormateada =horaactual.format(formato);
         t_hora_r.setText(horaFormateada);
+        
+    }
+    
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        t_nombre.requestFocus();
+        t_fecha_r.setText(java.time.LocalDate.now().toString());
+        LocalTime horaactual = LocalTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String horaFormateada =horaactual.format(formato);
+        t_hora_r.setText(horaFormateada);
+        
+        llenar_text();
+        //llenar_tabla();
+        bloquear_text();
     }//GEN-LAST:event_formWindowOpened
+
+    private void t_nombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombreKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_telefono.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_nombreKeyPressed
+
+    private void t_telefonoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_telefonoKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_direccion.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_telefonoKeyPressed
+
+    private void t_direccionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_direccionKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_descripcion.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_direccionKeyPressed
+
+    private void t_idKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_idKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_nombre.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_idKeyPressed
+
+    private void Tabla_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_trabajosMouseClicked
+        fila = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
+        cargar_datos_tabla(fila);
+        //int indice = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
+        //cargar_datos_tabla(indice);
+    }//GEN-LAST:event_Tabla_trabajosMouseClicked
+
+    private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
+        desbloquear_text();
+        
+
+        if ("Nuevo".equals(b_nuevo.getText()))
+        {
+            b_nuevo.setText("Guardar");
+            limpiar_text();
+            hora_fecha();
+            bloquear_botones();
+        }
+        else
+        {
+            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_direccion.getText().trim().isEmpty() || t_descripcion.getText().trim().isEmpty() || t_telefono.getText().trim().isEmpty())
+            {
+                return;
+            }
+            b_nuevo.setText("Nuevo");
+            llenar_tabla();
+            bloquear_text();
+            desbloquear_botones();
+        }
+    }//GEN-LAST:event_b_nuevoActionPerformed
+
+    private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
+        if ("Editar".equals(b_editar.getText()))
+        {
+            b_editar.setText("Guardar");
+            b_nuevo.setEnabled(false);
+            b_eliminar.setEnabled(false);
+            b_buscar.setEnabled(false);
+            desbloquear_text();
+        }
+        else
+        {
+            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_telefono.getText().trim().isEmpty() || t_descripcion.getText().trim().isEmpty() || t_direccion.getText().trim().isEmpty())
+            {
+                return;
+            }
+            b_editar.setText("Editar");
+            editar_tabla();
+            b_nuevo.setEnabled(true);
+            b_eliminar.setEnabled(true);
+            b_buscar.setEnabled(true);
+            bloquear_text();
+        }
+    }//GEN-LAST:event_b_editarActionPerformed
+
+    private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
+        
+        fila= Tabla_trabajos.getSelectedRow();
+        
+        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_trabajos.getModel();
+        if (this.Tabla_trabajos.getRowCount()>0){
+            if(fila == -1){
+                return;
+            }
+            modelo2.removeRow(fila);
+            this.Tabla_trabajos.setModel(modelo2);
+            fila = fila-1;
+            if (fila<0)
+            {
+                limpiar_text();
+            }
+            else
+            {
+                cargar_datos_tabla(fila);
+            }
+        }
+    }//GEN-LAST:event_b_eliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,11 +446,13 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField t_descripcion;
     private javax.swing.JTextField t_direccion;
     private javax.swing.JTextField t_fecha_r;
     private javax.swing.JTextField t_hora_r;
+    private javax.swing.JTextField t_id;
     private javax.swing.JTextField t_nombre;
     private javax.swing.JTextField t_telefono;
     // End of variables declaration//GEN-END:variables
