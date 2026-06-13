@@ -38,6 +38,7 @@ public class V_menu extends javax.swing.JFrame {
         jPopupMenu2 = new javax.swing.JPopupMenu();
         jPopupMenu3 = new javax.swing.JPopupMenu();
         jDialog1 = new javax.swing.JDialog();
+        jMenuItem2 = new javax.swing.JMenuItem();
         l_foto = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
@@ -48,8 +49,12 @@ public class V_menu extends javax.swing.JFrame {
         m_empleado = new javax.swing.JMenuItem();
         m_trabajo = new javax.swing.JMenuItem();
         m_herramienta = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        m_trabajos = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
+
+        jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -74,7 +79,7 @@ public class V_menu extends javax.swing.JFrame {
         getContentPane().add(filler2, new java.awt.GridBagConstraints());
         getContentPane().add(filler3, new java.awt.GridBagConstraints());
 
-        jMenu1.setText("Operacion");
+        jMenu1.setText("Catalogo");
 
         M_cerrar_programa.setText("Cerrar el programa");
         M_cerrar_programa.addActionListener(new java.awt.event.ActionListener() {
@@ -109,6 +114,18 @@ public class V_menu extends javax.swing.JFrame {
         jMenu1.add(m_herramienta);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Registros");
+
+        m_trabajos.setText("Trabajos");
+        m_trabajos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_trabajosActionPerformed(evt);
+            }
+        });
+        jMenu2.add(m_trabajos);
+
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -154,6 +171,11 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
         trabajo.setVisible(true);
     }//GEN-LAST:event_m_trabajoActionPerformed
 
+    private void m_trabajosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_trabajosActionPerformed
+        V_trabajos trabajos = new V_trabajos();
+        trabajos.setVisible(true);
+    }//GEN-LAST:event_m_trabajosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -195,8 +217,10 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
     private javax.swing.Box.Filler filler3;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;
@@ -204,6 +228,7 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
     private javax.swing.JMenuItem m_empleado;
     private javax.swing.JMenuItem m_herramienta;
     private javax.swing.JMenuItem m_trabajo;
+    private javax.swing.JMenuItem m_trabajos;
     // End of variables declaration//GEN-END:variables
 }
 

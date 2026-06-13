@@ -205,6 +205,12 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
         jLabel9.setText("Id");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, -1, -1));
+
+        t_id.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_idKeyPressed(evt);
+            }
+        });
         getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 310, -1));
 
         pack();
@@ -223,6 +229,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }
     
     public void limpiar_text(){
+        t_id.setText("");
         t_nombre.setText("");
         t_rfc.setText("");
         t_curp.setText("");
@@ -232,6 +239,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }
     
     public void desbloquear_text(){
+        this.t_id.setEnabled(true);
         this.t_nombre.setEnabled(true);
         this.c_sexo.setEnabled(true);
         this.c_puesto.setEnabled(true);
@@ -241,6 +249,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }
     
     public void bloquear_text(){
+        this.t_id.setEnabled(false);
         this.t_nombre.setEnabled(false);
         this.c_sexo.setEnabled(false);
         this.c_puesto.setEnabled(false);
@@ -373,6 +382,7 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     private void Tabla_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_empleadosMouseClicked
         fila = this.Tabla_empleados.rowAtPoint(evt.getPoint());
         cargar_datos_tabla(fila);
+        bloquear_text();
         //int indice = this.Tabla_empleados.rowAtPoint(evt.getPoint());
         //cargar_datos_tabla(indice);
     }//GEN-LAST:event_Tabla_empleadosMouseClicked
@@ -411,6 +421,7 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     }//GEN-LAST:event_b_eliminarActionPerformed
 
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
+        t_id.requestFocus();
         desbloquear_text();
         this.b_foto.setEnabled(true);
 
@@ -422,13 +433,15 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
         }
         else
         {
-            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_rfc.getText().trim().isEmpty() || t_f_nac.getText().trim().isEmpty() || t_curp.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_rfc.getText().trim().isEmpty() || t_f_nac.getText().trim().isEmpty() || t_curp.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty() || "src/Imagenes/signo-de-pregunta.png".equals(t_foto.getText().trim()))
             {
                 return;
             }
+            
             b_nuevo.setText("Nuevo");
             llenar_tabla();
             desbloquear_botones();
+            limpiar_text();
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
@@ -455,6 +468,15 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
             bloquear_text();
         }
     }//GEN-LAST:event_b_editarActionPerformed
+
+    private void t_idKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_idKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_nombre.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_idKeyPressed
 
     /**
      * @param args the command line arguments
