@@ -104,7 +104,7 @@ public class V_bitacora extends javax.swing.JFrame {
         t_fecha.setEditable(false);
         getContentPane().add(t_fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 210, -1));
 
-        c_plomero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        c_plomero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLO_00", "PLO_01", "PLO_02", "PLO_03", "PLO_04", "PLO_05", "PLO_06", "PLO_07", "PLO_08", "PLO_09", "Administrador" }));
         getContentPane().add(c_plomero, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 110, -1));
 
         jLabel9.setText("Plomero");
@@ -220,13 +220,10 @@ public class V_bitacora extends javax.swing.JFrame {
     
     public void fecha(){
         t_fecha.setText(java.time.LocalDate.now().toString());
-        LocalTime horaactual = LocalTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String horaFormateada = horaactual.format(formato);
     }
     
     public void limpiar_text(){
-        t_fecha.setText("");
+        t_fecha.setText(java.time.LocalDate.now().toString());
         t_evidencia.setText("");
         s_hora_llegada.setValue(new java.util.Date());
         s_hora_salida.setValue(new java.util.Date());
@@ -306,8 +303,9 @@ public class V_bitacora extends javax.swing.JFrame {
             bloquear_text();
             desbloquear_botones();
             b_nuevo.setEnabled(true);
-            limpiar_text();
             cargar_foto();
+            limpiar_text();
+            
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 

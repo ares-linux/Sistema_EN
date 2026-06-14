@@ -198,9 +198,19 @@ public class V_R_Empleado extends javax.swing.JFrame {
         getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 430, -1, -1));
 
         c_sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
+        c_sexo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                c_sexoKeyPressed(evt);
+            }
+        });
         getContentPane().add(c_sexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 310, -1));
 
         c_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Oficial", "Medio oficial", "Cabo" }));
+        c_puesto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                c_puestoKeyPressed(evt);
+            }
+        });
         getContentPane().add(c_puesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 310, -1));
 
         jLabel9.setText("Id");
@@ -336,7 +346,7 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
         int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_rfc.requestFocus();
+        this.c_sexo.requestFocus();
            
         }
     }//GEN-LAST:event_t_nombreKeyPressed
@@ -360,8 +370,8 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     }//GEN-LAST:event_t_curpKeyPressed
 
     private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
-        String ruta = "/home/ares/NetBeansProjects/Ventacar_ares/src/Imagenes/";
-    JFileChooser foto = new JFileChooser("c:\\fotossoft\\empleados\\");
+        String ruta = "/home/ares/NetBeansProjects/Sistema_EN/Sistema_en/src/Imagenes/empleados";
+    JFileChooser foto = new JFileChooser("src/Imagenes/empleados");
     FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
     foto.setFileFilter(filtrado);
     
@@ -477,6 +487,24 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
            
         }
     }//GEN-LAST:event_t_idKeyPressed
+
+    private void c_sexoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_sexoKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.c_puesto.requestFocus();
+           
+        }
+    }//GEN-LAST:event_c_sexoKeyPressed
+
+    private void c_puestoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_puestoKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_rfc.requestFocus();
+           
+        }
+    }//GEN-LAST:event_c_puestoKeyPressed
 
     /**
      * @param args the command line arguments

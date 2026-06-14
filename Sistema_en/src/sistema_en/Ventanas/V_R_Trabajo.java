@@ -104,6 +104,12 @@ public class V_R_Trabajo extends javax.swing.JFrame {
 
         jLabel6.setText("Descripcion de trabajo");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
+
+        t_descripcion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_descripcionKeyPressed(evt);
+            }
+        });
         getContentPane().add(t_descripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 230, 350, -1));
 
         jLabel7.setText("Fecha");
@@ -139,6 +145,11 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         b_nuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_nuevoActionPerformed(evt);
+            }
+        });
+        b_nuevo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_nuevoKeyPressed(evt);
             }
         });
         getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
@@ -209,8 +220,9 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         t_telefono.setText("");
         t_direccion.setText("");
         t_descripcion.setText("");
-        t_fecha_r.setText("");
-        t_hora_r.setText("");
+        hora_fecha();
+        //t_fecha_r.setText("");
+        //t_hora_r.setText("");
     }
     
     public void editar_tabla(){
@@ -359,6 +371,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             llenar_tabla();
             bloquear_text();
             desbloquear_botones();
+            limpiar_text();
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
@@ -408,6 +421,25 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_b_eliminarActionPerformed
+
+    private void b_nuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_nuevoKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        return;
+        //b_nuevoActionPerformed(null);
+        
+        }
+    }//GEN-LAST:event_b_nuevoKeyPressed
+
+    private void t_descripcionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_descripcionKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.b_nuevo.requestFocus();
+           
+        }
+    }//GEN-LAST:event_t_descripcionKeyPressed
 
     /**
      * @param args the command line arguments
