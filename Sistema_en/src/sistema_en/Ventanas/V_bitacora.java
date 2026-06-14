@@ -375,7 +375,7 @@ public class V_bitacora extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
-        String ruta = "/home/ares/NetBeansProjects/Ventacar_ares/src/Imagenes/";
+        String ruta = "G:\\Mi unidad\\Trabajo\\";
     JFileChooser foto = new JFileChooser("c:\\fotossoft\\empleados\\");
     FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
     foto.setFileFilter(filtrado);
