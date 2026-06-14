@@ -104,7 +104,7 @@ public class V_bitacora extends javax.swing.JFrame {
         t_fecha.setEditable(false);
         getContentPane().add(t_fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 210, -1));
 
-        c_plomero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        c_plomero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLO_00", "PLO_01", "PLO_02", "PLO_03", "PLO_04", "PLO_05", "PLO_06", "PLO_07", "PLO_08", "PLO_09", "Administrador" }));
         getContentPane().add(c_plomero, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 110, -1));
 
         jLabel9.setText("Plomero");
