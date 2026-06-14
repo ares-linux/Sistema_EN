@@ -145,7 +145,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
 
     private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
         String ruta = "/home/ares/NetBeansProjects/Ventacar_ares/src/Imagenes/";
-    JFileChooser foto = new JFileChooser("c:\\fotossoft\\empleados\\");
+    JFileChooser foto = new JFileChooser("src/Imagenes/herramientas");
     FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
     foto.setFileFilter(filtrado);
     
@@ -214,13 +214,15 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         }
         else
         {
-            if(t_n_serie.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            if(t_n_serie.getText().trim().isEmpty() || "src/Imagenes/signo-de-pregunta.png".equals(t_foto.getText().trim()))
             {
                 return;
             }
             b_nuevo.setText("Nuevo");
             llenar_tabla();
             desbloquear_botones();
+            limpiar_text();
+            bloquear_text();
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 

@@ -220,13 +220,10 @@ public class V_bitacora extends javax.swing.JFrame {
     
     public void fecha(){
         t_fecha.setText(java.time.LocalDate.now().toString());
-        LocalTime horaactual = LocalTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String horaFormateada = horaactual.format(formato);
     }
     
     public void limpiar_text(){
-        t_fecha.setText("");
+        t_fecha.setText(java.time.LocalDate.now().toString());
         t_evidencia.setText("");
         s_hora_llegada.setValue(new java.util.Date());
         s_hora_salida.setValue(new java.util.Date());
@@ -306,8 +303,9 @@ public class V_bitacora extends javax.swing.JFrame {
             bloquear_text();
             desbloquear_botones();
             b_nuevo.setEnabled(true);
-            limpiar_text();
             cargar_foto();
+            limpiar_text();
+            
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
