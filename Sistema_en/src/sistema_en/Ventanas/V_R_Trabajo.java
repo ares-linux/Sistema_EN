@@ -238,6 +238,19 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         DefaultTableModel modelo=(DefaultTableModel) this.Tabla_trabajos.getModel();
         modelo.addRow(info);
         this.Tabla_trabajos.setModel(modelo);
+
+        // Crear carpeta con el ID del trabajo en G:\Mi unidad\Trabajo
+        String idTrabajo = t_id.getText().trim();
+        if (!idTrabajo.isEmpty()) {
+            try {
+                java.io.File carpeta = new java.io.File("G:\\Mi unidad\\Trabajo\\" + idTrabajo);
+                if (!carpeta.exists()) {
+                    carpeta.mkdirs();
+                }
+            } catch (Exception e) {
+                System.err.println("Error al crear la carpeta del trabajo: " + e.getMessage());
+            }
+        }
     }
     
     public void cargar_datos_tabla(int indice){
