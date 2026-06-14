@@ -4,6 +4,7 @@
  */
 package sistema_en.Ventanas;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -88,7 +89,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         b_añadir_materiales = new javax.swing.JButton();
-        jLabel16 = new javax.swing.JLabel();
+        l_aviso = new javax.swing.JLabel();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -235,6 +236,11 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         jLabel7.setText("Nombre del material");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 230, -1, 20));
 
+        t_nombre_m.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                t_nombre_mMouseClicked(evt);
+            }
+        });
         t_nombre_m.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 t_nombre_mActionPerformed(evt);
@@ -250,6 +256,11 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         jLabel8.setText("Precio uni");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 230, -1, -1));
 
+        t_precio_uni.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                t_precio_uniMouseClicked(evt);
+            }
+        });
         t_precio_uni.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_precio_uniKeyPressed(evt);
@@ -284,12 +295,27 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 570, -1, -1));
 
         b_editar.setText("Editar");
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
         getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 570, -1, -1));
 
         b_aceptar.setText("Aceptar");
+        b_aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_aceptarActionPerformed(evt);
+            }
+        });
         getContentPane().add(b_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 610, -1, -1));
 
         b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
         getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 610, -1, -1));
 
         jLabel1.setText("Fecha de creacion");
@@ -304,6 +330,11 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         jLabel12.setText("Hora de creacion");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, -1, -1));
 
+        t_cantidad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                t_cantidadMouseClicked(evt);
+            }
+        });
         t_cantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_cantidadKeyPressed(evt);
@@ -334,8 +365,8 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         });
         getContentPane().add(b_añadir_materiales, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 260, -1, -1));
 
-        jLabel16.setText("Por favor, revise los campos de concepto y precio.");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 210, -1, -1));
+        l_aviso.setText("Por favor, revise los campos de concepto y precio.");
+        getContentPane().add(l_aviso, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 210, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -414,6 +445,8 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         modelo.setValueAt(this.t_nombre_m.getText(), fila, 0);
         modelo.setValueAt(this.t_precio_uni.getText(), fila, 1);
         modelo.setValueAt(this.t_cantidad.getText(), fila, 2);
+        calcular_total_m();
+        modelo.setValueAt(total, fila, 3);
     }
     
     public void editar_tabla_c(){
@@ -438,6 +471,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         t_precio.setEnabled(false);
         t_nombre_m.setEnabled(false);
         t_precio_uni.setEnabled(false);
+        t_cantidad.setEnabled(false);
     }
     
     public void desbloquear_text(){
@@ -445,6 +479,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         t_precio.setEnabled(true);
         t_nombre_m.setEnabled(true);
         t_precio_uni.setEnabled(true);
+        t_cantidad.setEnabled(true);
     }
     
     public void bloquear_botones(){
@@ -469,6 +504,21 @@ public class V_R_cotizacion extends javax.swing.JFrame {
     public void cargar_datos_tabla_materiales(int indice){
         this.t_nombre_m.setText(String.valueOf(this.Tabla_materiales.getValueAt(indice, 0)));
         this.t_precio_uni.setText(String.valueOf(this.Tabla_materiales.getValueAt(indice, 1)));
+        this.t_cantidad.setText(String.valueOf(this.Tabla_materiales.getValueAt(indice, 2)));
+    }
+    
+    public void editar_tabla(){
+        int selMaterial = this.Tabla_materiales.getSelectedRow();
+        int selConcepto = this.Tabla_conceptos.getSelectedRow();
+        
+        if (selMaterial >= 0) {
+            fila = selMaterial;
+            editar_tabla_m();
+        } else if (selConcepto >= 0) {
+            fila = selConcepto;
+            editar_tabla_c();
+        }
+        calcular_total();
     }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -483,16 +533,18 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         hora_fecha();        
         b_añadir_materiales.setText("+");
         //b_editar.setEnabled(false);
+        l_aviso.setVisible(false);
+        l_aviso.setForeground(Color.red);
     }//GEN-LAST:event_formWindowOpened
 
     private void Tabla_conceptosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_conceptosMouseClicked
-        //fila = this.Tabla_conceptos.rowAtPoint(evt.getPoint());
-        //cargar_datos_tabla_conceptos(fila);
+        fila = this.Tabla_conceptos.rowAtPoint(evt.getPoint());
+        this.Tabla_materiales.clearSelection();
     }//GEN-LAST:event_Tabla_conceptosMouseClicked
 
     private void Tabla_materialesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_materialesMouseClicked
-        //fila = this.Tabla_materiales.rowAtPoint(evt.getPoint());
-        //cargar_datos_tabla_materiales(fila);
+        fila = this.Tabla_materiales.rowAtPoint(evt.getPoint());
+        this.Tabla_conceptos.clearSelection();
     }//GEN-LAST:event_Tabla_materialesMouseClicked
 
     private void t_conceptoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_conceptoKeyPressed
@@ -527,6 +579,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_t_precio_uniKeyPressed
 
     private void b_añadir_conceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_añadir_conceptoActionPerformed
+        desbloquear_text();
         t_concepto.requestFocus();
         //limpiar_text_c();
             if(t_concepto.getText().trim().isEmpty() || t_precio.getText().trim().isEmpty())
@@ -569,10 +622,12 @@ public class V_R_cotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_b_añadir_conceptoKeyPressed
 
     private void b_añadir_materialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_añadir_materialesActionPerformed
+        desbloquear_text();
         t_nombre_m.requestFocus();
         //limpiar_text_m();
             if(t_nombre_m.getText().trim().isEmpty() || t_precio_uni.getText().trim().isEmpty() || t_cantidad.getText().trim().isEmpty())
             {
+                l_aviso.setVisible(true);
                 return;
             }
             
@@ -626,9 +681,10 @@ public class V_R_cotizacion extends javax.swing.JFrame {
             }
             else
             {
-                t_iva.setText("0");
-                t_subtotal.setText("0");
-                t_total.setText("0");
+                calcular_total();
+                //t_iva.setText("0");
+                //t_subtotal.setText("0");
+                //t_total.setText("0");
             }
         }
         
@@ -640,9 +696,10 @@ public class V_R_cotizacion extends javax.swing.JFrame {
             }
             else
             {
-                t_iva.setText("0");
-                t_subtotal.setText("0");
-                t_total.setText("0");
+                calcular_total();
+                //t_iva.setText("0");
+                //t_subtotal.setText("0");
+                //t_total.setText("0");
             }
         }
         else
@@ -654,6 +711,81 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         calcular_total();
         
     }//GEN-LAST:event_b_eliminarActionPerformed
+
+    private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
+        int selMaterial = this.Tabla_materiales.getSelectedRow();
+        int selConcepto = this.Tabla_conceptos.getSelectedRow();
+
+        if (selMaterial < 0 && selConcepto < 0) {
+            JOptionPane.showMessageDialog(null, "Seleccione una fila para editar");
+            return;
+        }
+
+        if ("Editar".equals(b_editar.getText()))
+        {
+            b_editar.setText("Guardar");
+            b_añadir_concepto.setEnabled(false);
+            b_eliminar.setEnabled(false);
+            b_añadir_materiales.setEnabled(false);
+            b_aceptar.setEnabled(false);
+            b_cancelar.setEnabled(false);
+            
+            if (selMaterial >= 0) {
+                fila = selMaterial;
+                cargar_datos_tabla_materiales(selMaterial);
+            } else if (selConcepto >= 0) {
+                fila = selConcepto;
+                cargar_datos_tabla_conceptos(selConcepto);
+            }
+            
+            desbloquear_text();
+        }
+        else
+        {
+            if (selMaterial >= 0) {
+                if (t_nombre_m.getText().trim().isEmpty() || t_precio_uni.getText().trim().isEmpty() || t_cantidad.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor complete todos los campos del material");
+                    return;
+                }
+            } else if (selConcepto >= 0) {
+                if (t_concepto.getText().trim().isEmpty() || t_precio.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Por favor complete todos los campos del concepto");
+                    return;
+                }
+            }
+
+            b_editar.setText("Editar");
+            editar_tabla();
+            b_aceptar.setEnabled(true);
+            b_eliminar.setEnabled(true);
+            b_añadir_materiales.setEnabled(true);
+            b_añadir_concepto.setEnabled(true);
+            b_cancelar.setEnabled(true);
+            bloquear_text();
+            limpiar_text_c();
+            limpiar_text_m();
+        }
+    }//GEN-LAST:event_b_editarActionPerformed
+
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_cancelarActionPerformed
+
+    private void t_nombre_mMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nombre_mMouseClicked
+        l_aviso.setVisible(false);
+    }//GEN-LAST:event_t_nombre_mMouseClicked
+
+    private void t_precio_uniMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_precio_uniMouseClicked
+        l_aviso.setVisible(false);
+    }//GEN-LAST:event_t_precio_uniMouseClicked
+
+    private void t_cantidadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_cantidadMouseClicked
+        l_aviso.setVisible(false);
+    }//GEN-LAST:event_t_cantidadMouseClicked
+
+    private void b_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_aceptarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_aceptarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -713,7 +845,6 @@ public class V_R_cotizacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -728,6 +859,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel l_aviso;
     private javax.swing.JTextField t_cantidad;
     private javax.swing.JTextField t_concepto;
     private javax.swing.JTextField t_fecha_r;
