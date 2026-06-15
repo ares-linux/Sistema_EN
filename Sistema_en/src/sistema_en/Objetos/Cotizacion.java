@@ -17,7 +17,12 @@ public class Cotizacion {
     private int id_cotizacion;
     private String concepto;
     private float precio;
-    
+    private String n_material;
+    private int cantidad;
+    private float precio_uni;
+    private float iva;
+    private float subtotal;
+    private float total;
     private String estado;
     
     public Cotizacion(String informacionCompleta){
@@ -112,6 +117,90 @@ public class Cotizacion {
      */
     public void setId_trabajo(Trabajo id_trabajo) {
         this.id_trabajo = id_trabajo;
+    }
+
+    /**
+     * @return the n_material
+     */
+    public String getN_material() {
+        return n_material;
+    }
+
+    /**
+     * @param n_material the n_material to set
+     */
+    public void setN_material(String n_material) {
+        this.n_material = n_material;
+    }
+
+    /**
+     * @return the cantidad
+     */
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    /**
+     * @param cantidad the cantidad to set
+     */
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    /**
+     * @return the precio_uni
+     */
+    public float getPrecio_uni() {
+        return precio_uni;
+    }
+
+    /**
+     * @param precio_uni the precio_uni to set
+     */
+    public void setPrecio_uni(float precio_uni) {
+        this.precio_uni = precio_uni;
+    }
+
+    /**
+     * @return the iva
+     */
+    public float getIva() {
+        return iva;
+    }
+
+    /**
+     * @param iva the iva to set
+     */
+    public void setIva(float iva) {
+        this.iva = iva;
+    }
+
+    /**
+     * @return the subtotal
+     */
+    public float getSubtotal() {
+        return subtotal;
+    }
+
+    /**
+     * @param subtotal the subtotal to set
+     */
+    public void setSubtotal(float subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    /**
+     * @return the total
+     */
+    public float getTotal() {
+        return total;
+    }
+
+    /**
+     * @param total the total to set
+     */
+    public void setTotal(float total) {
+        this.total = total;
     }
 
     
