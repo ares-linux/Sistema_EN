@@ -16,6 +16,7 @@ public class Trabajo {
     private String descripcion;
     private LocalDate fecha;
     private LocalTime hora;
+    private String estado;
     
     public Trabajo(){
         
@@ -91,6 +92,20 @@ public class Trabajo {
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    /**
+     * @return the estado
+     */
+    public String getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
     
     

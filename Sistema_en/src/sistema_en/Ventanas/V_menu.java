@@ -6,6 +6,8 @@ package sistema_en.Ventanas;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import sistema_en.Ventanas.dialogos.D_configuraciones;
 
 
 /**
@@ -39,47 +41,67 @@ public class V_menu extends javax.swing.JFrame {
         jPopupMenu3 = new javax.swing.JPopupMenu();
         jDialog1 = new javax.swing.JDialog();
         jMenuItem2 = new javax.swing.JMenuItem();
-        l_foto = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        l_foto = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        m_catalogo = new javax.swing.JMenu();
         M_cerrar_programa = new javax.swing.JMenuItem();
         m_empleado = new javax.swing.JMenuItem();
         m_trabajo = new javax.swing.JMenuItem();
         m_herramienta = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        m_registros = new javax.swing.JMenu();
         m_trabajos = new javax.swing.JMenuItem();
+        m_clientes = new javax.swing.JMenuItem();
+        m_configuraciones = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
 
         jMenuItem2.setText("jMenuItem2");
 
+        jMenuItem3.setText("jMenuItem3");
+
+        jMenuItem4.setText("jMenuItem4");
+
+        jMenu3.setText("jMenu3");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 44;
+        gridBagConstraints.gridheight = 26;
+        getContentPane().add(filler1, gridBagConstraints);
 
         l_foto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         l_foto.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         l_foto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 598;
-        gridBagConstraints.ipady = 398;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(40, 100, 46, 88);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 601;
+        gridBagConstraints.ipady = 366;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(25, 25, 25, 25);
         getContentPane().add(l_foto, gridBagConstraints);
-        getContentPane().add(filler1, new java.awt.GridBagConstraints());
-        getContentPane().add(filler2, new java.awt.GridBagConstraints());
-        getContentPane().add(filler3, new java.awt.GridBagConstraints());
 
-        jMenu1.setText("Catalogo");
+        m_catalogo.setText("Catalogo");
 
         M_cerrar_programa.setText("Cerrar el programa");
         M_cerrar_programa.addActionListener(new java.awt.event.ActionListener() {
@@ -87,7 +109,7 @@ public class V_menu extends javax.swing.JFrame {
                 M_cerrar_programaActionPerformed(evt);
             }
         });
-        jMenu1.add(M_cerrar_programa);
+        m_catalogo.add(M_cerrar_programa);
 
         m_empleado.setText("Registrar empleado");
         m_empleado.addActionListener(new java.awt.event.ActionListener() {
@@ -95,7 +117,7 @@ public class V_menu extends javax.swing.JFrame {
                 m_empleadoActionPerformed(evt);
             }
         });
-        jMenu1.add(m_empleado);
+        m_catalogo.add(m_empleado);
 
         m_trabajo.setText("Registrar trabajo");
         m_trabajo.addActionListener(new java.awt.event.ActionListener() {
@@ -103,7 +125,7 @@ public class V_menu extends javax.swing.JFrame {
                 m_trabajoActionPerformed(evt);
             }
         });
-        jMenu1.add(m_trabajo);
+        m_catalogo.add(m_trabajo);
 
         m_herramienta.setText("Registrar herramienta");
         m_herramienta.addActionListener(new java.awt.event.ActionListener() {
@@ -111,11 +133,11 @@ public class V_menu extends javax.swing.JFrame {
                 m_herramientaActionPerformed(evt);
             }
         });
-        jMenu1.add(m_herramienta);
+        m_catalogo.add(m_herramienta);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(m_catalogo);
 
-        jMenu2.setText("Registros");
+        m_registros.setText("Registros");
 
         m_trabajos.setText("Trabajos");
         m_trabajos.addActionListener(new java.awt.event.ActionListener() {
@@ -123,9 +145,32 @@ public class V_menu extends javax.swing.JFrame {
                 m_trabajosActionPerformed(evt);
             }
         });
-        jMenu2.add(m_trabajos);
+        m_registros.add(m_trabajos);
 
-        jMenuBar1.add(jMenu2);
+        m_clientes.setText("Clientes");
+        m_clientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_clientesActionPerformed(evt);
+            }
+        });
+        m_registros.add(m_clientes);
+
+        jMenuBar1.add(m_registros);
+
+        m_configuraciones.setText("Configuraciones");
+        m_configuraciones.setToolTipText("");
+        m_configuraciones.setVerifyInputWhenFocusTarget(false);
+        m_configuraciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                m_configuracionesMouseClicked(evt);
+            }
+        });
+        m_configuraciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_configuracionesActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(m_configuraciones);
 
         setJMenuBar(jMenuBar1);
 
@@ -133,16 +178,29 @@ public class V_menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void cargar_foto(){
-        
-        ImageIcon iconoOriginal = new ImageIcon("src/Imagenes/logo.png");
+        // 1. Obtener las dimensiones actuales del Label
+        int ancho = l_foto.getWidth();
+        int alto = l_foto.getHeight();
 
-Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Image.SCALE_SMOOTH);
-    l_foto.setIcon(new ImageIcon(imagenEscalada));
+        // 2. Si la ventana apenas se está abriendo, el tamaño puede ser 0.
+        // Usamos tamaños por defecto (600x400) para evitar errores en la primera carga.
+        if (ancho <= 0) ancho = 600;
+        if (alto <= 0) alto = 400;
+
+        try {
+            ImageIcon iconoOriginal = new ImageIcon("src/Imagenes/logo.png");
+
+            // 3. Escalamos la imagen usando el tamaño real obtenido del Label
+            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+            l_foto.setIcon(new ImageIcon(imagenEscalada));
+
+        if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al procesar la imagen: " + e.getMessage());
+        }
     
-    if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-    System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
-    
-    }
     }
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -158,23 +216,52 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
 
     private void m_herramientaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_herramientaActionPerformed
         V_R_Herramienta herramienta = new V_R_Herramienta();
+        herramienta.setExtendedState(JFrame.MAXIMIZED_BOTH);
         herramienta.setVisible(true);
     }//GEN-LAST:event_m_herramientaActionPerformed
 
     private void m_empleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_empleadoActionPerformed
         V_R_Empleado empleado = new V_R_Empleado();
+        empleado.setExtendedState(JFrame.MAXIMIZED_BOTH);
         empleado.setVisible(true);
     }//GEN-LAST:event_m_empleadoActionPerformed
 
     private void m_trabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_trabajoActionPerformed
         V_R_Trabajo trabajo = new V_R_Trabajo();
+        trabajo.setExtendedState(JFrame.MAXIMIZED_BOTH);
         trabajo.setVisible(true);
     }//GEN-LAST:event_m_trabajoActionPerformed
 
     private void m_trabajosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_trabajosActionPerformed
         V_trabajos trabajos = new V_trabajos();
+        trabajos.setExtendedState(JFrame.MAXIMIZED_BOTH);
         trabajos.setVisible(true);
     }//GEN-LAST:event_m_trabajosActionPerformed
+
+    private void m_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_clientesActionPerformed
+        V_clientes clientes = new V_clientes();
+        clientes.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        clientes.setVisible(true);
+    }//GEN-LAST:event_m_clientesActionPerformed
+
+    private void m_configuracionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_configuracionesActionPerformed
+        
+    }//GEN-LAST:event_m_configuracionesActionPerformed
+
+    private void m_configuracionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_m_configuracionesMouseClicked
+        D_configuraciones config = new D_configuraciones(this,true);
+        
+        // Configura el diálogo al tamaño completo de la pantalla
+        //config.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());
+        // Opcional: Centrarlo por si acaso
+        //config.setLocationRelativeTo(null);
+        
+        config.setVisible(true);
+    }//GEN-LAST:event_m_configuracionesMouseClicked
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        cargar_foto();
+    }//GEN-LAST:event_formComponentResized
 
     /**
      * @param args the command line arguments
@@ -213,20 +300,24 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(600, 400, Imag
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem M_cerrar_programa;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler3;
     private javax.swing.JDialog jDialog1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel l_foto;
+    private javax.swing.JMenu m_catalogo;
+    private javax.swing.JMenuItem m_clientes;
+    private javax.swing.JMenu m_configuraciones;
     private javax.swing.JMenuItem m_empleado;
     private javax.swing.JMenuItem m_herramienta;
+    private javax.swing.JMenu m_registros;
     private javax.swing.JMenuItem m_trabajo;
     private javax.swing.JMenuItem m_trabajos;
     // End of variables declaration//GEN-END:variables

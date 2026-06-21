@@ -85,6 +85,7 @@ public class V_pago_recibido extends javax.swing.JFrame {
         jLabel5.setText("Monto");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 202, -1, -1));
 
+        b_aceptar.setBackground(new java.awt.Color(47, 101, 202));
         b_aceptar.setText("Aceptar");
         b_aceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

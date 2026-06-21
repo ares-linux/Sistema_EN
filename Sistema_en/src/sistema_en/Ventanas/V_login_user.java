@@ -1,4 +1,4 @@
-/*
+/*ws
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
@@ -21,6 +21,7 @@ public class V_login_user extends javax.swing.JFrame {
      */
     public V_login_user() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -41,6 +42,8 @@ public class V_login_user extends javax.swing.JFrame {
         t_contraseña = new javax.swing.JPasswordField();
         l_aviso_contra = new javax.swing.JLabel();
         l_aviso_user = new javax.swing.JLabel();
+        l_confir = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -49,10 +52,9 @@ public class V_login_user extends javax.swing.JFrame {
             }
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 200, 200));
 
-        l_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 37, 200, 200));
-
+        b_aceptar.setBackground(new java.awt.Color(47, 101, 202));
         b_aceptar.setText("Aceptar");
         b_aceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,22 +69,38 @@ public class V_login_user extends javax.swing.JFrame {
                 b_aceptarKeyTyped(evt);
             }
         });
-        getContentPane().add(b_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 368, -1, -1));
+        getContentPane().add(b_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 200, -1));
 
         b_cancelar.setText("Cancelar");
+        b_cancelar.setSelected(true);
         b_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_cancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(178, 368, -1, -1));
+        b_cancelar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_cancelarKeyPressed(evt);
+            }
+        });
+        getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 200, -1));
 
         jLabel2.setText("Usuario");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 271, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, -1, -1));
 
+        t_usuario.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                t_usuarioFocusGained(evt);
+            }
+        });
         t_usuario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 t_usuarioMouseClicked(evt);
+            }
+        });
+        t_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                t_usuarioActionPerformed(evt);
             }
         });
         t_usuario.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -90,10 +108,10 @@ public class V_login_user extends javax.swing.JFrame {
                 t_usuarioKeyPressed(evt);
             }
         });
-        getContentPane().add(t_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(114, 268, 200, -1));
+        getContentPane().add(t_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 200, -1));
 
         jLabel3.setText("Contraseña");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 309, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
 
         t_contraseña.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -105,13 +123,23 @@ public class V_login_user extends javax.swing.JFrame {
                 t_contraseñaKeyPressed(evt);
             }
         });
-        getContentPane().add(t_contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 310, 200, -1));
+        getContentPane().add(t_contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 200, -1));
 
-        l_aviso_contra.setText("Ingrese una contraseña valida");
-        getContentPane().add(l_aviso_contra, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, -1, 20));
+        l_aviso_contra.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_aviso_contra.setText("X");
+        l_aviso_contra.setFocusable(false);
+        l_aviso_contra.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        l_aviso_contra.setMaximumSize(new java.awt.Dimension(230, 20));
+        l_aviso_contra.setMinimumSize(new java.awt.Dimension(230, 20));
+        getContentPane().add(l_aviso_contra, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 20, 20));
 
-        l_aviso_user.setText("Ingrese un usuario valido");
-        getContentPane().add(l_aviso_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 250, 190, -1));
+        l_aviso_user.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_aviso_user.setText("X");
+        getContentPane().add(l_aviso_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 20, -1));
+
+        l_confir.setText("✔");
+        getContentPane().add(l_confir, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 350, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 290, 520));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -122,12 +150,18 @@ public class V_login_user extends javax.swing.JFrame {
         l_aviso_contra.setForeground(Color.red);
         l_aviso_user.setVisible(false);
         l_aviso_user.setForeground(Color.red);
+        l_confir.setVisible(false);
+        l_confir.setForeground(Color.green);
     }//GEN-LAST:event_formWindowOpened
 
     private void t_usuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_usuarioKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_contraseña.requestFocus();
+         
+        }
+    if (Tecla_presionada == KeyEvent.VK_DOWN) {
         this.t_contraseña.requestFocus();
            
         }
@@ -146,7 +180,25 @@ public class V_login_user extends javax.swing.JFrame {
         
         if(Tecla == KeyEvent.VK_ENTER)
         {
+            String pasword = new String(t_contraseña.getPassword());
+            
+            if(pasword.equals("1234")){
+                l_confir.setVisible(true);
+            }
+            else{
+                l_confir.setVisible(false);
+            }
+            
             this.b_aceptar.requestFocus();
+        }
+        if (Tecla == KeyEvent.VK_UP) {
+        this.t_usuario.requestFocus();
+           
+        }
+        
+        if (Tecla == KeyEvent.VK_DOWN) {
+        this.b_aceptar.requestFocus();
+           
         }
     }//GEN-LAST:event_t_contraseñaKeyPressed
 
@@ -156,26 +208,35 @@ public class V_login_user extends javax.swing.JFrame {
 
     public void verificar_contra(){
         String pasword = new String(t_contraseña.getPassword());
-        if(t_usuario.getText().trim().isEmpty() || t_contraseña.getPassword().length>0)
-        {
-            
-            if(!t_usuario.getText().equals("Administrador")){
-                l_aviso_user.setVisible(true);
-            }
-            
-            if(!pasword.equals("1234")){
-                l_aviso_contra.setVisible(true);
-            } 
-                
-            
-            if(t_usuario.getText().equals("Administrador") && pasword.equals("1234"))
-            {
-                V_menu menu = new V_menu();
-                menu.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                menu.setVisible(true);
-                this.dispose();
-            }
-            
+    
+        l_aviso_user.setVisible(false);
+        l_aviso_contra.setVisible(false);
+    
+        boolean error = false;
+
+        if (t_usuario.getText().trim().isEmpty()) {
+            l_aviso_user.setVisible(true);
+            error = true;
+        } 
+        else if (!t_usuario.getText().equals("Administrador")) {
+            l_aviso_user.setVisible(true);
+            error = true;
+        }
+    
+        if (pasword.isEmpty()) {
+            l_aviso_contra.setVisible(true);
+            error = true;
+        } 
+        else if (!pasword.equals("1234")) {
+            l_aviso_contra.setVisible(true);
+            error = true;
+        } 
+    
+        if (!error) {
+            V_menu menu = new V_menu();
+            menu.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            menu.setVisible(true);
+            this.dispose();
         }
     }
     
@@ -184,7 +245,15 @@ public class V_login_user extends javax.swing.JFrame {
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) 
         {
-            verificar_contra();
+            //verificar_contra();
+        }
+    if (Tecla_presionada == KeyEvent.VK_UP) {
+        this.t_contraseña.requestFocus();
+           
+        }
+    if (Tecla_presionada == KeyEvent.VK_DOWN) {
+        this.b_cancelar.requestFocus();
+           
         }
     }//GEN-LAST:event_b_aceptarKeyPressed
 
@@ -195,6 +264,27 @@ public class V_login_user extends javax.swing.JFrame {
     private void t_usuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_usuarioMouseClicked
         l_aviso_user.setVisible(false);
     }//GEN-LAST:event_t_usuarioMouseClicked
+
+    private void t_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_usuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_usuarioActionPerformed
+
+    private void b_cancelarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_cancelarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_UP) 
+        {
+            this.b_aceptar.requestFocus();
+        }
+    if (Tecla_presionada == KeyEvent.VK_ENTER) 
+        {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_b_cancelarKeyPressed
+
+    private void t_usuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_usuarioFocusGained
+        l_aviso_user.setVisible(false);
+    }//GEN-LAST:event_t_usuarioFocusGained
 
     public void cargar_foto(){
         
@@ -249,8 +339,10 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(200, 200, Imag
     private javax.swing.JButton b_cancelar;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel l_aviso_contra;
     private javax.swing.JLabel l_aviso_user;
+    private javax.swing.JLabel l_confir;
     private javax.swing.JLabel l_foto;
     private javax.swing.JPasswordField t_contraseña;
     private javax.swing.JTextField t_usuario;
