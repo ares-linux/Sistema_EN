@@ -4,10 +4,13 @@
  */
 package sistema_en;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import javax.swing.JFrame;
 import sistema_en.Ventanas.V_login_user;
 import sistema_en.Ventanas.V_menu;
+
 
 
 /**
@@ -21,8 +24,13 @@ public class Sistema_en {
      */
     public static void main(String[] args) {
         
+        FlatDarkLaf.setup();
+        //FlatLightLaf.setup();
+        java.awt.EventQueue.invokeLater(() -> {
+        
+    
         V_login_user login = new V_login_user();
-        login.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //login.setExtendedState(JFrame.MAXIMIZED_BOTH);
         //login.getContentPane().setBackground(Color.decode("#FFFFF"));
         login.setVisible(true);
 
@@ -30,6 +38,7 @@ public class Sistema_en {
         //menu.setExtendedState(JFrame.MAXIMIZED_BOTH);
         //menu.getContentPane().setBackground(Color.decode("#FFFFFF"));
         //menu.setVisible(true);
+        });
     }
     
 }

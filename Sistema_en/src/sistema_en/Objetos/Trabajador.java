@@ -17,7 +17,7 @@ public class Trabajador {
     private String f_nac;
     private String CURP;
     private String rfc;
-    private String estado;
+    
     
     public Trabajador(){
         foto = "/home/ares/NetBeansProjects/Sistema_EN/Sistema_en/src/Imagenes/signo-de-pregunta.png";
@@ -135,20 +135,6 @@ public class Trabajador {
      */
     public void setRfc(String rfc) {
         this.rfc = rfc;
-    }
-
-    /**
-     * @return the estado
-     */
-    public String getEstado() {
-        return estado;
-    }
-
-    /**
-     * @param estado the estado to set
-     */
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     /**

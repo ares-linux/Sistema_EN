@@ -4,6 +4,7 @@
  */
 package sistema_en.Ventanas;
 
+import sistema_en.Ventanas.dialogos.D_buscar_cliente;
 import java.awt.event.KeyEvent;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -59,6 +60,8 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         b_editar = new javax.swing.JButton();
         t_id = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        b_buscar_cli = new javax.swing.JButton();
+        b_cerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -68,6 +71,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setText("Registrar trabajo");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, -1, 20));
 
@@ -152,7 +156,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 b_nuevoKeyPressed(evt);
             }
         });
-        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
+        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, -1, -1));
 
         b_eliminar.setText("Eliminar");
         b_eliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -160,10 +164,10 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 b_eliminarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, -1, -1));
+        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 360, -1, -1));
 
         b_buscar.setText("Buscar");
-        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 360, -1, -1));
+        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 360, -1, -1));
 
         b_editar.setText("Editar");
         b_editar.addActionListener(new java.awt.event.ActionListener() {
@@ -171,7 +175,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 b_editarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 360, -1, -1));
+        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 360, -1, -1));
 
         t_id.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -182,6 +186,22 @@ public class V_R_Trabajo extends javax.swing.JFrame {
 
         jLabel9.setText("id");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));
+
+        b_buscar_cli.setText("Buscar cliente");
+        b_buscar_cli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_buscar_cliActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_buscar_cli, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 110, -1, -1));
+
+        b_cerrar.setText("Cerrar");
+        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cerrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(b_cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 360, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -206,12 +226,14 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         b_eliminar.setEnabled(false);
         b_buscar.setEnabled(false);
         b_editar.setEnabled(false);
+        b_buscar_cli.setEnabled(false);
     }
     
     public void desbloquear_botones(){
         b_eliminar.setEnabled(true);
         b_buscar.setEnabled(true);
         b_editar.setEnabled(true);
+        b_buscar_cli.setEnabled(true);
     }
     
     public void limpiar_text(){
@@ -251,18 +273,34 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         modelo.addRow(info);
         this.Tabla_trabajos.setModel(modelo);
 
-        // Crear carpeta con el ID del trabajo en G:\Mi unidad\Trabajo
         String idTrabajo = t_id.getText().trim();
-        if (!idTrabajo.isEmpty()) {
+    if (!idTrabajo.isEmpty()) {
+        // Usamos hilos (Thread) para evitar que la interfaz de Java Swing se congele
+        new Thread(() -> {
             try {
-                java.io.File carpeta = new java.io.File("G:\\Mi unidad\\Trabajo\\" + idTrabajo);
+                // Definición de la ruta base (puedes cambiar 'G' por la letra real de tu Drive)
+                String rutaBase = "G:\\Mi unidad\\Trabajo\\";
+                java.io.File carpeta = new java.io.File(rutaBase + idTrabajo);
+                
                 if (!carpeta.exists()) {
-                    carpeta.mkdirs();
+                    boolean creada = carpeta.mkdirs();
+                    if (!creada) {
+                        System.err.println("No se pudieron crear todos los directorios para: " + idTrabajo);
+                    }
                 }
             } catch (Exception e) {
-                System.err.println("Error al crear la carpeta del trabajo: " + e.getMessage());
+                // Alerta en consola
+                System.err.println("Error crítico al crear la carpeta del trabajo: " + e.getMessage());
+                // Alerta visual discreta al usuario en caso de error de red/disco
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    javax.swing.JOptionPane.showMessageDialog(this, 
+                        "No se pudo crear la carpeta en Google Drive.\nVerifique que la unidad G: esté conectada.", 
+                        "Advertencia de Almacenamiento", 
+                        javax.swing.JOptionPane.WARNING_MESSAGE);
+                });
             }
-        }
+        }).start();
+    }
     }
     
     public void cargar_datos_tabla(int indice){
@@ -295,7 +333,10 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     }
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        b_buscar_cli.setEnabled(false);
         t_nombre.requestFocus();
+        
+        
         t_fecha_r.setText(java.time.LocalDate.now().toString());
         LocalTime horaactual = LocalTime.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -360,6 +401,8 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             limpiar_text();
             hora_fecha();
             bloquear_botones();
+            b_buscar_cli.setEnabled(true);
+            b_cerrar.setEnabled(false);
         }
         else
         {
@@ -372,17 +415,27 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             bloquear_text();
             desbloquear_botones();
             limpiar_text();
+            b_buscar_cli.setEnabled(false);
+            b_cerrar.setEnabled(true);
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         if ("Editar".equals(b_editar.getText()))
         {
+            fila = Tabla_trabajos.getSelectedRow();
+                if (fila == -1) 
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para editar.");
+                    return;
+                }
+            
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
             b_eliminar.setEnabled(false);
             b_buscar.setEnabled(false);
             desbloquear_text();
+            b_cerrar.setEnabled(false);
         }
         else
         {
@@ -396,6 +449,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             b_eliminar.setEnabled(true);
             b_buscar.setEnabled(true);
             bloquear_text();
+            b_cerrar.setEnabled(true);
         }
     }//GEN-LAST:event_b_editarActionPerformed
 
@@ -441,6 +495,16 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_t_descripcionKeyPressed
 
+    private void b_buscar_cliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscar_cliActionPerformed
+        D_buscar_cliente buscar = new D_buscar_cliente(this, true);
+        buscar.setLocationRelativeTo(this);
+        buscar.setVisible(true);
+    }//GEN-LAST:event_b_buscar_cliActionPerformed
+
+    private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_cerrarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -480,6 +544,8 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla_trabajos;
     private javax.swing.JButton b_buscar;
+    private javax.swing.JButton b_buscar_cli;
+    private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_editar;
     private javax.swing.JButton b_eliminar;
     private javax.swing.JButton b_nuevo;

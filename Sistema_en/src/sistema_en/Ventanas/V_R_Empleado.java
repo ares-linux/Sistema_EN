@@ -67,6 +67,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         c_puesto = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         t_id = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
 
         jButton2.setText("...");
 
@@ -80,8 +81,9 @@ public class V_R_Empleado extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setText("Registrar empleado");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, 130, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, 130, -1));
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         jLabel3.setText("Nombre");
@@ -122,8 +124,9 @@ public class V_R_Empleado extends javax.swing.JFrame {
         jLabel8.setText("Foto");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 390, -1, -1));
 
+        l_foto.setToolTipText("Foto del empleado");
         l_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 120, 260, 270));
+        getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 70, 300, 350));
 
         jLabel10.setText("Curp");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, -1));
@@ -181,7 +184,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         b_buscar.setText("Buscar");
         getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 430, -1, -1));
 
-        b_foto.setText("jButton4");
+        b_foto.setText("...");
         b_foto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_fotoActionPerformed(evt);
@@ -206,6 +209,11 @@ public class V_R_Empleado extends javax.swing.JFrame {
         getContentPane().add(c_sexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 310, -1));
 
         c_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Oficial", "Medio oficial", "Cabo" }));
+        c_puesto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                c_puestoActionPerformed(evt);
+            }
+        });
         c_puesto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 c_puestoKeyPressed(evt);
@@ -223,9 +231,17 @@ public class V_R_Empleado extends javax.swing.JFrame {
         });
         getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 310, -1));
 
+        jButton3.setText("Cerrar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 430, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+   
     public void bloquear_botones(){
         b_eliminar.setEnabled(false);
         b_editar.setEnabled(false);
@@ -458,6 +474,13 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         if ("Editar".equals(b_editar.getText()))
         {
+            fila = Tabla_empleados.getSelectedRow();
+                if (fila == -1) 
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un empleado de la tabla para editar.");
+                    return;
+                }
+            
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
             b_eliminar.setEnabled(false);
@@ -490,10 +513,10 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
 
     private void c_sexoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_sexoKeyPressed
         int Tecla_presionada = evt.getKeyCode();
+        int e;
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.c_puesto.requestFocus();
-           
+            this.c_puesto.requestFocus(); 
         }
     }//GEN-LAST:event_c_sexoKeyPressed
 
@@ -501,10 +524,19 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
         int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        c_puesto.setSelectedItem(ABORT);
         this.t_rfc.requestFocus();
            
         }
     }//GEN-LAST:event_c_puestoKeyPressed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void c_puestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_puestoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_puestoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -553,6 +585,7 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     private javax.swing.JComboBox<String> c_sexo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

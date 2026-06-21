@@ -54,6 +54,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla_herramientas = new javax.swing.JTable();
         b_editar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         jLabel5.setText("jLabel5");
 
@@ -69,6 +70,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         getContentPane().add(c_tipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 220, -1));
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, -1, -1));
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setText("Registrar herramienta");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, -1, 20));
 
@@ -79,13 +81,14 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, -1));
         getContentPane().add(t_n_serie, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 220, -1));
 
+        h_foto.setToolTipText("foto de la herramienta");
         h_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         getContentPane().add(h_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 250, 280));
 
         jLabel7.setText("Foto");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
 
-        b_foto.setText("jButton1");
+        b_foto.setText("...");
         b_foto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_fotoActionPerformed(evt);
@@ -97,23 +100,30 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         getContentPane().add(t_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 180, -1));
 
         b_nuevo.setText("Nuevo");
+        b_nuevo.setMaximumSize(new java.awt.Dimension(70, 25));
+        b_nuevo.setMinimumSize(new java.awt.Dimension(70, 25));
         b_nuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_nuevoActionPerformed(evt);
             }
         });
-        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, -1));
+        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         b_eliminar.setText("Eliminar");
+        b_eliminar.setMaximumSize(new java.awt.Dimension(70, 25));
+        b_eliminar.setMinimumSize(new java.awt.Dimension(70, 25));
         b_eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_eliminarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 280, -1, -1));
+        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 280, -1, -1));
 
         b_buscar.setText("Buscar");
-        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, -1, -1));
+        b_buscar.setMaximumSize(new java.awt.Dimension(70, 25));
+        b_buscar.setMinimumSize(new java.awt.Dimension(70, 25));
+        b_buscar.setName(""); // NOI18N
+        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
         Tabla_herramientas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -133,12 +143,25 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 520, 170));
 
         b_editar.setText("Editar");
+        b_editar.setMaximumSize(new java.awt.Dimension(70, 25));
+        b_editar.setMinimumSize(new java.awt.Dimension(70, 25));
+        b_editar.setPreferredSize(new java.awt.Dimension(70, 25));
         b_editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_editarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 80, -1));
+        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 320, 70, 25));
+
+        jButton1.setText("Cerrar");
+        jButton1.setMaximumSize(new java.awt.Dimension(70, 25));
+        jButton1.setMinimumSize(new java.awt.Dimension(70, 25));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -181,6 +204,14 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         if ("Editar".equals(b_editar.getText()))
         {
+            
+            fila = Tabla_herramientas.getSelectedRow();
+                if (fila == -1) 
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione una herramienta de la tabla para editar.");
+                    return;
+                }
+            
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
             b_eliminar.setEnabled(false);
@@ -223,6 +254,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
             desbloquear_botones();
             limpiar_text();
             bloquear_text();
+            b_foto.setEnabled(false);
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
@@ -249,16 +281,22 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_b_eliminarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     public void bloquear_botones(){
         b_eliminar.setEnabled(false);
         b_editar.setEnabled(false);
         b_buscar.setEnabled(false);
+        b_foto.setEnabled(false);
     }
     
     public void desbloquear_botones(){
         b_eliminar.setEnabled(true);
         b_editar.setEnabled(true);
         b_buscar.setEnabled(true);
+        b_foto.setEnabled(true);
     }
     
     public void limpiar_text(){
@@ -368,6 +406,7 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(250, 280, Imag
     private javax.swing.JButton b_nuevo;
     private javax.swing.JComboBox<String> c_tipo;
     private javax.swing.JLabel h_foto;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
