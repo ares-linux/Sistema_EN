@@ -7,6 +7,8 @@ package sistema_en.Ventanas;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JFrame;
+import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 
 /**
  *
@@ -94,6 +96,7 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
         getContentPane().add(b_informacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
 
         jLabel5.setText("Ficha de trabajo");
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, -1, -1));
 
         jLabel6.setText("Id_trabajo");
@@ -133,6 +136,11 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private V_R_Trabajo ventana_trabajo = null;
+    private V_bitacora ventana_bitacora = null;
+    private V_R_Cotizacion ventana_cotizacion = null;
+    private V_pago_recibido ventana_pago = null;
+    
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
         this.dispose();
     }//GEN-LAST:event_b_cerrarActionPerformed
@@ -160,18 +168,57 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void b_cotizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cotizacionActionPerformed
-        V_R_cotizacion cotizacion = new V_R_cotizacion();
-        cotizacion.setVisible(true);
+        //V_R_cotizacion cotizacion = new V_R_Cotizacion();
+        //cotizacion.setVisible(true);
+        
+        if (ventana_cotizacion == null || !ventana_cotizacion.isDisplayable()) {
+            ventana_cotizacion = new V_R_Cotizacion();
+            ventana_cotizacion.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_cotizacion.setVisible(true);
+        } else {
+            if (ventana_cotizacion.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_cotizacion.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_cotizacion.toFront();
+            ventana_cotizacion.requestFocus();
+        }
+        
     }//GEN-LAST:event_b_cotizacionActionPerformed
 
     private void b_bitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_bitacoraActionPerformed
-        V_bitacora bitacora = new V_bitacora();
-        bitacora.setVisible(true);
+        //V_bitacora bitacora = new V_bitacora();
+        //bitacora.setVisible(true);
+        
+        if (ventana_bitacora == null || !ventana_bitacora.isDisplayable()) {
+            ventana_bitacora = new V_bitacora();
+            ventana_bitacora.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_bitacora.setVisible(true);
+        } else {
+            if (ventana_bitacora.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_bitacora.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_bitacora.toFront();
+            ventana_bitacora.requestFocus();
+        }
+        
     }//GEN-LAST:event_b_bitacoraActionPerformed
 
     private void b_informacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_informacionActionPerformed
-        V_R_Trabajo trabajo = new V_R_Trabajo();
-        trabajo.setVisible(true);
+        //V_R_Trabajo trabajo = new V_R_Trabajo();
+        //trabajo.setVisible(true);
+        
+        if (ventana_trabajo == null || !ventana_trabajo.isDisplayable()) {
+            ventana_trabajo = new V_R_Trabajo();
+            ventana_trabajo.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_trabajo.setVisible(true);
+        } else {
+            if (ventana_trabajo.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_trabajo.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_trabajo.toFront();
+            ventana_trabajo.requestFocus();
+        }
+        
     }//GEN-LAST:event_b_informacionActionPerformed
 
     public void registrar_pago(){
@@ -191,8 +238,21 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
     
     private void b_pago_recibidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_pago_recibidoActionPerformed
         this.dispose();
-        V_pago_recibido pago = new V_pago_recibido();
-        pago.setVisible(true);
+        //V_pago_recibido pago = new V_pago_recibido();
+        //pago.setVisible(true);
+        
+        if (ventana_pago == null || !ventana_pago.isDisplayable()) {
+            ventana_pago = new V_pago_recibido();
+            ventana_pago.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_pago.setVisible(true);
+        } else {
+            if (ventana_pago.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_pago.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_pago.toFront();
+            ventana_pago.requestFocus();
+        }
+        
     }//GEN-LAST:event_b_pago_recibidoActionPerformed
 
     /**

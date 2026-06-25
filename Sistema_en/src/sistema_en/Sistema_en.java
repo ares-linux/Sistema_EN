@@ -24,8 +24,8 @@ public class Sistema_en {
      */
     public static void main(String[] args) {
         
-        FlatDarkLaf.setup();
-        //FlatLightLaf.setup();
+        //FlatDarkLaf.setup();
+        FlatLightLaf.setup();
         java.awt.EventQueue.invokeLater(() -> {
         
     

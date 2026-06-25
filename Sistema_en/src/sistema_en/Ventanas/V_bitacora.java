@@ -22,13 +22,14 @@ public class V_bitacora extends javax.swing.JFrame {
     
     Bitacora bitacora = new Bitacora();
     int fila;
+    
 
     /**
      * Creates new form V_bitacora
      */
     public V_bitacora() {
         initComponents();
-    }
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,8 +59,6 @@ public class V_bitacora extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        s_hora_salida = new javax.swing.JSpinner();
-        s_hora_llegada = new javax.swing.JSpinner();
         jLabel12 = new javax.swing.JLabel();
         t_evidencia = new javax.swing.JTextField();
         b_foto = new javax.swing.JButton();
@@ -70,6 +69,8 @@ public class V_bitacora extends javax.swing.JFrame {
         b_editar = new javax.swing.JButton();
         l_evidencia = new javax.swing.JLabel();
         b_buscar = new javax.swing.JButton();
+        time_hora_llegada = new com.github.lgooddatepicker.components.TimePicker();
+        time_hora_salida = new com.github.lgooddatepicker.components.TimePicker();
 
         jLabel5.setText("Fecha");
 
@@ -89,48 +90,39 @@ public class V_bitacora extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("Bitacora");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, -1, 20));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel1.setText("Bitacora de asistencia");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, -1, 20));
 
         jLabel2.setText("Trabajo");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 20, -1, -1));
 
         jLabel3.setText("Fecha");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 60, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 90, -1, -1));
 
         t_id.setEditable(false);
-        getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 200, -1));
+        getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 40, 200, -1));
 
         t_fecha.setEditable(false);
-        getContentPane().add(t_fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 210, -1));
+        getContentPane().add(t_fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 120, 200, -1));
 
         c_plomero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLO_00", "PLO_01", "PLO_02", "PLO_03", "PLO_04", "PLO_05", "PLO_06", "PLO_07", "PLO_08", "PLO_09", "Administrador" }));
-        getContentPane().add(c_plomero, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 110, -1));
+        getContentPane().add(c_plomero, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, 310, -1));
 
-        jLabel9.setText("Plomero");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 140, -1, -1));
+        jLabel9.setText("Seleccionar plomero:");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
 
-        jLabel10.setText("Hora de llegada");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, -1, -1));
+        jLabel10.setText("Hora de entrada");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 150, -1, -1));
 
         jLabel11.setText("Hora de salida");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 140, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 150, -1, -1));
 
-        s_hora_salida.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.HOUR));
-        s_hora_salida.setEditor(new javax.swing.JSpinner.DateEditor(s_hora_salida, "hh:mm a"));
-        getContentPane().add(s_hora_salida, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 170, 150, -1));
-
-        s_hora_llegada.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.HOUR));
-        s_hora_llegada.setAutoscrolls(true);
-        s_hora_llegada.setEditor(new javax.swing.JSpinner.DateEditor(s_hora_llegada, "hh:mm a"));
-        s_hora_llegada.setName(""); // NOI18N
-        getContentPane().add(s_hora_llegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 170, 150, -1));
-
-        jLabel12.setText("Evidencia");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 140, -1, -1));
+        jLabel12.setText("Ruta de evidencia");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, -1, -1));
 
         t_evidencia.setEditable(false);
-        getContentPane().add(t_evidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 170, 150, -1));
+        getContentPane().add(t_evidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 280, -1));
 
         b_foto.setText("...");
         b_foto.addActionListener(new java.awt.event.ActionListener() {
@@ -138,7 +130,7 @@ public class V_bitacora extends javax.swing.JFrame {
                 b_fotoActionPerformed(evt);
             }
         });
-        getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 170, -1, -1));
+        getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 250, -1, -1));
 
         b_nuevo.setText("Nuevo");
         b_nuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -146,7 +138,7 @@ public class V_bitacora extends javax.swing.JFrame {
                 b_nuevoActionPerformed(evt);
             }
         });
-        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 170, -1, -1));
+        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 310, -1));
 
         Tabla_bitacora.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -163,7 +155,7 @@ public class V_bitacora extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(Tabla_bitacora);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 670, 210));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 930, 170));
 
         b_eliminar.setText("Eliminar");
         b_eliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -171,7 +163,7 @@ public class V_bitacora extends javax.swing.JFrame {
                 b_eliminarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 490, -1, -1));
+        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, -1, -1));
 
         b_editar.setText("Editar");
         b_editar.addActionListener(new java.awt.event.ActionListener() {
@@ -179,27 +171,29 @@ public class V_bitacora extends javax.swing.JFrame {
                 b_editarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 490, -1, -1));
+        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 230, -1, -1));
 
         l_evidencia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(l_evidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 30, 340, 480));
+        getContentPane().add(l_evidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 30, 340, 290));
 
         b_buscar.setText("Buscar");
-        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 490, -1, -1));
+        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 230, -1, -1));
+        getContentPane().add(time_hora_llegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(56, 180, 140, -1));
+        getContentPane().add(time_hora_salida, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 150, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     public void bloquear_text(){
         c_plomero.setEnabled(false);
-        s_hora_llegada.setEnabled(false);
-        s_hora_salida.setEnabled(false);
+        time_hora_llegada.setEnabled(false);
+        time_hora_salida.setEnabled(false);
     }
     
     public void desbloquear_text(){
         c_plomero.setEnabled(true);
-        s_hora_llegada.setEnabled(true);
-        s_hora_salida.setEnabled(true);
+        time_hora_llegada.setEnabled(true);
+        time_hora_salida.setEnabled(true);
     }
     
     public void bloquear_botones(){
@@ -225,16 +219,21 @@ public class V_bitacora extends javax.swing.JFrame {
     public void limpiar_text(){
         t_fecha.setText(java.time.LocalDate.now().toString());
         t_evidencia.setText("");
-        s_hora_llegada.setValue(new java.util.Date());
-        s_hora_salida.setValue(new java.util.Date());
+        time_hora_llegada.setTime(null);
+        time_hora_salida.setTime(null);
     }
     
     public void llenar_tabla(){
+        
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
+        String entrada_F = time_hora_llegada.getTime().format(formateador);
+        String salida_F = time_hora_salida.getTime().format(formateador);
+        
         Object [] info = new Object[5];
         info[0] = c_plomero.getSelectedItem().toString();
         info[1] = t_fecha.getText();
-        info[2] = s_hora_llegada.getValue();
-        info[3] = s_hora_salida.getValue();
+        info[2] = entrada_F;
+        info[3] = salida_F;
         info[4] = t_evidencia.getText();
         
         DefaultTableModel modelo=(DefaultTableModel) this.Tabla_bitacora.getModel();
@@ -244,11 +243,27 @@ public class V_bitacora extends javax.swing.JFrame {
     
     public void cargar_datos_tabla(int indice){
         this.c_plomero.setSelectedItem(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 0)));
-        this.t_fecha.setText(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 1)));
-        this.s_hora_llegada.setValue((java.util.Date) this.Tabla_bitacora.getValueAt(indice, 2));
-        this.s_hora_salida.setValue((java.util.Date) this.Tabla_bitacora.getValueAt(indice, 3));
-        this.t_evidencia.setText(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 4)));
-        cargar_foto();
+    this.t_fecha.setText(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 1)));
+    
+    // Recuperar los Strings de la tabla
+    String horaEntradaStr = String.valueOf(this.Tabla_bitacora.getValueAt(indice, 2));
+    String horaSalidaStr = String.valueOf(this.Tabla_bitacora.getValueAt(indice, 3));
+    
+    // Formateador para interpretar el texto de la tabla
+    DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
+    
+    try {
+        // Convertir texto a LocalTime y mandarlo al TimePicker
+        this.time_hora_llegada.setTime(LocalTime.parse(horaEntradaStr, formateador));
+        this.time_hora_salida.setTime(LocalTime.parse(horaSalidaStr, formateador));
+    } catch (Exception e) {
+        // En caso de que la fila seleccionada no tuviera horas válidas o estuviera vacía
+        this.time_hora_llegada.setTime(null);
+        this.time_hora_salida.setTime(null);
+    }
+    
+    this.t_evidencia.setText(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 4)));
+    cargar_foto();
     }
     
     public void llenar_text(){
@@ -256,11 +271,19 @@ public class V_bitacora extends javax.swing.JFrame {
     }
     
     public void editar_tabla(){
-        DefaultTableModel modelo =(DefaultTableModel) this.Tabla_bitacora.getModel();
+        if (time_hora_llegada.getTime() == null || time_hora_salida.getTime() == null) {
+            return;
+        }
+    
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("hh:mm a");
+        String entradaFormateada = time_hora_llegada.getTime().format(format);
+        String salidaFormateada = time_hora_salida.getTime().format(format);
+
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_bitacora.getModel();
         modelo.setValueAt(this.c_plomero.getSelectedItem(), fila, 0);
         modelo.setValueAt(this.t_fecha.getText(), fila, 1);
-        modelo.setValueAt(this.s_hora_llegada.getValue(), fila, 2);
-        modelo.setValueAt(this.s_hora_salida.getValue(), fila, 3);
+        modelo.setValueAt(entradaFormateada, fila, 2);
+        modelo.setValueAt(salidaFormateada, fila, 3);
         modelo.setValueAt(this.t_evidencia.getText(), fila, 4);
     }
     
@@ -289,6 +312,7 @@ public class V_bitacora extends javax.swing.JFrame {
             this.b_foto.setEnabled(true);
             b_nuevo.setText("Guardar");
             limpiar_text();
+            cargar_foto();
             bloquear_botones();
         }
         else
@@ -303,9 +327,8 @@ public class V_bitacora extends javax.swing.JFrame {
             bloquear_text();
             desbloquear_botones();
             b_nuevo.setEnabled(true);
-            cargar_foto();
             limpiar_text();
-            
+            cargar_foto();
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
@@ -454,10 +477,10 @@ public class V_bitacora extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JLabel l_evidencia;
-    private javax.swing.JSpinner s_hora_llegada;
-    private javax.swing.JSpinner s_hora_salida;
     private javax.swing.JTextField t_evidencia;
     private javax.swing.JTextField t_fecha;
     private javax.swing.JTextField t_id;
+    private com.github.lgooddatepicker.components.TimePicker time_hora_llegada;
+    private com.github.lgooddatepicker.components.TimePicker time_hora_salida;
     // End of variables declaration//GEN-END:variables
 }

@@ -16,7 +16,7 @@ import sistema_en.Objetos.Cotizacion;
  *
  * @author zahid
  */
-public class V_R_cotizacion extends javax.swing.JFrame {
+public class V_R_Cotizacion extends javax.swing.JFrame {
     
     
     //Cotizacion cotizacion = new Cotizacion();
@@ -29,7 +29,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
     /**
      * Creates new form V_registrarco
      */
-    public V_R_cotizacion() {
+    public V_R_Cotizacion() {
         initComponents();
     }
 
@@ -148,6 +148,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setText("Cotizacion");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, -1, -1));
 
@@ -159,31 +160,31 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         getContentPane().add(t_n_trabajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 290, -1));
 
         jLabel4.setText("Numero de cotizacion");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 120, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 50, -1, -1));
 
         t_n_cotizacion.setEditable(false);
         t_n_cotizacion.setText("0");
-        getContentPane().add(t_n_cotizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, 290, -1));
+        getContentPane().add(t_n_cotizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 80, 290, -1));
 
         jLabel5.setText("Concepto");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 230, -1, 20));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, -1, 20));
 
         t_concepto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_conceptoKeyPressed(evt);
             }
         });
-        getContentPane().add(t_concepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 240, -1));
+        getContentPane().add(t_concepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 240, -1));
 
         jLabel6.setText("Precio");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 230, -1, 20));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, -1, 20));
 
         t_precio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_precioKeyPressed(evt);
             }
         });
-        getContentPane().add(t_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 260, 250, -1));
+        getContentPane().add(t_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, 250, -1));
 
         b_añadir_concepto.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
         b_añadir_concepto.setText("+");
@@ -197,7 +198,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 b_añadir_conceptoKeyPressed(evt);
             }
         });
-        getContentPane().add(b_añadir_concepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, -1, -1));
+        getContentPane().add(b_añadir_concepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 200, -1, -1));
 
         Tabla_conceptos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -214,7 +215,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(Tabla_conceptos);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 530, 220));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 530, 220));
 
         Tabla_materiales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -231,10 +232,10 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         });
         jScrollPane4.setViewportView(Tabla_materiales);
 
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 300, 590, 210));
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 240, 590, 210));
 
         jLabel7.setText("Nombre del material");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 230, -1, 20));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 170, -1, 20));
 
         t_nombre_m.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -251,10 +252,10 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 t_nombre_mKeyPressed(evt);
             }
         });
-        getContentPane().add(t_nombre_m, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 260, 210, -1));
+        getContentPane().add(t_nombre_m, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 200, 210, -1));
 
         jLabel8.setText("Precio uni");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 230, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 170, -1, -1));
 
         t_precio_uni.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -266,25 +267,25 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 t_precio_uniKeyPressed(evt);
             }
         });
-        getContentPane().add(t_precio_uni, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 260, 100, -1));
+        getContentPane().add(t_precio_uni, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 200, 100, -1));
 
         jLabel9.setText("Subtotal");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 540, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 480, -1, -1));
 
         t_subtotal.setEditable(false);
-        getContentPane().add(t_subtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 570, 110, -1));
+        getContentPane().add(t_subtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 510, 110, -1));
 
         jLabel10.setText("Iva 16%");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 540, -1, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 480, -1, -1));
 
         t_iva.setEditable(false);
-        getContentPane().add(t_iva, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 570, 100, -1));
+        getContentPane().add(t_iva, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 510, 100, -1));
 
         jLabel11.setText("Total");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 540, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 480, -1, -1));
 
         t_total.setEditable(false);
-        getContentPane().add(t_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 570, 90, -1));
+        getContentPane().add(t_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 510, 90, -1));
 
         b_eliminar.setText("Eliminar");
         b_eliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -292,7 +293,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 b_eliminarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 570, -1, -1));
+        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 510, -1, -1));
 
         b_editar.setText("Editar");
         b_editar.addActionListener(new java.awt.event.ActionListener() {
@@ -300,7 +301,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 b_editarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 570, -1, -1));
+        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 510, -1, -1));
 
         b_aceptar.setText("Aceptar");
         b_aceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -308,7 +309,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 b_aceptarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 610, -1, -1));
+        getContentPane().add(b_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
 
         b_cancelar.setText("Cancelar");
         b_cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -316,7 +317,7 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 b_cancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 610, -1, -1));
+        getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 550, -1, -1));
 
         jLabel1.setText("Fecha de creacion");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, -1, -1));
@@ -325,10 +326,10 @@ public class V_R_cotizacion extends javax.swing.JFrame {
         getContentPane().add(t_fecha_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 290, -1));
 
         t_hora_r.setEditable(false);
-        getContentPane().add(t_hora_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 290, -1));
+        getContentPane().add(t_hora_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 80, 290, -1));
 
         jLabel12.setText("Hora de creacion");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, -1, -1));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 50, -1, -1));
 
         t_cantidad.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -340,16 +341,16 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 t_cantidadKeyPressed(evt);
             }
         });
-        getContentPane().add(t_cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 260, 170, -1));
+        getContentPane().add(t_cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 200, 170, -1));
 
         jLabel13.setText("Cantidad");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 230, -1, -1));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 170, -1, -1));
 
         jLabel14.setText("Materiales");
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 190, -1, -1));
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 130, -1, -1));
 
         jLabel15.setText("Conceptos");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, -1, -1));
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, -1, -1));
 
         b_añadir_materiales.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
         b_añadir_materiales.setText("+");
@@ -363,10 +364,10 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 b_añadir_materialesKeyPressed(evt);
             }
         });
-        getContentPane().add(b_añadir_materiales, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 260, -1, -1));
+        getContentPane().add(b_añadir_materiales, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 200, -1, -1));
 
         l_aviso.setText("Por favor, revise los campos de concepto y precio.");
-        getContentPane().add(l_aviso, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 210, -1, -1));
+        getContentPane().add(l_aviso, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 150, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -804,21 +805,23 @@ public class V_R_cotizacion extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(V_R_cotizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(V_R_Cotizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(V_R_cotizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(V_R_Cotizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(V_R_cotizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(V_R_Cotizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(V_R_cotizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(V_R_Cotizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new V_R_cotizacion().setVisible(true);
+                new V_R_Cotizacion().setVisible(true);
             }
         });
     }

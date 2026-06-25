@@ -7,6 +7,10 @@ package sistema_en.Ventanas;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -15,6 +19,8 @@ import javax.swing.JFrame;
  * @author ares
  */
 public class V_login_user extends javax.swing.JFrame {
+    
+    int intentos = 0;
 
     /**
      * Creates new form V_login_user
@@ -55,7 +61,7 @@ public class V_login_user extends javax.swing.JFrame {
         getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 200, 200));
 
         b_aceptar.setBackground(new java.awt.Color(47, 101, 202));
-        b_aceptar.setText("Aceptar");
+        b_aceptar.setText("Ingresar");
         b_aceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_aceptarActionPerformed(evt);
@@ -71,7 +77,7 @@ public class V_login_user extends javax.swing.JFrame {
         });
         getContentPane().add(b_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, 200, -1));
 
-        b_cancelar.setText("Cancelar");
+        b_cancelar.setText("Salir");
         b_cancelar.setSelected(true);
         b_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,6 +91,7 @@ public class V_login_user extends javax.swing.JFrame {
         });
         getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 200, -1));
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setText("Usuario");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, -1, -1));
 
@@ -110,9 +117,15 @@ public class V_login_user extends javax.swing.JFrame {
         });
         getContentPane().add(t_usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 200, -1));
 
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel3.setText("Contraseña");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, -1, -1));
 
+        t_contraseña.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                t_contraseñaFocusGained(evt);
+            }
+        });
         t_contraseña.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 t_contraseñaMouseClicked(evt);
@@ -125,6 +138,7 @@ public class V_login_user extends javax.swing.JFrame {
         });
         getContentPane().add(t_contraseña, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 200, -1));
 
+        l_aviso_contra.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         l_aviso_contra.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         l_aviso_contra.setText("X");
         l_aviso_contra.setFocusable(false);
@@ -133,10 +147,12 @@ public class V_login_user extends javax.swing.JFrame {
         l_aviso_contra.setMinimumSize(new java.awt.Dimension(230, 20));
         getContentPane().add(l_aviso_contra, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 20, 20));
 
+        l_aviso_user.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         l_aviso_user.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         l_aviso_user.setText("X");
         getContentPane().add(l_aviso_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 20, -1));
 
+        l_confir.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         l_confir.setText("✔");
         getContentPane().add(l_confir, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 350, -1, -1));
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, 290, 520));
@@ -144,12 +160,34 @@ public class V_login_user extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    public class r_sonido {
+
+        public static void reproducir(String ruta) {
+            try {
+                File archivo = new File(ruta);
+                AudioInputStream audio = AudioSystem.getAudioInputStream(archivo);
+
+                Clip clip = AudioSystem.getClip();
+                clip.open(audio);
+                clip.start();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
+        
         l_aviso_contra.setVisible(false);
         l_aviso_contra.setForeground(Color.red);
+        
         l_aviso_user.setVisible(false);
         l_aviso_user.setForeground(Color.red);
+        
         l_confir.setVisible(false);
         l_confir.setForeground(Color.green);
     }//GEN-LAST:event_formWindowOpened
@@ -183,10 +221,13 @@ public class V_login_user extends javax.swing.JFrame {
             String pasword = new String(t_contraseña.getPassword());
             
             if(pasword.equals("1234")){
+                
                 l_confir.setVisible(true);
+                
             }
             else{
                 l_confir.setVisible(false);
+                
             }
             
             this.b_aceptar.requestFocus();
@@ -207,6 +248,7 @@ public class V_login_user extends javax.swing.JFrame {
     }//GEN-LAST:event_b_aceptarKeyTyped
 
     public void verificar_contra(){
+                        
         String pasword = new String(t_contraseña.getPassword());
     
         l_aviso_user.setVisible(false);
@@ -232,7 +274,16 @@ public class V_login_user extends javax.swing.JFrame {
             error = true;
         } 
     
-        if (!error) {
+        if (error) {
+        intentos++; 
+        
+        
+        if (intentos < 5) {
+            r_sonido.reproducir("src/audios/error.wav");
+        } else {
+            System.out.println("Límite alcanzado. Próximos intentos erroneos no sonarán.");
+        }
+        } else {
             V_menu menu = new V_menu();
             menu.setExtendedState(JFrame.MAXIMIZED_BOTH);
             menu.setVisible(true);
@@ -286,11 +337,15 @@ public class V_login_user extends javax.swing.JFrame {
         l_aviso_user.setVisible(false);
     }//GEN-LAST:event_t_usuarioFocusGained
 
+    private void t_contraseñaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_contraseñaFocusGained
+        l_aviso_contra.setVisible(false);
+    }//GEN-LAST:event_t_contraseñaFocusGained
+
     public void cargar_foto(){
         
         ImageIcon iconoOriginal = new ImageIcon("src/Imagenes/logo.png");
 
-Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
     l_foto.setIcon(new ImageIcon(imagenEscalada));
     
     if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {

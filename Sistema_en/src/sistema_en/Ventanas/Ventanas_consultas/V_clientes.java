@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package sistema_en.Ventanas;
+package sistema_en.Ventanas.Ventanas_consultas;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -41,11 +41,11 @@ public class V_clientes extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
+        d_periodo_inicio = new com.github.lgooddatepicker.components.DatePicker();
+        d_periodo_fin = new com.github.lgooddatepicker.components.DatePicker();
         c_ordenar = new javax.swing.JComboBox<>();
         t_buscar = new javax.swing.JTextField();
         b_buscar = new javax.swing.JButton();
-        d_periodo_inicio = new com.toedter.calendar.JDateChooser();
-        d_periodo_fin = new com.toedter.calendar.JDateChooser();
         b_reiniciar_filtros = new javax.swing.JButton();
         b_dividir_pantalla = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -56,7 +56,11 @@ public class V_clientes extends javax.swing.JFrame {
         Tabla_clientes = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setAlwaysOnTop(true);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jScrollPane2.setMaximumSize(new java.awt.Dimension(40, 80));
@@ -65,6 +69,16 @@ public class V_clientes extends javax.swing.JFrame {
         jPanel1.setAutoscrolls(true);
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel1.setLayout(new java.awt.GridBagLayout());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(1, 12, 0, 10);
+        jPanel1.add(d_periodo_inicio, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        jPanel1.add(d_periodo_fin, gridBagConstraints);
 
         c_ordenar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mayor a menor", "Menor a mayor", "Fecha de registro" }));
         c_ordenar.setMaximumSize(new java.awt.Dimension(127, 27));
@@ -120,41 +134,6 @@ public class V_clientes extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(3, 30, 0, 0);
         jPanel1.add(b_buscar, gridBagConstraints);
-
-        d_periodo_inicio.setToolTipText("inicio del periodo");
-        d_periodo_inicio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                d_periodo_inicioKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 62;
-        gridBagConstraints.ipady = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 22, 0, 0);
-        jPanel1.add(d_periodo_inicio, gridBagConstraints);
-
-        d_periodo_fin.setToolTipText("fin del periodo");
-        d_periodo_fin.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                d_periodo_finKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 62;
-        gridBagConstraints.ipady = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 25, 0, 0);
-        jPanel1.add(d_periodo_fin, gridBagConstraints);
 
         b_reiniciar_filtros.setText("Reiniciar filtros");
         b_reiniciar_filtros.setMaximumSize(new java.awt.Dimension(125, 25));
@@ -354,32 +333,6 @@ public class V_clientes extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_b_buscarKeyPressed
 
-    private void d_periodo_finKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_d_periodo_finKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-
-        if (Tecla_presionada == KeyEvent.VK_RIGHT) {
-            this.b_reiniciar_filtros.requestFocus();
-
-        }
-        if (Tecla_presionada == KeyEvent.VK_LEFT) {
-            this.d_periodo_inicio.requestFocus();
-
-        }
-    }//GEN-LAST:event_d_periodo_finKeyPressed
-
-    private void d_periodo_inicioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_d_periodo_inicioKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-
-        if (Tecla_presionada == KeyEvent.VK_RIGHT) {
-            this.d_periodo_fin.requestFocus();
-
-        }
-        if (Tecla_presionada == KeyEvent.VK_LEFT) {
-            this.b_buscar.requestFocus();
-
-        }
-    }//GEN-LAST:event_d_periodo_inicioKeyPressed
-
     private void b_reiniciar_filtrosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_reiniciar_filtrosKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
@@ -481,6 +434,28 @@ public class V_clientes extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_b_dividir_pantallaActionPerformed
 
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        // 1. Obtenemos la configuración de la pantalla actual
+        java.awt.GraphicsConfiguration config = this.getGraphicsConfiguration();
+        if (config != null) {
+            java.awt.Rectangle bounds = config.getBounds();
+            java.awt.Insets insets = java.awt.Toolkit.getDefaultToolkit().getScreenInsets(config);
+        
+        // 2. Calculamos el ancho útil de la pantalla (descontando barras de tareas)
+        int anchoUtil = bounds.width - insets.left - insets.right;
+        
+        // 3. Si el ancho de la ventana es menor o igual al 60% de la pantalla, asumimos que está dividida
+        if (this.getWidth() <= (anchoUtil * 0.6)) {
+            b_dividir_pantalla.setText("Maximizar");
+            dividida = true;
+        } else {
+            // Si es más ancha, asumimos que está completa o maximizada
+            b_dividir_pantalla.setText("Dividir");
+            dividida = false;
+        }
+    }
+    }//GEN-LAST:event_formComponentResized
+
     /**
      * @param args the command line arguments
      */
@@ -524,8 +499,8 @@ public class V_clientes extends javax.swing.JFrame {
     private javax.swing.JButton b_dividir_pantalla;
     private javax.swing.JButton b_reiniciar_filtros;
     private javax.swing.JComboBox<String> c_ordenar;
-    private com.toedter.calendar.JDateChooser d_periodo_fin;
-    private com.toedter.calendar.JDateChooser d_periodo_inicio;
+    private com.github.lgooddatepicker.components.DatePicker d_periodo_fin;
+    private com.github.lgooddatepicker.components.DatePicker d_periodo_inicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

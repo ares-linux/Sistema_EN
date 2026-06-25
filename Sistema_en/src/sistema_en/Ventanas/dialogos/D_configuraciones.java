@@ -6,7 +6,14 @@ package sistema_en.Ventanas.dialogos;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import sistema_en.Objetos.Configuraciones;
+import sistema_en.Ventanas.V_login_user;
+
 
 
 
@@ -35,13 +42,14 @@ public class D_configuraciones extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        b_cancelar = new javax.swing.JButton();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        b_cerrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         c_tema = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         b_guardar_preferencias = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -58,6 +66,16 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
         t_contraseña_a = new javax.swing.JPasswordField();
         t_contraseña_n = new javax.swing.JPasswordField();
+        b_acerca_de = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        C_modelo_pdf = new javax.swing.JComboBox<>();
+        b_vista_previa = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        c_error = new javax.swing.JCheckBox();
+        c_confirmacion = new javax.swing.JCheckBox();
+        Sl_volumen = new javax.swing.JSlider();
+        jLabel13 = new javax.swing.JLabel();
+        l_n_volumen = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -66,10 +84,10 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
 
-        b_cancelar.setText("Cerrar");
-        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+        b_cerrar.setText("Cerrar");
+        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_cancelarActionPerformed(evt);
+                b_cerrarActionPerformed(evt);
             }
         });
 
@@ -89,9 +107,6 @@ public class D_configuraciones extends javax.swing.JDialog {
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel3.setText("Apariencia");
-
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel4.setText("Operación del sistema");
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel5.setText("Impresión");
@@ -141,119 +156,189 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
 
+        t_contraseña_n.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_contraseña_nKeyPressed(evt);
+            }
+        });
+
+        b_acerca_de.setText("Acerca de");
+        b_acerca_de.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_acerca_deActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setText("Modelo de cotizacion");
+
+        C_modelo_pdf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clasico", "Moderno", "MInimalista", "Tecnico" }));
+
+        b_vista_previa.setText("Vista previa");
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel4.setText("Sonido");
+
+        c_error.setSelected(true);
+        c_error.setText("Error");
+
+        c_confirmacion.setSelected(true);
+        c_confirmacion.setText("Confirmacion");
+
+        Sl_volumen.setToolTipText("volumen");
+
+        jLabel13.setText("Volumen");
+
+        l_n_volumen.setText("%");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addComponent(b_guardar_preferencias)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(b_cancelar)
-                .addGap(29, 29, 29))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel3)
-                        .addGap(282, 282, 282)
-                        .addComponent(jLabel4))
+                        .addComponent(b_guardar_preferencias)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(b_cerrar)
+                        .addGap(29, 29, 29))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel2)
-                        .addGap(296, 296, 296)
-                        .addComponent(jLabel5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(c_tema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(272, 272, 272)
-                        .addComponent(jLabel9))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel6)
-                        .addGap(285, 285, 285)
-                        .addComponent(t_carpeta_c, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(b_carpeta_c))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel10))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(jLabel12))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(78, 78, 78)
-                        .addComponent(jLabel8))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(78, 78, 78)
-                        .addComponent(t_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(b_logo))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(301, 301, 301)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(21, 21, 21)
-                                        .addComponent(jLabel11))
-                                    .addComponent(t_contraseña_a, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(l_aviso))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(t_contraseña_n, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(b_cambiar_contraseña))
+                                            .addComponent(jLabel7)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(19, 19, 19)
+                                                .addComponent(jLabel12))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addGap(21, 21, 21)
+                                                        .addComponent(jLabel11))
+                                                    .addComponent(t_contraseña_a, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(l_aviso)))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(14, 14, 14)
+                                                .addComponent(jLabel2))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(35, 35, 35)
+                                                .addComponent(c_tema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel10)
+                                            .addComponent(jLabel3))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 205, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(c_error)
+                                            .addComponent(c_confirmacion)
+                                            .addComponent(jLabel13)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(Sl_volumen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(l_n_volumen))
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel9)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(1, 1, 1)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(t_carpeta_c, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(b_carpeta_c))
+                                                    .addComponent(jLabel14)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(C_modelo_pdf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(b_vista_previa)))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(t_contraseña_n, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(43, 43, 43)
+                                .addComponent(t_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(b_cambiar_contraseña))
-                            .addComponent(jLabel7))))
-                .addGap(108, 131, Short.MAX_VALUE))
+                                .addComponent(b_logo))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(266, 266, 266)
+                                .addComponent(jLabel1)))
+                        .addComponent(b_acerca_de)
+                        .addGap(56, 56, 56))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel8)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(b_acerca_de))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel5))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(c_tema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel3)
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel2)
                         .addGap(6, 6, 6)
-                        .addComponent(jLabel9)))
+                        .addComponent(c_tema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel10))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel9)
+                        .addGap(3, 3, 3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(t_carpeta_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(b_carpeta_c))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel14)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(C_modelo_pdf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(b_vista_previa))))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel4))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(l_aviso)
+                    .addComponent(t_contraseña_a, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(c_error))
                 .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabel6))
-                    .addComponent(t_carpeta_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(b_carpeta_c))
+                        .addComponent(jLabel12)
+                        .addGap(2, 2, 2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(b_cambiar_contraseña)
+                            .addComponent(t_contraseña_n, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel7))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(c_confirmacion)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel13)))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel10)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel11)
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(l_aviso)
-                    .addComponent(t_contraseña_a, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(4, 4, 4)
-                .addComponent(jLabel12)
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(b_cambiar_contraseña)
-                    .addComponent(t_contraseña_n, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addComponent(jLabel7)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(Sl_volumen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(l_n_volumen))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(t_logo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,32 +346,31 @@ public class D_configuraciones extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(b_guardar_preferencias)
-                    .addComponent(b_cancelar))
+                    .addComponent(b_cerrar))
                 .addGap(4, 4, 4))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    public class r_sonido {
 
-    public void cambiar_contraseña(){
-        
-        t_contraseña_a.setEnabled(true);
-        t_contraseña_n.setEnabled(true);
-        String pasword = new String(t_contraseña_a.getPassword());
-              
-        
-            if(pasword.equals("1234")){
-                l_aviso.setVisible(true);
-                l_aviso.setText("Contraseña valida");
-                l_aviso.setForeground(Color.green);
+        public static void reproducir(String ruta) {
+            try {
+                File archivo = new File(ruta);
+                AudioInputStream audio = AudioSystem.getAudioInputStream(archivo);
+
+                Clip clip = AudioSystem.getClip();
+                clip.open(audio);
+                clip.start();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            else{
-                l_aviso.setVisible(true);
-                l_aviso.setText("Contraseña invalida");
-                l_aviso.setForeground(Color.red);
-            }
-        
+        }
     }
+    
+    boolean error = false;
     
     public void bloquear_text(){
         c_tema.setEnabled(false);
@@ -294,6 +378,10 @@ public class D_configuraciones extends javax.swing.JDialog {
         t_contraseña_n.setEnabled(false);
         t_carpeta_c.setEnabled(false);
         t_logo.setEnabled(false);
+        c_error.setEnabled(false);
+        c_confirmacion.setEnabled(false);
+        Sl_volumen.setEnabled(false);
+        C_modelo_pdf.setEnabled(false);
     }
     
     public void desbloquear_text(){
@@ -302,29 +390,58 @@ public class D_configuraciones extends javax.swing.JDialog {
         //t_contraseña_n.setEnabled(true);
         t_carpeta_c.setEnabled(true);
         t_logo.setEnabled(true);
+        c_error.setEnabled(true);
+        c_confirmacion.setEnabled(true);
+        Sl_volumen.setEnabled(true);
+        C_modelo_pdf.setEnabled(true);
     }
     
     public void bloquear_botones(){
         b_carpeta_c.setEnabled(false);
         b_cambiar_contraseña.setEnabled(false);
         b_logo.setEnabled(false);
+        b_vista_previa.setEnabled(false);
     }
     
     public void desbloquear_botones(){
         b_carpeta_c.setEnabled(true);
         b_cambiar_contraseña.setEnabled(true);
         b_logo.setEnabled(true);
+        b_vista_previa.setEnabled(true);
     }
        
-    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_b_cancelarActionPerformed
+    private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
+        
+        if("Guardar preferencias".equals(b_guardar_preferencias.getText())){
+            javax.swing.JOptionPane.showMessageDialog(this, "Guarde los cambios realizados.");
+            return;
+        }
+        else{
+            this.dispose();
+        }
+    }//GEN-LAST:event_b_cerrarActionPerformed
 
     private void b_guardar_preferenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_guardar_preferenciasActionPerformed
-        desbloquear_botones();
-        desbloquear_text();
-        b_guardar_preferencias.setText("Guardar preferencias");
-        
+        if (b_guardar_preferencias.getText().equals("Editar configuraciones")) {
+            // Habilitar la edición de campos de texto y botones de búsqueda
+            desbloquear_text();
+            desbloquear_botones();
+            b_carpeta_c.setEnabled(true);
+            b_logo.setEnabled(true);
+            b_guardar_preferencias.setText("Guardar preferencias");
+        } else {
+            // AQUÍ GUARDAS LOS DATOS EN TU OBJETO O BD
+            // Ejemplo:
+            // configuracion.setTema(c_tema.getSelectedItem().toString());
+            // configuracion.setRutaCarpeta(t_carpeta_c.getText());
+            // configuracion.setRutaLogo(t_logo.getText());
+            // configuracion.guardar(); // Tu método para persistir datos
+            
+            bloquear_text();
+            bloquear_botones();
+            b_guardar_preferencias.setText("Editar configuraciones");
+            javax.swing.JOptionPane.showMessageDialog(this, "Configuraciones guardadas con éxito.", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_b_guardar_preferenciasActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -345,7 +462,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         javax.swing.JOptionPane.YES_NO_OPTION, // Cambiado a YES_NO_OPTION para mejor control
         javax.swing.JOptionPane.QUESTION_MESSAGE
     );
-    
+  
     if (respuesta == javax.swing.JOptionPane.YES_OPTION) {
         // Habilitar campos para que el usuario escriba
         t_contraseña_a.setEnabled(true);
@@ -353,18 +470,19 @@ public class D_configuraciones extends javax.swing.JDialog {
         t_contraseña_a.requestFocus(); // Opcional: pone el foco en el primer campo
         b_cambiar_contraseña.setText("Confirmar");
     }
-    
+   
     } else if (textoBoton.equals("Confirmar")) {
     // ESTADO 2: El usuario ya escribió los datos y hace clic en Confirmar
     String paswordActual = new String(t_contraseña_a.getPassword());
     String paswordNueva = new String(t_contraseña_n.getPassword()); // Corrección: getPassword() para JPasswordField
-    
-    
+
+  
     if (paswordNueva.trim().isEmpty()) {
         javax.swing.JOptionPane.showMessageDialog(this, "La nueva contraseña no puede estar vacía.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        r_sonido.reproducir("src/audios/error.wav");
         return;
     }
-    
+   
     if (paswordActual.equals("1234")) { 
         // Nota: Aquí deberías validar si 'paswordActual' coincide con la contraseña real del admin.
         // Si "1234" es una contraseña incorrecta por defecto, la lógica sería: !paswordActual.equals(ContraseñaReal)
@@ -376,13 +494,33 @@ public class D_configuraciones extends javax.swing.JDialog {
     t_contraseña_n.setEnabled(false);
     b_cambiar_contraseña.setText("Cambiar contraseña");
     l_aviso.setVisible(false);
-    
+   
     javax.swing.JOptionPane.showMessageDialog(this, "Contraseña modificada con éxito.", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 }
     }//GEN-LAST:event_b_cambiar_contraseñaActionPerformed
 
+    private void cambiar_contraseña() {
+        t_contraseña_a.setEnabled(true);
+        t_contraseña_n.setEnabled(true);
+        String pasword = new String(t_contraseña_a.getPassword());
+         
+      
+            if(pasword.equals("1234")){
+                l_aviso.setVisible(true);
+                l_aviso.setText("Contraseña valida");
+                l_aviso.setForeground(Color.green);
+            }
+            else{
+                l_aviso.setVisible(true);
+                l_aviso.setText("Contraseña invalida");
+                r_sonido.reproducir("src/audios/error.wav");
+                l_aviso.setForeground(Color.red);
+            }
+    }
+    
     private void b_logoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_logoActionPerformed
-        // TODO add your handling code here:
+        
+        
     }//GEN-LAST:event_b_logoActionPerformed
 
     private void t_contraseña_aKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_contraseña_aKeyPressed
@@ -391,13 +529,25 @@ public class D_configuraciones extends javax.swing.JDialog {
     if (Tecla_presionada == KeyEvent.VK_ENTER) 
         {
             this.t_contraseña_n.requestFocus();
-            cambiar_contraseña();
         }
     }//GEN-LAST:event_t_contraseña_aKeyPressed
 
     private void t_contraseña_aMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_contraseña_aMouseClicked
         l_aviso.setVisible(false);
     }//GEN-LAST:event_t_contraseña_aMouseClicked
+
+    private void t_contraseña_nKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_contraseña_nKeyPressed
+        if(b_cambiar_contraseña.getText().equals("Confirmar")){
+                cambiar_contraseña();
+                
+            }
+    }//GEN-LAST:event_t_contraseña_nKeyPressed
+
+    private void b_acerca_deActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_acerca_deActionPerformed
+       D_acerca_de acerca = new D_acerca_de((java.awt.Frame) this.getParent(), true);
+       //acerca.setLocationRelativeTo(this);
+       acerca.setVisible(true);
+    }//GEN-LAST:event_b_acerca_deActionPerformed
 
     /**
      * @param args the command line arguments
@@ -442,16 +592,26 @@ public class D_configuraciones extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> C_modelo_pdf;
+    private javax.swing.JSlider Sl_volumen;
+    private javax.swing.JButton b_acerca_de;
     private javax.swing.JButton b_cambiar_contraseña;
-    private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_carpeta_c;
+    private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_guardar_preferencias;
     private javax.swing.JButton b_logo;
+    private javax.swing.JButton b_vista_previa;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JCheckBox c_confirmacion;
+    private javax.swing.JCheckBox c_error;
     private javax.swing.JComboBox<String> c_tema;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -461,6 +621,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel l_aviso;
+    private javax.swing.JLabel l_n_volumen;
     private javax.swing.JTextField t_carpeta_c;
     private javax.swing.JPasswordField t_contraseña_a;
     private javax.swing.JPasswordField t_contraseña_n;

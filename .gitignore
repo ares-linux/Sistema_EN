@@ -1,3 +1,7 @@
 /Sistema_en/nbproject/private/
 /Sistema_en/build/
 /Sistema_en/dist/
+database/*.db
+backups/*
+build/
+dist/
