@@ -37,6 +37,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -45,29 +46,31 @@ public class V_R_Empleado extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        t_nombre = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        t_rfc = new javax.swing.JTextField();
-        t_foto = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         l_foto = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        t_curp = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        t_id = new javax.swing.JTextField();
+        t_nombre = new javax.swing.JTextField();
+        t_rfc = new javax.swing.JTextField();
+        t_curp = new javax.swing.JTextField();
         t_f_nac = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        t_foto = new javax.swing.JTextField();
+        J_tabla = new javax.swing.JScrollPane();
         Tabla_empleados = new javax.swing.JTable();
+        b_foto = new javax.swing.JButton();
+        c_sexo = new javax.swing.JComboBox<>();
+        c_puesto = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        P_botones = new javax.swing.JPanel();
         b_nuevo = new javax.swing.JButton();
         b_eliminar = new javax.swing.JButton();
         b_buscar = new javax.swing.JButton();
-        b_foto = new javax.swing.JButton();
         b_editar = new javax.swing.JButton();
-        c_sexo = new javax.swing.JComboBox<>();
-        c_puesto = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
-        t_id = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        b_cerrar = new javax.swing.JButton();
 
         jButton2.setText("...");
 
@@ -79,19 +82,133 @@ public class V_R_Empleado extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setText("Registrar empleado");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, 130, -1));
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.ipadx = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 111, 0, 0);
+        getContentPane().add(jLabel1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        getContentPane().add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Nombre");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, -1, -1));
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 0);
+        getContentPane().add(jLabel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        getContentPane().add(jLabel4, gridBagConstraints);
 
         jLabel5.setText("Sexo");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(26, 60, 0, 0);
+        getContentPane().add(jLabel5, gridBagConstraints);
+
+        jLabel6.setText("Puesto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.ipady = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(24, 50, 0, 0);
+        getContentPane().add(jLabel6, gridBagConstraints);
+
+        jLabel7.setText("Rfc");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(24, 70, 0, 0);
+        getContentPane().add(jLabel7, gridBagConstraints);
+
+        jLabel8.setText("Foto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(16, 60, 0, 0);
+        getContentPane().add(jLabel8, gridBagConstraints);
+
+        l_foto.setToolTipText("Foto del empleado");
+        l_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 20;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 20;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 298;
+        gridBagConstraints.ipady = 348;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 95, 0, 104);
+        getContentPane().add(l_foto, gridBagConstraints);
+
+        jLabel10.setText("Curp");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(16, 50, 0, 0);
+        getContentPane().add(jLabel10, gridBagConstraints);
+
+        jLabel11.setText("F_nacimienta");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(16, 10, 0, 0);
+        getContentPane().add(jLabel11, gridBagConstraints);
+
+        jLabel9.setText("Id");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 70, 0, 0);
+        getContentPane().add(jLabel9, gridBagConstraints);
+
+        t_id.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_idKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 295;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
+        getContentPane().add(t_id, gridBagConstraints);
 
         t_nombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -103,50 +220,83 @@ public class V_R_Empleado extends javax.swing.JFrame {
                 t_nombreKeyPressed(evt);
             }
         });
-        getContentPane().add(t_nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, 310, -1));
-
-        jLabel6.setText("Puesto");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, -1, 20));
-
-        jLabel7.setText("Rfc");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 295;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
+        getContentPane().add(t_nombre, gridBagConstraints);
 
         t_rfc.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_rfcKeyPressed(evt);
             }
         });
-        getContentPane().add(t_rfc, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 270, 310, -1));
-
-        t_foto.setEditable(false);
-        getContentPane().add(t_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, 270, -1));
-
-        jLabel8.setText("Foto");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 390, -1, -1));
-
-        l_foto.setToolTipText("Foto del empleado");
-        l_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 70, 300, 350));
-
-        jLabel10.setText("Curp");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 295;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
+        getContentPane().add(t_rfc, gridBagConstraints);
 
         t_curp.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_curpKeyPressed(evt);
             }
         });
-        getContentPane().add(t_curp, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 310, -1));
-
-        jLabel11.setText("F_nacimienta");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 295;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
+        getContentPane().add(t_curp, gridBagConstraints);
 
         t_f_nac.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 t_f_nacActionPerformed(evt);
             }
         });
-        getContentPane().add(t_f_nac, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 350, 310, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 295;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
+        getContentPane().add(t_f_nac, gridBagConstraints);
+
+        t_foto.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 255;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 47, 0, 0);
+        getContentPane().add(t_foto, gridBagConstraints);
+
+        J_tabla.setAutoscrolls(true);
 
         Tabla_empleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -161,28 +311,20 @@ public class V_R_Empleado extends javax.swing.JFrame {
                 Tabla_empleadosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(Tabla_empleados);
+        J_tabla.setViewportView(Tabla_empleados);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, 720, 180));
-
-        b_nuevo.setText("Nuevo");
-        b_nuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_nuevoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 430, -1, -1));
-
-        b_eliminar.setText("Eliminar");
-        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_eliminarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 430, -1, -1));
-
-        b_buscar.setText("Buscar");
-        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 430, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 22;
+        gridBagConstraints.gridwidth = 20;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 700;
+        gridBagConstraints.ipady = 156;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(40, 10, 23, 29);
+        getContentPane().add(J_tabla, gridBagConstraints);
 
         b_foto.setText("...");
         b_foto.addActionListener(new java.awt.event.ActionListener() {
@@ -190,15 +332,16 @@ public class V_R_Empleado extends javax.swing.JFrame {
                 b_fotoActionPerformed(evt);
             }
         });
-        getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 390, 30, -1));
-
-        b_editar.setText("Editar");
-        b_editar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_editarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 430, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 18;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(16, 0, 0, 17);
+        getContentPane().add(b_foto, gridBagConstraints);
 
         c_sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
         c_sexo.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -206,7 +349,17 @@ public class V_R_Empleado extends javax.swing.JFrame {
                 c_sexoKeyPressed(evt);
             }
         });
-        getContentPane().add(c_sexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 310, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 224;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
+        getContentPane().add(c_sexo, gridBagConstraints);
 
         c_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Oficial", "Medio oficial", "Cabo" }));
         c_puesto.addActionListener(new java.awt.event.ActionListener() {
@@ -219,25 +372,82 @@ public class V_R_Empleado extends javax.swing.JFrame {
                 c_puestoKeyPressed(evt);
             }
         });
-        getContentPane().add(c_puesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 310, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 12;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 212;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
+        getContentPane().add(c_puesto, gridBagConstraints);
 
-        jLabel9.setText("Id");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, -1, -1));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(20, 60));
 
-        t_id.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                t_idKeyPressed(evt);
-            }
-        });
-        getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 310, -1));
+        P_botones.setLayout(new java.awt.GridBagLayout());
 
-        jButton3.setText("Cerrar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        b_nuevo.setText("Nuevo");
+        b_nuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                b_nuevoActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 430, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
+        P_botones.add(b_nuevo, gridBagConstraints);
+
+        b_eliminar.setText("Eliminar");
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
+        P_botones.add(b_eliminar, gridBagConstraints);
+
+        b_buscar.setText("Buscar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
+        P_botones.add(b_buscar, gridBagConstraints);
+
+        b_editar.setText("Editar");
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
+        P_botones.add(b_editar, gridBagConstraints);
+
+        b_cerrar.setText("Cerrar");
+        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cerrarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
+        P_botones.add(b_cerrar, gridBagConstraints);
+
+        jScrollPane1.setViewportView(P_botones);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridwidth = 18;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -530,9 +740,9 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
         }
     }//GEN-LAST:event_c_puestoKeyPressed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_b_cerrarActionPerformed
 
     private void c_puestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_puestoActionPerformed
         // TODO add your handling code here:
@@ -575,8 +785,11 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane J_tabla;
+    private javax.swing.JPanel P_botones;
     private javax.swing.JTable Tabla_empleados;
     private javax.swing.JButton b_buscar;
+    private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_editar;
     private javax.swing.JButton b_eliminar;
     private javax.swing.JButton b_foto;
@@ -585,7 +798,6 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     private javax.swing.JComboBox<String> c_sexo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

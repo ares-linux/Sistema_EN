@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package sistema_en.Ventanas;
+package sistema_en.Ventanas.Ventanas_consultas;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
+import sistema_en.Ventanas.V_ficha_trabajo;
 
 /**
  *

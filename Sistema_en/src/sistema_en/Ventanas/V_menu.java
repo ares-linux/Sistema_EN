@@ -4,11 +4,14 @@
  */
 package sistema_en.Ventanas;
 
+import sistema_en.Ventanas.Ventanas_consultas.V_clientes;
+import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import sistema_en.Ventanas.dialogos.D_configuraciones;
-
+import java.io.File;
+import javax.sound.sampled.*;
 
 /**
  *
@@ -16,9 +19,18 @@ import sistema_en.Ventanas.dialogos.D_configuraciones;
  */
 public class V_menu extends javax.swing.JFrame {
     
+    // Formularios de consulta
     
-
-    /**
+    private V_clientes ventana_Clientes = null;
+    private V_trabajos ventana_Trabajos = null;
+    
+    //Formularios de registro
+    
+    private V_R_Trabajo ventana_r_trabajos = null;
+    private V_R_Herramienta ventana_r_herramientas = null;
+    private V_R_Empleado ventana_r_empleados = null;
+    
+     /**
      * Creates new form V_menu
      */
     public V_menu() {
@@ -103,7 +115,7 @@ public class V_menu extends javax.swing.JFrame {
 
         m_catalogo.setText("Catalogo");
 
-        M_cerrar_programa.setText("Cerrar el programa");
+        M_cerrar_programa.setText("Salir del programa");
         M_cerrar_programa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 M_cerrar_programaActionPerformed(evt);
@@ -177,13 +189,27 @@ public class V_menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public class r_sonido {
+
+        public static void reproducir(String ruta) {
+            try {
+                File archivo = new File(ruta);
+                AudioInputStream audio = AudioSystem.getAudioInputStream(archivo);
+
+                Clip clip = AudioSystem.getClip();
+                clip.open(audio);
+                clip.start();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     public void cargar_foto(){
-        // 1. Obtener las dimensiones actuales del Label
         int ancho = l_foto.getWidth();
         int alto = l_foto.getHeight();
-
-        // 2. Si la ventana apenas se está abriendo, el tamaño puede ser 0.
-        // Usamos tamaños por defecto (600x400) para evitar errores en la primera carga.
+        
         if (ancho <= 0) ancho = 600;
         if (alto <= 0) alto = 400;
 
@@ -205,9 +231,11 @@ public class V_menu extends javax.swing.JFrame {
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
+        r_sonido.reproducir("src/audios/inicio.wav");
     }//GEN-LAST:event_formWindowOpened
 
     private void M_cerrar_programaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_cerrar_programaActionPerformed
+        V_menu.r_sonido.reproducir("src/audios/error.wav");
         int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea cerrar el programa?", "Confirmar accion", javax.swing.JOptionPane.YES_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
         if (respuesta == javax.swing.JOptionPane.YES_OPTION){
             System.exit(0);
@@ -215,33 +243,91 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_M_cerrar_programaActionPerformed
 
     private void m_herramientaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_herramientaActionPerformed
-        V_R_Herramienta herramienta = new V_R_Herramienta();
-        herramienta.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        herramienta.setVisible(true);
+                
+         if (ventana_r_herramientas == null || !ventana_r_herramientas.isDisplayable()) {
+            ventana_r_herramientas = new V_R_Herramienta();
+            ventana_r_herramientas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_r_herramientas.setVisible(true);
+            ventana_r_herramientas.toFront();
+            ventana_r_herramientas.requestFocus();
+        } else {
+            if (ventana_r_herramientas.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_r_herramientas.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_r_herramientas.toFront();
+            ventana_r_herramientas.requestFocus();
+        }
+        
     }//GEN-LAST:event_m_herramientaActionPerformed
 
     private void m_empleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_empleadoActionPerformed
-        V_R_Empleado empleado = new V_R_Empleado();
-        empleado.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        empleado.setVisible(true);
+                
+         if (ventana_r_empleados == null || !ventana_r_empleados.isDisplayable()) {
+            ventana_r_empleados = new V_R_Empleado();
+            ventana_r_empleados.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_r_empleados.setVisible(true);
+            ventana_r_empleados.toFront();
+            ventana_r_empleados.requestFocus();
+        } else {
+            if (ventana_r_empleados.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_r_empleados.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_r_empleados.toFront();
+            ventana_r_empleados.requestFocus();
+        }
+        
     }//GEN-LAST:event_m_empleadoActionPerformed
 
     private void m_trabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_trabajoActionPerformed
-        V_R_Trabajo trabajo = new V_R_Trabajo();
-        trabajo.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        trabajo.setVisible(true);
+                
+         if (ventana_r_trabajos == null || !ventana_r_trabajos.isDisplayable()) {
+            ventana_r_trabajos = new V_R_Trabajo();
+            ventana_r_trabajos.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_r_trabajos.setVisible(true);
+            ventana_r_trabajos.toFront();
+            ventana_r_trabajos.requestFocus();
+        } else {
+            if (ventana_r_trabajos.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_r_trabajos.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_r_trabajos.toFront();
+            ventana_r_trabajos.requestFocus();
+        }
     }//GEN-LAST:event_m_trabajoActionPerformed
 
     private void m_trabajosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_trabajosActionPerformed
-        V_trabajos trabajos = new V_trabajos();
-        trabajos.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        trabajos.setVisible(true);
+                
+         if (ventana_Trabajos == null || !ventana_Trabajos.isDisplayable()) {
+            ventana_Trabajos = new V_trabajos();
+            ventana_Trabajos.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_Trabajos.setVisible(true);
+            ventana_Trabajos.toFront();
+            ventana_Trabajos.requestFocus();
+        } else {
+            if (ventana_Trabajos.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_Trabajos.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_Trabajos.toFront();
+            ventana_Trabajos.requestFocus();
+        }
+        
     }//GEN-LAST:event_m_trabajosActionPerformed
 
     private void m_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_clientesActionPerformed
-        V_clientes clientes = new V_clientes();
-        clientes.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        clientes.setVisible(true);
+                
+        if (ventana_Clientes == null || !ventana_Clientes.isDisplayable()) {
+            ventana_Clientes = new V_clientes();
+            ventana_Clientes.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_Clientes.setVisible(true);
+            ventana_Clientes.toFront();
+            ventana_Clientes.requestFocus();
+        } else {
+            if (ventana_Clientes.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_Clientes.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_Clientes.toFront();
+            ventana_Clientes.requestFocus();
+        }
     }//GEN-LAST:event_m_clientesActionPerformed
 
     private void m_configuracionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_configuracionesActionPerformed
@@ -250,13 +336,7 @@ public class V_menu extends javax.swing.JFrame {
 
     private void m_configuracionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_m_configuracionesMouseClicked
         D_configuraciones config = new D_configuraciones(this,true);
-        
-        // Configura el diálogo al tamaño completo de la pantalla
-        //config.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());
-        // Opcional: Centrarlo por si acaso
-        //config.setLocationRelativeTo(null);
-        
-        config.setVisible(true);
+        config.setVisible(true);       
     }//GEN-LAST:event_m_configuracionesMouseClicked
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized

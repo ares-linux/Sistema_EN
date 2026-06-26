@@ -64,7 +64,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="M_cerrar_programa">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cerrar el programa"/>
+                <Property name="text" type="java.lang.String" value="Salir del programa"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="M_cerrar_programaActionPerformed"/>
