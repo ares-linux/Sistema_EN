@@ -90,6 +90,8 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         b_añadir_materiales = new javax.swing.JButton();
         l_aviso = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -270,22 +272,22 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         getContentPane().add(t_precio_uni, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 200, 100, -1));
 
         jLabel9.setText("Subtotal");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 480, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 490, -1, -1));
 
         t_subtotal.setEditable(false);
-        getContentPane().add(t_subtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 510, 110, -1));
+        getContentPane().add(t_subtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 520, 110, -1));
 
         jLabel10.setText("Iva 16%");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 480, -1, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 490, -1, -1));
 
         t_iva.setEditable(false);
-        getContentPane().add(t_iva, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 510, 100, -1));
+        getContentPane().add(t_iva, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 520, 100, -1));
 
         jLabel11.setText("Total");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 480, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 490, -1, -1));
 
         t_total.setEditable(false);
-        getContentPane().add(t_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 510, 90, -1));
+        getContentPane().add(t_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 520, 90, -1));
 
         b_eliminar.setText("Eliminar");
         b_eliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -301,7 +303,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 b_editarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 510, -1, -1));
+        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 510, 60, -1));
 
         b_aceptar.setText("Aceptar");
         b_aceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -317,7 +319,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 b_cancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 550, -1, -1));
+        getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 550, -1, -1));
 
         jLabel1.setText("Fecha de creacion");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, -1, -1));
@@ -368,6 +370,12 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
 
         l_aviso.setText("Por favor, revise los campos de concepto y precio.");
         getContentPane().add(l_aviso, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 150, -1, -1));
+
+        jButton2.setText("Exportar");
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 510, 80, -1));
+
+        jButton5.setText("Vista previa");
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 550, 80, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -836,8 +844,10 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     private javax.swing.JButton b_editar;
     private javax.swing.JButton b_eliminar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JInternalFrame jInternalFrame1;
