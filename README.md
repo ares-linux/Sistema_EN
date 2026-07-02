@@ -2,11 +2,13 @@
 
 <img width="520" height="261" alt="logo 2 0" src="https://github.com/user-attachments/assets/04061dcc-7484-4573-a746-a85d29977daf" />
 
-
 Sistema para la empresa: ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARIAS <br>
 Lenguaje de programacion: **Java** <br>
 IDE usado: **NetBeans 17** <br>
 Librerias externas usadas: *JCalendar*, *FlatLaf* (para look and feel moderno), *AbsoluteLayout* (para diseño de GUI)
+Sistema administrador de bases de datos usado: **sqlite**.
+Programas adicionales usados: db browser for SQLite.
+
 <p align="left">
 <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green">
 </p>
@@ -17,7 +19,7 @@ Librerias externas usadas: *JCalendar*, *FlatLaf* (para look and feel moderno), 
 
 ---
 
-# 📖 Manual de Git: La Regla de Oro del Trabajo en Equipo
+# 📖 Manual de GitHub Desktop: La Regla de Oro del Trabajo en Equipo
 
 ¡Bienvenidos al proyecto! Para que los tres podamos trabajar al mismo tiempo sin borrar el código de los demás y mantener el proyecto ordenado, vamos a seguir una única **regla de oro obligatoria**:
 
@@ -25,110 +27,72 @@ Librerias externas usadas: *JCalendar*, *FlatLaf* (para look and feel moderno), 
 
 ---
 
-## 🗺️ El Flujo de Trabajo en una Imagen
-
-Para que visualices cómo se ve nuestro trabajo, imagina que la rama `main` es el tronco de un árbol y cada uno de nosotros crea pequeñas ramas que luego se vuelven a unir al tronco cuando el código funciona perfectamente:
-
----
-
-## 🛠️ Paso a Paso: Cómo hacer una tarea (Desde Windows)
+## 🛠️ Paso a Paso: Cómo hacer una tarea (Desde GitHub Desktop)
 
 Sigue estos pasos **cada vez** que vayas a iniciar una nueva actividad.
 
 ### Paso 1: Limpiar y actualizar tu casa
 
-Antes de inventar o intentar algo nuevo, asegúrate de tener el código más reciente que se haya subido a GitHub.
+Antes de inventar o intentar algo nuevo, asegúrate de tener el código más reciente que tus compañeros hayan subido a GitHub.
 
-1. Abre la terminal en la carpeta del proyecto (usa **Git Bash** ).
-2. Muévete a la rama principal:
-```bash
-git checkout main
+1. Abre **GitHub Desktop** y asegúrate de estar en el repositorio del proyecto (arriba a la izquierda en *Current repository*).
+2. En la barra superior, haz clic en **Current branch** y selecciona **`main`**.
+3. Haz clic en el botón grande de la derecha que dice **Fetch origin**.
+4. Si hay cambios nuevos, el botón cambiará a **Pull origin**. Haz clic ahí para descargar lo último que se haya subido al proyecto.
 
-```
-
-
-3. Descarga lo último de GitHub:
-```bash
-git pull origin main
-
-```
-
-
+---
 
 ### Paso 2: Crear tu propia rama (Tu espacio seguro)
 
-Ahora vas a crear una ramita exclusiva para tu tarea. Ponle un nombre corto que describa lo que vas a hacer, usando minúsculas y guiones.
+Ahora vas a crear una ramita exclusiva para tu tarea para no alterar el tronco principal.
 
-* **Estructura recomendada:** `tipo-de-tarea/descripcion-corta`
-* Si es una función nueva: `feature/login-correo` o `feature/tabla-productos`
+1. Haz clic de nuevo en **Current branch** (arriba al centro).
+2. Haz clic en el botón **New branch**.
+3. Escribe el nombre de tu rama siguiendo esta estructura recomendada: `tipo-de-tarea/descripcion-corta`
+* Si es una función nueva: `feature/login-correo`
 * Si vas a arreglar un error: `fix/error-registro`
-* Si vas a cambiar textos o diseño menor: `design/colores-boton`
+* Si vas a cambiar diseño menor: `design/colores-boton`
 
 
-* **El comando para crear y meterte a la rama al mismo tiempo:**
-```bash
-git checkout -b feature/tu-tarea-aqui
+4. Haz clic en **Create branch**.
+5. Para que tus compañeros sepan que estás trabajando en esto, haz clic en el botón azul **Publish branch** que aparece en la pantalla principal.
 
-```
-
-
-*(Sabrás que funcionó porque en la terminal de Git Bash el texto azul cambiará de `[main]` a `[feature/tu-tarea-aqui]`)*.
-
+---
 
 ### Paso 3: Haz tu tarea y guarda tus cambios
 
-Programa con normalidad en tus archivos. Cuando termines o quieras guardar tu avance del día, usa el combo clásico de tres comandos:
+Abre tu editor de código (como VS Code) y programa con normalidad. A medida que guardes tus archivos, verás que aparecen automáticamente en la columna izquierda de GitHub Desktop bajo la pestaña **Changes**.
 
-1. Selecciona los archivos modificados:
-```bash
-git add .
+Cuando termines tu avance o tu tarea, haz lo siguiente:
 
-```
+1. En la esquina inferior izquierda verás dos cuadros de texto bajo el título **Commit to [nombre de tu rama]**.
+2. En el primer cuadro (*Summary*), escribe un título corto y claro de lo que hiciste (ej: `Agregada la interfaz de login`).
+3. (Opcional) En el cuadro de abajo (*Description*), puedes agregar detalles o poner tu nombre si quieren identificarlo rápido.
+4. Haz clic en el botón azul **Commit to [tu-rama]**.
+5. Por último, haz clic en el botón **Push origin** en la barra superior para subir tus cambios a internet.
 
-
-2. Ponle un título a lo que hiciste (un mensaje claro), ingresa tu nombre para identificar quien hizo el cambio y que ha realizado cada uno:
-```bash
-git commit -m "Agregada la interfaz de la pantalla de login"
-
-```
-
-
-3. Sube tu rama a GitHub por primera vez:
-```bash
-git push origin feature/tu-tarea-aqui
-
-```
-
-
+---
 
 ### Paso 4: El Pull Request (PR) u "Orden de revisión"
 
-Una vez que subas tu rama, tu trabajo ya está en internet, pero **aún no se ha mezclado** con el proyecto principal.
+Tu trabajo ya está en la nube, pero **aún no se ha mezclado** con el proyecto principal.
 
-1. Entra a nuestra página del repositorio en GitHub.
-2. Verás un cuadro amarillo brillante que dice algo como: `feature/tu-tarea-aqui had recent pushes...`.
-3. Haz clic en el botón verde **"Compare & pull request"**.
-4. Escribe una breve descripción de lo que hiciste y avísale a alguno de los dos por el grupo para que revise el código que escribiste.
-5. Si alguno ve que todo funciona, él le dará al botón **"Merge pull request"**.
-
-¡Felicidades! Tu código ahora forma parte oficialmente del proyecto.
+1. Justo después de hacer el *Push*, GitHub Desktop te mostrará un botón mágico en el centro que dice **Create Pull Request**. Haz clic ahí.
+2. Esto te abrirá automáticamente el navegador en la página web de GitHub.
+3. Escribe una breve descripción de lo que hiciste y haz clic en el botón verde **Create pull request**.
+4. Avísale a alguno de los otros dos por el grupo para que revise tu código.
+5. Si todo está correcto, esa persona le dará al botón **Merge pull request** desde la web. ¡Listo!
 
 ---
 
 ## 🚫 ¿Qué pasa si me equivoco y edito en `main`?
 
-Si te das cuenta de que escribiste código y olvidaste cambiarte de rama, **¡NO HAGAS PUSH!** Respira hondo y escribe esto en la terminal:
+Si escribiste código y de repente te diste cuenta de que olvidaste cambiarte de rama, **¡no entres en pánico!** GitHub Desktop lo resuelve muy fácil sin romper nada:
 
-```bash
-# 1. Guarda tus cambios en un bolsillo temporal
-git stash
+1. Ve a **Current branch** en la barra superior y haz clic en **New branch**.
+2. Escribe el nombre correcto para tu tarea.
+3. Al hacer clic en **Create branch**, GitHub Desktop detectará que tienes cambios sin guardar y te mostrará una ventana con dos opciones.
+4. Selecciona la primera opción: **"Bring my changes to [nueva-rama]"** (Traer mis cambios a la nueva rama).
+5. Haz clic en **Switch branch**.
 
-# 2. Crea la rama en la que debiste haber estado
-git checkout -b feature/nombre-correcto-de-la-tarea
-
-# 3. Saca los cambios del bolsillo y ponlos en esta nueva rama
-git stash pop
-
-```
-
-Listo, el error está arreglado y puedes seguir en tu rama como si nada hubiera pasado.
+¡Y listo! Tus cambios se mudarán mágicamente a la rama correcta y la rama `main` quedará limpia y a salvo.
