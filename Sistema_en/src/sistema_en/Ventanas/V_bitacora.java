@@ -13,6 +13,11 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import sistema_en.Objetos.Bitacora;
+import java.time.LocalDate;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
 /**
  *
@@ -23,13 +28,152 @@ public class V_bitacora extends javax.swing.JFrame {
     Bitacora bitacora = new Bitacora();
     int fila;
     
+    // =========================================================================
+    // [CONFIGURACIÓN JTREE] - Propiedades y Listas para la gestión de la Bitácora
+    // =========================================================================
+    // listaCompleta: Fuente de verdad que almacena todos los registros de la bitácora ingresados.
+    private java.util.List<Bitacora> listaCompleta = new java.util.ArrayList<>();
+    // listaFiltrada: Subconjunto de registros actualmente mostrados en la tabla según el filtro del JTree.
+    private java.util.List<Bitacora> listaFiltrada = new java.util.ArrayList<>();
+
+    // =========================================================================
+    // [CONFIGURACIÓN JTREE] - Wrapper para personalizar los nodos hoja del JTree
+    // =========================================================================
+    public static class BitacoraNodeWrapper {
+        private final Bitacora bitacoraWrapper;
+        public BitacoraNodeWrapper(Bitacora b) {
+            this.bitacoraWrapper = b;
+        }
+        public Bitacora getBitacora() {
+            return bitacoraWrapper;
+        }
+        // toString(): Define la etiqueta visible del registro en el árbol (Plomero y horas)
+        @Override
+        public String toString() {
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("hh:mm a");
+            String entrada = bitacoraWrapper.getHora_llegada() != null ? bitacoraWrapper.getHora_llegada().format(format) : "";
+            String salida = bitacoraWrapper.getHora_salida() != null ? bitacoraWrapper.getHora_salida().format(format) : "";
+            return bitacoraWrapper.getTrabajador() + " (" + entrada + " - " + salida + ")";
+        }
+    }
+
+    // =========================================================================
+    // [CONFIGURACIÓN JTREE] - Métodos de Inicialización, Actualización y Filtrado
+    // =========================================================================
+    
+    // inicializarArbol(): Configura el nodo raíz del JTree y registra el listener de eventos de selección
+    public void inicializarArbol() {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Bitacora");
+        a_bitacora.setModel(new DefaultTreeModel(root));
+        
+        a_bitacora.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                refrescarTablaSegunSeleccionArbol();
+            }
+        });
+    }
+    
+    // actualizarArbol(): Agrupa los registros de listaCompleta por fecha y reconstruye el JTree
+    public void actualizarArbol() {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Bitacora");
+        
+        // Agrupar los registros usando un TreeMap para ordenar las fechas cronológicamente
+        java.util.Map<LocalDate, java.util.List<Bitacora>> agrupados = new java.util.TreeMap<>();
+        for (Bitacora b : listaCompleta) {
+            if (b.getFecha() != null) {
+                agrupados.computeIfAbsent(b.getFecha(), k -> new java.util.ArrayList<>()).add(b);
+            }
+        }
+        
+        // Construir nodos intermedios (Fechas) y nodos hoja (Registros individuales)
+        for (java.util.Map.Entry<LocalDate, java.util.List<Bitacora>> entrada : agrupados.entrySet()) {
+            DefaultMutableTreeNode dateNode = new DefaultMutableTreeNode(entrada.getKey());
+            for (Bitacora b : entrada.getValue()) {
+                DefaultMutableTreeNode leaf = new DefaultMutableTreeNode(new BitacoraNodeWrapper(b));
+                dateNode.add(leaf);
+            }
+            root.add(dateNode);
+        }
+        
+        a_bitacora.setModel(new DefaultTreeModel(root));
+        
+        // Expandir automáticamente todas las ramas del JTree
+        for (int i = 0; i < a_bitacora.getRowCount(); i++) {
+            a_bitacora.expandRow(i);
+        }
+    }
+    
+    // filtrarTablaPorFecha(): Llena la tabla y listaFiltrada solo con los registros de la fecha especificada
+    private void filtrarTablaPorFecha(LocalDate fecha) {
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_bitacora.getModel();
+        modelo.setRowCount(0);
+        listaFiltrada.clear();
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
+        for (Bitacora b : listaCompleta) {
+            if (b.getFecha() != null && b.getFecha().equals(fecha)) {
+                listaFiltrada.add(b);
+                Object[] info = new Object[5];
+                info[0] = b.getTrabajador();
+                info[1] = b.getFecha().toString();
+                info[2] = b.getHora_llegada() != null ? b.getHora_llegada().format(formateador) : "";
+                info[3] = b.getHora_salida() != null ? b.getHora_salida().format(formateador) : "";
+                info[4] = b.getEvidencia();
+                modelo.addRow(info);
+            }
+        }
+    }
+    
+    // mostrarTodosEnTabla(): Llena la tabla con la totalidad de registros almacenados en listaCompleta
+    private void mostrarTodosEnTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_bitacora.getModel();
+        modelo.setRowCount(0);
+        listaFiltrada.clear();
+        listaFiltrada.addAll(listaCompleta);
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
+        for (Bitacora b : listaFiltrada) {
+            Object[] info = new Object[5];
+            info[0] = b.getTrabajador();
+            info[1] = b.getFecha().toString();
+            info[2] = b.getHora_llegada() != null ? b.getHora_llegada().format(formateador) : "";
+            info[3] = b.getHora_salida() != null ? b.getHora_salida().format(formateador) : "";
+            info[4] = b.getEvidencia();
+            modelo.addRow(info);
+        }
+    }
+    
+    // refrescarTablaSegunSeleccionArbol(): Reacciona a la selección de nodos en el JTree y actualiza la tabla/formulario
+    private void refrescarTablaSegunSeleccionArbol() {
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) a_bitacora.getLastSelectedPathComponent();
+        if (selectedNode == null || selectedNode.isRoot()) {
+            mostrarTodosEnTabla();
+        } else if (selectedNode.getUserObject() instanceof LocalDate) {
+            filtrarTablaPorFecha((LocalDate) selectedNode.getUserObject());
+        } else if (selectedNode.getUserObject() instanceof BitacoraNodeWrapper) {
+            DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) selectedNode.getParent();
+            LocalDate fecha = (LocalDate) parentNode.getUserObject();
+            filtrarTablaPorFecha(fecha);
+            
+            Bitacora target = ((BitacoraNodeWrapper) selectedNode.getUserObject()).getBitacora();
+            for (int i = 0; i < listaFiltrada.size(); i++) {
+                if (listaFiltrada.get(i) == target) {
+                    Tabla_bitacora.setRowSelectionInterval(i, i);
+                    fila = i;
+                    cargar_datos_tabla(i);
+                    break;
+                }
+            }
+        }
+    }
 
     /**
      * Creates new form V_bitacora
      */
     public V_bitacora() {
         initComponents();
-        }
+        inicializarArbol();
+        actualizarArbol();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,6 +183,7 @@ public class V_bitacora extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jTextField3 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -50,6 +195,7 @@ public class V_bitacora extends javax.swing.JFrame {
         jTextField6 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -63,14 +209,18 @@ public class V_bitacora extends javax.swing.JFrame {
         t_evidencia = new javax.swing.JTextField();
         b_foto = new javax.swing.JButton();
         b_nuevo = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        Tabla_bitacora = new javax.swing.JTable();
         b_eliminar = new javax.swing.JButton();
         b_editar = new javax.swing.JButton();
         l_evidencia = new javax.swing.JLabel();
         b_buscar = new javax.swing.JButton();
         time_hora_llegada = new com.github.lgooddatepicker.components.TimePicker();
         time_hora_salida = new com.github.lgooddatepicker.components.TimePicker();
+        jButton1 = new javax.swing.JButton();
+        b_cancelar = new javax.swing.JButton();
+        jScrollPaneArbol = new javax.swing.JScrollPane();
+        a_bitacora = new javax.swing.JTree();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Tabla_bitacora = new javax.swing.JTable();
 
         jLabel5.setText("Fecha");
 
@@ -88,41 +238,35 @@ public class V_bitacora extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("Bitacora de asistencia");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, -1, 20));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
 
         jLabel2.setText("Trabajo");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 20, -1, -1));
 
         jLabel3.setText("Fecha");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 90, -1, -1));
 
         t_id.setEditable(false);
-        getContentPane().add(t_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 40, 200, -1));
 
         t_fecha.setEditable(false);
-        getContentPane().add(t_fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 120, 200, -1));
 
         c_plomero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLO_00", "PLO_01", "PLO_02", "PLO_03", "PLO_04", "PLO_05", "PLO_06", "PLO_07", "PLO_08", "PLO_09", "Administrador" }));
-        getContentPane().add(c_plomero, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, 310, -1));
+        c_plomero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                c_plomeroActionPerformed(evt);
+            }
+        });
 
         jLabel9.setText("Seleccionar plomero:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
 
         jLabel10.setText("Hora de entrada");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 150, -1, -1));
 
         jLabel11.setText("Hora de salida");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 150, -1, -1));
 
         jLabel12.setText("Ruta de evidencia");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 230, -1, -1));
 
         t_evidencia.setEditable(false);
-        getContentPane().add(t_evidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 250, 280, -1));
 
         b_foto.setText("...");
         b_foto.addActionListener(new java.awt.event.ActionListener() {
@@ -130,7 +274,6 @@ public class V_bitacora extends javax.swing.JFrame {
                 b_fotoActionPerformed(evt);
             }
         });
-        getContentPane().add(b_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 250, -1, -1));
 
         b_nuevo.setText("Nuevo");
         b_nuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -138,7 +281,174 @@ public class V_bitacora extends javax.swing.JFrame {
                 b_nuevoActionPerformed(evt);
             }
         });
-        getContentPane().add(b_nuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 310, -1));
+
+        b_eliminar.setText("Eliminar");
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
+
+        b_editar.setText("Editar");
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
+
+        l_evidencia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        b_buscar.setText("Buscar");
+
+        jButton1.setText("Cerrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel9))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel10)
+                        .addGap(68, 68, 68)
+                        .addComponent(jLabel11))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(120, 120, 120)
+                        .addComponent(jLabel12))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(t_evidencia)
+                        .addGap(10, 10, 10)
+                        .addComponent(b_foto))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(b_nuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(c_plomero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addComponent(time_hora_llegada, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                .addGap(14, 14, 14)
+                                .addComponent(time_hora_salida, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
+                        .addGap(1, 1, 1)))
+                .addGap(39, 39, 39)
+                .addComponent(l_evidencia, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(t_id, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                    .addComponent(t_fecha)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(70, 70, 70)
+                                .addComponent(jLabel2))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(80, 80, 80)
+                                .addComponent(jLabel3))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(b_buscar)
+                                    .addComponent(jButton1))
+                                .addGap(19, 19, 19)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(b_cancelar)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(b_eliminar)
+                                        .addGap(22, 22, 22)
+                                        .addComponent(b_editar)))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addGap(40, 40, 40)
+                .addComponent(jLabel9)
+                .addGap(13, 13, 13)
+                .addComponent(c_plomero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
+                .addGap(13, 13, 13)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(time_hora_llegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(time_hora_salida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(jLabel12)
+                .addGap(3, 3, 3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(t_evidencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(b_foto))
+                .addGap(25, 25, 25)
+                .addComponent(b_nuevo))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(l_evidencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(5, 5, 5))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel2)
+                .addGap(3, 3, 3)
+                .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(jLabel3)
+                .addGap(13, 13, 13)
+                .addComponent(t_fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(85, 85, 85)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(b_buscar)
+                    .addComponent(b_eliminar)
+                    .addComponent(b_editar))
+                .addGap(45, 45, 45)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(b_cancelar)))
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 65;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        getContentPane().add(jPanel1, gridBagConstraints);
+
+        jScrollPaneArbol.setViewportView(a_bitacora);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 230;
+        gridBagConstraints.ipady = 150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(25, 50, 23, 0);
+        getContentPane().add(jScrollPaneArbol, gridBagConstraints);
 
         Tabla_bitacora.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -155,35 +465,23 @@ public class V_bitacora extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(Tabla_bitacora);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 930, 170));
-
-        b_eliminar.setText("Eliminar");
-        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_eliminarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, -1, -1));
-
-        b_editar.setText("Editar");
-        b_editar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_editarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 230, -1, -1));
-
-        l_evidencia.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(l_evidencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 30, 340, 290));
-
-        b_buscar.setText("Buscar");
-        getContentPane().add(b_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 230, -1, -1));
-        getContentPane().add(time_hora_llegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(56, 180, 140, -1));
-        getContentPane().add(time_hora_salida, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 180, 150, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 640;
+        gridBagConstraints.ipady = 146;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(25, 20, 23, 18);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     public void bloquear_text(){
         c_plomero.setEnabled(false);
         time_hora_llegada.setEnabled(false);
@@ -224,21 +522,20 @@ public class V_bitacora extends javax.swing.JFrame {
     }
     
     public void llenar_tabla(){
+        if (time_hora_llegada.getTime() == null || time_hora_salida.getTime() == null) {
+            return;
+        }
         
-        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
-        String entrada_F = time_hora_llegada.getTime().format(formateador);
-        String salida_F = time_hora_salida.getTime().format(formateador);
+        Bitacora b = new Bitacora();
+        b.setTrabajador(c_plomero.getSelectedItem().toString());
+        b.setFecha(java.time.LocalDate.parse(t_fecha.getText()));
+        b.setHora_llegada(time_hora_llegada.getTime());
+        b.setHora_salida(time_hora_salida.getTime());
+        b.setEvidencia(t_evidencia.getText());
         
-        Object [] info = new Object[5];
-        info[0] = c_plomero.getSelectedItem().toString();
-        info[1] = t_fecha.getText();
-        info[2] = entrada_F;
-        info[3] = salida_F;
-        info[4] = t_evidencia.getText();
-        
-        DefaultTableModel modelo=(DefaultTableModel) this.Tabla_bitacora.getModel();
-        modelo.addRow(info);
-        this.Tabla_bitacora.setModel(modelo);
+        listaCompleta.add(b);
+        actualizarArbol();
+        refrescarTablaSegunSeleccionArbol();
     }
     
     public void cargar_datos_tabla(int indice){
@@ -274,20 +571,28 @@ public class V_bitacora extends javax.swing.JFrame {
         if (time_hora_llegada.getTime() == null || time_hora_salida.getTime() == null) {
             return;
         }
-    
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("hh:mm a");
-        String entradaFormateada = time_hora_llegada.getTime().format(format);
-        String salidaFormateada = time_hora_salida.getTime().format(format);
-
-        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_bitacora.getModel();
-        modelo.setValueAt(this.c_plomero.getSelectedItem(), fila, 0);
-        modelo.setValueAt(this.t_fecha.getText(), fila, 1);
-        modelo.setValueAt(entradaFormateada, fila, 2);
-        modelo.setValueAt(salidaFormateada, fila, 3);
-        modelo.setValueAt(this.t_evidencia.getText(), fila, 4);
+        if (fila < 0 || fila >= listaFiltrada.size()) {
+            return;
+        }
+        
+        Bitacora b = listaFiltrada.get(fila);
+        b.setTrabajador(c_plomero.getSelectedItem().toString());
+        b.setFecha(java.time.LocalDate.parse(t_fecha.getText()));
+        b.setHora_llegada(time_hora_llegada.getTime());
+        b.setHora_salida(time_hora_salida.getTime());
+        b.setEvidencia(t_evidencia.getText());
+        
+        actualizarArbol();
+        refrescarTablaSegunSeleccionArbol();
     }
     
     public void cargar_foto(){
+        
+        int ancho = l_evidencia.getWidth();
+        int alto = l_evidencia.getHeight();
+        
+        if (ancho <= 0) ancho = 260;
+        if (alto <= 0) alto = 270;
         
         if (t_evidencia.getText().trim().isEmpty()) {
         l_evidencia.setIcon(null); // Quita cualquier imagen previa que se haya quedado en el contenedor
@@ -296,10 +601,10 @@ public class V_bitacora extends javax.swing.JFrame {
         
         ImageIcon iconoOriginal = new ImageIcon(t_evidencia.getText());
 
-        Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(340, 480, Image.SCALE_SMOOTH);
+        Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         l_evidencia.setIcon(new ImageIcon(imagenEscalada));
         if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-        System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
+            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
         }
     }
     
@@ -357,23 +662,22 @@ public class V_bitacora extends javax.swing.JFrame {
     }//GEN-LAST:event_b_editarActionPerformed
 
     private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
-        
-        fila= Tabla_bitacora.getSelectedRow();
-        
-        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_bitacora.getModel();
-        if (this.Tabla_bitacora.getRowCount()>0){
-            if(fila == -1){
-                return;
-            }
-            modelo2.removeRow(fila);
-            this.Tabla_bitacora.setModel(modelo2);
-            fila = fila-1;
-            if (fila<0)
-            {
+        fila = Tabla_bitacora.getSelectedRow();
+        if (fila == -1) {
+            return;
+        }
+        if (fila >= 0 && fila < listaFiltrada.size()) {
+            Bitacora b = listaFiltrada.get(fila);
+            listaCompleta.remove(b);
+            listaFiltrada.remove(fila);
+            
+            actualizarArbol();
+            refrescarTablaSegunSeleccionArbol();
+            
+            fila = fila - 1;
+            if (fila < 0) {
                 limpiar_text();
-            }
-            else
-            {
+            } else {
                 cargar_datos_tabla(fila);
             }
         }
@@ -415,6 +719,18 @@ public class V_bitacora extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_b_fotoActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void c_plomeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_plomeroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_plomeroActionPerformed
+
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_b_cancelarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -452,12 +768,15 @@ public class V_bitacora extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla_bitacora;
+    private javax.swing.JTree a_bitacora;
     private javax.swing.JButton b_buscar;
+    private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_editar;
     private javax.swing.JButton b_eliminar;
     private javax.swing.JButton b_foto;
     private javax.swing.JButton b_nuevo;
     private javax.swing.JComboBox<String> c_plomero;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -470,7 +789,9 @@ public class V_bitacora extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPaneArbol;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;

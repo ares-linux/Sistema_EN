@@ -4,6 +4,8 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import java.awt.event.KeyEvent;
+
 /**
  *
  * @author ares
@@ -19,6 +21,8 @@ public class D_buscar_cliente extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
     }
 
+    int fila;
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,38 +41,80 @@ public class D_buscar_cliente extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla_clientes = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
-        b_seleccionar = new javax.swing.JButton();
         b_cancelar = new javax.swing.JButton();
+        b_seleccionar = new javax.swing.JButton();
         b_limpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Buscar cliente");
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setText("Nombre");
 
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel3.setText("Telefono");
 
+        t_nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_nombreKeyPressed(evt);
+            }
+        });
+
+        t_telefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_telefonoKeyPressed(evt);
+            }
+        });
+
         b_buscar.setText("Buscar");
+        b_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_buscarKeyPressed(evt);
+            }
+        });
 
         Tabla_clientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "id", "nombre", "telefono", "direccion"
+                "id", "nombre", "telefono"
             }
         ));
+        Tabla_clientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_clientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Tabla_clientes);
 
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel4.setText("Resultados");
-
-        b_seleccionar.setText("Seleccionar");
 
         b_cancelar.setText("Cancelar");
         b_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_cancelarActionPerformed(evt);
+            }
+        });
+        b_cancelar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_cancelarKeyPressed(evt);
+            }
+        });
+
+        b_seleccionar.setText("Seleccionar");
+        b_seleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_seleccionarActionPerformed(evt);
+            }
+        });
+        b_seleccionar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_seleccionarKeyPressed(evt);
             }
         });
 
@@ -78,41 +124,43 @@ public class D_buscar_cliente extends javax.swing.JDialog {
                 b_limpiarActionPerformed(evt);
             }
         });
+        b_limpiar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_limpiarKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(116, 116, 116)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(t_nombre, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                    .addComponent(t_telefono)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(b_buscar)
-                                .addGap(18, 18, 18)
-                                .addComponent(b_limpiar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(120, 120, 120)
-                                .addComponent(jLabel4))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(b_seleccionar)
-                                .addGap(18, 18, 18)
-                                .addComponent(b_cancelar))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(t_nombre)
+                            .addComponent(t_telefono)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(b_buscar)
+                        .addGap(18, 18, 18)
+                        .addComponent(b_limpiar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(b_seleccionar)
+                        .addGap(18, 18, 18)
+                        .addComponent(b_cancelar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 645, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addContainerGap(27, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,6 +201,100 @@ public class D_buscar_cliente extends javax.swing.JDialog {
         t_nombre.setText("");
         t_telefono.setText("");
     }//GEN-LAST:event_b_limpiarActionPerformed
+
+    private void t_nombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombreKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.t_telefono.requestFocus();
+    }
+    }//GEN-LAST:event_t_nombreKeyPressed
+
+    private void t_telefonoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_telefonoKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_nombre.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_buscar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_t_telefonoKeyPressed
+
+    private void b_buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_buscarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_limpiar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_telefono.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_buscarKeyPressed
+
+    private void b_limpiarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_limpiarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_buscar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_telefono.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_limpiarKeyPressed
+
+    private void b_seleccionarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_seleccionarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_cancelar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.b_buscar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_seleccionarKeyPressed
+
+    private void b_cancelarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_cancelarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.b_buscar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_cancelarKeyPressed
+
+    private void Tabla_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_clientesMouseClicked
+        fila = this.Tabla_clientes.rowAtPoint(evt.getPoint());
+    }//GEN-LAST:event_Tabla_clientesMouseClicked
+
+    private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
+        fila = Tabla_clientes.getSelectedRow();
+                if (fila == -1) 
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un cliente de la tabla");
+                    return;
+                }
+    }//GEN-LAST:event_b_seleccionarActionPerformed
 
     /**
      * @param args the command line arguments

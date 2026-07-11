@@ -4,14 +4,19 @@
  */
 package sistema_en.Ventanas;
 
+import com.formdev.flatlaf.FlatLaf;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import sistema_en.Objetos.Trabajador;
+import sistema_en.Ventanas.dialogos.D_buscar_empleado;
 
 /**
  *
@@ -21,12 +26,14 @@ public class V_R_Empleado extends javax.swing.JFrame {
     
     Trabajador trabajador = new Trabajador();
     int fila;
-
+    String toast;
+    String ruta_foto_defecto;
+        
     /**
      * Creates new form V_REmpleado
      */
     public V_R_Empleado() {
-        initComponents();
+        initComponents();               
     }
 
     /**
@@ -39,177 +46,237 @@ public class V_R_Empleado extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        b_nuevo = new javax.swing.JButton();
+        b_editar = new javax.swing.JButton();
+        b_buscar = new javax.swing.JButton();
+        b_eliminar = new javax.swing.JButton();
+        b_cancelar = new javax.swing.JButton();
+        b_cerrar = new javax.swing.JButton();
+        b_foto = new javax.swing.JButton();
+        t_foto = new javax.swing.JTextField();
+        c_puesto = new javax.swing.JComboBox<>();
+        c_sexo = new javax.swing.JComboBox<>();
+        f_f_nac = new javax.swing.JFormattedTextField();
+        t_curp = new javax.swing.JTextField();
+        t_rfc = new javax.swing.JTextField();
+        t_nombre = new javax.swing.JTextField();
+        t_id = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        l_nombre = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        l_sexo = new javax.swing.JLabel();
+        l_puesto = new javax.swing.JLabel();
+        l_rfc = new javax.swing.JLabel();
+        l_Foto = new javax.swing.JLabel();
         l_foto = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        t_id = new javax.swing.JTextField();
-        t_nombre = new javax.swing.JTextField();
-        t_rfc = new javax.swing.JTextField();
-        t_curp = new javax.swing.JTextField();
-        t_f_nac = new javax.swing.JTextField();
-        t_foto = new javax.swing.JTextField();
+        l_curp = new javax.swing.JLabel();
+        l_f_nac = new javax.swing.JLabel();
+        l_id = new javax.swing.JLabel();
+        l_aviso = new javax.swing.JLabel();
         J_tabla = new javax.swing.JScrollPane();
         Tabla_empleados = new javax.swing.JTable();
-        b_foto = new javax.swing.JButton();
-        c_sexo = new javax.swing.JComboBox<>();
-        c_puesto = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        P_botones = new javax.swing.JPanel();
-        b_nuevo = new javax.swing.JButton();
-        b_eliminar = new javax.swing.JButton();
-        b_buscar = new javax.swing.JButton();
-        b_editar = new javax.swing.JButton();
-        b_cerrar = new javax.swing.JButton();
-
-        jButton2.setText("...");
-
-        jButton1.setText("...");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(800, 600));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel1.setText("Registrar empleado");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.ipadx = 18;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 111, 0, 0);
-        getContentPane().add(jLabel1, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        getContentPane().add(jLabel2, gridBagConstraints);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setText("Nombre");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 40, 0, 0);
-        getContentPane().add(jLabel3, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        getContentPane().add(jLabel4, gridBagConstraints);
-
-        jLabel5.setText("Sexo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(26, 60, 0, 0);
-        getContentPane().add(jLabel5, gridBagConstraints);
-
-        jLabel6.setText("Puesto");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 7;
-        gridBagConstraints.ipady = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(24, 50, 0, 0);
-        getContentPane().add(jLabel6, gridBagConstraints);
-
-        jLabel7.setText("Rfc");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(24, 70, 0, 0);
-        getContentPane().add(jLabel7, gridBagConstraints);
-
-        jLabel8.setText("Foto");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(16, 60, 0, 0);
-        getContentPane().add(jLabel8, gridBagConstraints);
-
-        l_foto.setToolTipText("Foto del empleado");
-        l_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 20;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridheight = 20;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 298;
-        gridBagConstraints.ipady = 348;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 95, 0, 104);
-        getContentPane().add(l_foto, gridBagConstraints);
-
-        jLabel10.setText("Curp");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(16, 50, 0, 0);
-        getContentPane().add(jLabel10, gridBagConstraints);
-
-        jLabel11.setText("F_nacimienta");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(16, 10, 0, 0);
-        getContentPane().add(jLabel11, gridBagConstraints);
-
-        jLabel9.setText("Id");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 70, 0, 0);
-        getContentPane().add(jLabel9, gridBagConstraints);
-
-        t_id.addKeyListener(new java.awt.event.KeyAdapter() {
+        b_nuevo.setText("Nuevo");
+        b_nuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_nuevoActionPerformed(evt);
+            }
+        });
+        b_nuevo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                t_idKeyPressed(evt);
+                b_nuevoKeyPressed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 295;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
-        getContentPane().add(t_id, gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(11, 13, 12, 15);
+        jPanel2.add(b_nuevo, gridBagConstraints);
 
+        b_editar.setText("Editar");
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
+        b_editar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_editarKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(11, 13, 12, 15);
+        jPanel2.add(b_editar, gridBagConstraints);
+
+        b_buscar.setText("Buscar");
+        b_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_buscarActionPerformed(evt);
+            }
+        });
+        b_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_buscarKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(11, 13, 12, 15);
+        jPanel2.add(b_buscar, gridBagConstraints);
+
+        b_eliminar.setText("Eliminar");
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
+        b_eliminar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_eliminarKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(11, 13, 12, 15);
+        jPanel2.add(b_eliminar, gridBagConstraints);
+
+        b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 17, 0, 18);
+        jPanel2.add(b_cancelar, gridBagConstraints);
+
+        b_cerrar.setText("Cerrar");
+        b_cerrar.setMaximumSize(new java.awt.Dimension(70, 25));
+        b_cerrar.setMinimumSize(new java.awt.Dimension(70, 25));
+        b_cerrar.setPreferredSize(new java.awt.Dimension(70, 25));
+        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cerrarActionPerformed(evt);
+            }
+        });
+        b_cerrar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_cerrarKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(11, 13, 12, 15);
+        jPanel2.add(b_cerrar, gridBagConstraints);
+
+        b_foto.setText("...");
+        b_foto.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        b_foto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        b_foto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                b_fotoFocusGained(evt);
+            }
+        });
+        b_foto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_fotoActionPerformed(evt);
+            }
+        });
+        b_foto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_fotoKeyPressed(evt);
+            }
+        });
+
+        t_foto.setEditable(false);
+
+        c_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Oficial", "Medio oficial", "Cabo" }));
+        c_puesto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                c_puestoFocusGained(evt);
+            }
+        });
+        c_puesto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                c_puestoKeyPressed(evt);
+            }
+        });
+
+        c_sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
+        c_sexo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                c_sexoFocusGained(evt);
+            }
+        });
+        c_sexo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                c_sexoKeyPressed(evt);
+            }
+        });
+
+        try {
+            f_f_nac.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-##-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        f_f_nac.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                f_f_nacFocusGained(evt);
+            }
+        });
+        f_f_nac.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                f_f_nacKeyPressed(evt);
+            }
+        });
+
+        t_curp.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                t_curpFocusGained(evt);
+            }
+        });
+        t_curp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_curpKeyPressed(evt);
+            }
+        });
+
+        t_rfc.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                t_rfcFocusGained(evt);
+            }
+        });
+        t_rfc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_rfcKeyPressed(evt);
+            }
+        });
+
+        t_nombre.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                t_nombreFocusGained(evt);
+            }
+        });
         t_nombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 t_nombreActionPerformed(evt);
@@ -220,90 +287,176 @@ public class V_R_Empleado extends javax.swing.JFrame {
                 t_nombreKeyPressed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 295;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
-        getContentPane().add(t_nombre, gridBagConstraints);
 
-        t_rfc.addKeyListener(new java.awt.event.KeyAdapter() {
+        t_id.setVerifyInputWhenFocusTarget(false);
+        t_id.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                t_idFocusGained(evt);
+            }
+        });
+        t_id.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                t_rfcKeyPressed(evt);
+                t_idKeyPressed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 295;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
-        getContentPane().add(t_rfc, gridBagConstraints);
 
-        t_curp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                t_curpKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 295;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
-        getContentPane().add(t_curp, gridBagConstraints);
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel1.setText("Registrar empleado");
 
-        t_f_nac.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                t_f_nacActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 16;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 295;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
-        getContentPane().add(t_f_nac, gridBagConstraints);
+        l_nombre.setText("Nombre");
 
-        t_foto.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridwidth = 10;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 255;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 47, 0, 0);
-        getContentPane().add(t_foto, gridBagConstraints);
+        l_sexo.setText("Sexo");
+
+        l_puesto.setText("Puesto");
+
+        l_rfc.setText("RFC");
+
+        l_Foto.setText("Foto");
+
+        l_foto.setToolTipText("Foto del empleado");
+        l_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        l_curp.setText("CURP");
+
+        l_f_nac.setText("Fecha de nacimiento");
+
+        l_id.setText("Id");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 235, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                .addGap(408, 408, 408))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(l_nombre)
+                        .addGap(12, 12, 12)
+                        .addComponent(t_nombre))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addComponent(l_sexo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(c_sexo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(l_curp)
+                        .addGap(21, 21, 21)
+                        .addComponent(t_curp))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(l_f_nac)
+                        .addGap(18, 18, 18)
+                        .addComponent(f_f_nac, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(45, 45, 45)
+                                .addComponent(l_puesto))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(l_rfc))
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(t_rfc)
+                            .addComponent(c_puesto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(55, 55, 55)
+                        .addComponent(l_Foto)
+                        .addGap(18, 18, 18)
+                        .addComponent(t_foto)
+                        .addGap(18, 18, 18)
+                        .addComponent(b_foto))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(l_id)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(l_aviso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(t_id))))
+                .addGap(39, 39, 39)
+                .addComponent(l_foto, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel2))
+                .addGap(9, 9, 9)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(l_aviso)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(l_id))
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(t_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(l_nombre))
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(c_sexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(l_sexo))
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(c_puesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(l_puesto, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(t_rfc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(l_rfc))
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(l_curp))
+                            .addComponent(t_curp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(f_f_nac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(l_f_nac))
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(l_Foto)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(b_foto)
+                                    .addComponent(t_foto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(l_foto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        t_nombre.getAccessibleContext().setAccessibleName("");
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         J_tabla.setAutoscrolls(true);
+        J_tabla.setPreferredSize(new java.awt.Dimension(453, 240));
 
         Tabla_empleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "id", "Nombre", "Sexo", "Puesto", "Rfc", "Curp", "F_nacimiento", "Foto"
+                "Id", "Nombre", "Sexo", "Puesto", "RFC", "CURP", "Fecha de nacimiento", "Foto"
             }
         ));
         Tabla_empleados.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -313,145 +466,184 @@ public class V_R_Empleado extends javax.swing.JFrame {
         });
         J_tabla.setViewportView(Tabla_empleados);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 22;
-        gridBagConstraints.gridwidth = 20;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 700;
-        gridBagConstraints.ipady = 156;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(40, 10, 23, 29);
-        getContentPane().add(J_tabla, gridBagConstraints);
-
-        b_foto.setText("...");
-        b_foto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_fotoActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 18;
-        gridBagConstraints.gridy = 18;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(16, 0, 0, 17);
-        getContentPane().add(b_foto, gridBagConstraints);
-
-        c_sexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
-        c_sexo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                c_sexoKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 224;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
-        getContentPane().add(c_sexo, gridBagConstraints);
-
-        c_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Oficial", "Medio oficial", "Cabo" }));
-        c_puesto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                c_puestoActionPerformed(evt);
-            }
-        });
-        c_puesto.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                c_puestoKeyPressed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 12;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 212;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(15, 10, 0, 0);
-        getContentPane().add(c_puesto, gridBagConstraints);
-
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(20, 60));
-
-        P_botones.setLayout(new java.awt.GridBagLayout());
-
-        b_nuevo.setText("Nuevo");
-        b_nuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_nuevoActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
-        P_botones.add(b_nuevo, gridBagConstraints);
-
-        b_eliminar.setText("Eliminar");
-        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_eliminarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
-        P_botones.add(b_eliminar, gridBagConstraints);
-
-        b_buscar.setText("Buscar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
-        P_botones.add(b_buscar, gridBagConstraints);
-
-        b_editar.setText("Editar");
-        b_editar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_editarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
-        P_botones.add(b_editar, gridBagConstraints);
-
-        b_cerrar.setText("Cerrar");
-        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_cerrarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
-        P_botones.add(b_cerrar, gridBagConstraints);
-
-        jScrollPane1.setViewportView(P_botones);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 20;
-        gridBagConstraints.gridwidth = 18;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jScrollPane1, gridBagConstraints);
+        getContentPane().add(J_tabla, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-   
+    
+    public void actualizar_imagenes_tema() {
+        if (FlatLaf.isLafDark()) {
+            ruta_foto_defecto = "/Imagenes/usuario_claro.png";
+        } else {
+            ruta_foto_defecto = "/Imagenes/usuario_oscuro.png";
+        }
+    }
+    
+    private boolean campos_vacios() {
+    
+    String fecha = f_f_nac.getText().replace("-", "").trim();
+    String foto_text = t_foto.getText().trim();
+        
+    return t_id.getText().trim().isEmpty()
+        &&t_nombre.getText().trim().isEmpty() 
+        && c_sexo.getSelectedItem() == null
+        && c_puesto.getSelectedItem() == null
+        && t_rfc.getText().trim().isEmpty() 
+        && t_curp.getText().trim().isEmpty() 
+        && fecha.isEmpty()
+        && (foto_text.isEmpty() || foto_text.equals(ruta_foto_defecto));
+    }
+    
+    private boolean datos_moficados() {
+    int fila = Tabla_empleados.getSelectedRow();
+    if (fila == -1) return false;
+
+    
+    String id_original = Tabla_empleados.getValueAt(fila, 0).toString();
+    String nombre_original = Tabla_empleados.getValueAt(fila, 1).toString(); 
+    String sexo_original = Tabla_empleados.getValueAt(fila, 2).toString();
+    String puesto_original = Tabla_empleados.getValueAt(fila, 3).toString();
+    String rfc_original = Tabla_empleados.getValueAt(fila, 4).toString(); 
+    String curp_original = Tabla_empleados.getValueAt(fila, 5).toString();
+    String fecha_nac_original = Tabla_empleados.getValueAt(fila, 6).toString();
+    String foto_original = Tabla_empleados.getValueAt(fila, 7).toString();
+    
+    
+    return !t_id.getText().equals(id_original)
+            ||!t_nombre.getText().equals(nombre_original)
+            || !("" + c_sexo.getSelectedItem()).equals(sexo_original)
+            || !("" + c_puesto.getSelectedItem()).equals(puesto_original)
+            || !t_rfc.getText().equals(rfc_original)
+            ||!t_curp.getText().equals(curp_original)
+            ||!f_f_nac.getText().equals(fecha_nac_original)
+            ||!t_foto.getText().equals(foto_original);
+}
+    
+    public void creacion_exitosa(){       
+        
+            l_aviso.setForeground(Color.green);
+            String mensaje;
+            mensaje = "El empleado " + t_nombre.getText() + " fue registrado con éxito.";
+            toast = mensaje;
+            l_aviso.setVisible(true);
+            l_aviso.setText(mensaje);
+            
+            new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                l_aviso.setText(""); // Se limpia el mensaje solo
+                l_aviso.setVisible(false);
+            }
+            }).start();  
+    }
+    
+    public void edicion_exitosa(){
+        
+            l_aviso.setForeground(Color.orange);
+            String mensaje;
+            mensaje = "✓ Cambios guardados con éxito.";
+            toast = mensaje;
+            l_aviso.setVisible(true);
+            l_aviso.setText(mensaje);
+            
+            new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                l_aviso.setText(""); // Se limpia el mensaje solo
+                l_aviso.setVisible(false);
+            }
+            }).start();  
+    }
+    
+    public void restablecer_color(){
+        l_id.setForeground(null);
+        l_nombre.setForeground(null);
+        l_sexo.setForeground(null);
+        l_puesto.setForeground(null);
+        l_rfc.setForeground(null);
+        l_curp.setForeground(null);
+        l_f_nac.setForeground(null);
+        l_Foto.setForeground(null);
+    }
+    
+    public void aviso_labels(){
+        
+        boolean error = false;
+
+        if (t_id.getText().trim().isEmpty()) {
+            l_id.setForeground(Color.red);
+            error = true;
+        }
+        
+        if (!t_id.getText().trim().isEmpty()) {
+            l_id.setForeground(null);
+            error = false;
+        }
+        
+        if (t_nombre.getText().trim().isEmpty()) {
+            l_nombre.setForeground(Color.red);
+            error = true;
+        }
+        
+        if (!t_nombre.getText().trim().isEmpty()) {
+            l_nombre.setForeground(null);
+            error = false;
+        }             
+                
+        if (c_sexo.getSelectedItem() == null) {
+            l_sexo.setForeground(Color.RED);
+            error = true;
+        } else {
+            l_sexo.setForeground(null);
+        }
+        
+        if (c_puesto.getSelectedItem() == null) {
+            l_puesto.setForeground(Color.RED);
+            error = true;
+        } else {
+            l_puesto.setForeground(null);
+        }
+                
+        if (t_rfc.getText().trim().isEmpty()) {
+            l_rfc.setForeground(Color.red);
+            error = true;
+        }
+        
+        if (!t_rfc.getText().trim().isEmpty()) {
+            l_rfc.setForeground(null);
+            error = false;
+        }
+
+        if (t_curp.getText().trim().isEmpty()) {
+            l_curp.setForeground(Color.red);
+            error = true;
+        }
+        
+        if (!t_curp.getText().trim().isEmpty()) {
+            l_curp.setForeground(null);
+            error = false;
+        }
+                
+        String fecha = f_f_nac.getText().replace("-", "").trim();
+
+        if (fecha.isEmpty()) {
+            l_f_nac.setForeground(Color.red);
+            error = true;
+        } else {
+            l_f_nac.setForeground(null);
+        }
+                        
+        String foto_text = t_foto.getText().trim();
+
+        if (foto_text.isEmpty() || foto_text.equals(ruta_foto_defecto)) {
+            l_Foto.setForeground(Color.red);
+            error = true;
+        } else {
+            l_Foto.setForeground(null);
+            error = false;
+        }
+    }
+    
     public void bloquear_botones(){
         b_eliminar.setEnabled(false);
         b_editar.setEnabled(false);
@@ -467,10 +659,12 @@ public class V_R_Empleado extends javax.swing.JFrame {
     public void limpiar_text(){
         t_id.setText("");
         t_nombre.setText("");
+        c_sexo.setSelectedItem(null);
+        c_puesto.setSelectedItem(null);
         t_rfc.setText("");
         t_curp.setText("");
-        t_f_nac.setText("");
-        t_foto.setText("src/Imagenes/signo-de-pregunta.png");
+        f_f_nac.setValue(null);
+        t_foto.setText(ruta_foto_defecto);
         cargar_foto();
     }
     
@@ -481,7 +675,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         this.c_puesto.setEnabled(true);
         this.t_rfc.setEnabled(true);
         this.t_curp.setEnabled(true);
-        this.t_f_nac.setEnabled(true);
+        this.f_f_nac.setEnabled(true);
     }
     
     public void bloquear_text(){
@@ -491,7 +685,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         this.c_puesto.setEnabled(false);
         this.t_rfc.setEnabled(false);
         this.t_curp.setEnabled(false);
-        this.t_f_nac.setEnabled(false);
+        this.f_f_nac.setEnabled(false);
         this.t_foto.setEnabled(false);
     }
     
@@ -502,7 +696,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         this.c_puesto.setSelectedItem(trabajador.getPuesto());
         this.t_rfc.setText(trabajador.getRfc());
         this.t_curp.setText(trabajador.getCURP());
-        this.t_f_nac.setText(trabajador.getF_nac());
+        this.f_f_nac.setText(trabajador.getF_nac());
         this.t_foto.setText(trabajador.getFoto());
     }
     
@@ -513,24 +707,42 @@ public class V_R_Empleado extends javax.swing.JFrame {
         this.c_puesto.setSelectedItem(String.valueOf(this.Tabla_empleados.getValueAt(indice, 3)));
         this.t_rfc.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 4)));
         this.t_curp.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 5)));
-        this.t_f_nac.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 6)));
+        this.f_f_nac.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 6)));
         this.t_foto.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 7)));
         this.cargar_foto();
     }
     
     public void cargar_foto(){
-        
-        ImageIcon iconoOriginal = new ImageIcon(t_foto.getText());
+        ImageIcon iconoOriginal;
 
-Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Image.SCALE_SMOOTH);
-    l_foto.setIcon(new ImageIcon(imagenEscalada));
-    
-    if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-    System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
-    
+        if (t_foto.getText().equals(ruta_foto_defecto)) {
+
+        URL url = getClass().getResource(ruta_foto_defecto);
+
+        if (url == null) {
+            System.out.println("No se encontró la imagen por defecto.");
+            return;
+        }
+
+        iconoOriginal = new ImageIcon(url);
+
+        } else {
+            iconoOriginal = new ImageIcon(t_foto.getText());
+        }
+        int ancho = l_foto.getWidth();
+        int alto = l_foto.getHeight();
+        
+        if (ancho <= 0) ancho = 260;
+        if (alto <= 0) alto = 270;
+
+        Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+        l_foto.setIcon(new ImageIcon(imagenEscalada));
+        if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada en el formulario de registrar empleados.");
+        }
     }
-    }
     
+
     public void llenar_tabla(){
         String [] info = new String [8];
         info[0] = t_id.getText();
@@ -539,7 +751,7 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
         info[3] = (c_puesto.getSelectedItem() != null) ? c_puesto.getSelectedItem().toString() : "";
         info[4] = t_rfc.getText();
         info[5] = t_curp.getText();
-        info[6] = t_f_nac.getText();
+        info[6] = f_f_nac.getText();
         info[7] = t_foto.getText();
         
         DefaultTableModel modelo=(DefaultTableModel) this.Tabla_empleados.getModel();//crea una variable de tipo modelo de tabla 
@@ -555,15 +767,11 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
         modelo.setValueAt(this.c_puesto.getSelectedItem(), fila, 3);
         modelo.setValueAt(this.t_rfc.getText(), fila, 4);
         modelo.setValueAt(this.t_curp.getText(), fila, 5);
-        modelo.setValueAt(this.t_f_nac.getText(), fila, 6);
+        modelo.setValueAt(this.f_f_nac.getText(), fila, 6);
         modelo.setValueAt(this.t_foto.getText(), fila, 7);
         this.Tabla_empleados.setModel(modelo); 
     }
     
-    private void t_f_nacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_f_nacActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_t_f_nacActionPerformed
-
     private void t_nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_nombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_t_nombreActionPerformed
@@ -571,47 +779,72 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     private void t_nombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombreKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
+    if (Tecla_presionada == KeyEvent.VK_ENTER){
         this.c_sexo.requestFocus();
-           
-        }
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.c_sexo.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_id.requestFocus();
+    }
+    
     }//GEN-LAST:event_t_nombreKeyPressed
 
     private void t_rfcKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_rfcKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
+    
+    int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_curp.requestFocus();       
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
         this.t_curp.requestFocus();
-           
-        }
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.c_puesto.requestFocus();
+    }
+    
     }//GEN-LAST:event_t_rfcKeyPressed
 
     private void t_curpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_curpKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
+    
+    int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_f_nac.requestFocus();
-           
-        }
+        this.f_f_nac.requestFocus();       
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.f_f_nac.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_rfc.requestFocus();
+    }
+    
     }//GEN-LAST:event_t_curpKeyPressed
 
     private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
-        String ruta = "/home/ares/NetBeansProjects/Sistema_EN/Sistema_en/src/Imagenes/empleados";
-    JFileChooser foto = new JFileChooser("src/Imagenes/empleados");
-    FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
-    foto.setFileFilter(filtrado);
+        String directorioActual = System.getProperty("user.dir");
+        JFileChooser foto = new JFileChooser(directorioActual);
     
-    int respuesta = foto.showOpenDialog(this);
+        FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
+        foto.setFileFilter(filtrado);
     
-    if (respuesta == JFileChooser.APPROVE_OPTION)
-    {
-        ruta = foto.getSelectedFile().getPath();
+        int respuesta = foto.showOpenDialog(this);
+    
+    if (respuesta == JFileChooser.APPROVE_OPTION) {
+        String ruta = foto.getSelectedFile().getPath();
         this.t_foto.setText(ruta);
-        // this.doble_diagonal();
+        
         ImageIcon img = new ImageIcon(ruta);
         Icon micono = new ImageIcon(img.getImage().getScaledInstance(this.l_foto.getWidth(), this.l_foto.getHeight(), Image.SCALE_DEFAULT));
         this.l_foto.setIcon(micono);
-        this.t_foto.setText(ruta);
     }
     }//GEN-LAST:event_b_fotoActionPerformed
 
@@ -619,134 +852,381 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
         fila = this.Tabla_empleados.rowAtPoint(evt.getPoint());
         cargar_datos_tabla(fila);
         bloquear_text();
+        b_nuevo.setText("Nuevo");
         //int indice = this.Tabla_empleados.rowAtPoint(evt.getPoint());
         //cargar_datos_tabla(indice);
     }//GEN-LAST:event_Tabla_empleadosMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-                  
-    llenar_text();
-    cargar_foto();
-    //llenar_tabla();
-    bloquear_text();
-    b_foto.setEnabled(false);
-    
+        actualizar_imagenes_tema();
+        llenar_text();
+        limpiar_text();
+        cargar_foto();
+        bloquear_text();
+        b_foto.setEnabled(false);
+        b_nuevo.requestFocus();
+        l_aviso.setVisible(false);
+        b_cancelar.setEnabled(false);
     }//GEN-LAST:event_formWindowOpened
 
     private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
-        
         fila= Tabla_empleados.getSelectedRow();
         
-        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_empleados.getModel();
-        if (this.Tabla_empleados.getRowCount()>0){
-            if(fila == -1){
+        if(fila == -1){
+                javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un empleado de la tabla para eliminarlo.");
+                restablecer_color();
                 return;
             }
-            modelo2.removeRow(fila);
-            this.Tabla_empleados.setModel(modelo2);
-            fila = fila-1;
-            if (fila<0)
-            {
-                limpiar_text();
-            }
-            else
-            {
-                cargar_datos_tabla(fila);
-            }
-        }
+        
+        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_empleados.getModel();
+            int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este empleado?\n\n" + "ID: " + t_id.getText() + "\n" + "Nombre: " + t_nombre.getText(), "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
+                if (respuesta == javax.swing.JOptionPane.YES_OPTION){
+                    
+                    modelo2.removeRow(fila);
+                    if (modelo2.getRowCount() == 0) {
+                        limpiar_text();
+                    } else {
+                        if (fila >= modelo2.getRowCount()) {
+                            fila = modelo2.getRowCount() - 1;
+                    }
+                        cargar_datos_tabla(fila);
+                    }
+                }
     }//GEN-LAST:event_b_eliminarActionPerformed
 
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
+        
+        cargar_foto();
         t_id.requestFocus();
         desbloquear_text();
-        this.b_foto.setEnabled(true);
+        b_foto.setEnabled(true);
+        b_cancelar.setEnabled(true);
+        
 
         if ("Nuevo".equals(b_nuevo.getText()))
         {
             b_nuevo.setText("Guardar");
             limpiar_text();
             bloquear_botones();
+            
         }
         else
         {
-            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_rfc.getText().trim().isEmpty() || t_f_nac.getText().trim().isEmpty() || t_curp.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty() || "src/Imagenes/signo-de-pregunta.png".equals(t_foto.getText().trim()))
+            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || c_sexo.getSelectedItem() == null || c_puesto.getSelectedItem() == null || t_rfc.getText().trim().isEmpty() || f_f_nac.getValue() == null || t_curp.getText().trim().isEmpty() || ruta_foto_defecto.equals(t_foto.getText().trim()))
             {
+                aviso_labels();
                 return;
             }
-            
             b_nuevo.setText("Nuevo");
             llenar_tabla();
             desbloquear_botones();
+            creacion_exitosa();
             limpiar_text();
+            bloquear_text();
+            b_foto.setEnabled(false);
+            restablecer_color();
+            b_cancelar.setEnabled(false);
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
+        
         if ("Editar".equals(b_editar.getText()))
         {
             fila = Tabla_empleados.getSelectedRow();
                 if (fila == -1) 
                 {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un empleado de la tabla para editar.");
+                    javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un empleado de la tabla para editar.");
+                    restablecer_color();
                     return;
                 }
-            
+            b_foto.setEnabled(true);
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
             b_eliminar.setEnabled(false);
             b_buscar.setEnabled(false);
+            b_cancelar.setEnabled(true);
             desbloquear_text();
         }
         else
         {
-            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_rfc.getText().trim().isEmpty() || t_curp.getText().trim().isEmpty() || t_f_nac.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_rfc.getText().trim().isEmpty() || t_curp.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty() || f_f_nac.getText().trim().isEmpty())
             {
+                aviso_labels();
                 return;
             }
+            
             b_editar.setText("Editar");
             editar_tabla();
             b_nuevo.setEnabled(true);
             b_eliminar.setEnabled(true);
             b_buscar.setEnabled(true);
+            b_foto.setEnabled(false);
             bloquear_text();
+            restablecer_color();
+            edicion_exitosa();
+            b_cancelar.setEnabled(false);
         }
     }//GEN-LAST:event_b_editarActionPerformed
 
     private void t_idKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_idKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
+    int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
+        this.t_nombre.requestFocus();       
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
         this.t_nombre.requestFocus();
-           
-        }
+    }
+    
     }//GEN-LAST:event_t_idKeyPressed
 
     private void c_sexoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_sexoKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-        int e;
+        
+    int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
-            this.c_puesto.requestFocus(); 
-        }
+        this.c_puesto.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.c_puesto.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_nombre.requestFocus();
+    }
+    
     }//GEN-LAST:event_c_sexoKeyPressed
 
     private void c_puestoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_puestoKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
+        
+    int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        c_puesto.setSelectedItem(ABORT);
+        this.t_rfc.requestFocus();       
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
         this.t_rfc.requestFocus();
-           
-        }
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.c_sexo.requestFocus();
+    }
+    
     }//GEN-LAST:event_c_puestoKeyPressed
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
+    
+    if ("Guardar".equals(b_nuevo.getText()) || "Guardar".equals(b_editar.getText())) {  
+        b_cancelar.doClick(); 
+  
+        if (!b_cancelar.isEnabled()) {
+            this.dispose(); 
+        }
+    } else {
         this.dispose();
+    }
     }//GEN-LAST:event_b_cerrarActionPerformed
 
-    private void c_puestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_puestoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_puestoActionPerformed
+    private void t_idFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_idFocusGained
+        
+    }//GEN-LAST:event_t_idFocusGained
+
+    private void f_f_nacKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_f_f_nacKeyPressed
+        
+    int Tecla_presionada = evt.getKeyCode();
+        
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_curp.requestFocus();
+    }
+        
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_foto.requestFocus();
+    }
+    
+    }//GEN-LAST:event_f_f_nacKeyPressed
+
+    private void b_nuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_nuevoKeyPressed
+    int Tecla_presionada = evt.getKeyCode();
+        
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_editar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_cerrar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.b_foto.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_nuevoKeyPressed
+
+    private void b_editarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_editarKeyPressed
+    int Tecla_presionada = evt.getKeyCode();
+        
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_buscar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_nuevo.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_editarKeyPressed
+
+    private void b_buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_buscarKeyPressed
+    int Tecla_presionada = evt.getKeyCode();
+        
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_eliminar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_editar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_buscarKeyPressed
+
+    private void b_eliminarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_eliminarKeyPressed
+    int Tecla_presionada = evt.getKeyCode();
+        
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_cerrar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_buscar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_eliminarKeyPressed
+
+    private void b_fotoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_fotoKeyPressed
+    
+    int Tecla_presionada = evt.getKeyCode();
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_nuevo.requestFocus();
+    }
+   
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.f_f_nac.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_fotoKeyPressed
+
+    private void b_cerrarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_cerrarKeyPressed
+    
+    int Tecla_presionada = evt.getKeyCode();
+    
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_nuevo.requestFocus();
+    }    
+    
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_eliminar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_cerrarKeyPressed
+
+    private void t_nombreFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_nombreFocusGained
+        
+    }//GEN-LAST:event_t_nombreFocusGained
+
+    private void c_sexoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_c_sexoFocusGained
+        
+    }//GEN-LAST:event_c_sexoFocusGained
+
+    private void c_puestoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_c_puestoFocusGained
+        
+    }//GEN-LAST:event_c_puestoFocusGained
+
+    private void t_rfcFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_rfcFocusGained
+        
+    }//GEN-LAST:event_t_rfcFocusGained
+
+    private void t_curpFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_t_curpFocusGained
+        
+    }//GEN-LAST:event_t_curpFocusGained
+
+    private void f_f_nacFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_f_f_nacFocusGained
+        
+    }//GEN-LAST:event_f_f_nacFocusGained
+
+    private void b_fotoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_b_fotoFocusGained
+        
+    }//GEN-LAST:event_b_fotoFocusGained
+
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        
+        // 1. PASO CLAVE: Detectar en qué modo estábamos antes de cancelar
+        boolean es_nuevo = "Guardar".equals(b_nuevo.getText());
+        boolean es_editar = "Guardar".equals(b_editar.getText());
+
+        if (es_nuevo || es_editar) {
+    
+        // --- MODO NUEVO ---
+            if (es_nuevo) {
+                // Validación: Si los campos NO están vacíos, pedimos confirmación
+                if (!campos_vacios()) { 
+                    int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar el registro? Se perderán los datos introducidos.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos y no cancelamos nada
+                }
+            }
+            // Si estaban vacíos o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+    
+        // --- MODO EDITAR ---
+        else if (es_editar) {
+            // Validación: Si los datos fueron modificados, pedimos confirmación
+            if (datos_moficados()) { 
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos
+                }
+            }
+            // Si no se modificó nada o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+
+    // --- RESTABLECER LA INTERFAZ (Tu código original ordenado) ---
+    b_nuevo.setText("Nuevo");
+    b_editar.setText("Editar");   
+    
+    b_nuevo.setEnabled(true);
+    desbloquear_botones(); 
+    bloquear_text();
+    b_foto.setEnabled(false);
+    restablecer_color();
+            
+    // Si estábamos editando, recuperamos los datos que ya tenía la fila
+    int filaSeleccionada = Tabla_empleados.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        cargar_datos_tabla(filaSeleccionada);
+    } else {
+        limpiar_text();
+    }
+            
+    l_aviso.setVisible(false);
+    l_aviso.setText("");
+    b_cancelar.setEnabled(false);
+}
+    }//GEN-LAST:event_b_cancelarActionPerformed
+
+    private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+        D_buscar_empleado emple = new D_buscar_empleado(this, true);
+        emple.setVisible(true);
+    }//GEN-LAST:event_b_buscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -786,9 +1266,9 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane J_tabla;
-    private javax.swing.JPanel P_botones;
     private javax.swing.JTable Tabla_empleados;
     private javax.swing.JButton b_buscar;
+    private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_editar;
     private javax.swing.JButton b_eliminar;
@@ -796,23 +1276,23 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(260, 270, Imag
     private javax.swing.JButton b_nuevo;
     private javax.swing.JComboBox<String> c_puesto;
     private javax.swing.JComboBox<String> c_sexo;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JFormattedTextField f_f_nac;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel l_Foto;
+    private javax.swing.JLabel l_aviso;
+    private javax.swing.JLabel l_curp;
+    private javax.swing.JLabel l_f_nac;
     private javax.swing.JLabel l_foto;
+    private javax.swing.JLabel l_id;
+    private javax.swing.JLabel l_nombre;
+    private javax.swing.JLabel l_puesto;
+    private javax.swing.JLabel l_rfc;
+    private javax.swing.JLabel l_sexo;
     private javax.swing.JTextField t_curp;
-    private javax.swing.JTextField t_f_nac;
     private javax.swing.JTextField t_foto;
     private javax.swing.JTextField t_id;
     private javax.swing.JTextField t_nombre;

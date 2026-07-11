@@ -4,11 +4,15 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import java.awt.event.KeyEvent;
+
 /**
  *
  * @author ares
  */
 public class D_buscar_empleado extends javax.swing.JDialog {
+    
+    int fila;
 
     /**
      * Creates new form D_buscar_empleado
@@ -27,21 +31,280 @@ public class D_buscar_empleado extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        b_buscar = new javax.swing.JButton();
+        b_limpiar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Tabla_empleados = new javax.swing.JTable();
+        b_seleccionar = new javax.swing.JButton();
+        b_cancelar = new javax.swing.JButton();
+        t_nombre = new javax.swing.JTextField();
+        c_puesto = new javax.swing.JComboBox<>();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Buscar empleado");
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel2.setText("Nombre");
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel3.setText("Puesto");
+
+        b_buscar.setText("Buscar");
+        b_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_buscarActionPerformed(evt);
+            }
+        });
+        b_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_buscarKeyPressed(evt);
+            }
+        });
+
+        b_limpiar.setText("Limpiar");
+        b_limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_limpiarActionPerformed(evt);
+            }
+        });
+        b_limpiar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_limpiarKeyPressed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel4.setText("Resultados");
+
+        Tabla_empleados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Nombre", "Sexo", "Puesto", "RFC", "CURP", "Fecha de nacimiento", "Foto"
+            }
+        ));
+        Tabla_empleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_empleadosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Tabla_empleados);
+
+        b_seleccionar.setText("Seleccionar");
+        b_seleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_seleccionarActionPerformed(evt);
+            }
+        });
+        b_seleccionar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_seleccionarKeyPressed(evt);
+            }
+        });
+
+        b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
+        b_cancelar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_cancelarKeyPressed(evt);
+            }
+        });
+
+        t_nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_nombreKeyPressed(evt);
+            }
+        });
+
+        c_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Oficial", "Medio oficial", "Cabo" }));
+        c_puesto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                c_puestoKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(b_seleccionar)
+                        .addGap(18, 18, 18)
+                        .addComponent(b_cancelar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 643, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(b_buscar)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(t_nombre)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(b_limpiar)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(c_puesto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(29, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(t_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(c_puesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(b_buscar)
+                    .addComponent(b_limpiar))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(b_seleccionar)
+                    .addComponent(b_cancelar))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_cancelarActionPerformed
+
+    private void b_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_limpiarActionPerformed
+        t_nombre.setText("");
+        c_puesto.setSelectedItem(null);
+    }//GEN-LAST:event_b_limpiarActionPerformed
+
+    private void t_nombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombreKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.c_puesto.requestFocus();
+    }
+    }//GEN-LAST:event_t_nombreKeyPressed
+
+    private void b_limpiarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_limpiarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_buscar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.c_puesto.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_limpiarKeyPressed
+
+    private void b_buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_buscarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_limpiar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_nombre.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_buscarKeyPressed
+
+    private void b_seleccionarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_seleccionarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_cancelar.requestFocus();
+    }
+        
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.b_buscar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_seleccionarKeyPressed
+
+    private void b_cancelarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_cancelarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.b_buscar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_cancelarKeyPressed
+
+    private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
+        fila = Tabla_empleados.getSelectedRow();
+                if (fila == -1) 
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un empleado de la tabla.");
+                    return;
+                }
+    }//GEN-LAST:event_b_seleccionarActionPerformed
+
+    private void Tabla_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_empleadosMouseClicked
+        fila = this.Tabla_empleados.rowAtPoint(evt.getPoint());
+    }//GEN-LAST:event_Tabla_empleadosMouseClicked
+
+    private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+        if(t_nombre.getText().trim().isEmpty() || c_puesto.getSelectedItem() == null){
+            return;
+        }
+    }//GEN-LAST:event_b_buscarActionPerformed
+
+    private void c_puestoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_puestoKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_buscar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_nombre.requestFocus();
+    }
+    
+    }//GEN-LAST:event_c_puestoKeyPressed
 
     /**
      * @param args the command line arguments
@@ -86,5 +349,17 @@ public class D_buscar_empleado extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Tabla_empleados;
+    private javax.swing.JButton b_buscar;
+    private javax.swing.JButton b_cancelar;
+    private javax.swing.JButton b_limpiar;
+    private javax.swing.JButton b_seleccionar;
+    private javax.swing.JComboBox<String> c_puesto;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField t_nombre;
     // End of variables declaration//GEN-END:variables
 }

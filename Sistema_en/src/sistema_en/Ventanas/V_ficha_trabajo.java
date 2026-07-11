@@ -23,6 +23,7 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
         initComponents();
     }
 
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,99 +32,67 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         t_fecha_r = new javax.swing.JTextField();
         t_hora_r = new javax.swing.JTextField();
+        t_id_trabajo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        b_bitacora = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        b_pago_recibido = new javax.swing.JButton();
-        b_informacion = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        t_id_trabajo = new javax.swing.JTextField();
-        c_estado = new javax.swing.JComboBox<>();
-        b_cotizacion = new javax.swing.JButton();
-        b_actualizar_estado = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        b_bitacora = new javax.swing.JButton();
+        b_pago_recibido = new javax.swing.JButton();
+        b_informacion = new javax.swing.JButton();
+        b_cotizacion = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        c_estado = new javax.swing.JComboBox<>();
+        b_actualizar_estado = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(782, 416));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         t_fecha_r.setEditable(false);
-        getContentPane().add(t_fecha_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, -1, -1));
+        t_fecha_r.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                t_fecha_rActionPerformed(evt);
+            }
+        });
 
         t_hora_r.setEditable(false);
-        getContentPane().add(t_hora_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(331, 80, -1, -1));
-
-        jLabel1.setText("Fecha de registro");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, -1, -1));
-
-        jLabel2.setText("Hora de registro");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(316, 57, -1, -1));
-
-        b_bitacora.setText("Bitacora");
-        b_bitacora.addActionListener(new java.awt.event.ActionListener() {
+        t_hora_r.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_bitacoraActionPerformed(evt);
+                t_hora_rActionPerformed(evt);
             }
         });
-        getContentPane().add(b_bitacora, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, -1, -1));
-
-        jLabel3.setText("Estado");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 140, -1, -1));
-
-        b_pago_recibido.setText("Pago recibido");
-        b_pago_recibido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_pago_recibidoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_pago_recibido, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 230, 140, -1));
-
-        b_informacion.setText("Informacion");
-        b_informacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_informacionActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_informacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
-
-        jLabel5.setText("Ficha de trabajo");
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, -1, -1));
-
-        jLabel6.setText("Id_trabajo");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(55, 57, -1, -1));
 
         t_id_trabajo.setEditable(false);
-        t_id_trabajo.setText("1               ");
-        getContentPane().add(t_id_trabajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 86, 81, -1));
-
-        c_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "En progreso", "Completado" }));
-        getContentPane().add(c_estado, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, -1, -1));
-
-        b_cotizacion.setText("Cotizacion");
-        b_cotizacion.addActionListener(new java.awt.event.ActionListener() {
+        t_id_trabajo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_cotizacionActionPerformed(evt);
+                t_id_trabajoActionPerformed(evt);
             }
         });
-        getContentPane().add(b_cotizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, 110, -1));
 
-        b_actualizar_estado.setText("Actualizar estado");
-        b_actualizar_estado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_actualizar_estadoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_actualizar_estado, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 170, -1, -1));
+        jLabel1.setText("Fecha de registro");
+
+        jLabel2.setText("Hora de registro");
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Estado");
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Ficha de trabajo");
+
+        jLabel6.setText("Id_trabajo");
 
         b_cerrar.setText("Cerrar");
         b_cerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -131,7 +100,157 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
                 b_cerrarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(474, 278, -1, -1));
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        b_bitacora.setText("Bitacora");
+        b_bitacora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_bitacoraActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(11, 11, 10, 11);
+        jPanel1.add(b_bitacora, gridBagConstraints);
+
+        b_pago_recibido.setText("Pago recibido");
+        b_pago_recibido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_pago_recibidoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 21;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(11, 11, 10, 11);
+        jPanel1.add(b_pago_recibido, gridBagConstraints);
+
+        b_informacion.setText("Informacion");
+        b_informacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_informacionActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(11, 11, 10, 11);
+        jPanel1.add(b_informacion, gridBagConstraints);
+
+        b_cotizacion.setText("Cotizacion");
+        b_cotizacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cotizacionActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(11, 11, 10, 11);
+        jPanel1.add(b_cotizacion, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        c_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "En progreso", "Completado" }));
+        c_estado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                c_estadoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(c_estado, gridBagConstraints);
+
+        b_actualizar_estado.setText("Actualizar estado");
+        b_actualizar_estado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_actualizar_estadoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(b_actualizar_estado, gridBagConstraints);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(b_cerrar))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(t_id_trabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6))
+                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(t_fecha_r, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(t_hora_r, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))))
+                        .addGap(31, 31, 31))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel6))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(t_fecha_r, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(t_id_trabajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(t_hora_r, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(b_cerrar))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -255,6 +374,22 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
         
     }//GEN-LAST:event_b_pago_recibidoActionPerformed
 
+    private void t_hora_rActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_hora_rActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_hora_rActionPerformed
+
+    private void t_fecha_rActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_fecha_rActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_fecha_rActionPerformed
+
+    private void c_estadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_estadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_estadoActionPerformed
+
+    private void t_id_trabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_id_trabajoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_id_trabajoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -303,6 +438,8 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     public javax.swing.JTextField t_fecha_r;
     public javax.swing.JTextField t_hora_r;
     public javax.swing.JTextField t_id_trabajo;

@@ -4,13 +4,16 @@
  */
 package sistema_en.Ventanas;
 
+import java.awt.Color;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import sistema_en.Objetos.Herramienta;
+import sistema_en.Ventanas.dialogos.D_buscar_herramienta;
 
 /**
  *
@@ -20,6 +23,8 @@ public class V_R_Herramienta extends javax.swing.JFrame {
 
     Herramienta herramienta = new Herramienta();
     int fila;
+    String toast;
+    String ruta_foto_defecto;
     
     /**
      * Creates new form V_Rherramienta
@@ -38,119 +43,68 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel5 = new javax.swing.JLabel();
-        c_tipo = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        t_id = new javax.swing.JTextField();
+        c_tipo = new javax.swing.JComboBox<>();
         t_n_serie = new javax.swing.JTextField();
-        h_foto = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        b_foto = new javax.swing.JButton();
         t_foto = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        Tabla_herramientas = new javax.swing.JTable();
+        b_foto = new javax.swing.JButton();
+        b_añadir = new javax.swing.JButton();
+        h_foto = new javax.swing.JLabel();
+        l_foto = new javax.swing.JLabel();
+        l_tipo = new javax.swing.JLabel();
+        l_n_serie = new javax.swing.JLabel();
+        l_id = new javax.swing.JLabel();
         P_botones = new javax.swing.JPanel();
         b_nuevo = new javax.swing.JButton();
         b_editar = new javax.swing.JButton();
         b_buscar = new javax.swing.JButton();
-        b_eliminar = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
-
-        jLabel5.setText("jLabel5");
+        b_cancelar = new javax.swing.JButton();
+        b_eliminar = new javax.swing.JButton();
+        l_aviso = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Tabla_herramientas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 400));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        c_tipo.setToolTipText("");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 74;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(11, 30, 11, 30);
-        getContentPane().add(c_tipo, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        getContentPane().add(jLabel1, gridBagConstraints);
+        jPanel1.setMinimumSize(new java.awt.Dimension(20, 20));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Registrar herramienta");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 40;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipady = 4;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 10, 10);
-        getContentPane().add(jLabel2, gridBagConstraints);
 
-        jLabel3.setText("Tipo de herramienta");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(34, 30, 0, 13);
-        getContentPane().add(jLabel3, gridBagConstraints);
+        c_tipo.setToolTipText("");
+        c_tipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                c_tipoActionPerformed(evt);
+            }
+        });
 
-        jLabel4.setText("Numero de serie");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 30, 0, 10);
-        getContentPane().add(jLabel4, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 205;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 32, 11, 29);
-        getContentPane().add(t_n_serie, gridBagConstraints);
+        t_n_serie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                t_n_serieActionPerformed(evt);
+            }
+        });
 
-        h_foto.setToolTipText("foto de la herramienta");
-        h_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 34;
-        gridBagConstraints.gridheight = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 248;
-        gridBagConstraints.ipady = 278;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(11, 11, 11, 10);
-        getContentPane().add(h_foto, gridBagConstraints);
-
-        jLabel7.setText("Foto");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 30, 0, 11);
-        getContentPane().add(jLabel7, gridBagConstraints);
+        t_foto.setEditable(false);
+        t_foto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                t_fotoActionPerformed(evt);
+            }
+        });
 
         b_foto.setText("...");
         b_foto.addActionListener(new java.awt.event.ActionListener() {
@@ -158,59 +112,35 @@ public class V_R_Herramienta extends javax.swing.JFrame {
                 b_fotoActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.ipadx = 9;
-        gridBagConstraints.insets = new java.awt.Insets(10, 26, 10, 5);
-        getContentPane().add(b_foto, gridBagConstraints);
 
-        t_foto.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 165;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 5, 11, 24);
-        getContentPane().add(t_foto, gridBagConstraints);
-
-        jScrollPane1.setAutoscrolls(true);
-
-        Tabla_herramientas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Tipo de herramienta", "Numero de serie", "Foto"
-            }
-        ));
-        Tabla_herramientas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Tabla_herramientasMouseClicked(evt);
+        b_añadir.setText("Añadir");
+        b_añadir.setMaximumSize(new java.awt.Dimension(80, 25));
+        b_añadir.setMinimumSize(new java.awt.Dimension(80, 25));
+        b_añadir.setPreferredSize(new java.awt.Dimension(80, 25));
+        b_añadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_añadirActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(Tabla_herramientas);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 38;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 500;
-        gridBagConstraints.ipady = 116;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
-        getContentPane().add(jScrollPane1, gridBagConstraints);
+        h_foto.setToolTipText("foto de la herramienta");
+        h_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        l_foto.setText("Foto");
+
+        l_tipo.setText("Tipo de herramienta");
+
+        l_n_serie.setText("Numero de serie");
+
+        l_id.setText("Id");
+
+        P_botones.setPreferredSize(new java.awt.Dimension(200, 51));
         P_botones.setLayout(new java.awt.GridBagLayout());
 
         b_nuevo.setText("Nuevo");
-        b_nuevo.setMaximumSize(new java.awt.Dimension(70, 25));
-        b_nuevo.setMinimumSize(new java.awt.Dimension(70, 25));
+        b_nuevo.setMaximumSize(new java.awt.Dimension(85, 25));
+        b_nuevo.setMinimumSize(new java.awt.Dimension(85, 25));
+        b_nuevo.setPreferredSize(new java.awt.Dimension(85, 25));
         b_nuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_nuevoActionPerformed(evt);
@@ -220,14 +150,13 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 9);
+        gridBagConstraints.insets = new java.awt.Insets(13, 15, 15, 15);
         P_botones.add(b_nuevo, gridBagConstraints);
 
         b_editar.setText("Editar");
-        b_editar.setMaximumSize(new java.awt.Dimension(70, 25));
-        b_editar.setMinimumSize(new java.awt.Dimension(70, 25));
-        b_editar.setPreferredSize(new java.awt.Dimension(70, 25));
+        b_editar.setMaximumSize(new java.awt.Dimension(75, 25));
+        b_editar.setMinimumSize(new java.awt.Dimension(75, 25));
+        b_editar.setPreferredSize(new java.awt.Dimension(75, 25));
         b_editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_editarActionPerformed(evt);
@@ -237,43 +166,30 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 9);
+        gridBagConstraints.insets = new java.awt.Insets(13, 15, 15, 15);
         P_botones.add(b_editar, gridBagConstraints);
 
         b_buscar.setText("Buscar");
-        b_buscar.setMaximumSize(new java.awt.Dimension(70, 25));
-        b_buscar.setMinimumSize(new java.awt.Dimension(70, 25));
+        b_buscar.setMaximumSize(new java.awt.Dimension(75, 25));
+        b_buscar.setMinimumSize(new java.awt.Dimension(75, 25));
         b_buscar.setName(""); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 9);
-        P_botones.add(b_buscar, gridBagConstraints);
-
-        b_eliminar.setText("Eliminar");
-        b_eliminar.setMaximumSize(new java.awt.Dimension(70, 25));
-        b_eliminar.setMinimumSize(new java.awt.Dimension(70, 25));
-        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+        b_buscar.setPreferredSize(new java.awt.Dimension(75, 25));
+        b_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_eliminarActionPerformed(evt);
+                b_buscarActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 9);
-        P_botones.add(b_eliminar, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(13, 15, 15, 15);
+        P_botones.add(b_buscar, gridBagConstraints);
 
         b_cerrar.setText("Cerrar");
-        b_cerrar.setMaximumSize(new java.awt.Dimension(70, 25));
-        b_cerrar.setMinimumSize(new java.awt.Dimension(70, 25));
+        b_cerrar.setMaximumSize(new java.awt.Dimension(75, 25));
+        b_cerrar.setMinimumSize(new java.awt.Dimension(75, 25));
+        b_cerrar.setPreferredSize(new java.awt.Dimension(75, 25));
         b_cerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_cerrarActionPerformed(evt);
@@ -283,49 +199,297 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 9);
+        gridBagConstraints.insets = new java.awt.Insets(13, 15, 15, 15);
         P_botones.add(b_cerrar, gridBagConstraints);
 
+        b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 29, 0, 1);
-        getContentPane().add(P_botones, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(13, 15, 15, 15);
+        P_botones.add(b_cancelar, gridBagConstraints);
+
+        b_eliminar.setText("Eliminar");
+        b_eliminar.setMaximumSize(new java.awt.Dimension(80, 25));
+        b_eliminar.setMinimumSize(new java.awt.Dimension(80, 25));
+        b_eliminar.setPreferredSize(new java.awt.Dimension(80, 25));
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(13, 15, 15, 15);
+        P_botones.add(b_eliminar, gridBagConstraints);
+
+        l_aviso.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        l_aviso.setText("aviso");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(l_id)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 542, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(t_id, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(t_foto)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(b_foto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(c_tipo, 0, 421, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(b_añadir, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
+                                    .addComponent(t_n_serie, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(l_tipo, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(l_n_serie, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(l_foto, javax.swing.GroupLayout.Alignment.LEADING))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(l_aviso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)))
+                        .addComponent(h_foto, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(P_botones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(l_aviso)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(l_id)
+                        .addGap(18, 18, 18)
+                        .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(l_tipo)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(c_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(b_añadir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(l_n_serie)
+                        .addGap(18, 18, 18)
+                        .addComponent(t_n_serie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(l_foto)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(t_foto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(b_foto)))
+                    .addComponent(h_foto, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(P_botones, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
+        );
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        jScrollPane1.setToolTipText("");
+        jScrollPane1.setAutoscrolls(true);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(453, 240));
+
+        Tabla_herramientas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Tipo de herramienta", "Numero de serie", "Foto"
+            }
+        ));
+        Tabla_herramientas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_herramientasMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Tabla_herramientas);
+        Tabla_herramientas.getAccessibleContext().setAccessibleDescription("");
+
+        getContentPane().add(jScrollPane1, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void actualizar_imagenes_tema() {
+    
+        if (com.formdev.flatlaf.FlatLaf.isLafDark()) {
+            ruta_foto_defecto = "src/Imagenes/herramientas_claro.png";
+        } else {
+            ruta_foto_defecto = "src/Imagenes/herramientas_oscuro.png";
+        }
+    
+    }
+    
+        
+    private boolean campos_vacios() {
+        
+    String foto_text = t_foto.getText().trim();
+        
+    return t_id.getText().trim().isEmpty()
+        && c_tipo.getSelectedItem() == null
+        && t_n_serie.getText().trim().isEmpty() 
+        && (foto_text.isEmpty() || foto_text.equals(ruta_foto_defecto));
+    }
+    
+    private boolean datos_moficados() {
+    int fila = Tabla_herramientas.getSelectedRow();
+    if (fila == -1) return false;
+
+    
+    String id_original = Tabla_herramientas.getValueAt(fila, 0).toString();
+    String nombre_original = Tabla_herramientas.getValueAt(fila, 1).toString(); 
+    String sexo_original = Tabla_herramientas.getValueAt(fila, 2).toString();
+    String puesto_original = Tabla_herramientas.getValueAt(fila, 3).toString();
+    String rfc_original = Tabla_herramientas.getValueAt(fila, 4).toString(); 
+    String curp_original = Tabla_herramientas.getValueAt(fila, 5).toString();
+    String fecha_nac_original = Tabla_herramientas.getValueAt(fila, 6).toString();
+    String foto_original = Tabla_herramientas.getValueAt(fila, 7).toString();
+    
+    
+    return !t_id.getText().equals(id_original)
+            || !("" + c_tipo.getSelectedItem()).equals(sexo_original)
+            ||!t_n_serie.getText().equals(curp_original)
+            ||!t_foto.getText().equals(foto_original);
+}
+    
+    public void creacion_exitosa(){       
+        
+            l_aviso.setForeground(Color.green);
+            String mensaje;
+            mensaje = "La herramienta " + c_tipo.getSelectedItem() + " fue registrado con éxito.";
+            toast = mensaje;
+            l_aviso.setVisible(true);
+            l_aviso.setText(mensaje);
+            
+            new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                l_aviso.setText(""); // Se limpia el mensaje solo
+                l_aviso.setVisible(false);
+            }
+            }).start();  
+    }
+    
+    public void edicion_exitosa(){
+        
+            l_aviso.setForeground(Color.green);
+            String mensaje;
+            mensaje = "✓ Cambios guardados con éxito.";
+            toast = mensaje;
+            l_aviso.setVisible(true);
+            l_aviso.setText(mensaje);
+            
+            new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                l_aviso.setText(""); // Se limpia el mensaje solo
+                l_aviso.setVisible(false);
+            }
+            }).start();  
+    }
+    
+    public void restablecer_color(){
+        l_id.setForeground(null);
+        l_tipo.setForeground(null);
+        l_n_serie.setForeground(null);
+        l_foto.setForeground(null);
+    }
+    
+    public void aviso_labels(){
+        boolean error = false;
+        
+        if (t_id.getText().trim().isEmpty()) {
+            l_id.setForeground(Color.red);
+            error = true;
+        }
+        
+        if (!t_id.getText().trim().isEmpty()) {
+            l_id.setForeground(null);
+            error = false;
+        }
+        
+        if (c_tipo.getSelectedItem() == null) {
+            l_tipo.setForeground(Color.RED);
+            error = true;
+        } else {
+            l_tipo.setForeground(null);
+        }
+        
+        if (t_n_serie.getText().trim().isEmpty()) {
+            l_n_serie.setForeground(Color.red);
+            error = true;
+        }
+        
+        if (!t_n_serie.getText().trim().isEmpty()) {
+            l_n_serie.setForeground(null);
+            error = false;
+        }
+        
+        String foto_text = t_foto.getText().trim();
+
+        if (foto_text.isEmpty() || foto_text.equals(ruta_foto_defecto)) {
+            l_foto.setForeground(Color.red);
+            error = true;
+        } else {
+            l_foto.setForeground(null);
+            error = false;
+        }
+        
+    }
+    
     private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
-        String ruta = "/home/ares/NetBeansProjects/Ventacar_ares/src/Imagenes/";
-    JFileChooser foto = new JFileChooser("src/Imagenes/herramientas");
-    FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
-    foto.setFileFilter(filtrado);
+        String directorioActual = System.getProperty("user.dir");
+        JFileChooser foto = new JFileChooser(directorioActual);
     
-    int respuesta = foto.showOpenDialog(this);
+        FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
+        foto.setFileFilter(filtrado);
     
-    if (respuesta == JFileChooser.APPROVE_OPTION)
-    {
-        ruta = foto.getSelectedFile().getPath();
+        int respuesta = foto.showOpenDialog(this);
+    
+    if (respuesta == JFileChooser.APPROVE_OPTION) {
+        String ruta = foto.getSelectedFile().getPath();
         this.t_foto.setText(ruta);
-        // this.doble_diagonal();
+        
         ImageIcon img = new ImageIcon(ruta);
         Icon micono = new ImageIcon(img.getImage().getScaledInstance(this.h_foto.getWidth(), this.h_foto.getHeight(), Image.SCALE_DEFAULT));
         this.h_foto.setIcon(micono);
-        this.t_foto.setText(ruta);
-    }  
+    }
     }//GEN-LAST:event_b_fotoActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
     llenar_text();
     cargar_foto();
-    //llenar_tabla();
     bloquear_text();
     b_foto.setEnabled(false);
+    b_añadir.setEnabled(false);
+    l_aviso.setVisible(false);
+    b_cancelar.setEnabled(false);
+    actualizar_imagenes_tema();
+    limpiar_text();
     }//GEN-LAST:event_formWindowOpened
 
     private void Tabla_herramientasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_herramientasMouseClicked
@@ -336,6 +500,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }//GEN-LAST:event_Tabla_herramientasMouseClicked
 
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
+        
         if ("Editar".equals(b_editar.getText()))
         {
             
@@ -343,6 +508,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
                 if (fila == -1) 
                 {
                     javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione una herramienta de la tabla para editar.");
+                    restablecer_color();
                     return;
                 }
             
@@ -351,11 +517,14 @@ public class V_R_Herramienta extends javax.swing.JFrame {
             b_eliminar.setEnabled(false);
             b_buscar.setEnabled(false);
             desbloquear_text();
+            b_añadir.setEnabled(true);
+            b_cancelar.setEnabled(true);
         }
         else
         {
-            if(t_n_serie.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            if(t_id.getText().trim().isEmpty() || c_tipo.getSelectedItem() == null || t_n_serie.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
             {
+                aviso_labels();
                 return;
             }
             b_editar.setText("Editar");
@@ -363,13 +532,18 @@ public class V_R_Herramienta extends javax.swing.JFrame {
             b_nuevo.setEnabled(true);
             b_eliminar.setEnabled(true);
             b_buscar.setEnabled(true);
+            b_añadir.setEnabled(false);
             bloquear_text();
+            b_cancelar.setEnabled(false);
+            edicion_exitosa();
         }
     }//GEN-LAST:event_b_editarActionPerformed
 
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
+        b_añadir.setEnabled(true);
         desbloquear_text();
-        this.b_foto.setEnabled(true);
+        b_foto.setEnabled(true);
+        b_cancelar.setEnabled(true);
 
         if ("Nuevo".equals(b_nuevo.getText()))
         {
@@ -379,16 +553,21 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         }
         else
         {
-            if(t_n_serie.getText().trim().isEmpty() || "src/Imagenes/signo-de-pregunta.png".equals(t_foto.getText().trim()))
+            if(t_id.getText().trim().isEmpty() || c_tipo.getSelectedItem() == null || t_n_serie.getText().trim().isEmpty() || ruta_foto_defecto.equals(t_foto.getText().trim()))
             {
+                aviso_labels();
                 return;
             }
             b_nuevo.setText("Nuevo");
             llenar_tabla();
             desbloquear_botones();
+            creacion_exitosa();
             limpiar_text();
             bloquear_text();
             b_foto.setEnabled(false);
+            b_añadir.setEnabled(false);
+            restablecer_color();
+            b_cancelar.setEnabled(false);
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
@@ -396,56 +575,182 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         
         fila= Tabla_herramientas.getSelectedRow();
         
-        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_herramientas.getModel();
-        if (this.Tabla_herramientas.getRowCount()>0){
-            if(fila == -1){
+        if(fila == -1){
+                javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una herramienta de la tabla para eliminarlo.");
+                restablecer_color();
                 return;
             }
-            modelo2.removeRow(fila);
-            this.Tabla_herramientas.setModel(modelo2);
-            fila = fila-1;
-            if (fila<0)
-            {
-                limpiar_text();
-            }
-            else
-            {
-                cargar_datos_tabla(fila);
-            }
-        }
+        
+        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_herramientas.getModel();
+            int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar esta herramienta?\n\n" + "ID: " + t_id.getText() + "\n" + "Tipo: " + c_tipo.getSelectedItem(), "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
+                if (respuesta == javax.swing.JOptionPane.YES_OPTION){
+                    
+                    modelo2.removeRow(fila);
+                    if (modelo2.getRowCount() == 0) {
+                        limpiar_text();
+                    } else {
+                        if (fila >= modelo2.getRowCount()) {
+                            fila = modelo2.getRowCount() - 1;
+                    }
+                        cargar_datos_tabla(fila);
+                    }
+                }
     }//GEN-LAST:event_b_eliminarActionPerformed
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
+        
+    if ("Guardar".equals(b_nuevo.getText()) || "Guardar".equals(b_editar.getText())) {
+        b_cancelar.doClick(); 
+                
+        if (!b_cancelar.isEnabled()) {
+            this.dispose(); 
+        }
+    } else {
         this.dispose();
+    }
     }//GEN-LAST:event_b_cerrarActionPerformed
+
+    private void b_añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_añadirActionPerformed
+    
+    String nuevo_tipo = JOptionPane.showInputDialog( this,  "Escribe el nuevo tipo de herramienta:",  "Añadir nuevo tipo",  JOptionPane.QUESTION_MESSAGE);
+    
+    if (nuevo_tipo != null && !nuevo_tipo.trim().isEmpty()) {
+        
+        String item_f = nuevo_tipo.trim();
+        
+        boolean tipo_existente = false;
+        for (int i = 0; i < c_tipo.getItemCount(); i++) {
+            if (c_tipo.getItemAt(i).equalsIgnoreCase(item_f)) {
+                tipo_existente = true;
+                break;
+            }
+        }
+        
+        if (!tipo_existente) {
+            c_tipo.addItem(item_f);
+            c_tipo.setSelectedItem(item_f);
+            
+            JOptionPane.showMessageDialog(this, "Tipo '" + item_f + "' añadido correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "Ese tipo de herramienta ya tipo existe.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    }//GEN-LAST:event_b_añadirActionPerformed
+
+    private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+        D_buscar_herramienta herramienta = new D_buscar_herramienta(this,true);
+        herramienta.setVisible(true);
+    }//GEN-LAST:event_b_buscarActionPerformed
+
+    private void t_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_fotoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_fotoActionPerformed
+
+    private void c_tipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_tipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_tipoActionPerformed
+
+    private void t_n_serieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_n_serieActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_n_serieActionPerformed
+
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+      
+        // 1. PASO CLAVE: Detectar en qué modo estábamos antes de cancelar
+        boolean es_nuevo = "Guardar".equals(b_nuevo.getText());
+        boolean es_editar = "Guardar".equals(b_editar.getText());
+
+        if (es_nuevo || es_editar) {
+    
+        // --- MODO NUEVO ---
+            if (es_nuevo) {
+                // Validación: Si los campos NO están vacíos, pedimos confirmación
+                if (!campos_vacios()) { 
+                    int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar el registro? Se perderán los datos introducidos.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos y no cancelamos nada
+                }
+            }
+            // Si estaban vacíos o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+    
+        // --- MODO EDITAR ---
+        else if (es_editar) {
+            // Validación: Si los datos fueron modificados, pedimos confirmación
+            if (datos_moficados()) { 
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos
+                }
+            }
+            // Si no se modificó nada o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+
+    // --- RESTABLECER LA INTERFAZ (Tu código original ordenado) ---
+    b_nuevo.setText("Nuevo");
+    b_editar.setText("Editar");   
+    
+    b_nuevo.setEnabled(true);
+    desbloquear_botones(); 
+    bloquear_text();
+    b_foto.setEnabled(false);
+    restablecer_color();
+            
+    // Si estábamos editando, recuperamos los datos que ya tenía la fila
+    int filaSeleccionada = Tabla_herramientas.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        cargar_datos_tabla(filaSeleccionada);
+    } else {
+        limpiar_text();
+    }
+            
+    l_aviso.setVisible(false);
+    l_aviso.setText("");
+    b_cancelar.setEnabled(false);
+}
+    }//GEN-LAST:event_b_cancelarActionPerformed
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        
+    }//GEN-LAST:event_formComponentResized
 
     public void bloquear_botones(){
         b_eliminar.setEnabled(false);
         b_editar.setEnabled(false);
         b_buscar.setEnabled(false);
-        b_foto.setEnabled(false);
+        //b_foto.setEnabled(false);
     }
     
     public void desbloquear_botones(){
         b_eliminar.setEnabled(true);
         b_editar.setEnabled(true);
         b_buscar.setEnabled(true);
-        b_foto.setEnabled(true);
+        //b_foto.setEnabled(true);
     }
     
     public void limpiar_text(){
+        t_id.setText("");
         t_n_serie.setText("");
-        t_foto.setText("src/Imagenes/signo-de-pregunta.png");
+        t_foto.setText(ruta_foto_defecto);
+        c_tipo.setSelectedItem(null);
         cargar_foto();
     }
     
     public void bloquear_text(){
+        t_id.setEnabled(false);
         c_tipo.setEnabled(false);
         t_n_serie.setEnabled(false);
         t_foto.setEnabled(false);
     }   
     
     public void desbloquear_text(){
+        t_id.setEnabled(true);
         c_tipo.setEnabled(true);
         t_n_serie.setEnabled(true);
     }
@@ -453,34 +758,41 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     public void cargar_foto(){
         
         ImageIcon iconoOriginal = new ImageIcon(t_foto.getText());
+        int ancho = h_foto.getWidth();
+        int alto = h_foto.getHeight();
+        
+        if (ancho <= 0) ancho = 250;
+        if (alto <= 0) alto = 280;
 
-Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(250, 280, Image.SCALE_SMOOTH);
-    h_foto.setIcon(new ImageIcon(imagenEscalada));
+        Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+        h_foto.setIcon(new ImageIcon(imagenEscalada));
     
-    if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-    System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
-    
-    }
+        if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada en el formulario de registrar herramientas.");
+        }
     }
     
     public void llenar_text(){
+        //this.t_id.setText(herramienta.getId_herramienta());
         this.c_tipo.setSelectedItem(herramienta.getT_herramienta());
         this.t_n_serie.setText(herramienta.getN_serie());
         this.t_foto.setText(herramienta.getFoto());
     }
     
     public void cargar_datos_tabla(int indice){
-        this.c_tipo.setSelectedItem(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 0)));
-        this.t_n_serie.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 1)));
-        this.t_foto.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 2)));
+        this.t_id.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 0)));
+        this.c_tipo.setSelectedItem(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 1)));
+        this.t_n_serie.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 2)));
+        this.t_foto.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 3)));
         cargar_foto();
     }
     
     public void llenar_tabla(){
-        String [] info = new String [3];
-        info[0] = c_tipo.getSelectedItem().toString();
-        info[1] = t_n_serie.getText();
-        info[2] = t_foto.getText();
+        String [] info = new String [4];
+        info[0] = t_id.getText();
+        info[1] = c_tipo.getSelectedItem().toString();
+        info[2] = t_n_serie.getText();
+        info[3] = t_foto.getText();
         DefaultTableModel modelo=(DefaultTableModel) this.Tabla_herramientas.getModel();//crea una variable de tipo modelo de tabla 
         modelo.addRow(info);//agrega una fila al modelo de tabla
         this.Tabla_herramientas.setModel(modelo);
@@ -488,9 +800,10 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(250, 280, Imag
     
     public void editar_tabla(){
         DefaultTableModel modelo =(DefaultTableModel) this.Tabla_herramientas.getModel();
-        modelo.setValueAt(this.c_tipo.getSelectedItem(), fila, 0);
-        modelo.setValueAt(this.t_n_serie.getText(), fila, 1);
-        modelo.setValueAt(this.t_foto.getText(), fila, 2);
+        modelo.setValueAt(this.t_id.getText(), fila, 0);
+        modelo.setValueAt(this.c_tipo.getSelectedItem(), fila, 1);
+        modelo.setValueAt(this.t_n_serie.getText(), fila, 2);
+        modelo.setValueAt(this.t_foto.getText(), fila, 3);
     }
     
     
@@ -534,7 +847,9 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(250, 280, Imag
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel P_botones;
     private javax.swing.JTable Tabla_herramientas;
+    private javax.swing.JButton b_añadir;
     private javax.swing.JButton b_buscar;
+    private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_editar;
     private javax.swing.JButton b_eliminar;
@@ -542,14 +857,17 @@ Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(250, 280, Imag
     private javax.swing.JButton b_nuevo;
     private javax.swing.JComboBox<String> c_tipo;
     private javax.swing.JLabel h_foto;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel l_aviso;
+    private javax.swing.JLabel l_foto;
+    private javax.swing.JLabel l_id;
+    private javax.swing.JLabel l_n_serie;
+    private javax.swing.JLabel l_tipo;
     private javax.swing.JTextField t_foto;
+    private javax.swing.JTextField t_id;
     private javax.swing.JTextField t_n_serie;
     // End of variables declaration//GEN-END:variables
 }
+

@@ -1,7 +1,14 @@
-/Sistema_en/nbproject/private/
-/Sistema_en/build/
-/Sistema_en/dist/
+# Ignorar carpetas de NetBeans (tanto en la raíz como en subcarpetas)
+**/nbproject/private/
+
+# Ignorar archivos de bases de datos y respaldos
 database/*.db
 backups/*
+
+# Ignorar carpetas de compilación (build y dist) en cualquier parte del proyecto
 build/
 dist/
+
+# archivos multimedia
+*.png
+*.mp3

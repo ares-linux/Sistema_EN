@@ -7,10 +7,12 @@ package sistema_en.Ventanas;
 import sistema_en.Ventanas.Ventanas_consultas.V_clientes;
 import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import sistema_en.Ventanas.dialogos.D_configuraciones;
 import java.io.File;
+import java.net.URL;
 import javax.sound.sampled.*;
 
 /**
@@ -29,12 +31,68 @@ public class V_menu extends javax.swing.JFrame {
     private V_R_Trabajo ventana_r_trabajos = null;
     private V_R_Herramienta ventana_r_herramientas = null;
     private V_R_Empleado ventana_r_empleados = null;
-    
+                        
      /**
      * Creates new form V_menu
      */
     public V_menu() {
         initComponents();
+        
+        // --- CONTROL DE FLECHAS PARA EL MENÚ CATÁLOGO ---
+        m_catalogo.addMenuListener(new javax.swing.event.MenuListener() {
+            @Override
+            public void menuSelected(javax.swing.event.MenuEvent e) {
+                m_catalogo.setText("Catálogo ▲"); // Sube la flecha al abrirse
+            }
+
+            @Override
+            public void menuDeselected(javax.swing.event.MenuEvent e) {
+                m_catalogo.setText("Catálogo ▼"); // Baja la flecha al cerrarse
+            }
+
+            @Override
+            public void menuCanceled(javax.swing.event.MenuEvent e) {
+                m_catalogo.setText("Catálogo ▼");
+            }
+        });
+
+        // --- CONTROL DE FLECHAS PARA EL MENÚ REGISTROS ---
+        m_registros.addMenuListener(new javax.swing.event.MenuListener() {
+            @Override
+            public void menuSelected(javax.swing.event.MenuEvent e) {
+                m_registros.setText("Registros ▲"); // Sube la flecha al abrirse
+            }
+
+            @Override
+            public void menuDeselected(javax.swing.event.MenuEvent e) {
+                m_registros.setText("Registros ▼"); // Baja la flecha al cerrarse
+            }
+
+            @Override
+            public void menuCanceled(javax.swing.event.MenuEvent e) {
+                m_registros.setText("Registros ▼");
+            }
+        });
+        
+        // --- CONTROL DE FLECHAS PARA EL MENÚ REGISTROS ---
+        
+        m_sistema.addMenuListener(new javax.swing.event.MenuListener() {
+            @Override
+            public void menuSelected(javax.swing.event.MenuEvent e) {
+                m_sistema.setText("Sistema ▲"); // Sube la flecha al abrirse
+            }
+
+            @Override
+            public void menuDeselected(javax.swing.event.MenuEvent e) {
+                m_sistema.setText("Sistema ▼"); // Baja la flecha al cerrarse
+            }
+
+            @Override
+            public void menuCanceled(javax.swing.event.MenuEvent e) {
+                m_sistema.setText("Sistema ▼");
+            }
+        });
+        
     }
 
     /**
@@ -60,15 +118,16 @@ public class V_menu extends javax.swing.JFrame {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         l_foto = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        m_catalogo = new javax.swing.JMenu();
-        M_cerrar_programa = new javax.swing.JMenuItem();
-        m_empleado = new javax.swing.JMenuItem();
-        m_trabajo = new javax.swing.JMenuItem();
-        m_herramienta = new javax.swing.JMenuItem();
         m_registros = new javax.swing.JMenu();
-        m_trabajos = new javax.swing.JMenuItem();
+        m_empleado = new javax.swing.JMenuItem();
+        m_herramienta = new javax.swing.JMenuItem();
+        m_trabajo = new javax.swing.JMenuItem();
+        m_catalogo = new javax.swing.JMenu();
         m_clientes = new javax.swing.JMenuItem();
-        m_configuraciones = new javax.swing.JMenu();
+        m_trabajos = new javax.swing.JMenuItem();
+        m_sistema = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        M_cerrar_programa = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -113,15 +172,19 @@ public class V_menu extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(25, 25, 25, 25);
         getContentPane().add(l_foto, gridBagConstraints);
 
-        m_catalogo.setText("Catalogo");
+        jMenuBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        M_cerrar_programa.setText("Salir del programa");
-        M_cerrar_programa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                M_cerrar_programaActionPerformed(evt);
+        m_registros.setText("Registros ▼");
+        m_registros.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                m_registrosFocusGained(evt);
             }
         });
-        m_catalogo.add(M_cerrar_programa);
+        m_registros.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                m_registrosKeyPressed(evt);
+            }
+        });
 
         m_empleado.setText("Registrar empleado");
         m_empleado.addActionListener(new java.awt.event.ActionListener() {
@@ -129,15 +192,7 @@ public class V_menu extends javax.swing.JFrame {
                 m_empleadoActionPerformed(evt);
             }
         });
-        m_catalogo.add(m_empleado);
-
-        m_trabajo.setText("Registrar trabajo");
-        m_trabajo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_trabajoActionPerformed(evt);
-            }
-        });
-        m_catalogo.add(m_trabajo);
+        m_registros.add(m_empleado);
 
         m_herramienta.setText("Registrar herramienta");
         m_herramienta.addActionListener(new java.awt.event.ActionListener() {
@@ -145,66 +200,88 @@ public class V_menu extends javax.swing.JFrame {
                 m_herramientaActionPerformed(evt);
             }
         });
-        m_catalogo.add(m_herramienta);
+        m_registros.add(m_herramienta);
 
-        jMenuBar1.add(m_catalogo);
-
-        m_registros.setText("Registros");
-
-        m_trabajos.setText("Trabajos");
-        m_trabajos.addActionListener(new java.awt.event.ActionListener() {
+        m_trabajo.setText("Registrar trabajo");
+        m_trabajo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_trabajosActionPerformed(evt);
+                m_trabajoActionPerformed(evt);
             }
         });
-        m_registros.add(m_trabajos);
+        m_registros.add(m_trabajo);
 
-        m_clientes.setText("Clientes");
+        jMenuBar1.add(m_registros);
+
+        m_catalogo.setText("Catálogo ▼");
+
+        m_clientes.setText("Ver clientes");
         m_clientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_clientesActionPerformed(evt);
             }
         });
-        m_registros.add(m_clientes);
+        m_catalogo.add(m_clientes);
 
-        jMenuBar1.add(m_registros);
-
-        m_configuraciones.setText("Configuraciones");
-        m_configuraciones.setToolTipText("");
-        m_configuraciones.setVerifyInputWhenFocusTarget(false);
-        m_configuraciones.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                m_configuracionesMouseClicked(evt);
-            }
-        });
-        m_configuraciones.addActionListener(new java.awt.event.ActionListener() {
+        m_trabajos.setText("Ver trabajos");
+        m_trabajos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_configuracionesActionPerformed(evt);
+                m_trabajosActionPerformed(evt);
             }
         });
-        jMenuBar1.add(m_configuraciones);
+        m_catalogo.add(m_trabajos);
+
+        jMenuBar1.add(m_catalogo);
+
+        m_sistema.setText("Sistema ▼");
+
+        jMenuItem5.setText("Configuraciones");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        m_sistema.add(jMenuItem5);
+
+        M_cerrar_programa.setText("Salir del programa");
+        M_cerrar_programa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                M_cerrar_programaActionPerformed(evt);
+            }
+        });
+        m_sistema.add(M_cerrar_programa);
+
+        jMenuBar1.add(m_sistema);
 
         setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     public class r_sonido {
 
-        public static void reproducir(String ruta) {
-            try {
-                File archivo = new File(ruta);
-                AudioInputStream audio = AudioSystem.getAudioInputStream(archivo);
+    public static void reproducir(String ruta) {
+        try {
 
-                Clip clip = AudioSystem.getClip();
-                clip.open(audio);
-                clip.start();
+            URL url =
+                    r_sonido.class.getResource(ruta);
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (url == null) {
+                System.out.println(
+                        "No se encontró el audio: " + ruta);
+                return;
             }
+
+            AudioInputStream audio =
+                    AudioSystem.getAudioInputStream(url);
+
+            Clip clip = AudioSystem.getClip();
+            clip.open(audio);
+            clip.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+}
     
     public void cargar_foto(){
         int ancho = l_foto.getWidth();
@@ -214,14 +291,13 @@ public class V_menu extends javax.swing.JFrame {
         if (alto <= 0) alto = 400;
 
         try {
-            ImageIcon iconoOriginal = new ImageIcon("src/Imagenes/logo.png");
+            ImageIcon iconoOriginal = new ImageIcon( getClass().getResource("/Imagenes/logo.png"));
 
-            // 3. Escalamos la imagen usando el tamaño real obtenido del Label
             Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
             l_foto.setIcon(new ImageIcon(imagenEscalada));
 
         if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
+            System.out.println("¡Error! No se pudo encontrar o cargar la imagen del menu");
             }
         } catch (Exception e) {
             System.out.println("Error al procesar la imagen: " + e.getMessage());
@@ -231,7 +307,7 @@ public class V_menu extends javax.swing.JFrame {
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
-        r_sonido.reproducir("src/audios/inicio.wav");
+        r_sonido.reproducir("/audios/inicio.wav");
     }//GEN-LAST:event_formWindowOpened
 
     private void M_cerrar_programaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_cerrar_programaActionPerformed
@@ -243,8 +319,7 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_M_cerrar_programaActionPerformed
 
     private void m_herramientaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_herramientaActionPerformed
-                
-         if (ventana_r_herramientas == null || !ventana_r_herramientas.isDisplayable()) {
+        if (ventana_r_herramientas == null || !ventana_r_herramientas.isDisplayable()) {
             ventana_r_herramientas = new V_R_Herramienta();
             ventana_r_herramientas.setExtendedState(JFrame.MAXIMIZED_BOTH);
             ventana_r_herramientas.setVisible(true);
@@ -261,8 +336,7 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_m_herramientaActionPerformed
 
     private void m_empleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_empleadoActionPerformed
-                
-         if (ventana_r_empleados == null || !ventana_r_empleados.isDisplayable()) {
+        if (ventana_r_empleados == null || !ventana_r_empleados.isDisplayable()) {
             ventana_r_empleados = new V_R_Empleado();
             ventana_r_empleados.setExtendedState(JFrame.MAXIMIZED_BOTH);
             ventana_r_empleados.setVisible(true);
@@ -279,8 +353,7 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_m_empleadoActionPerformed
 
     private void m_trabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_trabajoActionPerformed
-                
-         if (ventana_r_trabajos == null || !ventana_r_trabajos.isDisplayable()) {
+        if (ventana_r_trabajos == null || !ventana_r_trabajos.isDisplayable()) {
             ventana_r_trabajos = new V_R_Trabajo();
             ventana_r_trabajos.setExtendedState(JFrame.MAXIMIZED_BOTH);
             ventana_r_trabajos.setVisible(true);
@@ -296,8 +369,7 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_m_trabajoActionPerformed
 
     private void m_trabajosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_trabajosActionPerformed
-                
-         if (ventana_Trabajos == null || !ventana_Trabajos.isDisplayable()) {
+        if (ventana_Trabajos == null || !ventana_Trabajos.isDisplayable()) {
             ventana_Trabajos = new V_trabajos();
             ventana_Trabajos.setExtendedState(JFrame.MAXIMIZED_BOTH);
             ventana_Trabajos.setVisible(true);
@@ -314,7 +386,6 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_m_trabajosActionPerformed
 
     private void m_clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_clientesActionPerformed
-                
         if (ventana_Clientes == null || !ventana_Clientes.isDisplayable()) {
             ventana_Clientes = new V_clientes();
             ventana_Clientes.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -330,18 +401,22 @@ public class V_menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_m_clientesActionPerformed
 
-    private void m_configuracionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_configuracionesActionPerformed
-        
-    }//GEN-LAST:event_m_configuracionesActionPerformed
-
-    private void m_configuracionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_m_configuracionesMouseClicked
-        D_configuraciones config = new D_configuraciones(this,true);
-        config.setVisible(true);       
-    }//GEN-LAST:event_m_configuracionesMouseClicked
-
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         cargar_foto();
     }//GEN-LAST:event_formComponentResized
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        D_configuraciones config = new D_configuraciones(this,true);
+        config.setVisible(true);  
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void m_registrosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_registrosKeyPressed
+    
+    }//GEN-LAST:event_m_registrosKeyPressed
+
+    private void m_registrosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_registrosFocusGained
+    
+    }//GEN-LAST:event_m_registrosFocusGained
 
     /**
      * @param args the command line arguments
@@ -387,6 +462,7 @@ public class V_menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;
@@ -394,10 +470,10 @@ public class V_menu extends javax.swing.JFrame {
     private javax.swing.JLabel l_foto;
     private javax.swing.JMenu m_catalogo;
     private javax.swing.JMenuItem m_clientes;
-    private javax.swing.JMenu m_configuraciones;
     private javax.swing.JMenuItem m_empleado;
     private javax.swing.JMenuItem m_herramienta;
     private javax.swing.JMenu m_registros;
+    private javax.swing.JMenu m_sistema;
     private javax.swing.JMenuItem m_trabajo;
     private javax.swing.JMenuItem m_trabajos;
     // End of variables declaration//GEN-END:variables

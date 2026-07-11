@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import sistema_en.Ventanas.V_ficha_trabajo;
+import sistema_en.Ventanas.dialogos.D_ficha_trabajo;
 
 /**
  *
@@ -18,8 +19,7 @@ public class V_trabajos extends javax.swing.JFrame {
     
     private boolean dividida = false;
     
-    public V_ficha_trabajo ficha;
-    V_ficha_trabajo trabajo = new V_ficha_trabajo();
+    public D_ficha_trabajo ficha;
     int fila;
 
     /**
@@ -28,9 +28,9 @@ public class V_trabajos extends javax.swing.JFrame {
     public V_trabajos() {
         initComponents();
         
-        //DefaultTableModel modelo = (DefaultTableModel) Tabla_trabajos.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_trabajos.getModel();
         
-            //Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
+            Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
             //Object[] fila2 = {"2", "María López", "555-5678", "Calle Secundaria 45", "Mantenimiento de tuberia sanitaria", "2026-06-11", "12:30", "En progreso"};
             //Object[] fila3 = {"3", "Carlos Gómez", "555-9876", "Ruta Rural Km 4", "Instalación de tuberia para sanitario domestico", "2026-06-10", "16:00", "Completado"};
             //Object[] fila4 = {"4", "Ana Martínez", "555-4321", "Calle Los Olivos 789", "Detección de filtraciones", "2026-06-12", "09:00", "Pendiente"};
@@ -54,7 +54,7 @@ public class V_trabajos extends javax.swing.JFrame {
             //Object[] fila22 = {"22", "Mónica Suárez", "555-6565", "Plaza Mayor 14", "Reparación de gotera en techo por humedad", "2026-06-18", "10:00", "Pendiente"};
             //Object[] fila23 = {"23", "Javier Paredes", "555-8787", "Av. Libertador 2200", "Purgado de radiadores/calefacción", "2026-06-18", "13:00", "Pendiente"};
 
-            //modelo.addRow(fila1);
+            modelo.addRow(fila1);
             //modelo.addRow(fila2);
             //modelo.addRow(fila3);
             //modelo.addRow(fila4);
@@ -147,8 +147,8 @@ public class V_trabajos extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setText("Historial de Trabajos");
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel1.setText("Trabajos registros");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -217,7 +217,7 @@ public class V_trabajos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "nombre_cli", "telefono", "direccion", "descripcion", "fecha_r", "hora_r", "estado"
+                "Id", "Nombre Cliente", "Teléfono", "Dirección", "Descripción", "Fecha Registro", "Hora Registro", "Estado"
             }
         ));
         Tabla_trabajos.setFillsViewportHeight(true);
@@ -271,7 +271,7 @@ public class V_trabajos extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     public void cargar_datos_tabla(int indice){
-        ficha = new V_ficha_trabajo();
+        ficha = new D_ficha_trabajo(this,false);
         ficha.setVisible(true);
     }
     

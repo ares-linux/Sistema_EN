@@ -20,7 +20,7 @@ public class Trabajador {
     
     
     public Trabajador(){
-        foto = "/home/ares/NetBeansProjects/Sistema_EN/Sistema_en/src/Imagenes/signo-de-pregunta.png";
+        
     }
     
     public void Editar(){

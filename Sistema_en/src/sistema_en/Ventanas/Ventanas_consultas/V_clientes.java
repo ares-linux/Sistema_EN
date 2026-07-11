@@ -9,6 +9,8 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
+import sistema_en.Ventanas.V_ficha_trabajo;
 import sistema_en.Ventanas.dialogos.D_ficha_cliente;
 
 /**
@@ -26,7 +28,33 @@ public class V_clientes extends javax.swing.JFrame {
      */
     public V_clientes() {
         initComponents();
-        //jScrollPane1.setViewportView(jPanel1);
+        
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_clientes.getModel();
+        
+            Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
+        
+        modelo.addRow(fila1);
+        
+        
+    }
+    
+    public void actualizar_filtro(){
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_clientes.getModel();
+
+        modelo.setRowCount(0);
+
+        String filtro = c_ordenar.getSelectedItem().toString();
+
+        Object[][] datos = {
+            {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"},
+            
+            };
+
+        for (Object[] fila : datos) {
+            if (filtro.equals("Todos") || fila[7].equals(filtro)) {
+            modelo.addRow(fila);
+            }
+        }
     }
 
     /**
@@ -236,7 +264,7 @@ public class V_clientes extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre", "Telefono", "Direccion"
+                "Id", "Nombre", "Telefono"
             }
         ));
         Tabla_clientes.setColumnSelectionAllowed(true);
@@ -286,16 +314,20 @@ public class V_clientes extends javax.swing.JFrame {
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
         this.dispose();
     }//GEN-LAST:event_b_cerrarActionPerformed
-
+    
     private void Tabla_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_clientesMouseClicked
+     
         fila = Tabla_clientes.getSelectedRow();
-        if (fila == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un cliente de la tabla para ver su ficha.");
-            return;
-        } else {
-            fila = this.Tabla_clientes.rowAtPoint(evt.getPoint());
-            cargar_datos_tabla(fila);
-        }
+                if (fila == -1) 
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para ver su ficha.");
+                    return;
+                }
+                else{
+                    fila = this.Tabla_clientes.rowAtPoint(evt.getPoint());
+                    cargar_datos_tabla(fila);
+                }
+                
     }//GEN-LAST:event_Tabla_clientesMouseClicked
 
     private void c_ordenarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_ordenarKeyPressed

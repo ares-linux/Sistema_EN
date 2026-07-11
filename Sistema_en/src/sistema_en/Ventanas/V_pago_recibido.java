@@ -29,16 +29,19 @@ public class V_pago_recibido extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        l_fecha = new javax.swing.JLabel();
+        l_hora = new javax.swing.JLabel();
+        l_nombre_cli = new javax.swing.JLabel();
+        l_monto = new javax.swing.JLabel();
         t_fecha = new javax.swing.JTextField();
         t_hora = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         t_nombre_cli = new javax.swing.JTextField();
         t_monto = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         b_aceptar = new javax.swing.JButton();
         b_cancelar = new javax.swing.JButton();
 
@@ -48,42 +51,36 @@ public class V_pago_recibido extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Pago recibido");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(176, 27, -1, -1));
 
-        jLabel2.setText("Fecha");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 79, -1, -1));
+        l_fecha.setText("Fecha de registro");
 
-        jLabel3.setText("Hora");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 120, -1, -1));
+        l_hora.setText("Hora de registro");
+
+        l_nombre_cli.setText("Nombre del cliente");
+
+        l_monto.setText("Monto");
 
         t_fecha.setEditable(false);
-        getContentPane().add(t_fecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 76, 284, -1));
 
         t_hora.setEditable(false);
-        getContentPane().add(t_hora, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 117, 284, -1));
-
-        jLabel4.setText("Nombre del cliente");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 161, -1, -1));
 
         t_nombre_cli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_nombre_cliKeyPressed(evt);
             }
         });
-        getContentPane().add(t_nombre_cli, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 158, 200, -1));
 
         t_monto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 t_montoActionPerformed(evt);
             }
         });
-        getContentPane().add(t_monto, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 199, 283, -1));
 
-        jLabel5.setText("Monto");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 202, -1, -1));
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
         b_aceptar.setBackground(new java.awt.Color(47, 101, 202));
         b_aceptar.setText("Aceptar");
@@ -92,7 +89,9 @@ public class V_pago_recibido extends javax.swing.JFrame {
                 b_aceptarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(107, 255, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(9, 9, 9, 11);
+        jPanel2.add(b_aceptar, gridBagConstraints);
 
         b_cancelar.setText("Cancelar");
         b_cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -100,34 +99,97 @@ public class V_pago_recibido extends javax.swing.JFrame {
                 b_cancelarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(204, 255, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(9, 9, 9, 11);
+        jPanel2.add(b_cancelar, gridBagConstraints);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(217, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(l_hora, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(t_hora, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(t_fecha)
+                            .addComponent(t_nombre_cli, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(l_fecha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(l_nombre_cli, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(3, 3, 3)
+                                        .addComponent(l_monto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(t_monto, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(3, 3, 3)))
+                        .addGap(25, 25, 25))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(l_fecha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(t_fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(l_hora)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(t_hora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(l_nombre_cli)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(t_nombre_cli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(l_monto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(t_monto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48))
+        );
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void fecha_hora(){
+    public void fecha_hora() {
         t_fecha.setText(java.time.LocalDate.now().toString());
         LocalTime horaactual = LocalTime.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String horaFormateada =horaactual.format(formato);
+        String horaFormateada = horaactual.format(formato);
         t_hora.setText(horaFormateada);
+
+        t_nombre_cli.setRequestFocusEnabled(true);
     }
-    
+
     private void t_montoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_montoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_t_montoActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        t_nombre_cli.setRequestFocusEnabled(true);
+
         fecha_hora();
     }//GEN-LAST:event_formWindowOpened
 
     private void t_nombre_cliKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombre_cliKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_monto.requestFocus();
-           
+        if (Tecla_presionada == KeyEvent.VK_ENTER) {
+            this.t_monto.requestFocus();
+
         }
     }//GEN-LAST:event_t_nombre_cliKeyPressed
 
@@ -182,10 +244,12 @@ public class V_pago_recibido extends javax.swing.JFrame {
     private javax.swing.JButton b_aceptar;
     private javax.swing.JButton b_cancelar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel l_fecha;
+    private javax.swing.JLabel l_hora;
+    private javax.swing.JLabel l_monto;
+    private javax.swing.JLabel l_nombre_cli;
     private javax.swing.JTextField t_fecha;
     private javax.swing.JTextField t_hora;
     private javax.swing.JTextField t_monto;
