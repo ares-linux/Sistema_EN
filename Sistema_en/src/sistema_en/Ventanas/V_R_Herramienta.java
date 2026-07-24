@@ -4,14 +4,19 @@
  */
 package sistema_en.Ventanas;
 
+import dao.HerramientaDAO;
+import dao.Tipos_herramientaDAO;
 import java.awt.Color;
 import java.awt.Image;
+import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
 import sistema_en.Objetos.Herramienta;
 import sistema_en.Ventanas.dialogos.D_buscar_herramienta;
 
@@ -20,6 +25,9 @@ import sistema_en.Ventanas.dialogos.D_buscar_herramienta;
  * @author zahid
  */
 public class V_R_Herramienta extends javax.swing.JFrame {
+
+    /** Mapa nombre_tipo → id para resolver la FK al guardar/editar. */
+    private final java.util.Map<String, Integer> mapaTipos = new java.util.LinkedHashMap<>();
 
     Herramienta herramienta = new Herramienta();
     int fila;
@@ -31,6 +39,29 @@ public class V_R_Herramienta extends javax.swing.JFrame {
      */
     public V_R_Herramienta() {
         initComponents();
+        
+        Tabla_herramientas.setDefaultEditor(Object.class, null);
+        Tabla_herramientas.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {   
+        if ("Guardar".equals(b_nuevo.getText()) || "Guardar".equals(b_editar.getText())) {
+            //javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            b_cancelar.doClick(); 
+  
+            if (!b_cancelar.isEnabled()) {
+            dispose(); 
+            }
+        } else {
+            dispose();
+        }
+        
+    }
+    });
+
+    this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
     }
 
     /**
@@ -85,6 +116,8 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Registrar herramienta");
+
+        t_id.setEditable(false);
 
         c_tipo.setToolTipText("");
         c_tipo.addActionListener(new java.awt.event.ActionListener() {
@@ -335,81 +368,95 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void actualizar_imagenes_tema() {
-    
         if (com.formdev.flatlaf.FlatLaf.isLafDark()) {
-            ruta_foto_defecto = "src/Imagenes/herramientas_claro.png";
+            ruta_foto_defecto = "/Imagenes/herramientas_claro.png";
         } else {
-            ruta_foto_defecto = "src/Imagenes/herramientas_oscuro.png";
+            ruta_foto_defecto = "/Imagenes/herramientas_oscuro.png";
         }
     
     }
     
-        
     private boolean campos_vacios() {
         
     String foto_text = t_foto.getText().trim();
         
-    return t_id.getText().trim().isEmpty()
-        && c_tipo.getSelectedItem() == null
+    return //t_id.getText().trim().isEmpty()
+         c_tipo.getSelectedItem() == null
         && t_n_serie.getText().trim().isEmpty() 
         && (foto_text.isEmpty() || foto_text.equals(ruta_foto_defecto));
     }
     
     private boolean datos_moficados() {
-    int fila = Tabla_herramientas.getSelectedRow();
+    fila = Tabla_herramientas.getSelectedRow();
     if (fila == -1) return false;
-
     
-    String id_original = Tabla_herramientas.getValueAt(fila, 0).toString();
-    String nombre_original = Tabla_herramientas.getValueAt(fila, 1).toString(); 
-    String sexo_original = Tabla_herramientas.getValueAt(fila, 2).toString();
-    String puesto_original = Tabla_herramientas.getValueAt(fila, 3).toString();
-    String rfc_original = Tabla_herramientas.getValueAt(fila, 4).toString(); 
-    String curp_original = Tabla_herramientas.getValueAt(fila, 5).toString();
-    String fecha_nac_original = Tabla_herramientas.getValueAt(fila, 6).toString();
-    String foto_original = Tabla_herramientas.getValueAt(fila, 7).toString();
+    String id = Tabla_herramientas.getValueAt(fila, 0).toString();
+    String tipo = Tabla_herramientas.getValueAt(fila, 1).toString();
+    String n_serie = Tabla_herramientas.getValueAt(fila, 2).toString();
+    String foto = Tabla_herramientas.getValueAt(fila, 3).toString();
     
-    
-    return !t_id.getText().equals(id_original)
-            || !("" + c_tipo.getSelectedItem()).equals(sexo_original)
-            ||!t_n_serie.getText().equals(curp_original)
-            ||!t_foto.getText().equals(foto_original);
+    return !t_id.getText().equals(id)
+            || !("" + c_tipo.getSelectedItem()).equals(tipo)
+            ||!t_n_serie.getText().equals(n_serie)
+            ||!t_foto.getText().equals(foto);
 }
     
     public void creacion_exitosa(){       
-        
-            l_aviso.setForeground(Color.green);
+            l_aviso.setForeground(Color.decode("#008000"));
             String mensaje;
             mensaje = "La herramienta " + c_tipo.getSelectedItem() + " fue registrado con éxito.";
-            toast = mensaje;
-            l_aviso.setVisible(true);
-            l_aviso.setText(mensaje);
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+             
+            //toast = mensaje;
+            //l_aviso.setVisible(true);
+            //l_aviso.setText(mensaje);
             
-            new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                l_aviso.setText(""); // Se limpia el mensaje solo
-                l_aviso.setVisible(false);
-            }
-            }).start();  
+            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+            //    @Override
+            //    public void actionPerformed(java.awt.event.ActionEvent e) {
+            //    l_aviso.setText(""); // Se limpia el mensaje solo
+            //    l_aviso.setVisible(false);
+            //}
+            //}).start();  
+    }
+    
+    public void creacion_tipo(){       
+            l_aviso.setForeground(Color.decode("#008000"));
+            String mensaje;
+            mensaje = "El tipo de herramienta " + c_tipo.getSelectedItem() + " fue añadido con éxito.";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+             
+            //toast = mensaje;
+            //l_aviso.setVisible(true);
+            //l_aviso.setText(mensaje);
+            
+            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+            //    @Override
+            //    public void actionPerformed(java.awt.event.ActionEvent e) {
+            //    l_aviso.setText(""); // Se limpia el mensaje solo
+            //    l_aviso.setVisible(false);
+            //}
+            //}).start();  
     }
     
     public void edicion_exitosa(){
         
-            l_aviso.setForeground(Color.green);
+            l_aviso.setForeground(Color.decode("FFA500"));
             String mensaje;
             mensaje = "✓ Cambios guardados con éxito.";
-            toast = mensaje;
-            l_aviso.setVisible(true);
-            l_aviso.setText(mensaje);
-            
-            new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                l_aviso.setText(""); // Se limpia el mensaje solo
-                l_aviso.setVisible(false);
-            }
-            }).start();  
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+                        
+            //toast = mensaje;
+            //l_aviso.setVisible(true);
+            //l_aviso.setText(mensaje);
+                                    
+            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+            //    @Override
+            //    public void actionPerformed(java.awt.event.ActionEvent e) {
+            //    l_aviso.setText(""); // Se limpia el mensaje solo
+            //    l_aviso.setVisible(false);
+            //}
+            //}).start();  
     }
     
     public void restablecer_color(){
@@ -422,25 +469,15 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     public void aviso_labels(){
         boolean error = false;
         
-        if (t_id.getText().trim().isEmpty()) {
-            l_id.setForeground(Color.red);
-            error = true;
-        }
-        
-        if (!t_id.getText().trim().isEmpty()) {
-            l_id.setForeground(null);
-            error = false;
-        }
-        
         if (c_tipo.getSelectedItem() == null) {
-            l_tipo.setForeground(Color.RED);
+            l_tipo.setForeground(Color.decode("#CE1126"));
             error = true;
         } else {
             l_tipo.setForeground(null);
         }
         
         if (t_n_serie.getText().trim().isEmpty()) {
-            l_n_serie.setForeground(Color.red);
+            l_n_serie.setForeground(Color.decode("#CE1126"));
             error = true;
         }
         
@@ -452,7 +489,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         String foto_text = t_foto.getText().trim();
 
         if (foto_text.isEmpty() || foto_text.equals(ruta_foto_defecto)) {
-            l_foto.setForeground(Color.red);
+            l_foto.setForeground(Color.decode("#CE1126"));
             error = true;
         } else {
             l_foto.setForeground(null);
@@ -481,7 +518,9 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }//GEN-LAST:event_b_fotoActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-    llenar_text();
+    //llenar_text();
+    llenar_tipos();
+    llenar_tabla();
     cargar_foto();
     bloquear_text();
     b_foto.setEnabled(false);
@@ -500,18 +539,17 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }//GEN-LAST:event_Tabla_herramientasMouseClicked
 
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
-        
+
         if ("Editar".equals(b_editar.getText()))
         {
-            
             fila = Tabla_herramientas.getSelectedRow();
-                if (fila == -1) 
-                {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione una herramienta de la tabla para editar.");
-                    restablecer_color();
-                    return;
-                }
-            
+            if (fila == -1)
+            {
+                javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione una herramienta de la tabla para editar.");
+                restablecer_color();
+                return;
+            }
+
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
             b_eliminar.setEnabled(false);
@@ -522,20 +560,40 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         }
         else
         {
-            if(t_id.getText().trim().isEmpty() || c_tipo.getSelectedItem() == null || t_n_serie.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
+            if (c_tipo.getSelectedItem() == null || t_n_serie.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
             {
                 aviso_labels();
                 return;
             }
-            b_editar.setText("Editar");
-            editar_tabla();
-            b_nuevo.setEnabled(true);
-            b_eliminar.setEnabled(true);
-            b_buscar.setEnabled(true);
-            b_añadir.setEnabled(false);
-            bloquear_text();
-            b_cancelar.setEnabled(false);
-            edicion_exitosa();
+
+            int id_herramienta = Integer.parseInt(t_id.getText());
+            // Obtener el id del tipo desde el mapa nombre→id
+            String nombreTipo = (String) c_tipo.getSelectedItem();
+            int id_tipo = mapaTipos.getOrDefault(nombreTipo, -1);
+            if (id_tipo == -1) {
+                JOptionPane.showMessageDialog(this, "No se reconoce el tipo seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String n_serie = t_n_serie.getText();
+            String foto = t_foto.getText();
+
+            HerramientaDAO dao = new HerramientaDAO();
+            boolean actualizadoExitoso = dao.actualizarHerramienta(id_herramienta, id_tipo, n_serie, foto);
+
+            if (actualizadoExitoso) {
+                limpiar_text();
+                b_editar.setText("Editar");
+                editar_tabla();
+                b_nuevo.setEnabled(true);
+                b_eliminar.setEnabled(true);
+                b_buscar.setEnabled(true);
+                b_añadir.setEnabled(false);
+                bloquear_text();
+                b_cancelar.setEnabled(false);
+                edicion_exitosa();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al actualizar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_b_editarActionPerformed
 
@@ -553,21 +611,39 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         }
         else
         {
-            if(t_id.getText().trim().isEmpty() || c_tipo.getSelectedItem() == null || t_n_serie.getText().trim().isEmpty() || ruta_foto_defecto.equals(t_foto.getText().trim()))
+            if (c_tipo.getSelectedItem() == null || t_n_serie.getText().trim().isEmpty() || ruta_foto_defecto.equals(t_foto.getText().trim()))
             {
                 aviso_labels();
                 return;
             }
-            b_nuevo.setText("Nuevo");
-            llenar_tabla();
-            desbloquear_botones();
-            creacion_exitosa();
-            limpiar_text();
-            bloquear_text();
-            b_foto.setEnabled(false);
-            b_añadir.setEnabled(false);
-            restablecer_color();
-            b_cancelar.setEnabled(false);
+
+            // Obtener el id del tipo desde el mapa nombre→id
+            String nombreTipo = (String) c_tipo.getSelectedItem();
+            int id_tipo = mapaTipos.getOrDefault(nombreTipo, -1);
+            if (id_tipo == -1) {
+                JOptionPane.showMessageDialog(this, "No se reconoce el tipo seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String n_serie = t_n_serie.getText();
+            String foto = t_foto.getText();
+
+            HerramientaDAO dao = new HerramientaDAO();
+            boolean guardadoExitoso = dao.insertarHerramienta(id_tipo, n_serie, foto);
+
+            if (guardadoExitoso) {
+                b_nuevo.setText("Nuevo");
+                llenar_tabla();
+                desbloquear_botones();
+                creacion_exitosa();
+                limpiar_text();
+                bloquear_text();
+                b_foto.setEnabled(false);
+                b_añadir.setEnabled(false);
+                restablecer_color();
+                b_cancelar.setEnabled(false);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
@@ -577,24 +653,34 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         
         if(fila == -1){
                 javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una herramienta de la tabla para eliminarlo.");
-                restablecer_color();
+                //restablecer_color();
                 return;
             }
         
-        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_herramientas.getModel();
-            int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar esta herramienta?\n\n" + "ID: " + t_id.getText() + "\n" + "Tipo: " + c_tipo.getSelectedItem(), "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
-                if (respuesta == javax.swing.JOptionPane.YES_OPTION){
-                    
-                    modelo2.removeRow(fila);
-                    if (modelo2.getRowCount() == 0) {
-                        limpiar_text();
-                    } else {
-                        if (fila >= modelo2.getRowCount()) {
-                            fila = modelo2.getRowCount() - 1;
-                    }
-                        cargar_datos_tabla(fila);
-                    }
-                }
+        
+        String idString = Tabla_herramientas.getValueAt(fila, 0).toString();
+        int id = Integer.parseInt(idString);
+        String nombre = Tabla_herramientas.getValueAt(fila, 1).toString();
+
+        int respuesta = JOptionPane.showConfirmDialog( this, "¿Estás seguro de que deseas eliminar la herramienta: " + nombre + "?",  "Confirmar Eliminación",  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        
+        if (respuesta == JOptionPane.YES_OPTION) {
+   
+            HerramientaDAO dao = new HerramientaDAO();
+            boolean eliminadoExitoso = dao.eliminarHerramienta(id);
+
+        if (eliminadoExitoso) {
+            JOptionPane.showMessageDialog(this, "¡Herramienta eliminada con éxito!");
+            
+            limpiar_text();
+            llenar_tabla(); 
+            desbloquear_botones();
+            bloquear_text();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hubo un error al intentar eliminar el registro de la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_b_eliminarActionPerformed
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
@@ -611,35 +697,45 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }//GEN-LAST:event_b_cerrarActionPerformed
 
     private void b_añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_añadirActionPerformed
-    
-    String nuevo_tipo = JOptionPane.showInputDialog( this,  "Escribe el nuevo tipo de herramienta:",  "Añadir nuevo tipo",  JOptionPane.QUESTION_MESSAGE);
-    
+
+    String nuevo_tipo = JOptionPane.showInputDialog(this, "Escribe el nuevo tipo de herramienta:", "Añadir nuevo tipo", JOptionPane.QUESTION_MESSAGE);
+
     if (nuevo_tipo != null && !nuevo_tipo.trim().isEmpty()) {
-        
+
         String item_f = nuevo_tipo.trim();
-        
-        boolean tipo_existente = false;
-        for (int i = 0; i < c_tipo.getItemCount(); i++) {
-            if (c_tipo.getItemAt(i).equalsIgnoreCase(item_f)) {
-                tipo_existente = true;
-                break;
-            }
+
+        // Verificar si ya existe en la BD
+        dao.Tipos_herramientaDAO tipoDAO = new dao.Tipos_herramientaDAO();
+        if (tipoDAO.existeTipo(item_f)) {
+            JOptionPane.showMessageDialog(this, "Ese tipo de herramienta ya existe.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        
-        if (!tipo_existente) {
-            c_tipo.addItem(item_f);
+
+        // Insertar en la BD
+        boolean guardado = tipoDAO.insertarTipo(item_f);
+        if (guardado) {
+            // Recargar el combo y el mapa desde la BD para obtener el id recién generado
+            llenar_tipos();
+            // Seleccionar el recién insertado
             c_tipo.setSelectedItem(item_f);
-            
-            JOptionPane.showMessageDialog(this, "Tipo '" + item_f + "' añadido correctamente.");
+            creacion_tipo();
+            //JOptionPane.showMessageDialog(this, "Tipo '" + item_f + "' añadido correctamente.");
         } else {
-            JOptionPane.showMessageDialog(this, "Ese tipo de herramienta ya tipo existe.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al guardar el tipo en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     }//GEN-LAST:event_b_añadirActionPerformed
 
     private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
         D_buscar_herramienta herramienta = new D_buscar_herramienta(this,true);
+        herramienta.setLocationRelativeTo(V_R_Herramienta.this);
         herramienta.setVisible(true);
+        
+        fila = herramienta.getFila();
+        if (fila >= 0 && fila < Tabla_herramientas.getRowCount()) {
+            Tabla_herramientas.setRowSelectionInterval(fila, fila);
+        }
+        cargar_datos_tabla(fila);
     }//GEN-LAST:event_b_buscarActionPerformed
 
     private void t_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_fotoActionPerformed
@@ -697,7 +793,8 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     b_editar.setText("Editar");   
     
     b_nuevo.setEnabled(true);
-    desbloquear_botones(); 
+    desbloquear_botones();
+    //c_tipo.removeAllItems();
     bloquear_text();
     b_foto.setEnabled(false);
     restablecer_color();
@@ -750,23 +847,36 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }   
     
     public void desbloquear_text(){
-        t_id.setEnabled(true);
+        //t_id.setEnabled(true);
         c_tipo.setEnabled(true);
         t_n_serie.setEnabled(true);
     }
     
     public void cargar_foto(){
-        
-        ImageIcon iconoOriginal = new ImageIcon(t_foto.getText());
+        ImageIcon iconoOriginal;
+
+        if (t_foto.getText().equals(ruta_foto_defecto)) {
+
+        URL url = getClass().getResource(ruta_foto_defecto);
+
+        if (url == null) {
+            System.out.println("No se encontró la imagen por defecto.");
+            return;
+        }
+
+        iconoOriginal = new ImageIcon(url);
+
+        } else {
+            iconoOriginal = new ImageIcon(t_foto.getText());
+        }
         int ancho = h_foto.getWidth();
         int alto = h_foto.getHeight();
         
-        if (ancho <= 0) ancho = 250;
-        if (alto <= 0) alto = 280;
+        if (ancho <= 0) ancho = 260;
+        if (alto <= 0) alto = 270;
 
         Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         h_foto.setIcon(new ImageIcon(imagenEscalada));
-    
         if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
             System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada en el formulario de registrar herramientas.");
         }
@@ -781,21 +891,40 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     
     public void cargar_datos_tabla(int indice){
         this.t_id.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 0)));
-        this.c_tipo.setSelectedItem(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 1)));
+        // Seleccionar el nombre del tipo directamente (el combo ya contiene Strings)
+        String nombreTipo = String.valueOf(this.Tabla_herramientas.getValueAt(indice, 1));
+        this.c_tipo.setSelectedItem(nombreTipo);
         this.t_n_serie.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 2)));
         this.t_foto.setText(String.valueOf(this.Tabla_herramientas.getValueAt(indice, 3)));
         cargar_foto();
     }
     
     public void llenar_tabla(){
-        String [] info = new String [4];
-        info[0] = t_id.getText();
-        info[1] = c_tipo.getSelectedItem().toString();
-        info[2] = t_n_serie.getText();
-        info[3] = t_foto.getText();
-        DefaultTableModel modelo=(DefaultTableModel) this.Tabla_herramientas.getModel();//crea una variable de tipo modelo de tabla 
-        modelo.addRow(info);//agrega una fila al modelo de tabla
-        this.Tabla_herramientas.setModel(modelo);
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_herramientas.getModel();
+        modelo.setRowCount(0); 
+
+        HerramientaDAO dao = new HerramientaDAO();
+        java.util.List<String[]> lista_herramientas = dao.obtenerHerramienta();
+
+        for (String[] fila : lista_herramientas) {
+            modelo.addRow(fila);
+        }
+    }
+    
+    public void llenar_tipos(){
+        c_tipo.removeAllItems();
+        mapaTipos.clear();
+
+        Tipos_herramientaDAO dao = new Tipos_herramientaDAO();
+        java.util.List<String[]> lista_tipos = dao.obtenerHerramientas();
+
+        // Cada fila es String[2]: { id, nombre }
+        for (String[] fila : lista_tipos) {
+            int id = Integer.parseInt(fila[0]);
+            String nombre = fila[1];
+            mapaTipos.put(nombre, id);   // registrar en el mapa
+            c_tipo.addItem(nombre);      // agregar el nombre (String) al combo
+        }
     }
     
     public void editar_tabla(){

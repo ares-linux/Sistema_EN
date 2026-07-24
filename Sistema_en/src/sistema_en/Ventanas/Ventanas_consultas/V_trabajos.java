@@ -4,11 +4,10 @@
  */
 package sistema_en.Ventanas.Ventanas_consultas;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import dao.TrabajoDAO;
 import javax.swing.JFrame;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import sistema_en.Ventanas.V_ficha_trabajo;
 import sistema_en.Ventanas.dialogos.D_ficha_trabajo;
 
 /**
@@ -28,9 +27,12 @@ public class V_trabajos extends javax.swing.JFrame {
     public V_trabajos() {
         initComponents();
         
-        DefaultTableModel modelo = (DefaultTableModel) Tabla_trabajos.getModel();
+        Tabla_trabajos.setDefaultEditor(Object.class, null);
+        Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         
-            Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
+        //DefaultTableModel modelo = (DefaultTableModel) Tabla_trabajos.getModel();
+        
+            //Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
             //Object[] fila2 = {"2", "María López", "555-5678", "Calle Secundaria 45", "Mantenimiento de tuberia sanitaria", "2026-06-11", "12:30", "En progreso"};
             //Object[] fila3 = {"3", "Carlos Gómez", "555-9876", "Ruta Rural Km 4", "Instalación de tuberia para sanitario domestico", "2026-06-10", "16:00", "Completado"};
             //Object[] fila4 = {"4", "Ana Martínez", "555-4321", "Calle Los Olivos 789", "Detección de filtraciones", "2026-06-12", "09:00", "Pendiente"};
@@ -54,7 +56,7 @@ public class V_trabajos extends javax.swing.JFrame {
             //Object[] fila22 = {"22", "Mónica Suárez", "555-6565", "Plaza Mayor 14", "Reparación de gotera en techo por humedad", "2026-06-18", "10:00", "Pendiente"};
             //Object[] fila23 = {"23", "Javier Paredes", "555-8787", "Av. Libertador 2200", "Purgado de radiadores/calefacción", "2026-06-18", "13:00", "Pendiente"};
 
-            modelo.addRow(fila1);
+            //modelo.addRow(fila1);
             //modelo.addRow(fila2);
             //modelo.addRow(fila3);
             //modelo.addRow(fila4);
@@ -135,6 +137,7 @@ public class V_trabajos extends javax.swing.JFrame {
         c_filtro = new javax.swing.JComboBox<>();
         b_filtro = new javax.swing.JButton();
         b_dividir_pantalla = new javax.swing.JButton();
+        b_actualizar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla_trabajos = new javax.swing.JTable();
         b_cerrar = new javax.swing.JButton();
@@ -165,11 +168,10 @@ public class V_trabajos extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(6, 27, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(c_filtro, gridBagConstraints);
 
         b_filtro.setText("Aplicar filtro");
@@ -184,7 +186,7 @@ public class V_trabajos extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(6, 32, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(b_filtro, gridBagConstraints);
 
         b_dividir_pantalla.setText("Dividir");
@@ -194,12 +196,26 @@ public class V_trabajos extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(b_dividir_pantalla, gridBagConstraints);
+
+        b_actualizar.setText("Actualizar");
+        b_actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_actualizarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 7);
-        jPanel1.add(b_dividir_pantalla, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(b_actualizar, gridBagConstraints);
 
         jScrollPane2.setViewportView(jPanel1);
 
@@ -268,11 +284,25 @@ public class V_trabajos extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         //c_filtro.setEnabled(false);
+        llenar_tabla();
     }//GEN-LAST:event_formWindowOpened
 
     public void cargar_datos_tabla(int indice){
-        ficha = new D_ficha_trabajo(this,false);
+        ficha = new D_ficha_trabajo(this,true);
+        ficha.setLocationRelativeTo(V_trabajos.this);
         ficha.setVisible(true);
+    }
+    
+    public void llenar_tabla(){
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_trabajos.getModel();
+        modelo.setRowCount(0); 
+
+        TrabajoDAO dao = new TrabajoDAO();
+        java.util.List<String[]> listaTrabajos = dao.obtenerTrabajosConClientes();
+
+        for (String[] fila : listaTrabajos) {
+            modelo.addRow(fila);
+        }
     }
     
     private void Tabla_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_trabajosMouseClicked
@@ -280,7 +310,7 @@ public class V_trabajos extends javax.swing.JFrame {
         fila = Tabla_trabajos.getSelectedRow();
                 if (fila == -1) 
                 {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para ver su ficha.");
+                    //javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para ver su ficha.");
                     return;
                 }
                 else{
@@ -372,6 +402,11 @@ public class V_trabajos extends javax.swing.JFrame {
         }
                 }//GEN-LAST:event_b_dividir_pantallaActionPerformed
 
+    private void b_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_actualizarActionPerformed
+        //c_filtro.setSelectedItem(0);
+        llenar_tabla();
+    }//GEN-LAST:event_b_actualizarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -409,6 +444,7 @@ public class V_trabajos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla_trabajos;
+    private javax.swing.JButton b_actualizar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_dividir_pantalla;
     private javax.swing.JButton b_filtro;

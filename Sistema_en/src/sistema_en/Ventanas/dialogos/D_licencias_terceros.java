@@ -44,15 +44,14 @@ public class D_licencias_terceros extends javax.swing.JDialog {
         jScrollPane1.setViewportView(jt_licencias);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 464;
         gridBagConstraints.ipady = 425;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(20, 28, 0, 26);
+        gridBagConstraints.insets = new java.awt.Insets(9, 9, 9, 10);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
         b_cerrar.setText("Cerrar");
@@ -62,20 +61,18 @@ public class D_licencias_terceros extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(12, 483, 16, 26);
+        gridBagConstraints.insets = new java.awt.Insets(9, 9, 9, 10);
         getContentPane().add(b_cerrar, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setText("Licencias de tercero");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(15, 20, 0, 0);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(9, 9, 9, 10);
         getContentPane().add(jLabel1, gridBagConstraints);
 
         pack();

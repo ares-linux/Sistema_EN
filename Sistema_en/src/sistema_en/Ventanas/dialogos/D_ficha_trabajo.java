@@ -9,7 +9,7 @@ import sistema_en.Ventanas.V_R_Cotizacion;
 import sistema_en.Ventanas.V_R_Herramienta;
 import sistema_en.Ventanas.V_R_Trabajo;
 import sistema_en.Ventanas.V_bitacora;
-import sistema_en.Ventanas.V_pago_recibido;
+import sistema_en.Ventanas.No_utilizadas.V_pago_recibido;
 
 /**
  *
@@ -23,11 +23,51 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     public D_ficha_trabajo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {   
+        if (t_actualizar_estado.isSelected()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            //b_cancelar.doClick(); 
+  
+            //dispose(); 
+            
+        } else {
+            dispose();
+        }
+        
+    }
+    });
+
+
+    this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
     }
 
     public D_ficha_trabajo(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {   
+        if (t_actualizar_estado.isSelected()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            //b_cancelar.doClick(); 
+  
+            //dispose(); 
+            
+        } else {
+            dispose();
+        }
+        
+    }
+    });
+
+
+    this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
     }
     
     /**
@@ -38,44 +78,111 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        b_actualizar_estado = new javax.swing.JButton();
+        t_id = new javax.swing.JTextField();
+        t_fecha_registro = new javax.swing.JTextField();
+        t_hora_registro = new javax.swing.JTextField();
+        c_estado = new javax.swing.JComboBox<>();
         b_informacion = new javax.swing.JButton();
         b_pago_recibido = new javax.swing.JButton();
         b_bitacora = new javax.swing.JButton();
         b_cotizacion = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
+        b_informacion_estatica = new javax.swing.JButton();
+        t_actualizar_estado = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setText("Ficha de trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("Id_trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Fecha de registro");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(jLabel3, gridBagConstraints);
 
         jLabel4.setText("Hora de registro");
-
-        jTextField1.setText("jTextField1");
-
-        jTextField2.setText("jTextField2");
-
-        jTextField3.setText("jTextField3");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(jLabel4, gridBagConstraints);
 
         jLabel5.setText("Estado");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(jLabel5, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        t_id.setEditable(false);
+        t_id.setText("id");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 120;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(t_id, gridBagConstraints);
 
-        b_actualizar_estado.setText("Actualizar estado");
+        t_fecha_registro.setEditable(false);
+        t_fecha_registro.setText("fecha de registro");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 120;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(t_fecha_registro, gridBagConstraints);
+
+        t_hora_registro.setEditable(false);
+        t_hora_registro.setText("hora de registro");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 120;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(t_hora_registro, gridBagConstraints);
+
+        c_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "En progreso", "Completado" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(c_estado, gridBagConstraints);
 
         b_informacion.setText("Informacion");
         b_informacion.addActionListener(new java.awt.event.ActionListener() {
@@ -83,13 +190,27 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
                 b_informacionActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(b_informacion, gridBagConstraints);
 
-        b_pago_recibido.setText("Pago recibido");
+        b_pago_recibido.setText("Pagos recibidos");
         b_pago_recibido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_pago_recibidoActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(b_pago_recibido, gridBagConstraints);
 
         b_bitacora.setText("Bitacora");
         b_bitacora.addActionListener(new java.awt.event.ActionListener() {
@@ -97,6 +218,13 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
                 b_bitacoraActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(b_bitacora, gridBagConstraints);
 
         b_cotizacion.setText("Cotizacion");
         b_cotizacion.addActionListener(new java.awt.event.ActionListener() {
@@ -104,88 +232,52 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
                 b_cotizacionActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(b_cotizacion, gridBagConstraints);
 
         b_cerrar.setText("Cerrar");
+        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cerrarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(b_cerrar, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(175, 175, 175)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(207, 207, 207)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jLabel2)
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel3)
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(130, 130, 130)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5))
-                                .addGap(18, 18, 18)
-                                .addComponent(b_actualizar_estado))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(b_informacion)
-                        .addGap(18, 18, 18)
-                        .addComponent(b_bitacora))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(b_pago_recibido)
-                        .addGap(18, 18, 18)
-                        .addComponent(b_cotizacion)
-                        .addGap(18, 18, 18)
-                        .addComponent(b_cerrar)))
-                .addContainerGap(341, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(b_actualizar_estado))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(b_informacion)
-                    .addComponent(b_bitacora))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(b_pago_recibido)
-                    .addComponent(b_cotizacion)
-                    .addComponent(b_cerrar))
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
+        b_informacion_estatica.setText("Informacion estatica");
+        b_informacion_estatica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_informacion_estaticaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(b_informacion_estatica, gridBagConstraints);
+
+        t_actualizar_estado.setText("Actualizar estado");
+        t_actualizar_estado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                t_actualizar_estadoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 9);
+        getContentPane().add(t_actualizar_estado, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -198,7 +290,8 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     
     //Formularios dependientes de este
     
-    private V_pago_recibido pago = null;
+    private D_registrar_pagos pago = null;
+    private D_informacion_estatica estatica = null;
     
     private void b_cotizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cotizacionActionPerformed
         
@@ -208,7 +301,8 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         
             cotizacion.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                // CORRECCIÓN 2: Usamos windowClosed para atrapar el dispose() de tus botones
                     setVisible(true); 
                 }
             });
@@ -225,27 +319,33 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     }//GEN-LAST:event_b_cotizacionActionPerformed
 
     private void b_pago_recibidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_pago_recibidoActionPerformed
-        
+                
         if (pago == null || !pago.isDisplayable()) {
-            pago = new V_pago_recibido();
-            pago.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
+            // Si tu constructor pide (Frame, boolean), pásale el Frame actual o null si no aplica
+            pago = new D_registrar_pagos((java.awt.Frame) this.getParent(), true);
+            // ¡MAXIMIZADO PARA JDIALOG! 
+            // Obtenemos el tamaño máximo seguro de la pantalla
+            java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+            pago.setBounds(zonaSegura); // Forzamos al diálogo a tomar todo ese tamaño
             pago.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
-                    setVisible(true); 
-                }
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                // CORRECCIÓN 2: Usamos windowClosed para atrapar el dispose() de tus botones
+                setVisible(true); 
+            }
             });
         } else {
-                if (pago.getExtendedState() == JFrame.ICONIFIED) {
-                pago.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            }
+            // En JDialogs no existe ICONIFIED, si ya está creado simplemente nos aseguramos 
+            // de que mantenga el tamaño de la pantalla por si acaso
+            java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
+            .getMaximumWindowBounds();
+            pago.setBounds(zonaSegura);
         }
-    
         this.setVisible(false); 
         pago.setVisible(true);
         pago.toFront();
         pago.requestFocus();
+        
     }//GEN-LAST:event_b_pago_recibidoActionPerformed
 
     private void b_informacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_informacionActionPerformed
@@ -256,7 +356,8 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         
             informacion.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    // CORRECCIÓN 2: Usamos windowClosed para atrapar el dispose() de tus botones
                     setVisible(true); 
                 }
             });
@@ -280,7 +381,8 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         
             bitacora.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    // CORRECCIÓN 2: Usamos windowClosed para atrapar el dispose() de tus botones
                     setVisible(true); 
                 }
             });
@@ -295,6 +397,52 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         bitacora.toFront();
         bitacora.requestFocus();
     }//GEN-LAST:event_b_bitacoraActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        c_estado.setEnabled(false);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void t_actualizar_estadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_actualizar_estadoActionPerformed
+        if(t_actualizar_estado.isSelected() == true){
+            c_estado.setEnabled(true);
+        }
+        else{
+            c_estado.setEnabled(false);
+        }
+    }//GEN-LAST:event_t_actualizar_estadoActionPerformed
+
+    private void b_informacion_estaticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_informacion_estaticaActionPerformed
+        //D_informacion_estatica informacion_static = new D_informacion_estatica((java.awt.Frame) this.getParent(), true);
+        //informacion_static.setVisible(true);
+        
+        if (estatica == null || !estatica.isDisplayable()) {
+            // Si tu constructor pide (Frame, boolean), pásale el Frame actual o null si no aplica
+            estatica = new D_informacion_estatica((java.awt.Frame) this.getParent(), true);
+            //java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+            //estatica.setBounds(zonaSegura); // Forzamos al diálogo a tomar todo ese tamaño
+            estatica.setLocationRelativeTo(D_ficha_trabajo.this);
+            estatica.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                // CORRECCIÓN 2: Usamos windowClosed para atrapar el dispose() de tus botones
+                setVisible(true); 
+            }
+            });
+        } else {
+            //java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
+            //.getMaximumWindowBounds();
+            //estatica.setBounds(zonaSegura);
+        }
+        this.setVisible(false); 
+        estatica.setVisible(true);
+        estatica.toFront();
+        estatica.requestFocus();
+        
+    }//GEN-LAST:event_b_informacion_estaticaActionPerformed
+
+    private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_cerrarActionPerformed
 
     
     /**
@@ -341,20 +489,21 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton b_actualizar_estado;
     private javax.swing.JButton b_bitacora;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_cotizacion;
     private javax.swing.JButton b_informacion;
+    private javax.swing.JButton b_informacion_estatica;
     private javax.swing.JButton b_pago_recibido;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> c_estado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JToggleButton t_actualizar_estado;
+    private javax.swing.JTextField t_fecha_registro;
+    private javax.swing.JTextField t_hora_registro;
+    private javax.swing.JTextField t_id;
     // End of variables declaration//GEN-END:variables
 }

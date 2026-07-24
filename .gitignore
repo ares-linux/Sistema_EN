@@ -12,3 +12,6 @@ dist/
 # archivos multimedia
 *.png
 *.mp3
+Sistema_en/credentials.json
+Sistema_en/tokens/
+*.py

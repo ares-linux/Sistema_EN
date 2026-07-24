@@ -4,13 +4,14 @@
  */
 package sistema_en.Ventanas.Ventanas_consultas;
 
+import dao.ClienteDAO;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import sistema_en.Ventanas.V_ficha_trabajo;
 import sistema_en.Ventanas.dialogos.D_ficha_cliente;
 
 /**
@@ -29,32 +30,35 @@ public class V_clientes extends javax.swing.JFrame {
     public V_clientes() {
         initComponents();
         
-        DefaultTableModel modelo = (DefaultTableModel) Tabla_clientes.getModel();
+        Tabla_clientes.setDefaultEditor(Object.class, null);
+        Tabla_clientes.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         
-            Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
+        //DefaultTableModel modelo = (DefaultTableModel) Tabla_clientes.getModel();
         
-        modelo.addRow(fila1);
+        //    Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
+        
+        //modelo.addRow(fila1);
         
         
     }
     
     public void actualizar_filtro(){
-        DefaultTableModel modelo = (DefaultTableModel) Tabla_clientes.getModel();
+        //DefaultTableModel modelo = (DefaultTableModel) Tabla_clientes.getModel();
 
-        modelo.setRowCount(0);
+        //modelo.setRowCount(0);
 
-        String filtro = c_ordenar.getSelectedItem().toString();
+        //String filtro = c_ordenar.getSelectedItem().toString();
 
-        Object[][] datos = {
-            {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"},
-            
-            };
+        //Object[][] datos = {
+        //    {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"},
+        //    
+        //    };
 
-        for (Object[] fila : datos) {
-            if (filtro.equals("Todos") || fila[7].equals(filtro)) {
-            modelo.addRow(fila);
-            }
-        }
+        //for (Object[] fila : datos) {
+        //    if (filtro.equals("Todos") || fila[7].equals(filtro)) {
+        //    modelo.addRow(fila);
+        //    }
+        //}
     }
 
     /**
@@ -78,6 +82,7 @@ public class V_clientes extends javax.swing.JFrame {
         b_dividir_pantalla = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        b_actualizar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         b_cerrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -87,6 +92,11 @@ public class V_clientes extends javax.swing.JFrame {
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
+            }
+        });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -219,6 +229,18 @@ public class V_clientes extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 43, 0, 0);
         jPanel1.add(jLabel4, gridBagConstraints);
 
+        b_actualizar.setText("Actualizar");
+        b_actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_actualizarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        jPanel1.add(b_actualizar, gridBagConstraints);
+
         jScrollPane2.setViewportView(jPanel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -230,9 +252,9 @@ public class V_clientes extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jScrollPane2, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Clientes");
+        jLabel1.setText("Clientes registrados");
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -290,6 +312,18 @@ public class V_clientes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void llenar_tabla(){
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_clientes.getModel();
+        modelo.setRowCount(0); 
+
+        ClienteDAO dao = new ClienteDAO();
+        java.util.List<String[]> listaTrabajadores = dao.obtenerCliente();
+
+        for (String[] fila : listaTrabajadores) {
+            modelo.addRow(fila);
+        }
+    }
+    
     public void limpiar_text() {
         t_buscar.setText("");
         d_periodo_inicio.setDate(null);
@@ -297,8 +331,9 @@ public class V_clientes extends javax.swing.JFrame {
     }
 
     public void cargar_datos_tabla(int indice) {
-        ficha = new D_ficha_cliente(this, true);
-        ficha.setVisible(true);
+        //ficha = new D_ficha_cliente(this, true);
+        //ficha.setLocationRelativeTo(V_clientes.this);
+        //ficha.setVisible(true);
     }
 
     public void adaptar_fuentes(Container contenedor, Font nuevaFuente) {
@@ -488,6 +523,15 @@ public class V_clientes extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_formComponentResized
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        llenar_tabla();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void b_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_actualizarActionPerformed
+        limpiar_text();
+        llenar_tabla();
+    }//GEN-LAST:event_b_actualizarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -526,6 +570,7 @@ public class V_clientes extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla_clientes;
+    private javax.swing.JButton b_actualizar;
     private javax.swing.JButton b_buscar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_dividir_pantalla;

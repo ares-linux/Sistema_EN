@@ -5,6 +5,7 @@
 package sistema_en.Ventanas;
 
 import com.formdev.flatlaf.FlatLaf;
+import dao.TrabajadorDAO;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -13,8 +14,10 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
 import sistema_en.Objetos.Trabajador;
 import sistema_en.Ventanas.dialogos.D_buscar_empleado;
 
@@ -33,7 +36,33 @@ public class V_R_Empleado extends javax.swing.JFrame {
      * Creates new form V_REmpleado
      */
     public V_R_Empleado() {
-        initComponents();               
+        initComponents();
+        
+        Tabla_empleados.setDefaultEditor(Object.class, null);
+        Tabla_empleados.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {   
+        if ("Guardar".equals(b_nuevo.getText()) || "Guardar".equals(b_editar.getText())) {
+            //javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            b_cancelar.doClick(); 
+  
+            if (!b_cancelar.isEnabled()) {
+            dispose(); 
+            }
+        } else {
+            dispose();
+        }
+        
+    }
+    });
+
+
+    this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
+    
+    
     }
 
     /**
@@ -58,7 +87,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
         t_foto = new javax.swing.JTextField();
         c_puesto = new javax.swing.JComboBox<>();
         c_sexo = new javax.swing.JComboBox<>();
-        f_f_nac = new javax.swing.JFormattedTextField();
         t_curp = new javax.swing.JTextField();
         t_rfc = new javax.swing.JTextField();
         t_nombre = new javax.swing.JTextField();
@@ -76,6 +104,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         l_f_nac = new javax.swing.JLabel();
         l_id = new javax.swing.JLabel();
         l_aviso = new javax.swing.JLabel();
+        d_f_nac = new com.github.lgooddatepicker.components.DatePicker();
         J_tabla = new javax.swing.JScrollPane();
         Tabla_empleados = new javax.swing.JTable();
 
@@ -234,22 +263,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
             }
         });
 
-        try {
-            f_f_nac.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-##-##")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        f_f_nac.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                f_f_nacFocusGained(evt);
-            }
-        });
-        f_f_nac.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                f_f_nacKeyPressed(evt);
-            }
-        });
-
         t_curp.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 t_curpFocusGained(evt);
@@ -288,6 +301,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
             }
         });
 
+        t_id.setEditable(false);
         t_id.setVerifyInputWhenFocusTarget(false);
         t_id.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -300,8 +314,8 @@ public class V_R_Empleado extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setText("Registrar empleado");
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
         l_nombre.setText("Nombre");
 
@@ -313,14 +327,20 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
         l_Foto.setText("Foto");
 
-        l_foto.setToolTipText("Foto del empleado");
         l_foto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        l_foto.setToolTipText("Foto del empleado");
 
         l_curp.setText("CURP");
 
         l_f_nac.setText("Fecha de nacimiento");
 
         l_id.setText("Id");
+
+        d_f_nac.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                d_f_nacKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -351,7 +371,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
                         .addGap(43, 43, 43)
                         .addComponent(l_f_nac)
                         .addGap(18, 18, 18)
-                        .addComponent(f_f_nac, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
+                        .addComponent(d_f_nac, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -428,9 +448,9 @@ public class V_R_Empleado extends javax.swing.JFrame {
                             .addComponent(t_curp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(f_f_nac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(l_f_nac))
-                        .addGap(17, 17, 17)
+                            .addComponent(l_f_nac)
+                            .addComponent(d_f_nac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(l_Foto)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -441,7 +461,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
                     .addComponent(l_foto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         t_nombre.getAccessibleContext().setAccessibleName("");
@@ -470,6 +490,18 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+        
+    public boolean verificar_edad() {
+        java.time.LocalDate fechaNac = d_f_nac.getDate();
+        if (fechaNac == null) {
+            return false;
+        }
+    
+        int edad = java.time.Period.between(fechaNac, java.time.LocalDate.now()).getYears();
+    
+        return edad >= 18;
+               
+    }
     
     public void actualizar_imagenes_tema() {
         if (FlatLaf.isLafDark()) {
@@ -480,17 +512,16 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }
     
     private boolean campos_vacios() {
-    
-    String fecha = f_f_nac.getText().replace("-", "").trim();
+        
     String foto_text = t_foto.getText().trim();
         
-    return t_id.getText().trim().isEmpty()
-        &&t_nombre.getText().trim().isEmpty() 
+    return //t_id.getText().trim().isEmpty()
+        t_nombre.getText().trim().isEmpty() 
         && c_sexo.getSelectedItem() == null
         && c_puesto.getSelectedItem() == null
         && t_rfc.getText().trim().isEmpty() 
         && t_curp.getText().trim().isEmpty() 
-        && fecha.isEmpty()
+        && d_f_nac.getDate() == null
         && (foto_text.isEmpty() || foto_text.equals(ruta_foto_defecto));
     }
     
@@ -511,48 +542,54 @@ public class V_R_Empleado extends javax.swing.JFrame {
     
     return !t_id.getText().equals(id_original)
             ||!t_nombre.getText().equals(nombre_original)
-            || !("" + c_sexo.getSelectedItem()).equals(sexo_original)
-            || !("" + c_puesto.getSelectedItem()).equals(puesto_original)
-            || !t_rfc.getText().equals(rfc_original)
+            ||!("" + c_sexo.getSelectedItem()).equals(sexo_original)
+            ||!("" + c_puesto.getSelectedItem()).equals(puesto_original)
+            ||!t_rfc.getText().equals(rfc_original)
             ||!t_curp.getText().equals(curp_original)
-            ||!f_f_nac.getText().equals(fecha_nac_original)
+            ||!d_f_nac.getDateStringOrSuppliedString("").equals(fecha_nac_original)
             ||!t_foto.getText().equals(foto_original);
 }
     
     public void creacion_exitosa(){       
         
-            l_aviso.setForeground(Color.green);
+            l_aviso.setForeground(Color.decode("#008000"));
             String mensaje;
             mensaje = "El empleado " + t_nombre.getText() + " fue registrado con éxito.";
-            toast = mensaje;
-            l_aviso.setVisible(true);
-            l_aviso.setText(mensaje);
             
-            new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                l_aviso.setText(""); // Se limpia el mensaje solo
-                l_aviso.setVisible(false);
-            }
-            }).start();  
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+            
+            //toast = mensaje;
+            //l_aviso.setVisible(true);
+            //l_aviso.setText(mensaje);
+            
+            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+            //   @Override
+            //    public void actionPerformed(java.awt.event.ActionEvent e) {
+            //    l_aviso.setText(""); // Se limpia el mensaje solo
+            //    l_aviso.setVisible(false);
+            //}
+            //}).start();  
     }
     
     public void edicion_exitosa(){
         
-            l_aviso.setForeground(Color.orange);
+            l_aviso.setForeground(Color.decode("#FFA500"));
             String mensaje;
             mensaje = "✓ Cambios guardados con éxito.";
-            toast = mensaje;
-            l_aviso.setVisible(true);
-            l_aviso.setText(mensaje);
             
-            new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                l_aviso.setText(""); // Se limpia el mensaje solo
-                l_aviso.setVisible(false);
-            }
-            }).start();  
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+            
+            //toast = mensaje;
+            //l_aviso.setVisible(true);
+            //l_aviso.setText(mensaje);
+            
+            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
+            //    @Override
+            //    public void actionPerformed(java.awt.event.ActionEvent e) {
+            //    l_aviso.setText(""); // Se limpia el mensaje solo
+            //    l_aviso.setVisible(false);
+            //}
+            //}).start();  
     }
     
     public void restablecer_color(){
@@ -569,19 +606,9 @@ public class V_R_Empleado extends javax.swing.JFrame {
     public void aviso_labels(){
         
         boolean error = false;
-
-        if (t_id.getText().trim().isEmpty()) {
-            l_id.setForeground(Color.red);
-            error = true;
-        }
-        
-        if (!t_id.getText().trim().isEmpty()) {
-            l_id.setForeground(null);
-            error = false;
-        }
         
         if (t_nombre.getText().trim().isEmpty()) {
-            l_nombre.setForeground(Color.red);
+            l_nombre.setForeground(Color.decode("#CE1126"));
             error = true;
         }
         
@@ -591,21 +618,21 @@ public class V_R_Empleado extends javax.swing.JFrame {
         }             
                 
         if (c_sexo.getSelectedItem() == null) {
-            l_sexo.setForeground(Color.RED);
+            l_sexo.setForeground(Color.decode("#CE1126"));
             error = true;
         } else {
             l_sexo.setForeground(null);
         }
         
         if (c_puesto.getSelectedItem() == null) {
-            l_puesto.setForeground(Color.RED);
+            l_puesto.setForeground(Color.decode("#CE1126"));
             error = true;
         } else {
             l_puesto.setForeground(null);
         }
                 
         if (t_rfc.getText().trim().isEmpty()) {
-            l_rfc.setForeground(Color.red);
+            l_rfc.setForeground(Color.decode("#CE1126"));
             error = true;
         }
         
@@ -615,7 +642,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         }
 
         if (t_curp.getText().trim().isEmpty()) {
-            l_curp.setForeground(Color.red);
+            l_curp.setForeground(Color.decode("#CE1126"));
             error = true;
         }
         
@@ -624,10 +651,10 @@ public class V_R_Empleado extends javax.swing.JFrame {
             error = false;
         }
                 
-        String fecha = f_f_nac.getText().replace("-", "").trim();
+        
 
-        if (fecha.isEmpty()) {
-            l_f_nac.setForeground(Color.red);
+        if (d_f_nac.getDate() == null) {
+            l_f_nac.setForeground(Color.decode("#CE1126"));
             error = true;
         } else {
             l_f_nac.setForeground(null);
@@ -635,13 +662,22 @@ public class V_R_Empleado extends javax.swing.JFrame {
                         
         String foto_text = t_foto.getText().trim();
 
-        if (foto_text.isEmpty() || foto_text.equals(ruta_foto_defecto)) {
-            l_Foto.setForeground(Color.red);
+        if (foto_text.isEmpty()) {
+            l_Foto.setForeground(Color.decode("#CE1126"));
             error = true;
         } else {
             l_Foto.setForeground(null);
             error = false;
         }
+                 
+        if (foto_text.equals(ruta_foto_defecto)) {
+            l_Foto.setForeground(Color.decode("#CE1126"));
+            error = true;
+        } else {
+            l_Foto.setForeground(null);
+            error = false;
+        }     
+        
     }
     
     public void bloquear_botones(){
@@ -663,7 +699,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         c_puesto.setSelectedItem(null);
         t_rfc.setText("");
         t_curp.setText("");
-        f_f_nac.setValue(null);
+        d_f_nac.setDate(null);
         t_foto.setText(ruta_foto_defecto);
         cargar_foto();
     }
@@ -675,7 +711,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         this.c_puesto.setEnabled(true);
         this.t_rfc.setEnabled(true);
         this.t_curp.setEnabled(true);
-        this.f_f_nac.setEnabled(true);
+        this.d_f_nac.setEnabled(true);
     }
     
     public void bloquear_text(){
@@ -685,7 +721,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         this.c_puesto.setEnabled(false);
         this.t_rfc.setEnabled(false);
         this.t_curp.setEnabled(false);
-        this.f_f_nac.setEnabled(false);
+        this.d_f_nac.setEnabled(false);
         this.t_foto.setEnabled(false);
     }
     
@@ -696,18 +732,59 @@ public class V_R_Empleado extends javax.swing.JFrame {
         this.c_puesto.setSelectedItem(trabajador.getPuesto());
         this.t_rfc.setText(trabajador.getRfc());
         this.t_curp.setText(trabajador.getCURP());
-        this.f_f_nac.setText(trabajador.getF_nac());
+        
+        if (trabajador.getF_nac() != null && !trabajador.getF_nac().isEmpty()) {
+            java.time.LocalDate fecha = java.time.LocalDate.parse(trabajador.getF_nac());
+            this.d_f_nac.setDate(fecha);
+        } else {
+            this.d_f_nac.setDate(null);
+        }
         this.t_foto.setText(trabajador.getFoto());
     }
     
     public void cargar_datos_tabla(int indice){
+        
+        if (indice < 0 || indice >= Tabla_empleados.getRowCount()) {
+        System.out.println("Índice inválido: " + indice);
+        return;
+        }
+        
+        System.out.println(indice);
         this.t_id.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 0)));
         this.t_nombre.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 1)));
         this.c_sexo.setSelectedItem(String.valueOf(this.Tabla_empleados.getValueAt(indice, 2)));
         this.c_puesto.setSelectedItem(String.valueOf(this.Tabla_empleados.getValueAt(indice, 3)));
         this.t_rfc.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 4)));
         this.t_curp.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 5)));
-        this.f_f_nac.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 6)));
+        
+        //codigo de ia que no entiendo
+        
+        Object valorFecha = this.Tabla_empleados.getValueAt(indice, 6);
+
+        if (valorFecha != null && !valorFecha.toString().trim().isEmpty() && !valorFecha.toString().equals("null")) {
+            String fechaTexto = valorFecha.toString();
+    
+        try {
+            // OPCIÓN A: Si tu tabla guarda las fechas con guiones (ej: 1995-12-25)
+            java.time.LocalDate fecha = java.time.LocalDate.parse(fechaTexto);
+            this.d_f_nac.setDate(fecha);
+        
+            // OPCIÓN B: Si tu tabla muestra las fechas con barras (ej: 25/12/1995), 
+            // descomenta las siguientes 3 líneas y borra las de la OPCIÓN A:
+            // java.time.format.DateTimeFormatter formateador = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            // java.time.LocalDate fecha = java.time.LocalDate.parse(fechaTexto, formateador);
+            // this.f_f_nac.setDate(fecha);
+        
+        } catch (Exception e) {
+            System.out.println("Error al transformar la fecha de la tabla : " + e.getMessage());
+            this.d_f_nac.setDate(null); // Si falla el parseo, lo dejamos limpio
+        }
+        } else {
+            this.d_f_nac.setDate(null); // Si la tabla no tenía fecha, limpiamos el DatePicker
+        }
+        
+        ////////////////////////////////////////////////////
+        
         this.t_foto.setText(String.valueOf(this.Tabla_empleados.getValueAt(indice, 7)));
         this.cargar_foto();
     }
@@ -742,21 +819,17 @@ public class V_R_Empleado extends javax.swing.JFrame {
         }
     }
     
-
     public void llenar_tabla(){
-        String [] info = new String [8];
-        info[0] = t_id.getText();
-        info[1] = t_nombre.getText();
-        info[2] = (c_sexo.getSelectedItem() != null) ? c_sexo.getSelectedItem().toString() : "";
-        info[3] = (c_puesto.getSelectedItem() != null) ? c_puesto.getSelectedItem().toString() : "";
-        info[4] = t_rfc.getText();
-        info[5] = t_curp.getText();
-        info[6] = f_f_nac.getText();
-        info[7] = t_foto.getText();
-        
-        DefaultTableModel modelo=(DefaultTableModel) this.Tabla_empleados.getModel();//crea una variable de tipo modelo de tabla 
-        modelo.addRow(info);//agrega una fila al modelo de tabla
-        this.Tabla_empleados.setModel(modelo);
+ 
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_empleados.getModel();
+        modelo.setRowCount(0); 
+
+        TrabajadorDAO dao = new TrabajadorDAO();
+        java.util.List<String[]> listaTrabajadores = dao.obtenerTrabajadores();
+
+        for (String[] fila : listaTrabajadores) {
+            modelo.addRow(fila);
+        }
     }
     
     public void editar_tabla(){
@@ -767,7 +840,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         modelo.setValueAt(this.c_puesto.getSelectedItem(), fila, 3);
         modelo.setValueAt(this.t_rfc.getText(), fila, 4);
         modelo.setValueAt(this.t_curp.getText(), fila, 5);
-        modelo.setValueAt(this.f_f_nac.getText(), fila, 6);
+        modelo.setValueAt(this.d_f_nac.getDateStringOrSuppliedString(""), fila, 6);
         modelo.setValueAt(this.t_foto.getText(), fila, 7);
         this.Tabla_empleados.setModel(modelo); 
     }
@@ -816,11 +889,11 @@ public class V_R_Empleado extends javax.swing.JFrame {
     int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.f_f_nac.requestFocus();       
+        this.d_f_nac.requestFocus();       
     }
     
     if (Tecla_presionada == KeyEvent.VK_DOWN){
-        this.f_f_nac.requestFocus();
+        this.d_f_nac.requestFocus();
     }
     
     if (Tecla_presionada == KeyEvent.VK_UP){
@@ -859,6 +932,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         actualizar_imagenes_tema();
+        llenar_tabla();
         llenar_text();
         limpiar_text();
         cargar_foto();
@@ -870,103 +944,164 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
-        fila= Tabla_empleados.getSelectedRow();
         
-        if(fila == -1){
-                javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un empleado de la tabla para eliminarlo.");
-                restablecer_color();
-                return;
-            }
-        
-        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_empleados.getModel();
-            int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este empleado?\n\n" + "ID: " + t_id.getText() + "\n" + "Nombre: " + t_nombre.getText(), "Confirmar eliminación", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
-                if (respuesta == javax.swing.JOptionPane.YES_OPTION){
-                    
-                    modelo2.removeRow(fila);
-                    if (modelo2.getRowCount() == 0) {
-                        limpiar_text();
-                    } else {
-                        if (fila >= modelo2.getRowCount()) {
-                            fila = modelo2.getRowCount() - 1;
-                    }
-                        cargar_datos_tabla(fila);
-                    }
-                }
+        int filaSeleccionada = Tabla_empleados.getSelectedRow();
+    
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un empleado de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String idString = Tabla_empleados.getValueAt(filaSeleccionada, 0).toString();
+        int id = Integer.parseInt(idString);
+        String nombre = Tabla_empleados.getValueAt(filaSeleccionada, 1).toString();
+
+        int respuesta = JOptionPane.showConfirmDialog( this, "¿Estás seguro de que deseas eliminar al empleado: " + nombre + "?",  "Confirmar Eliminación",  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+   
+            TrabajadorDAO dao = new TrabajadorDAO();
+            boolean eliminadoExitoso = dao.eliminarTrabajador(id);
+
+        if (eliminadoExitoso) {
+            JOptionPane.showMessageDialog(this, "¡Empleado eliminado con éxito!");
+            
+            limpiar_text();
+            llenar_tabla(); 
+            desbloquear_botones();
+            bloquear_text();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hubo un error al intentar eliminar el registro de la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_b_eliminarActionPerformed
 
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
-        
-        cargar_foto();
-        t_id.requestFocus();
-        desbloquear_text();
-        b_foto.setEnabled(true);
-        b_cancelar.setEnabled(true);
-        
-
+               
         if ("Nuevo".equals(b_nuevo.getText()))
         {
+            cargar_foto();
+            t_id.requestFocus();
+            desbloquear_text();
+            b_foto.setEnabled(true);
+            b_cancelar.setEnabled(true);   
             b_nuevo.setText("Guardar");
             limpiar_text();
-            bloquear_botones();
-            
+            bloquear_botones(); 
         }
         else
         {
-            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || c_sexo.getSelectedItem() == null || c_puesto.getSelectedItem() == null || t_rfc.getText().trim().isEmpty() || f_f_nac.getValue() == null || t_curp.getText().trim().isEmpty() || ruta_foto_defecto.equals(t_foto.getText().trim()))
+            // || t_id.getText().trim().isEmpty()
+            
+            if(t_nombre.getText().trim().isEmpty() || c_sexo.getSelectedItem() == null || c_puesto.getSelectedItem() == null || t_rfc.getText().trim().isEmpty() || d_f_nac.getDate() == null || t_curp.getText().trim().isEmpty() || ruta_foto_defecto.equals(t_foto.getText().trim()))
             {
                 aviso_labels();
+                    
                 return;
             }
-            b_nuevo.setText("Nuevo");
-            llenar_tabla();
-            desbloquear_botones();
-            creacion_exitosa();
-            limpiar_text();
-            bloquear_text();
-            b_foto.setEnabled(false);
-            restablecer_color();
-            b_cancelar.setEnabled(false);
+            
+            if (!verificar_edad()) {
+                javax.swing.JOptionPane.showMessageDialog(this,  "El empleado debe ser mayor de edad (18 años o más).",  "Error de validación",  javax.swing.JOptionPane.ERROR_MESSAGE);
+                l_f_nac.setForeground(java.awt.Color.red); 
+                return; 
+            }
+
+            String nombre = t_nombre.getText();
+            String sexo = (c_sexo.getSelectedItem() != null) ? c_sexo.getSelectedItem().toString() : "";
+            String puesto = (c_puesto.getSelectedItem() != null) ? c_puesto.getSelectedItem().toString() : "";
+            String rfc = t_rfc.getText();
+            String curp = t_curp.getText();
+            String fechaNac = d_f_nac.getDateStringOrSuppliedString("");
+            String foto = t_foto.getText();
+        
+        TrabajadorDAO dao = new TrabajadorDAO();
+        boolean guardadoExitoso = dao.insertarTrabajador( nombre, sexo, puesto, rfc, curp, fechaNac, foto);
+
+    if (guardadoExitoso) {
+        //JOptionPane.showMessageDialog(this, "¡Trabajador guardado con éxito en la Base de Datos!");
+        limpiar_text();
+        llenar_tabla();
+        b_nuevo.setText("Nuevo");
+        desbloquear_botones();
+        creacion_exitosa();
+        bloquear_text();
+        b_foto.setEnabled(false);
+        restablecer_color();
+        b_cancelar.setEnabled(false);
+        
+    } else {
+        JOptionPane.showMessageDialog(this, "Error al guardar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+            
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         
-        if ("Editar".equals(b_editar.getText()))
-        {
-            fila = Tabla_empleados.getSelectedRow();
-                if (fila == -1) 
-                {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un empleado de la tabla para editar.");
-                    restablecer_color();
-                    return;
-                }
-            b_foto.setEnabled(true);
-            b_editar.setText("Guardar");
-            b_nuevo.setEnabled(false);
-            b_eliminar.setEnabled(false);
-            b_buscar.setEnabled(false);
-            b_cancelar.setEnabled(true);
-            desbloquear_text();
+    if ("Editar".equals(b_editar.getText())) {
+        
+        int filaSeleccionada = Tabla_empleados.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un empleado de la tabla para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        else
-        {
-            if(t_nombre.getText().trim().isEmpty() || t_id.getText().trim().isEmpty() || t_rfc.getText().trim().isEmpty() || t_curp.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty() || f_f_nac.getText().trim().isEmpty())
-            {
-                aviso_labels();
-                return;
-            }
-            
-            b_editar.setText("Editar");
-            editar_tabla();
-            b_nuevo.setEnabled(true);
-            b_eliminar.setEnabled(true);
-            b_buscar.setEnabled(true);
+        
+        b_editar.setText("Guardar");
+        desbloquear_text();
+        b_foto.setEnabled(true);
+        b_cancelar.setEnabled(true);
+        
+        b_nuevo.setEnabled(false);
+        b_eliminar.setEnabled(false);
+        b_buscar.setEnabled(false);
+        
+    } else { 
+
+        if(t_nombre.getText().trim().isEmpty() || 
+           c_sexo.getSelectedItem() == null || 
+           c_puesto.getSelectedItem() == null || 
+           t_rfc.getText().trim().isEmpty() || 
+           d_f_nac.getDate() == null || 
+           t_curp.getText().trim().isEmpty() || 
+           ruta_foto_defecto.equals(t_foto.getText().trim())) { 
+            aviso_labels();
+            return; 
+        } 
+
+        if (!verificar_edad()) { 
+            JOptionPane.showMessageDialog(this, "El empleado debe ser mayor de edad (18 años o más).", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            l_f_nac.setForeground(Color.red); 
+            return; 
+        } 
+
+        int id = Integer.parseInt(t_id.getText()); 
+        String nombre = t_nombre.getText(); 
+        String sexo = c_sexo.getSelectedItem().toString(); 
+        String puesto = c_puesto.getSelectedItem().toString(); 
+        String rfc = t_rfc.getText();
+        String curp = t_curp.getText(); 
+        String fechaNac = d_f_nac.getDateStringOrSuppliedString(""); 
+        String foto = t_foto.getText(); 
+
+        TrabajadorDAO dao = new TrabajadorDAO();
+        boolean actualizadoExitoso = dao.actualizarTrabajador(id, nombre, sexo, puesto, rfc, curp, fechaNac, foto);
+
+        if (actualizadoExitoso) { 
+            //JOptionPane.showMessageDialog(this, "¡Registro actualizado con éxito!"); 
+            limpiar_text(); 
+            llenar_tabla(); // Refresca la tabla visual
+            b_editar.setText("Editar"); 
+            desbloquear_botones(); 
+            bloquear_text(); 
             b_foto.setEnabled(false);
-            bloquear_text();
-            restablecer_color();
-            edicion_exitosa();
+            restablecer_color(); 
             b_cancelar.setEnabled(false);
-        }
+            edicion_exitosa();
+            b_nuevo.setEnabled(true);
+        } else { 
+            JOptionPane.showMessageDialog(this, "Error al actualizar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        } 
+    }
     }//GEN-LAST:event_b_editarActionPerformed
 
     private void t_idKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_idKeyPressed
@@ -1035,20 +1170,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
         
     }//GEN-LAST:event_t_idFocusGained
 
-    private void f_f_nacKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_f_f_nacKeyPressed
-        
-    int Tecla_presionada = evt.getKeyCode();
-        
-    if (Tecla_presionada == KeyEvent.VK_UP){
-        this.t_curp.requestFocus();
-    }
-        
-    if (Tecla_presionada == KeyEvent.VK_DOWN){
-        this.b_foto.requestFocus();
-    }
-    
-    }//GEN-LAST:event_f_f_nacKeyPressed
-
     private void b_nuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_nuevoKeyPressed
     int Tecla_presionada = evt.getKeyCode();
         
@@ -1114,7 +1235,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }
    
     if (Tecla_presionada == KeyEvent.VK_UP){
-        this.f_f_nac.requestFocus();
+        this.d_f_nac.requestFocus();
     }
     
     }//GEN-LAST:event_b_fotoKeyPressed
@@ -1153,80 +1274,54 @@ public class V_R_Empleado extends javax.swing.JFrame {
         
     }//GEN-LAST:event_t_curpFocusGained
 
-    private void f_f_nacFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_f_f_nacFocusGained
-        
-    }//GEN-LAST:event_f_f_nacFocusGained
-
     private void b_fotoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_b_fotoFocusGained
         
     }//GEN-LAST:event_b_fotoFocusGained
 
     private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-        
-        // 1. PASO CLAVE: Detectar en qué modo estábamos antes de cancelar
-        boolean es_nuevo = "Guardar".equals(b_nuevo.getText());
-        boolean es_editar = "Guardar".equals(b_editar.getText());
-
-        if (es_nuevo || es_editar) {
+    limpiar_text();         
+    bloquear_text();        
+    desbloquear_botones();  
+    restablecer_color();    
     
-        // --- MODO NUEVO ---
-            if (es_nuevo) {
-                // Validación: Si los campos NO están vacíos, pedimos confirmación
-                if (!campos_vacios()) { 
-                    int respuesta = JOptionPane.showConfirmDialog(this, 
-                     "¿Desea cancelar el registro? Se perderán los datos introducidos.", 
-                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
-            
-                if (respuesta != JOptionPane.YES_OPTION) {
-                    return; // El usuario dijo "No", nos salimos y no cancelamos nada
-                }
-            }
-            // Si estaban vacíos o el usuario dijo "Sí", el código sigue aquí abajo...
-        }
-    
-        // --- MODO EDITAR ---
-        else if (es_editar) {
-            // Validación: Si los datos fueron modificados, pedimos confirmación
-            if (datos_moficados()) { 
-                int respuesta = JOptionPane.showConfirmDialog(this, 
-                     "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
-                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
-            
-                if (respuesta != JOptionPane.YES_OPTION) {
-                    return; // El usuario dijo "No", nos salimos
-                }
-            }
-            // Si no se modificó nada o el usuario dijo "Sí", el código sigue aquí abajo...
-        }
-
-    // --- RESTABLECER LA INTERFAZ (Tu código original ordenado) ---
     b_nuevo.setText("Nuevo");
-    b_editar.setText("Editar");   
+    b_editar.setText("Editar");
     
-    b_nuevo.setEnabled(true);
-    desbloquear_botones(); 
-    bloquear_text();
     b_foto.setEnabled(false);
-    restablecer_color();
-            
-    // Si estábamos editando, recuperamos los datos que ya tenía la fila
-    int filaSeleccionada = Tabla_empleados.getSelectedRow();
-    if (filaSeleccionada != -1) {
-        cargar_datos_tabla(filaSeleccionada);
-    } else {
-        limpiar_text();
-    }
-            
-    l_aviso.setVisible(false);
-    l_aviso.setText("");
     b_cancelar.setEnabled(false);
-}
+    b_nuevo.setEnabled(true);
     }//GEN-LAST:event_b_cancelarActionPerformed
 
     private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+
         D_buscar_empleado emple = new D_buscar_empleado(this, true);
+        emple.setLocationRelativeTo(V_R_Empleado.this);
         emple.setVisible(true);
+        
+        //int numero = emple.getFila();
+
+        //System.out.println("El número obtenido del diálogo es: " + fila);
+        
+        fila = emple.getFila();
+        if (fila >= 0 && fila < Tabla_empleados.getRowCount()) {
+            Tabla_empleados.setRowSelectionInterval(fila, fila);
+        }
+        cargar_datos_tabla(fila);
+        
     }//GEN-LAST:event_b_buscarActionPerformed
+
+    private void d_f_nacKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_d_f_nacKeyPressed
+
+        int Tecla_presionada = evt.getKeyCode();
+
+        if (Tecla_presionada == KeyEvent.VK_UP){
+            this.t_curp.requestFocus();
+        }
+
+        if (Tecla_presionada == KeyEvent.VK_DOWN){
+            this.b_foto.requestFocus();
+        }
+    }//GEN-LAST:event_d_f_nacKeyPressed
 
     /**
      * @param args the command line arguments
@@ -1276,7 +1371,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
     private javax.swing.JButton b_nuevo;
     private javax.swing.JComboBox<String> c_puesto;
     private javax.swing.JComboBox<String> c_sexo;
-    private javax.swing.JFormattedTextField f_f_nac;
+    private com.github.lgooddatepicker.components.DatePicker d_f_nac;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

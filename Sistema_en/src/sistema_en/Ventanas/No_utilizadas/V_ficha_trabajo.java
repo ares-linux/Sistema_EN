@@ -2,12 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package sistema_en.Ventanas;
+package sistema_en.Ventanas.No_utilizadas;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JFrame;
+import sistema_en.Ventanas.V_R_Cotizacion;
+import sistema_en.Ventanas.V_R_Trabajo;
+import sistema_en.Ventanas.V_bitacora;
 import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 
 /**
@@ -53,7 +56,6 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
         b_actualizar_estado = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(782, 416));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -166,7 +168,6 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        c_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "En progreso", "Completado" }));
         c_estado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 c_estadoActionPerformed(evt);

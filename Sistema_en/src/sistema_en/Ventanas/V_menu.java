@@ -4,16 +4,18 @@
  */
 package sistema_en.Ventanas;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import sistema_en.Ventanas.Ventanas_consultas.V_historial_c;
 import sistema_en.Ventanas.Ventanas_consultas.V_clientes;
 import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
+import java.net.URL;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import sistema_en.Ventanas.dialogos.D_configuraciones;
-import java.io.File;
-import java.net.URL;
-import javax.sound.sampled.*;
 
 /**
  *
@@ -25,12 +27,15 @@ public class V_menu extends javax.swing.JFrame {
     
     private V_clientes ventana_Clientes = null;
     private V_trabajos ventana_Trabajos = null;
+    private V_historial_c ventana_h_cotizaciones = null;
     
     //Formularios de registro
     
     private V_R_Trabajo ventana_r_trabajos = null;
     private V_R_Herramienta ventana_r_herramientas = null;
     private V_R_Empleado ventana_r_empleados = null;
+    
+    private V_R_Cotizacion ventana_r_cotizaciones = null;
                         
      /**
      * Creates new form V_menu
@@ -93,6 +98,17 @@ public class V_menu extends javax.swing.JFrame {
             }
         });
         
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {   
+        M_cerrar_programa.doClick();
+        
+    }
+    });
+
+
+    this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
     }
 
     /**
@@ -122,6 +138,9 @@ public class V_menu extends javax.swing.JFrame {
         m_empleado = new javax.swing.JMenuItem();
         m_herramienta = new javax.swing.JMenuItem();
         m_trabajo = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        m_cotizacion = new javax.swing.JMenuItem();
+        m_cotizacion_c = new javax.swing.JMenuItem();
         m_catalogo = new javax.swing.JMenu();
         m_clientes = new javax.swing.JMenuItem();
         m_trabajos = new javax.swing.JMenuItem();
@@ -210,6 +229,26 @@ public class V_menu extends javax.swing.JFrame {
         });
         m_registros.add(m_trabajo);
 
+        jMenu1.setText("Cotizaciones");
+
+        m_cotizacion.setText("Cotizacion de prueba");
+        m_cotizacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_cotizacionActionPerformed(evt);
+            }
+        });
+        jMenu1.add(m_cotizacion);
+
+        m_cotizacion_c.setText("Historial ");
+        m_cotizacion_c.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_cotizacion_cActionPerformed(evt);
+            }
+        });
+        jMenu1.add(m_cotizacion_c);
+
+        m_registros.add(jMenu1);
+
         jMenuBar1.add(m_registros);
 
         m_catalogo.setText("Catálogo ▼");
@@ -260,16 +299,15 @@ public class V_menu extends javax.swing.JFrame {
 
     public static void reproducir(String ruta) {
         try {
-
+        
             URL url =
                     r_sonido.class.getResource(ruta);
-
+    
             if (url == null) {
                 System.out.println(
-                        "No se encontró el audio: " + ruta);
+                      "No se encontró el audio: " + ruta);
                 return;
             }
-
             AudioInputStream audio =
                     AudioSystem.getAudioInputStream(url);
 
@@ -307,12 +345,12 @@ public class V_menu extends javax.swing.JFrame {
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
-        r_sonido.reproducir("/audios/inicio.wav");
+        //r_sonido.reproducir("/audios/inicio.wav");
     }//GEN-LAST:event_formWindowOpened
 
     private void M_cerrar_programaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_cerrar_programaActionPerformed
-        V_menu.r_sonido.reproducir("src/audios/error.wav");
-        int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea cerrar el programa?", "Confirmar accion", javax.swing.JOptionPane.YES_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
+        V_menu.r_sonido.reproducir("/audios/error.wav");
+        int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea cerrar el programa?", "Confirmar salir", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
         if (respuesta == javax.swing.JOptionPane.YES_OPTION){
             System.exit(0);
         }
@@ -336,6 +374,7 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_m_herramientaActionPerformed
 
     private void m_empleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_empleadoActionPerformed
+        FlatDarkLaf.setup();
         if (ventana_r_empleados == null || !ventana_r_empleados.isDisplayable()) {
             ventana_r_empleados = new V_R_Empleado();
             ventana_r_empleados.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -406,8 +445,9 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentResized
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        D_configuraciones config = new D_configuraciones(this,true);
-        config.setVisible(true);  
+        D_configuraciones configuraciones = new D_configuraciones(this,true);
+        configuraciones.setLocationRelativeTo(V_menu.this);
+        configuraciones.setVisible(true);  
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void m_registrosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_registrosKeyPressed
@@ -417,6 +457,38 @@ public class V_menu extends javax.swing.JFrame {
     private void m_registrosFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_m_registrosFocusGained
     
     }//GEN-LAST:event_m_registrosFocusGained
+
+    private void m_cotizacion_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_cotizacion_cActionPerformed
+        if (ventana_h_cotizaciones == null || !ventana_h_cotizaciones.isDisplayable()) {
+            ventana_h_cotizaciones = new V_historial_c();
+            ventana_h_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_h_cotizaciones.setVisible(true);
+            ventana_h_cotizaciones.toFront();
+            ventana_h_cotizaciones.requestFocus();
+        } else {
+            if (ventana_h_cotizaciones.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_h_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_h_cotizaciones.toFront();
+            ventana_h_cotizaciones.requestFocus();
+        }
+    }//GEN-LAST:event_m_cotizacion_cActionPerformed
+
+    private void m_cotizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_cotizacionActionPerformed
+        if (ventana_r_cotizaciones == null || !ventana_r_cotizaciones.isDisplayable()) {
+            ventana_r_cotizaciones = new V_R_Cotizacion();
+            ventana_r_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_r_cotizaciones.setVisible(true);
+            ventana_r_cotizaciones.toFront();
+            ventana_r_cotizaciones.requestFocus();
+        } else {
+            if (ventana_r_cotizaciones.getExtendedState() == JFrame.ICONIFIED) {
+                ventana_r_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
+            ventana_r_cotizaciones.toFront();
+            ventana_r_cotizaciones.requestFocus();
+        }
+    }//GEN-LAST:event_m_cotizacionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -456,6 +528,7 @@ public class V_menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem M_cerrar_programa;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -470,6 +543,8 @@ public class V_menu extends javax.swing.JFrame {
     private javax.swing.JLabel l_foto;
     private javax.swing.JMenu m_catalogo;
     private javax.swing.JMenuItem m_clientes;
+    private javax.swing.JMenuItem m_cotizacion;
+    private javax.swing.JMenuItem m_cotizacion_c;
     private javax.swing.JMenuItem m_empleado;
     private javax.swing.JMenuItem m_herramienta;
     private javax.swing.JMenu m_registros;
