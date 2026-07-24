@@ -14,6 +14,7 @@ import java.time.LocalTime;
 public class Trabajo {
     private int id_trabajo;
     private String descripcion;
+    private String direccion;
     private LocalDate fecha;
     private LocalTime hora;
     private String estado;
@@ -106,6 +107,20 @@ public class Trabajo {
      */
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    /**
+     * @return the direccion
+     */
+    public String getDireccion() {
+        return direccion;
+    }
+
+    /**
+     * @param direccion the direccion to set
+     */
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
     
     

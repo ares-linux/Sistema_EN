@@ -4,11 +4,18 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.TrabajadorDAO;
+import java.awt.event.KeyEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ares
  */
 public class D_buscar_empleado extends javax.swing.JDialog {
+    
+    int fila_j;
 
     /**
      * Creates new form D_buscar_empleado
@@ -16,8 +23,45 @@ public class D_buscar_empleado extends javax.swing.JDialog {
     public D_buscar_empleado(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Tabla_empleados.setDefaultEditor(Object.class, null);
+        Tabla_empleados.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        
+        // 1. Carga inicial de datos
+        filtrar_tabla(); 
+        
+        // Control de botón según registros iniciales
+        if (Tabla_empleados.getRowCount() < 1000) {
+            b_buscar.setEnabled(false);
+        } else {
+            b_buscar.setEnabled(true);
+        }
+        
+        // 2. Evento para el campo de texto (Al escribir)
+        t_nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                // Si hay pocos registros, filtra de inmediato al escribir
+                if (Tabla_empleados.getRowCount() < 1000 || t_nombre.getText().trim().isEmpty()) {
+                    filtrar_tabla(); 
+                }
+            }
+        });
+        
+        // 3. Evento para el JComboBox (Al cambiar de opción)
+        c_puesto.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filtrar_tabla(); // Se activa inmediatamente al cambiar el puesto
+            }
+        });
+        
     }
 
+    public int getFila() {
+        return this.fila_j;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,22 +70,376 @@ public class D_buscar_empleado extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        b_buscar = new javax.swing.JButton();
+        b_limpiar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Tabla_empleados = new javax.swing.JTable();
+        b_seleccionar = new javax.swing.JButton();
+        b_cancelar = new javax.swing.JButton();
+        t_nombre = new javax.swing.JTextField();
+        c_puesto = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(740, 480));
+        setMinimumSize(new java.awt.Dimension(740, 480));
+        setPreferredSize(new java.awt.Dimension(740, 480));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Buscar empleado");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.ipadx = 584;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
+        getContentPane().add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Nombre");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel2, gridBagConstraints);
+
+        jLabel3.setText("Puesto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        b_buscar.setText("Buscar");
+        b_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_buscarActionPerformed(evt);
+            }
+        });
+        b_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_buscarKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_buscar, gridBagConstraints);
+
+        b_limpiar.setText("Limpiar");
+        b_limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_limpiarActionPerformed(evt);
+            }
+        });
+        b_limpiar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_limpiarKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_limpiar, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel4.setText("Resultados");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel4, gridBagConstraints);
+
+        Tabla_empleados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Nombre", "Sexo", "Puesto", "RFC", "CURP", "Fecha de nacimiento", "Foto"
+            }
+        ));
+        Tabla_empleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_empleadosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Tabla_empleados);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 623;
+        gridBagConstraints.ipady = 133;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
+
+        b_seleccionar.setText("Seleccionar");
+        b_seleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_seleccionarActionPerformed(evt);
+            }
+        });
+        b_seleccionar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_seleccionarKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_seleccionar, gridBagConstraints);
+
+        b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
+        b_cancelar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_cancelarKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_cancelar, gridBagConstraints);
+
+        t_nombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                t_nombreKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 559;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(t_nombre, gridBagConstraints);
+
+        c_puesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ayudante", "Oficial", "Medio oficial", "Cabo" }));
+        c_puesto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                c_puestoActionPerformed(evt);
+            }
+        });
+        c_puesto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                c_puestoKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 473;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(c_puesto, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public void limpiar_text(){
+        t_nombre.setText("");
+        c_puesto.setSelectedItem(null);
+    }
+    
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        this.fila_j = -1; 
+        this.dispose();
+    }//GEN-LAST:event_b_cancelarActionPerformed
+
+    private void b_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_limpiarActionPerformed
+        t_nombre.setText("");
+        if (c_puesto.getItemCount() > 0) {
+            c_puesto.setSelectedItem(null);
+        }
+        filtrar_tabla();
+    }//GEN-LAST:event_b_limpiarActionPerformed
+
+    private void t_nombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombreKeyPressed
+ 
+        int total_Registros = Tabla_empleados.getRowCount();
+
+        if (total_Registros < 1000 || t_nombre.getText().trim().isEmpty()) {
+            b_buscar.setEnabled(false); 
+            filtrar_tabla();              
+        } else {
+            b_buscar.setEnabled(true);  
+        }
+        
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.c_puesto.requestFocus();
+    }
+    }//GEN-LAST:event_t_nombreKeyPressed
+
+    private void b_limpiarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_limpiarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_buscar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.c_puesto.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_limpiarKeyPressed
+
+    private void b_buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_buscarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_limpiar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_nombre.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_buscarKeyPressed
+
+    private void b_seleccionarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_seleccionarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_RIGHT){
+        this.b_cancelar.requestFocus();
+    }
+        
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.b_buscar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_seleccionarKeyPressed
+
+    private void b_cancelarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_cancelarKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_LEFT){
+        this.b_seleccionar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.b_buscar.requestFocus();
+    }
+    
+    }//GEN-LAST:event_b_cancelarKeyPressed
+
+    private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
+        fila_j = Tabla_empleados.getSelectedRow();
+                if (fila_j == -1) 
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un empleado de la tabla.");
+                    return;
+                }
+        this.dispose();
+    }//GEN-LAST:event_b_seleccionarActionPerformed
+
+    private void Tabla_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_empleadosMouseClicked
+        fila_j = this.Tabla_empleados.rowAtPoint(evt.getPoint());
+    }//GEN-LAST:event_Tabla_empleadosMouseClicked
+
+    private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+        if(t_nombre.getText().trim().isEmpty() || c_puesto.getSelectedItem() == null){
+            return;
+        }
+        
+        filtrar_tabla();
+        
+    }//GEN-LAST:event_b_buscarActionPerformed
+
+    private void c_puestoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_puestoKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+    if (Tecla_presionada == KeyEvent.VK_DOWN){
+        this.b_buscar.requestFocus();
+    }
+    
+    if (Tecla_presionada == KeyEvent.VK_UP){
+        this.t_nombre.requestFocus();
+    }
+    
+    }//GEN-LAST:event_c_puestoKeyPressed
+
+    public void llenar_tabla(){
+ 
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_empleados.getModel();
+        modelo.setRowCount(0); 
+
+        TrabajadorDAO dao = new TrabajadorDAO();
+        java.util.List<String[]> listaTrabajadores = dao.obtenerTrabajadores();
+
+        for (String[] fila_j : listaTrabajadores) {
+            modelo.addRow(fila_j);
+        }
+    }
+    
+    public void filtrar_tabla(){
+        String nombre = t_nombre.getText().trim();
+        
+        // Obtenemos el puesto del combo. Si no hay nada seleccionado, asumimos "Todos"
+        String puesto = "Todos";
+        if (c_puesto.getSelectedItem() != null) {
+            puesto = c_puesto.getSelectedItem().toString();
+        }
+        
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_empleados.getModel();
+        modelo.setRowCount(0); 
+
+        TrabajadorDAO dao = new TrabajadorDAO();
+        // Llamamos al método DAO pasándole AMBOS filtros
+        java.util.List<String[]> listaTrabajadores = dao.buscarTrabajadores(nombre, puesto);
+
+        for (String[] fila : listaTrabajadores) {
+            modelo.addRow(fila);
+        }
+    }
+    
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        limpiar_text();
+        llenar_tabla();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void c_puestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_puestoActionPerformed
+        filtrar_tabla();
+    }//GEN-LAST:event_c_puestoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -86,5 +484,17 @@ public class D_buscar_empleado extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Tabla_empleados;
+    private javax.swing.JButton b_buscar;
+    private javax.swing.JButton b_cancelar;
+    private javax.swing.JButton b_limpiar;
+    private javax.swing.JButton b_seleccionar;
+    private javax.swing.JComboBox<String> c_puesto;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField t_nombre;
     // End of variables declaration//GEN-END:variables
 }

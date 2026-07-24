@@ -4,13 +4,12 @@
  */
 package sistema_en.Ventanas;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import sistema_en.Objetos.Cotizacion;
+import sistema_en.Ventanas.dialogos.D_exportar_opciones;
 
 /**
  *
@@ -31,6 +30,13 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
      */
     public V_R_Cotizacion() {
         initComponents();
+        
+        Tabla_conceptos.setDefaultEditor(Object.class, null);
+        Tabla_conceptos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        
+        Tabla_materiales.setDefaultEditor(Object.class, null);
+        Tabla_materiales.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        
     }
 
     /**
@@ -41,6 +47,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -53,45 +60,57 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        t_n_trabajo = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        t_n_cotizacion = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        t_concepto = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        t_precio = new javax.swing.JTextField();
-        b_añadir_concepto = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        Tabla_conceptos = new javax.swing.JTable();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        Tabla_materiales = new javax.swing.JTable();
-        jLabel7 = new javax.swing.JLabel();
-        t_nombre_m = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        t_precio_uni = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        t_subtotal = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        t_iva = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        t_total = new javax.swing.JTextField();
+        S_botones = new javax.swing.JScrollPane();
+        P_botones = new javax.swing.JPanel();
         b_eliminar = new javax.swing.JButton();
         b_editar = new javax.swing.JButton();
         b_aceptar = new javax.swing.JButton();
         b_cancelar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        b_exportar = new javax.swing.JButton();
+        b_convertir = new javax.swing.JButton();
+        b_cerrar = new javax.swing.JButton();
+        P_datos_estaticos = new javax.swing.JPanel();
+        t_n_trabajo = new javax.swing.JTextField();
+        t_n_cotizacion = new javax.swing.JTextField();
+        t_tipo_c = new javax.swing.JTextField();
         t_fecha_r = new javax.swing.JTextField();
-        t_hora_r = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        P_calculos_automaticos = new javax.swing.JPanel();
+        t_subtotal = new javax.swing.JTextField();
+        t_iva = new javax.swing.JTextField();
+        t_total = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        S_tablas = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
+        P_tabla_conceptos = new javax.swing.JPanel();
+        P_conceptos = new javax.swing.JPanel();
+        t_concepto = new javax.swing.JTextField();
+        t_precio = new javax.swing.JTextField();
+        b_añadir_concepto = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        S_conceptos = new javax.swing.JScrollPane();
+        Tabla_conceptos = new javax.swing.JTable();
+        P_tabla_materiales = new javax.swing.JPanel();
+        P_materiales = new javax.swing.JPanel();
+        b_añadir_materiales = new javax.swing.JButton();
+        t_nombre_m = new javax.swing.JTextField();
+        t_precio_uni = new javax.swing.JTextField();
         t_cantidad = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        b_añadir_materiales = new javax.swing.JButton();
-        l_aviso = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        S_materiales = new javax.swing.JScrollPane();
+        Tabla_materiales = new javax.swing.JTable();
+        b_derecha = new javax.swing.JButton();
+        b_izquierda = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -148,45 +167,297 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel2.setText("Cotizacion");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel2, gridBagConstraints);
 
-        jLabel3.setText("Numero de trabajo");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 50, -1, 20));
+        S_botones.setAutoscrolls(true);
+        S_botones.setMinimumSize(new java.awt.Dimension(20, 60));
+
+        P_botones.setLayout(new java.awt.GridBagLayout());
+
+        b_eliminar.setText("Eliminar");
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones.add(b_eliminar, gridBagConstraints);
+
+        b_editar.setText("Editar");
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 15;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones.add(b_editar, gridBagConstraints);
+
+        b_aceptar.setText("Aceptar");
+        b_aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_aceptarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones.add(b_aceptar, gridBagConstraints);
+
+        b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones.add(b_cancelar, gridBagConstraints);
+
+        b_exportar.setText("Exportar");
+        b_exportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_exportarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones.add(b_exportar, gridBagConstraints);
+
+        b_convertir.setText("Convertir a trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones.add(b_convertir, gridBagConstraints);
+
+        b_cerrar.setText("Cerrar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones.add(b_cerrar, gridBagConstraints);
+
+        S_botones.setViewportView(P_botones);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 10, 10);
+        getContentPane().add(S_botones, gridBagConstraints);
+
+        P_datos_estaticos.setLayout(new java.awt.GridBagLayout());
 
         t_n_trabajo.setEditable(false);
-        t_n_trabajo.setText("0");
-        getContentPane().add(t_n_trabajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 290, -1));
-
-        jLabel4.setText("Numero de cotizacion");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 50, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        P_datos_estaticos.add(t_n_trabajo, gridBagConstraints);
 
         t_n_cotizacion.setEditable(false);
-        t_n_cotizacion.setText("0");
-        getContentPane().add(t_n_cotizacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 80, 290, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        P_datos_estaticos.add(t_n_cotizacion, gridBagConstraints);
 
-        jLabel5.setText("Concepto");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, -1, 20));
+        t_tipo_c.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        P_datos_estaticos.add(t_tipo_c, gridBagConstraints);
+
+        t_fecha_r.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        P_datos_estaticos.add(t_fecha_r, gridBagConstraints);
+
+        jLabel1.setText("Fecha de creacion");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        P_datos_estaticos.add(jLabel1, gridBagConstraints);
+
+        jLabel12.setText("Tipo de cotizacion");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        P_datos_estaticos.add(jLabel12, gridBagConstraints);
+
+        jLabel3.setText("Numero de trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        P_datos_estaticos.add(jLabel3, gridBagConstraints);
+
+        jLabel4.setText("Numero de cotizacion");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        P_datos_estaticos.add(jLabel4, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 709;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(P_datos_estaticos, gridBagConstraints);
+
+        P_calculos_automaticos.setLayout(new java.awt.GridBagLayout());
+
+        t_subtotal.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 95;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_calculos_automaticos.add(t_subtotal, gridBagConstraints);
+
+        t_iva.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 85;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_calculos_automaticos.add(t_iva, gridBagConstraints);
+
+        t_total.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 75;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_calculos_automaticos.add(t_total, gridBagConstraints);
+
+        jLabel9.setText("Subtotal");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_calculos_automaticos.add(jLabel9, gridBagConstraints);
+
+        jLabel10.setText("Iva 16%");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_calculos_automaticos.add(jLabel10, gridBagConstraints);
+
+        jLabel11.setText("Total");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_calculos_automaticos.add(jLabel11, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 110;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(P_calculos_automaticos, gridBagConstraints);
+
+        S_tablas.setAutoscrolls(true);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        P_tabla_conceptos.setLayout(new java.awt.GridBagLayout());
+
+        P_conceptos.setLayout(new java.awt.GridBagLayout());
 
         t_concepto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_conceptoKeyPressed(evt);
             }
         });
-        getContentPane().add(t_concepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 240, -1));
-
-        jLabel6.setText("Precio");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, -1, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 225;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_conceptos.add(t_concepto, gridBagConstraints);
 
         t_precio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_precioKeyPressed(evt);
             }
         });
-        getContentPane().add(t_precio, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, 250, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 235;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_conceptos.add(t_precio, gridBagConstraints);
 
         b_añadir_concepto.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
         b_añadir_concepto.setText("+");
@@ -200,7 +471,50 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 b_añadir_conceptoKeyPressed(evt);
             }
         });
-        getContentPane().add(b_añadir_concepto, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 200, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_conceptos.add(b_añadir_concepto, gridBagConstraints);
+
+        jLabel15.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel15.setText("Conceptos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_conceptos.add(jLabel15, gridBagConstraints);
+
+        jLabel6.setText("Precio");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipady = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_conceptos.add(jLabel6, gridBagConstraints);
+
+        jLabel5.setText("Concepto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipady = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_conceptos.add(jLabel5, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 635;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(1, 0, 0, 0);
+        P_tabla_conceptos.add(P_conceptos, gridBagConstraints);
+
+        S_conceptos.setMaximumSize(new java.awt.Dimension(450, 200));
+        S_conceptos.setMinimumSize(new java.awt.Dimension(450, 200));
+        S_conceptos.setPreferredSize(new java.awt.Dimension(450, 200));
 
         Tabla_conceptos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -210,34 +524,54 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 "Concepto", "Precio"
             }
         ));
+        Tabla_conceptos.setMaximumSize(null);
+        Tabla_conceptos.setMinimumSize(null);
+        Tabla_conceptos.setPreferredSize(null);
         Tabla_conceptos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_conceptosMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(Tabla_conceptos);
+        S_conceptos.setViewportView(Tabla_conceptos);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 530, 220));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        P_tabla_conceptos.add(S_conceptos, gridBagConstraints);
 
-        Tabla_materiales.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipady = 96;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 9, 10);
+        jPanel1.add(P_tabla_conceptos, gridBagConstraints);
 
-            },
-            new String [] {
-                "Nombre", "Precio uni", "Cantidad", "Total"
-            }
-        ));
-        Tabla_materiales.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Tabla_materialesMouseClicked(evt);
+        P_tabla_materiales.setLayout(new java.awt.GridBagLayout());
+
+        P_materiales.setLayout(new java.awt.GridBagLayout());
+
+        b_añadir_materiales.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
+        b_añadir_materiales.setText("+");
+        b_añadir_materiales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_añadir_materialesActionPerformed(evt);
             }
         });
-        jScrollPane4.setViewportView(Tabla_materiales);
-
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 240, 590, 210));
-
-        jLabel7.setText("Nombre del material");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 170, -1, 20));
+        b_añadir_materiales.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                b_añadir_materialesKeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        P_materiales.add(b_añadir_materiales, gridBagConstraints);
 
         t_nombre_m.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -254,10 +588,14 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 t_nombre_mKeyPressed(evt);
             }
         });
-        getContentPane().add(t_nombre_m, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 200, 210, -1));
-
-        jLabel8.setText("Precio uni");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 170, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 320;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        P_materiales.add(t_nombre_m, gridBagConstraints);
 
         t_precio_uni.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -269,69 +607,14 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 t_precio_uniKeyPressed(evt);
             }
         });
-        getContentPane().add(t_precio_uni, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 200, 100, -1));
-
-        jLabel9.setText("Subtotal");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 490, -1, -1));
-
-        t_subtotal.setEditable(false);
-        getContentPane().add(t_subtotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 520, 110, -1));
-
-        jLabel10.setText("Iva 16%");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 490, -1, -1));
-
-        t_iva.setEditable(false);
-        getContentPane().add(t_iva, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 520, 100, -1));
-
-        jLabel11.setText("Total");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 490, -1, -1));
-
-        t_total.setEditable(false);
-        getContentPane().add(t_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(1130, 520, 90, -1));
-
-        b_eliminar.setText("Eliminar");
-        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_eliminarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_eliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 510, -1, -1));
-
-        b_editar.setText("Editar");
-        b_editar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_editarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 510, 60, -1));
-
-        b_aceptar.setText("Aceptar");
-        b_aceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_aceptarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_aceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
-
-        b_cancelar.setText("Cancelar");
-        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_cancelarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(b_cancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 550, -1, -1));
-
-        jLabel1.setText("Fecha de creacion");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, -1, -1));
-
-        t_fecha_r.setEditable(false);
-        getContentPane().add(t_fecha_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 290, -1));
-
-        t_hora_r.setEditable(false);
-        getContentPane().add(t_hora_r, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 80, 290, -1));
-
-        jLabel12.setText("Hora de creacion");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 50, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 85;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        P_materiales.add(t_precio_uni, gridBagConstraints);
 
         t_cantidad.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -343,52 +626,136 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 t_cantidadKeyPressed(evt);
             }
         });
-        getContentPane().add(t_cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 200, 170, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 155;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        P_materiales.add(t_cantidad, gridBagConstraints);
 
         jLabel13.setText("Cantidad");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 170, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        P_materiales.add(jLabel13, gridBagConstraints);
 
+        jLabel8.setText("Precio uni");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        P_materiales.add(jLabel8, gridBagConstraints);
+
+        jLabel7.setText("Nombre del material");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipady = 3;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        P_materiales.add(jLabel7, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel14.setText("Materiales");
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 130, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        P_materiales.add(jLabel14, gridBagConstraints);
 
-        jLabel15.setText("Conceptos");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 308;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        P_tabla_materiales.add(P_materiales, gridBagConstraints);
 
-        b_añadir_materiales.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
-        b_añadir_materiales.setText("+");
-        b_añadir_materiales.addActionListener(new java.awt.event.ActionListener() {
+        S_materiales.setMaximumSize(new java.awt.Dimension(450, 200));
+        S_materiales.setMinimumSize(new java.awt.Dimension(450, 200));
+        S_materiales.setName(""); // NOI18N
+        S_materiales.setPreferredSize(new java.awt.Dimension(450, 200));
+
+        Tabla_materiales.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Precio uni", "Cantidad", "Total"
+            }
+        ));
+        Tabla_materiales.setMaximumSize(null);
+        Tabla_materiales.setMinimumSize(null);
+        Tabla_materiales.setPreferredSize(null);
+        Tabla_materiales.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_materialesMouseClicked(evt);
+            }
+        });
+        S_materiales.setViewportView(Tabla_materiales);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        P_tabla_materiales.add(S_materiales, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 306;
+        gridBagConstraints.ipady = 91;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 9, 10);
+        jPanel1.add(P_tabla_materiales, gridBagConstraints);
+
+        S_tablas.setViewportView(jPanel1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        getContentPane().add(S_tablas, gridBagConstraints);
+
+        b_derecha.setText(">>");
+        b_derecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_añadir_materialesActionPerformed(evt);
+                b_derechaActionPerformed(evt);
             }
         });
-        b_añadir_materiales.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                b_añadir_materialesKeyPressed(evt);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_derecha, gridBagConstraints);
+
+        b_izquierda.setText("<<");
+        b_izquierda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_izquierdaActionPerformed(evt);
             }
         });
-        getContentPane().add(b_añadir_materiales, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 200, -1, -1));
-
-        l_aviso.setText("Por favor, revise los campos de concepto y precio.");
-        getContentPane().add(l_aviso, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 150, -1, -1));
-
-        jButton2.setText("Exportar");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 510, 80, -1));
-
-        jButton5.setText("Vista previa");
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 550, 80, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_izquierda, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void hora_fecha(){
-        t_fecha_r.setText(java.time.LocalDate.now().toString());
-        LocalTime horaactual = LocalTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String horaFormateada =horaactual.format(formato);
-        t_hora_r.setText(horaFormateada);
         
-    }
-    
     public void calcular_total_m(){
         float cant, precio_uni, total1;
         
@@ -539,11 +906,10 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        hora_fecha();        
+                
         b_añadir_materiales.setText("+");
-        //b_editar.setEnabled(false);
-        l_aviso.setVisible(false);
-        l_aviso.setForeground(Color.red);
+        
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void Tabla_conceptosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_conceptosMouseClicked
@@ -636,7 +1002,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         //limpiar_text_m();
             if(t_nombre_m.getText().trim().isEmpty() || t_precio_uni.getText().trim().isEmpty() || t_cantidad.getText().trim().isEmpty())
             {
-                l_aviso.setVisible(true);
+                
                 return;
             }
             
@@ -781,20 +1147,36 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_b_cancelarActionPerformed
 
     private void t_nombre_mMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nombre_mMouseClicked
-        l_aviso.setVisible(false);
+        
     }//GEN-LAST:event_t_nombre_mMouseClicked
 
     private void t_precio_uniMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_precio_uniMouseClicked
-        l_aviso.setVisible(false);
+        
     }//GEN-LAST:event_t_precio_uniMouseClicked
 
     private void t_cantidadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_cantidadMouseClicked
-        l_aviso.setVisible(false);
+        
     }//GEN-LAST:event_t_cantidadMouseClicked
 
     private void b_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_aceptarActionPerformed
         this.dispose();
     }//GEN-LAST:event_b_aceptarActionPerformed
+
+    private void b_izquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_izquierdaActionPerformed
+       JScrollBar barra = S_tablas.getHorizontalScrollBar();
+       barra.setValue(barra.getMinimum());
+    }//GEN-LAST:event_b_izquierdaActionPerformed
+
+    private void b_derechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_derechaActionPerformed
+        JScrollBar barra = S_tablas.getHorizontalScrollBar();
+        barra.setValue(barra.getMaximum());
+    }//GEN-LAST:event_b_derechaActionPerformed
+
+    private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
+        D_exportar_opciones exportar_opciones = new D_exportar_opciones((java.awt.Frame) this.getParent(), true);
+        exportar_opciones.setLocationRelativeTo(V_R_Cotizacion.this);
+        exportar_opciones.setVisible(true);
+    }//GEN-LAST:event_b_exportarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -835,19 +1217,33 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel P_botones;
+    private javax.swing.JPanel P_calculos_automaticos;
+    private javax.swing.JPanel P_conceptos;
+    private javax.swing.JPanel P_datos_estaticos;
+    private javax.swing.JPanel P_materiales;
+    private javax.swing.JPanel P_tabla_conceptos;
+    private javax.swing.JPanel P_tabla_materiales;
+    private javax.swing.JScrollPane S_botones;
+    private javax.swing.JScrollPane S_conceptos;
+    private javax.swing.JScrollPane S_materiales;
+    private javax.swing.JScrollPane S_tablas;
     private javax.swing.JTable Tabla_conceptos;
     private javax.swing.JTable Tabla_materiales;
     private javax.swing.JButton b_aceptar;
     private javax.swing.JButton b_añadir_concepto;
     private javax.swing.JButton b_añadir_materiales;
     private javax.swing.JButton b_cancelar;
+    private javax.swing.JButton b_cerrar;
+    private javax.swing.JButton b_convertir;
+    private javax.swing.JButton b_derecha;
     private javax.swing.JButton b_editar;
     private javax.swing.JButton b_eliminar;
+    private javax.swing.JButton b_exportar;
+    private javax.swing.JButton b_izquierda;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JInternalFrame jInternalFrame1;
@@ -867,16 +1263,13 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jList1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JLabel l_aviso;
     private javax.swing.JTextField t_cantidad;
     private javax.swing.JTextField t_concepto;
     private javax.swing.JTextField t_fecha_r;
-    private javax.swing.JTextField t_hora_r;
     private javax.swing.JTextField t_iva;
     private javax.swing.JTextField t_n_cotizacion;
     private javax.swing.JTextField t_n_trabajo;
@@ -884,6 +1277,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     private javax.swing.JTextField t_precio;
     private javax.swing.JTextField t_precio_uni;
     private javax.swing.JTextField t_subtotal;
+    private javax.swing.JTextField t_tipo_c;
     private javax.swing.JTextField t_total;
     // End of variables declaration//GEN-END:variables
 }

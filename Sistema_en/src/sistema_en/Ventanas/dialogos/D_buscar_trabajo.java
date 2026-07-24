@@ -4,18 +4,25 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import javax.swing.ListSelectionModel;
+
 /**
  *
  * @author ares
  */
 public class D_buscar_trabajo extends javax.swing.JDialog {
 
+    int fila;
+    
     /**
      * Creates new form D_buscar_trabajo
      */
     public D_buscar_trabajo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Tabla_trabajos.setDefaultEditor(Object.class, null);
+        Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
     }
 
     /**
@@ -26,22 +33,195 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        b_buscar = new javax.swing.JButton();
+        b_limpiar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Tabla_trabajos = new javax.swing.JTable();
+        d_fecha_registro = new com.github.lgooddatepicker.components.DatePicker();
+        c_estado = new javax.swing.JComboBox<>();
+        b_seleccionar = new javax.swing.JButton();
+        b_cancelar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMaximumSize(new java.awt.Dimension(740, 480));
+        setMinimumSize(new java.awt.Dimension(740, 480));
+        setPreferredSize(new java.awt.Dimension(740, 480));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Buscar trabajo");
+        jLabel1.setFont(new java.awt.Font("Inter", 1, 13)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.ipadx = 594;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 16);
+        getContentPane().add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Fecha de registro");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel2, gridBagConstraints);
+
+        jLabel3.setText("Estado");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        b_buscar.setText("Buscar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_buscar, gridBagConstraints);
+
+        b_limpiar.setText("Limpiar");
+        b_limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_limpiarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_limpiar, gridBagConstraints);
+
+        Tabla_trabajos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Descripcion", "Fecha", "Hora", "Estado"
+            }
+        ));
+        Tabla_trabajos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_trabajosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(Tabla_trabajos);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 618;
+        gridBagConstraints.ipady = 156;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 334;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(d_fecha_registro, gridBagConstraints);
+
+        c_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 516;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(c_estado, gridBagConstraints);
+
+        b_seleccionar.setText("Seleccionar");
+        b_seleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_seleccionarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_seleccionar, gridBagConstraints);
+
+        b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_cancelar, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel4.setText("Resultados");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 9, 10);
+        getContentPane().add(jLabel4, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public void limpiar_text(){
+        d_fecha_registro.setDate(null);
+        c_estado.setSelectedItem(null);
+    }
+    
+    private void b_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_limpiarActionPerformed
+        d_fecha_registro.setText("");
+        c_estado.setSelectedItem(null);
+    }//GEN-LAST:event_b_limpiarActionPerformed
+
+    private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
+        fila = Tabla_trabajos.getSelectedRow();
+                if (fila == -1) 
+                {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla.");
+                    return;
+                }
+    }//GEN-LAST:event_b_seleccionarActionPerformed
+
+    private void Tabla_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_trabajosMouseClicked
+        fila = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
+    }//GEN-LAST:event_Tabla_trabajosMouseClicked
+
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_cancelarActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        limpiar_text();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -86,5 +266,17 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Tabla_trabajos;
+    private javax.swing.JButton b_buscar;
+    private javax.swing.JButton b_cancelar;
+    private javax.swing.JButton b_limpiar;
+    private javax.swing.JButton b_seleccionar;
+    private javax.swing.JComboBox<String> c_estado;
+    private com.github.lgooddatepicker.components.DatePicker d_fecha_registro;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

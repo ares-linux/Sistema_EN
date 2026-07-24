@@ -11,7 +11,6 @@ package sistema_en.Objetos;
 public class Cliente {
     private int id_cliente;
     private String nombre_c;
-    private String direccion;
     private String telefono;
     
     public Cliente(){
@@ -60,20 +59,6 @@ public class Cliente {
      */
     public void setNombre_c(String nombre_c) {
         this.nombre_c = nombre_c;
-    }
-
-    /**
-     * @return the direccion
-     */
-    public String getDireccion() {
-        return direccion;
-    }
-
-    /**
-     * @param direccion the direccion to set
-     */
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
     }
 
     /**

@@ -17,7 +17,8 @@ public class Bitacora {
     private LocalDate fecha;
     private LocalTime hora_llegada;
     private LocalTime hora_salida;
-    private String evidencia;
+    private java.util.List<String> evidencias = new java.util.ArrayList<>();
+    private String notas;
     
     public Bitacora(){
         
@@ -82,17 +83,31 @@ public class Bitacora {
     }
 
     /**
-     * @return the evidencia
+     * @return the evidencias
      */
-    public String getEvidencia() {
-        return evidencia;
+    public java.util.List<String> getEvidencias() {
+        return evidencias;
     }
 
     /**
-     * @param evidencia the evidencia to set
+     * @param evidencias the evidencias to set
      */
-    public void setEvidencia(String evidencia) {
-        this.evidencia = evidencia;
+    public void setEvidencias(java.util.List<String> evidencias) {
+        this.evidencias = evidencias;
+    }
+
+    /**
+     * @return the notas
+     */
+    public String getNotas() {
+        return notas;
+    }
+
+    /**
+     * @param notas the notas to set
+     */
+    public void setNotas(String notas) {
+        this.notas = notas;
     }
 
     /**
@@ -122,6 +137,4 @@ public class Bitacora {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-    
-    
 }

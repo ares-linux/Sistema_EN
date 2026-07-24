@@ -1,0 +1,36 @@
+[01;34m.[0m
+├── [01;31mAbsoluteLayout.jar[0m
+├── estructura.txt
+├── [01;31mflatlaf-3.7.1.jar[0m
+├── [01;31mflatlaf-3.7.1-javadoc.jar[0m
+├── [01;31mflatlaf-extras-3.7.1.jar[0m
+├── [01;31mjbcrypt-0.4.jar[0m
+├── [01;31mjcalendar-1.4.jar[0m
+├── [01;31mjna-5.19.1.jar[0m
+├── [01;31mjna-platform-5.19.1.jar[0m
+├── [01;31mjsvg-2.1.0.jar[0m
+├── [01;31mjSystemThemeDetector-3.9.jar[0m
+├── [01;32mLGoodDatePicker-11.2.1.jar[0m
+├── [01;34mlibrerias-google[0m
+│   ├── [01;31mgoogle-api-client-2.2.0.jar[0m
+│   ├── [01;31mgoogle-api-services-drive-v3-rev20230822-2.0.0.jar[0m
+│   ├── [01;31mgoogle-http-client-1.43.3.jar[0m
+│   ├── [01;31mgoogle-http-client-gson-1.42.3.jar[0m
+│   ├── [01;31mgoogle-http-client-jackson2-1.43.3.jar[0m
+│   ├── [01;31mgoogle-oauth-client-1.34.1.jar[0m
+│   ├── [01;31mgoogle-oauth-client-java6-1.34.1.jar[0m
+│   ├── [01;31mgoogle-oauth-client-jetty-1.34.1.jar[0m
+│   ├── [01;31mgrpc-context-1.53.0.jar[0m
+│   ├── [01;31mgson-2.10.1.jar[0m
+│   ├── [01;31mguava-32.1.2-jre.jar[0m
+│   ├── [01;31mjackson-core-2.15.2.jar[0m
+│   ├── [01;31mopencensus-api-0.28.0.jar[0m
+│   └── [01;31mopencensus-contrib-http-util-0.28.0.jar[0m
+├── [01;31mopenpdf-1.3.39.jar[0m
+├── [01;31moshi-core-6.4.0.jar[0m
+├── [01;31mslf4j-api-2.0.13.jar[0m
+├── [01;31mslf4j-simple-2.0.18.jar[0m
+├── [01;32msqlite-jdbc-3.53.2.0.jar[0m
+└── [01;31mswing-toast-notifications-1.0.4.jar[0m
+
+2 directories, 32 files

@@ -5,13 +5,10 @@
 package sistema_en.Ventanas.dialogos;
 
 import java.awt.Image;
-import static java.awt.SystemColor.desktop;
 import javax.swing.ImageIcon;
 
 import java.awt.Desktop;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  *
@@ -25,6 +22,7 @@ public class D_acerca_de extends javax.swing.JDialog {
     public D_acerca_de(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
     }
 
     /**
@@ -35,48 +33,38 @@ public class D_acerca_de extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel2 = new javax.swing.JLabel();
         l_foto = new javax.swing.JLabel();
+        b_descargar_manual = new javax.swing.JButton();
+        b_licencias = new javax.swing.JButton();
+        b_soporte = new javax.swing.JButton();
+        b_buscar_actualizaciones = new javax.swing.JButton();
+        b_cerrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        b_descargar_manual = new javax.swing.JButton();
-        b_licencias = new javax.swing.JButton();
-        b_soporte = new javax.swing.JButton();
-        b_cerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(250, 610));
+        setMinimumSize(new java.awt.Dimension(250, 610));
+        setPreferredSize(new java.awt.Dimension(250, 610));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Sistema de gestion ");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 265, 430, -1));
-        getContentPane().add(l_foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, 200, 200));
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Version");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-4, 299, 430, -1));
-
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("© 2026 Softium S.A.");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-1, 333, 430, -1));
-
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Desarrollado por el equipo de softium");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 367, 430, -1));
-
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Documentación y Ayuda:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 401, 430, -1));
+        l_foto.setMaximumSize(new java.awt.Dimension(200, 200));
+        l_foto.setMinimumSize(new java.awt.Dimension(200, 200));
+        l_foto.setPreferredSize(new java.awt.Dimension(200, 200));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(11, 15, 10, 16);
+        getContentPane().add(l_foto, gridBagConstraints);
 
         b_descargar_manual.setText("Descargar manual de usuarios");
         b_descargar_manual.addActionListener(new java.awt.event.ActionListener() {
@@ -84,7 +72,13 @@ public class D_acerca_de extends javax.swing.JDialog {
                 b_descargar_manualActionPerformed(evt);
             }
         });
-        getContentPane().add(b_descargar_manual, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 435, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
+        getContentPane().add(b_descargar_manual, gridBagConstraints);
 
         b_licencias.setText("Licencias de terceros");
         b_licencias.addActionListener(new java.awt.event.ActionListener() {
@@ -92,7 +86,13 @@ public class D_acerca_de extends javax.swing.JDialog {
                 b_licenciasActionPerformed(evt);
             }
         });
-        getContentPane().add(b_licencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(237, 435, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
+        getContentPane().add(b_licencias, gridBagConstraints);
 
         b_soporte.setText("Soporte tecnico");
         b_soporte.addActionListener(new java.awt.event.ActionListener() {
@@ -100,7 +100,22 @@ public class D_acerca_de extends javax.swing.JDialog {
                 b_soporteActionPerformed(evt);
             }
         });
-        getContentPane().add(b_soporte, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 477, 332, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
+        getContentPane().add(b_soporte, gridBagConstraints);
+
+        b_buscar_actualizaciones.setText("Buscar actualizaciones");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
+        getContentPane().add(b_buscar_actualizaciones, gridBagConstraints);
 
         b_cerrar.setText("Cerrar");
         b_cerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -108,23 +123,62 @@ public class D_acerca_de extends javax.swing.JDialog {
                 b_cerrarActionPerformed(evt);
             }
         });
-        getContentPane().add(b_cerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 513, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
+        getContentPane().add(b_cerrar, gridBagConstraints);
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Version");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(5, 16, 5, 15);
+        getContentPane().add(jLabel1, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("© 2026 Softium S.A.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 16, 5, 15);
+        getContentPane().add(jLabel4, gridBagConstraints);
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Desarrollado por el equipo de softium");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(5, 16, 5, 15);
+        getContentPane().add(jLabel5, gridBagConstraints);
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("Documentación y Ayuda:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(5, 16, 5, 15);
+        getContentPane().add(jLabel6, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void cargar_imagen(){
-        ImageIcon iconoOriginal = new ImageIcon("src/Imagenes/logo 2.0.png");
+    public void cargar_imagen() {
+        //ImageIcon iconoOriginal = new ImageIcon("src/Imagenes/logo 2.0.png");
+        ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/Imagenes/logo 2.0.png"));
 
-            
-            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-            l_foto.setIcon(new ImageIcon(imagenEscalada));
+        Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        l_foto.setIcon(new ImageIcon(imagenEscalada));
 
         if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
-            }
+            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en el formulario acerca de.");
+        }
     }
-    
+
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
         this.dispose();
     }//GEN-LAST:event_b_cerrarActionPerformed
@@ -134,42 +188,43 @@ public class D_acerca_de extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowOpened
 
     private void b_licenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_licenciasActionPerformed
-        D_licencias_terceros licencias = new D_licencias_terceros((java.awt.Frame) this.getParent(), true);
+        D_licencias_terceros_tabla licencias = new D_licencias_terceros_tabla((java.awt.Frame) this.getParent(), true);
+        licencias.setLocationRelativeTo(D_acerca_de.this);
+        java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        licencias.setBounds(zonaSegura); // Forzamos al diálogo a tomar todo ese tamaño
         licencias.setVisible(true);
     }//GEN-LAST:event_b_licenciasActionPerformed
 
     private void b_soporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_soporteActionPerformed
-       try {
-        //desclaramos la url en una variable porque uri no acepta texto   
-        String url = "https://sites.google.com/view/softium-equipo/p%C3%A1gina-principal";
+        try {
+            //desclaramos la url en una variable porque uri no acepta texto   
+            String url = "https://sites.google.com/view/softium-equipo/p%C3%A1gina-principal";
 
-        //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
-        
-        if (Desktop.isDesktopSupported()) {
-            //lanzamos la url
-            Desktop.getDesktop().browse(new URI(url));
+            //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
+            if (Desktop.isDesktopSupported()) {
+                //lanzamos la url
+                Desktop.getDesktop().browse(new URI(url));
+            }
+        } catch (Exception e) {
+            //lazamos una exepcion si falla
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        //lazamos una exepcion si falla
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_b_soporteActionPerformed
 
     private void b_descargar_manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_manualActionPerformed
         try {
-        //desclaramos la url en una variable porque uri no acepta texto   
-        String url = "https://sites.google.com/view/softium-equipo/p%C3%A1gina-principal";
+            //desclaramos la url en una variable porque uri no acepta texto   
+            String url = "https://sites.google.com/view/softium-equipo/p%C3%A1gina-principal";
 
-        //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
-        
-        if (Desktop.isDesktopSupported()) {
-            //lanzamos la url
-            Desktop.getDesktop().browse(new URI(url));
+            //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
+            if (Desktop.isDesktopSupported()) {
+                //lanzamos la url
+                Desktop.getDesktop().browse(new URI(url));
+            }
+        } catch (Exception e) {
+            //lazamos una exepcion si falla
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        //lazamos una exepcion si falla
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_b_descargar_manualActionPerformed
 
     /**
@@ -215,12 +270,12 @@ public class D_acerca_de extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton b_buscar_actualizaciones;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_descargar_manual;
     private javax.swing.JButton b_licencias;
     private javax.swing.JButton b_soporte;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
