@@ -336,11 +336,6 @@ public class V_bitacora extends javax.swing.JFrame {
 
         P_evidencias.setLayout(new java.awt.GridBagLayout());
 
-        L_evidencias.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         L_evidencias.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 L_evidenciasKeyPressed(evt);
