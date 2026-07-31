@@ -4,6 +4,7 @@
  */
 package sistema_en.Ventanas;
 
+import dao.ConfiguracionesDAO;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import org.mindrot.jbcrypt.BCrypt;
 import java.sql.Connection;
+import java.util.List;
 
 /**
  *
@@ -22,6 +24,7 @@ import java.sql.Connection;
  */
 public class V_login_user extends javax.swing.JFrame {
     
+    private boolean sonido;
     int intentos = 0;
 
     /**
@@ -32,6 +35,26 @@ public class V_login_user extends javax.swing.JFrame {
         cargar_foto();
         pack();
         
+        ConfiguracionesDAO dao = new ConfiguracionesDAO();
+        List<String[]> configs = dao.obtenerConfiguraciones();
+    
+        for (String[] conf : configs) {
+
+        String clave = conf[1];
+        String valor = conf[2];
+
+        switch (clave) {
+
+            case "sonido_error":
+                if ("true".equals(valor)){
+                    sonido = true;
+                }
+                else if ("false".equals(valor)){
+                    sonido = false;
+                }
+                break;
+        }
+        }
     }
 
     /**
@@ -249,12 +272,16 @@ public class V_login_user extends javax.swing.JFrame {
     
         if (usuarioIngresado.isEmpty()) {
             l_aviso_user.setVisible(true);
-            r_sonido.reproducir("/audios/error.wav");
+            if (sonido == true){
+                    r_sonido.reproducir("/audios/error.wav");
+                }
             return;
         }
         if (passwordIngresada.isEmpty()) {
             l_aviso_contra.setVisible(true);
-            r_sonido.reproducir("/audios/error.wav");
+            if (sonido == true){
+                    r_sonido.reproducir("/audios/error.wav");
+                }
             return;
         }
 
@@ -305,7 +332,9 @@ public class V_login_user extends javax.swing.JFrame {
         if (error) {
             intentos++; 
             if (intentos < 5) {
-                r_sonido.reproducir("/audios/error.wav");
+                if (sonido == true){
+                    r_sonido.reproducir("/audios/error.wav");
+                }
             } else {
                 System.out.println("Límite alcanzado. Próximos intentos erróneos no sonarán.");
             }

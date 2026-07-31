@@ -3,7 +3,7 @@
     <description>Builds, tests, and runs the project Sistema_en.</description>
     <import file="nbproject/build-impl.xml"/>
 
-    <target name="-post-jar">
+    <!--<target name="-post-jar">
 
         <taskdef resource="proguard/ant/task.properties">
             <classpath>
@@ -25,7 +25,7 @@
             -libraryjars &lt;java.home&gt;/jmods/java.desktop.jmod(!module-info.class)
             -libraryjars &lt;java.home&gt;/jmods/java.datatransfer.jmod(!module-info.class)
 
-            -libraryjars dist/lib
+            -libraryjars dist/lib/*.jar
 
             -dontwarn java.**
             -dontwarn javax.**
@@ -41,15 +41,16 @@
             }
 
             -keep class sistema_en.Ventanas.** { *; }
-            -keep class Conexion { *; }
-            -keep class sistema_en.dao.** { *; }
+            -keep class sistema_en.Conexion { *; }
+            -keep class dao.** { *; }
             -keep class com.formdev.flatlaf.** { *; }
             -keep class org.sqlite.** { *; }
+            -keep class java.sql.** { *; }
+            -keep class javax.swing.** { *; }
 
             -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
             -dontoptimize
             -dontshrink
-            -allowaccessmodification
 
             -dontnote jdk.internal.**
             -dontnote com.formdev.flatlaf.**
@@ -61,6 +62,6 @@
         <delete file="dist/Sistema_en_original.jar" />
 
         <echo message="¡ProGuard ha protegido tu archivo ejecutable con éxito!" />
-    </target>
+    </target>-->
 
 </project>

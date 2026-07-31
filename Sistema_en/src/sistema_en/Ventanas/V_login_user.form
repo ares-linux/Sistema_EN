@@ -129,10 +129,10 @@
     </Component>
     <Component class="javax.swing.JButton" name="b_ingresar">
       <Properties>
+        <Property name="text" type="java.lang.String" value="Ingresar"/>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ca" green="65" red="2f" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Ingresar"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_ingresarActionPerformed"/>

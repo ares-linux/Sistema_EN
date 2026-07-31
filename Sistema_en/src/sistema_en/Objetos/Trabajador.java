@@ -15,7 +15,7 @@ public class Trabajador {
     private String foto;
     private String puesto;
     private String f_nac;
-    private String CURP;
+    private String curp;
     private String rfc;
     
     
@@ -110,20 +110,6 @@ public class Trabajador {
     }
 
     /**
-     * @return the CURP
-     */
-    public String getCURP() {
-        return CURP;
-    }
-
-    /**
-     * @param CURP the CURP to set
-     */
-    public void setCURP(String CURP) {
-        this.CURP = CURP;
-    }
-
-    /**
      * @return the rfc
      */
     public String getRfc() {
@@ -149,5 +135,19 @@ public class Trabajador {
      */
     public void setF_nac(String f_nac) {
         this.f_nac = f_nac;
+    }
+
+    /**
+     * @return the curp
+     */
+    public String getCurp() {
+        return curp;
+    }
+
+    /**
+     * @param curp the curp to set
+     */
+    public void setCurp(String curp) {
+        this.curp = curp;
     }
 }

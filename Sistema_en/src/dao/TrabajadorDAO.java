@@ -10,7 +10,7 @@ import sistema_en.Conexion;
 
 public class TrabajadorDAO {
         
-    public boolean insertarTrabajador(String nombre, String sexo, String puesto,String rfc, String curp, String fechaNac, String foto) {
+    public boolean insertarTrabajador(String nombre, String sexo, String puesto,String rfc, String curp, String f_nac, String foto) {
         
         String sql = "INSERT INTO Trabajador (nombre, sexo, puesto, rfc, curp, f_nac, foto) " + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -22,7 +22,7 @@ public class TrabajadorDAO {
             ps.setString(3, puesto);
             ps.setString(4, rfc);
             ps.setString(5, curp);
-            ps.setString(6, fechaNac);
+            ps.setString(6, f_nac);
             ps.setString(7, foto);
 
             int filasAfectadas = ps.executeUpdate();
@@ -36,7 +36,7 @@ public class TrabajadorDAO {
     
     public List<String[]> obtenerTrabajadores() {
     List<String[]> lista = new ArrayList<>();
-    String sql = "SELECT id, nombre, sexo, puesto, rfc, curp, f_nac, foto FROM Trabajador";
+    String sql = "SELECT id_trabajador, nombre, sexo, puesto, rfc, curp, f_nac, foto FROM Trabajador";
     
     Connection con = Conexion.conectar();
 
@@ -50,7 +50,7 @@ public class TrabajadorDAO {
 
         while (rs.next()) {
             String[] fila = new String[8];
-            fila[0] = String.valueOf(rs.getInt("id"));
+            fila[0] = String.valueOf(rs.getInt("id_trabajador"));
             fila[1] = rs.getString("nombre");
             fila[2] = rs.getString("sexo");
             fila[3] = rs.getString("puesto");
@@ -100,16 +100,16 @@ public class TrabajadorDAO {
 
         try (ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                // Definimos el arreglo con las 8 columnas que tiene tu JTable
+                
                 String[] trabajador = new String[8]; 
-                trabajador[0] = rs.getString("id");
+                trabajador[0] = rs.getString("id_trabajador");
                 trabajador[1] = rs.getString("nombre");
                 trabajador[2] = rs.getString("sexo");
                 trabajador[3] = rs.getString("puesto");
                 trabajador[4] = rs.getString("rfc");
                 trabajador[5] = rs.getString("curp");
                 trabajador[6] = rs.getString("f_nac");
-                trabajador[7] = rs.getString("foto"); // Si es ruta de texto o base64
+                trabajador[7] = rs.getString("foto");
                 
                 lista.add(trabajador);
             }
@@ -120,13 +120,13 @@ public class TrabajadorDAO {
     return lista;
 }
     
-public boolean eliminarTrabajador(int id) {
-    String sql = "DELETE FROM Trabajador WHERE id = ?";
+public boolean eliminarTrabajador(int id_trabajador) {
+    String sql = "DELETE FROM Trabajador WHERE id_trabajador = ?";
 
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setInt(1, id);
+        ps.setInt(1, id_trabajador);
 
         int filasAfectadas = ps.executeUpdate();
         return filasAfectadas > 0; 
@@ -137,8 +137,8 @@ public boolean eliminarTrabajador(int id) {
     }
 }
 
-public boolean actualizarTrabajador(int id, String nombre, String sexo, String puesto, String rfc, String curp, String fechaNac, String foto) {
-    String sql = "UPDATE Trabajador SET nombre = ?, sexo = ?, puesto = ?, rfc = ?, curp = ?, f_nac = ?, foto = ? WHERE id = ?";
+public boolean actualizarTrabajador(int id_trabajador, String nombre, String sexo, String puesto, String rfc, String curp, String f_nac, String foto) {
+    String sql = "UPDATE Trabajador SET nombre = ?, sexo = ?, puesto = ?, rfc = ?, curp = ?, f_nac = ?, foto = ? WHERE id_trabajador = ?";
 
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sql)) {
@@ -148,9 +148,9 @@ public boolean actualizarTrabajador(int id, String nombre, String sexo, String p
         ps.setString(3, puesto);
         ps.setString(4, rfc);
         ps.setString(5, curp);
-        ps.setString(6, fechaNac);
+        ps.setString(6, f_nac);
         ps.setString(7, foto);
-        ps.setInt(8, id); 
+        ps.setInt(8, id_trabajador); 
 
         int filasAfectadas = ps.executeUpdate();
         return filasAfectadas > 0; 

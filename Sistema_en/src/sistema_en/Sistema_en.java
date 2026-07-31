@@ -40,7 +40,7 @@ public class Sistema_en {
     switch (clave) {
 
         case "tema" -> {
-            if ("claro".equals(valor)){
+            if ("Claro".equals(valor)){
             
             FlatLightLaf.setup();
             //java.awt.EventQueue.invokeLater(() -> {
@@ -49,7 +49,7 @@ public class Sistema_en {
             login.setVisible(true);
             }
             
-            else if ("oscuro".equals(valor)){
+            else if ("Oscuro".equals(valor)){
             
             FlatDarkLaf.setup();
             //java.awt.EventQueue.invokeLater(() -> {
@@ -58,7 +58,7 @@ public class Sistema_en {
             login.setVisible(true);
             }
             
-            else if ("automatico".equals(valor)){
+            else if ("Automatico".equals(valor)){
                     
                 OsThemeDetector detector = OsThemeDetector.getDetector();
                 Runnable updateTheme = () -> {

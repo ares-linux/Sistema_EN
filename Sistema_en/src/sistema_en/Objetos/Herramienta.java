@@ -10,7 +10,7 @@ package sistema_en.Objetos;
  */
 public class Herramienta {
     private int id_herramienta;
-    private String t_herramienta;
+    private int t_herramienta;
     private String n_serie;
     private String foto;
     
@@ -44,19 +44,7 @@ public class Herramienta {
         this.id_herramienta = id_herramienta;
     }
 
-    /**
-     * @return the t_herramienta
-     */
-    public String getT_herramienta() {
-        return t_herramienta;
-    }
-
-    /**
-     * @param t_herramienta the t_herramienta to set
-     */
-    public void setT_herramienta(String t_herramienta) {
-        this.t_herramienta = t_herramienta;
-    }
+    
 
     /**
      * @return the n_serie
@@ -84,6 +72,20 @@ public class Herramienta {
      */
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    /**
+     * @return the t_herramienta
+     */
+    public int getT_herramienta() {
+        return t_herramienta;
+    }
+
+    /**
+     * @param t_herramienta the t_herramienta to set
+     */
+    public void setT_herramienta(int t_herramienta) {
+        this.t_herramienta = t_herramienta;
     }
 
     

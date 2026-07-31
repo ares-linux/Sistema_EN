@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import sistema_en.Ventanas.dialogos.D_exportar_opciones;
 
 /**
  *
@@ -726,6 +725,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(S_tablas, gridBagConstraints);
 
+        b_derecha.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         b_derecha.setText(">>");
         b_derecha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -739,6 +739,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_derecha, gridBagConstraints);
 
+        b_izquierda.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         b_izquierda.setText("<<");
         b_izquierda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1172,10 +1173,13 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         barra.setValue(barra.getMaximum());
     }//GEN-LAST:event_b_derechaActionPerformed
 
+    
     private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
-        D_exportar_opciones exportar_opciones = new D_exportar_opciones((java.awt.Frame) this.getParent(), true);
-        exportar_opciones.setLocationRelativeTo(V_R_Cotizacion.this);
-        exportar_opciones.setVisible(true);
+        //D_exportar_opciones exportar_opciones = new D_exportar_opciones((java.awt.Frame) this.getParent(), true);
+        //exportar_opciones.setLocationRelativeTo(V_R_Cotizacion.this);
+        //exportar_opciones.setVisible(true);
+        
+        
     }//GEN-LAST:event_b_exportarActionPerformed
 
     /**

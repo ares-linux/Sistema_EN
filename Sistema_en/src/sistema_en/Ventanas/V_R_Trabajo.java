@@ -18,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Trabajo;
-import sistema_en.Ventanas.dialogos.D_buscar_trabajo;
 
 /**
  *
@@ -77,7 +76,6 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        l_aviso = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         l_nombre = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -113,27 +111,74 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             }
         });
 
-        l_aviso.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        l_aviso.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        l_aviso.setText("aviso");
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Registrar trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 681;
+        gridBagConstraints.ipady = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel1, gridBagConstraints);
 
         l_nombre.setText("Nombre de cliente");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(l_nombre, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel1.add(jLabel3, gridBagConstraints);
 
         l_telefono.setText("Telefono");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(l_telefono, gridBagConstraints);
 
         l_direccion.setText("Direccion");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(l_direccion, gridBagConstraints);
 
         l_descripcion.setText("Descripcion de trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(l_descripcion, gridBagConstraints);
 
         l_fecha.setText("Fecha");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(l_fecha, gridBagConstraints);
 
         l_hora.setText("Hora");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(l_hora, gridBagConstraints);
 
         l_id.setText("id");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(l_id, gridBagConstraints);
 
         t_nombre.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -145,6 +190,14 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 t_nombreKeyPressed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 600;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(t_nombre, gridBagConstraints);
 
         t_telefono.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -156,22 +209,67 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 t_telefonoKeyPressed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 637;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(t_telefono, gridBagConstraints);
 
         t_direccion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_direccionKeyPressed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 633;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(t_direccion, gridBagConstraints);
 
         t_fecha_r.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 653;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(t_fecha_r, gridBagConstraints);
 
         t_hora_r.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 653;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(t_hora_r, gridBagConstraints);
 
         t_id.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 t_idKeyPressed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 676;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(t_id, gridBagConstraints);
 
         b_buscar_cliente.setText("Buscar cliente");
         b_buscar_cliente.addActionListener(new java.awt.event.ActionListener() {
@@ -179,6 +277,13 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 b_buscar_clienteActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(b_buscar_cliente, gridBagConstraints);
 
         P_botones.setLayout(new java.awt.GridBagLayout());
 
@@ -259,97 +364,30 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_botones.add(b_cancelar, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(P_botones, gridBagConstraints);
+
         T_descripcion.setColumns(20);
         T_descripcion.setRows(5);
         jScrollPane2.setViewportView(T_descripcion);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(l_descripcion)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane2))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(l_direccion)
-                                .addGap(18, 18, 18)
-                                .addComponent(t_direccion))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(l_telefono)
-                                .addGap(18, 18, 18)
-                                .addComponent(t_telefono))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(l_id)
-                                .addGap(18, 18, 18)
-                                .addComponent(t_id))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(l_nombre)
-                                .addGap(18, 18, 18)
-                                .addComponent(t_nombre)
-                                .addGap(18, 18, 18)
-                                .addComponent(b_buscar_cliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(l_hora)
-                                    .addComponent(l_fecha))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(t_fecha_r)
-                                    .addComponent(t_hora_r))))
-                        .addGap(32, 32, 32))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(l_aviso, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(P_botones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 247, Short.MAX_VALUE))))
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(l_aviso)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(l_id)
-                    .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(l_nombre)
-                    .addComponent(t_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(b_buscar_cliente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(l_telefono)
-                    .addComponent(t_telefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(l_direccion)
-                    .addComponent(t_direccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(l_descripcion)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(t_fecha_r, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(l_fecha))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(l_hora)
-                    .addComponent(t_hora_r, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(P_botones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 555;
+        gridBagConstraints.ipady = 40;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jScrollPane2, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -360,9 +398,10 @@ public class V_R_Trabajo extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre ", "Telefono", "Direccion", "Descripcion", "Fecha", "Hora"
+                "Id", "Nombre ", "Telefono", "Direccion", "Descripcion", "Fecha", "Hora", "Estado", "fecha de inicio", "fecha de fin"
             }
         ));
+        Tabla_trabajos.setToolTipText("");
         Tabla_trabajos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_trabajosMouseClicked(evt);
@@ -374,7 +413,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+        
     public void campos_bloquedos_edicion(){
             t_telefono.setEditable(false);
             t_nombre.setEditable(false);
@@ -449,7 +488,6 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             error = true;
         }
         
-        
         if (!t_id.getText().trim().isEmpty()) {
             l_id.setForeground(null);
             error = false;
@@ -484,49 +522,24 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         l_telefono.setForeground(null);
         l_direccion.setForeground(null);
         l_descripcion.setForeground(null);
-        //l_fecha.setForeground(null);
-        //l_hora.setForeground(null);
     }
     
     public void creacion_exitosa(){       
-        
-            l_aviso.setForeground(Color.decode("#008000"));
             String mensaje;
             mensaje = "El trabajo fue registrado con éxito.";
             Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
-            
-
-            //toast = mensaje;
-            //l_aviso.setText(mensaje);
-            //l_aviso.setVisible(true);
-            
-            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-            //    @Override
-            //    public void actionPerformed(java.awt.event.ActionEvent e) {
-            //    l_aviso.setText(""); // Se limpia el mensaje solo
-            //    l_aviso.setVisible(false);
-            //}
-            //}).start();  
     }
     
     public void edicion_exitosa(){
-        
-            l_aviso.setForeground(Color.decode("FFA500"));
             String mensaje;
             mensaje = "✓ Cambios guardados con éxito.";
-            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
-      
-            //toast = mensaje;
-            //l_aviso.setText(mensaje);
-            //l_aviso.setVisible(true);
-            
-            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-            //    @Override
-            //    public void actionPerformed(java.awt.event.ActionEvent e) {
-            //    l_aviso.setText(""); // Se limpia el mensaje solo
-            //    l_aviso.setVisible(false);
-            //}
-            //}).start();  
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje); 
+    }
+    
+    public void eliminacion_exitosa(){
+            String mensaje;
+            mensaje = "Trabajo eliminado correctamente";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje); 
     }
     
     public void bloquear_text(){
@@ -630,7 +643,6 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         llenar_tabla();
         b_buscar_cliente.setEnabled(false);
         t_nombre.requestFocus();
-        l_aviso.setVisible(false);
         b_cancelar.setEnabled(false);
         hora_fecha();
         llenar_text();
@@ -674,22 +686,27 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     }//GEN-LAST:event_t_idKeyPressed
 
     private void Tabla_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_trabajosMouseClicked
-        fila = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
-        cargar_datos_tabla(fila);
-        //this.idClienteSeleccionado = trabajo.getCliente();
-        //int indice = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
-        //cargar_datos_tabla(indice);
+        if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
+            return;
+        }
+        else{
+            fila = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
+            cargar_datos_tabla(fila);
+        }
+        
     }//GEN-LAST:event_Tabla_trabajosMouseClicked
 
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
         if ("Nuevo".equals(b_nuevo.getText())) {
-            t_nombre.requestFocus(); // Enfocamos directo al nombre, ya que el ID es automático
+            t_nombre.requestFocus(); 
             desbloquear_text();
-            t_id.setEnabled(false); // Mantenemos el ID bloqueado porque es autoincremental
+            t_id.setEnabled(false); 
             b_cancelar.setEnabled(true);   
             b_nuevo.setText("Guardar");
             limpiar_text();
-            bloquear_botones(); 
+            bloquear_botones();
+            b_buscar_cliente.setEnabled(true);
+            Tabla_trabajos.setEnabled(false);
         } else {
             // Validamos todos los campos excepto el ID (porque se autogenera)
             if(t_nombre.getText().trim().isEmpty() || t_direccion.getText().trim().isEmpty() 
@@ -698,43 +715,53 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 return;
             }
             
-            // Recolectamos datos de los JTextField
             String nombre = t_nombre.getText().trim();
             String telefono = t_telefono.getText().trim();
-            String direccion = t_direccion.getText().trim();
-            String descripcion = T_descripcion.getText().trim();
-            String fecha = t_fecha_r.getText();
-            String hora = t_hora_r.getText();
-            
-            String estado = "Pendiente"; // Estado inicial por defecto según tu esquema
 
-            ClienteDAO clienteDao = new ClienteDAO();
-            //int idClienteSeleccionado = -1;
-            TrabajoDAO trabajoDao = new TrabajoDAO();
-            
-            
-            // 1. Insertamos el cliente y recuperamos su ID generado
-            int idClienteGenerado = clienteDao.insertarClienteYObtenerID(nombre, telefono);
+            int idClienteFinal = idClienteSeleccionado;
 
-            // 2. Si el cliente se guardó con éxito, vinculamos el trabajo usando ese ID
-            if (idClienteGenerado != -1) {
-                // Pasamos los parámetros correctos alineados a tu TrabajoDAO:
-                // descripcion, fecha, hora, estado, idCliente
-                boolean trabajoGuardado = trabajoDao.insertarTrabajo(direccion, descripcion, fecha, hora, estado, idClienteGenerado);
+            if (idClienteFinal == -1) {
+                if (nombre.isEmpty() || telefono.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Por favor, ingresa o selecciona un cliente.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+    
+                // Buscamos si ya existe con esos datos o lo creamos sin duplicar
+                ClienteDAO clienteDao = new ClienteDAO();
+                idClienteFinal = clienteDao.obtenerOCrearCliente(nombre, telefono);
+            }
 
-                if (trabajoGuardado) {
-                    creacion_exitosa(); 
-                    limpiar_text();
+            // 3. Verificamos que tengamos un ID válido antes de registrar el trabajo
+            if (idClienteFinal != -1) {
+                TrabajoDAO trabajoDao = new TrabajoDAO();
+    
+                // Obtenemos los demás datos del trabajo de tus inputs...
+                String direccion = t_direccion.getText();
+                String descripcion = T_descripcion.getText();
+                String fecha = t_fecha_r.getText();
+                String hora = t_hora_r.getText();
+                String estado = "Pendiente"; // O el estado que manejes
+    
+                boolean guardado = trabajoDao.insertarTrabajo(direccion, descripcion, fecha, hora, estado, idClienteFinal);
+    
+                if (guardado) {
+                    JOptionPane.showMessageDialog(this, "¡Trabajo registrado con éxito!");
+                    Tabla_trabajos.setEnabled(true);
+                    b_buscar_cliente.setEnabled(false);
+                    creacion_exitosa();
                     bloquear_text();
                     desbloquear_botones();
-                    b_nuevo.setText("Nuevo");
+                    b_nuevo.setText( "Nuevo") ;
                     b_cancelar.setEnabled(false);
-                    llenar_tabla(); // Refresca la JTable con el INNER JOIN
+                    limpiar_text();
+                    bloquear_text();
+                    llenar_tabla();
+                    idClienteSeleccionado = -1; 
                 } else {
-                    JOptionPane.showMessageDialog(this, "Se creó el cliente, pero no se pudo registrar el trabajo.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Error al guardar el trabajo en la BD.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Error al guardar los datos del cliente.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No se pudo procesar el cliente.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
@@ -746,47 +773,32 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para editar.");
                 return;
             }
-            
-            // Opcional: Aquí deberías recuperar el idCliente del objeto o fila seleccionada
-            // idClienteSeleccionado = ...
-            
+            Tabla_trabajos.setEnabled(false);           
             campos_bloquedos_edicion();
-            
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
             b_eliminar.setEnabled(false);
             b_buscar.setEnabled(false);
             b_cancelar.setEnabled(true);
             desbloquear_text();
-            t_id.setEnabled(false); // El ID nunca se debe poder editar
+            t_id.setEnabled(false); 
         } else {
-            // Fase de GUARDAR la edición
-            if(t_nombre.getText().trim().isEmpty() || t_direccion.getText().trim().isEmpty() 
-               || T_descripcion.getText().trim().isEmpty() || t_telefono.getText().trim().isEmpty()) {
+            if(t_direccion.getText().trim().isEmpty() || T_descripcion.getText().trim().isEmpty()) {
                 aviso_labels();
                 return;
             }
 
-            int idTrabajo = Integer.parseInt(t_id.getText());
-            String nombre = t_nombre.getText().trim();
-            String telefono = t_telefono.getText().trim();
+            int id_trabajo = Integer.parseInt(t_id.getText());
             String direccion = t_direccion.getText().trim();
             String descripcion = T_descripcion.getText().trim();
-            String fecha = t_fecha_r.getText();
-            String hora = t_hora_r.getText();
-            String estado = "Pendiente"; 
-
-            ClienteDAO clienteDao = new ClienteDAO();
+            
             TrabajoDAO trabajoDao = new TrabajoDAO();
 
-            // 1. Actualizamos el Cliente (Solo nombre y teléfono, sin dirección)
-            boolean clienteActualizado = clienteDao.actualizarCliente(idClienteSeleccionado, nombre, telefono);
-            
-            // 2. Actualizamos el Trabajo (Aquí SÍ va la dirección)
-            boolean trabajoActualizado = trabajoDao.actualizarTrabajo(idTrabajo, direccion, descripcion, fecha, hora, estado);
+            boolean trabajoActualizado = trabajoDao.actualizarTrabajo(id_trabajo, direccion, descripcion);
 
-            if (clienteActualizado && trabajoActualizado) {
-                edicion_exitosa(); // Llama a tu notificación naranja
+            if (trabajoActualizado) {
+                Tabla_trabajos.setEnabled(true);
+                edicion_exitosa(); 
                 restablecer_campos_bloquedos_edicion();
                 limpiar_text();
                 bloquear_text();
@@ -802,26 +814,36 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     }//GEN-LAST:event_b_editarActionPerformed
 
     private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
-        
-        fila= Tabla_trabajos.getSelectedRow();
-        
-        DefaultTableModel modelo2 = (DefaultTableModel) this.Tabla_trabajos.getModel();
-        if (this.Tabla_trabajos.getRowCount()>0){
-            if(fila == -1){
-                return;
-            }
-            modelo2.removeRow(fila);
-            this.Tabla_trabajos.setModel(modelo2);
-            fila = fila-1;
-            if (fila<0)
-            {
-                limpiar_text();
-            }
-            else
-            {
-                cargar_datos_tabla(fila);
-            }
+
+        int filaSeleccionada = Tabla_trabajos.getSelectedRow();
+    
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un trabajo de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
         }
+
+        String idString = Tabla_trabajos.getValueAt(filaSeleccionada, 0).toString();
+        int id = Integer.parseInt(idString);
+        //String id_trabajo = Tabla_trabajos.getValueAt(filaSeleccionada, 0).toString();
+
+        int respuesta = JOptionPane.showConfirmDialog( this, "¿Estás seguro de que deseas eliminar este trabajo: " + id + "?",  "Confirmar Eliminación",  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+   
+            TrabajoDAO dao = new TrabajoDAO();
+            boolean eliminadoExitoso = dao.eliminarTrabajo(id);
+
+        if (eliminadoExitoso) {
+            //JOptionPane.showMessageDialog(this, "¡Trabajo eliminado con éxito!");
+            eliminacion_exitosa();
+            limpiar_text();
+            llenar_tabla(); 
+            desbloquear_botones();
+            bloquear_text();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hubo un error al intentar eliminar el registro de la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_b_eliminarActionPerformed
 
     private void b_nuevoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_nuevoKeyPressed
@@ -847,6 +869,19 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         D_buscar_cliente buscar = new D_buscar_cliente(this, true);
         buscar.setLocationRelativeTo(V_R_Trabajo.this);
         buscar.setVisible(true);
+        
+        int idCliente = buscar.getFila();
+        
+        
+        ClienteDAO dao = new ClienteDAO();
+
+        Cliente cliente = dao.obtenerCliente(idCliente);
+
+        if(cliente != null){
+
+            t_nombre.setText(cliente.getNombre_c());
+            t_telefono.setText(cliente.getTelefono());
+        }
     }//GEN-LAST:event_b_buscar_clienteActionPerformed
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
@@ -863,6 +898,40 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     }//GEN-LAST:event_b_cerrarActionPerformed
 
     private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+
+        boolean es_nuevo = "Guardar".equals(b_nuevo.getText());
+        boolean es_editar = "Guardar".equals(b_editar.getText());
+
+        if (es_nuevo || es_editar) {
+    
+        // --- MODO NUEVO ---
+            if (es_nuevo) {
+                // Validación: Si los campos NO están vacíos, pedimos confirmación
+                if (!campos_vacios()) { 
+                    int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar el registro? Se perderán los datos introducidos.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos y no cancelamos nada
+                }
+            }
+            // Si estaban vacíos o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+    
+        // --- MODO EDITAR ---
+        else if (es_editar) {
+           
+            if (datos_moficados()) { 
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; 
+                }
+            }
+        }
         restablecer_color();
         limpiar_text();
         bloquear_text();
@@ -872,12 +941,34 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         b_editar.setText("Editar");
         b_editar.setEnabled(true);
         b_cancelar.setEnabled(false);
+        Tabla_trabajos.setEnabled(true);
+
+        int filaSeleccionada = Tabla_trabajos.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            cargar_datos_tabla(filaSeleccionada);
+        } else {
+            limpiar_text();
+        }
+        b_cancelar.setEnabled(false);
+        Tabla_trabajos.clearSelection();
+        }
     }//GEN-LAST:event_b_cancelarActionPerformed
 
     private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
-        D_buscar_trabajo trabajo = new D_buscar_trabajo(this,true);
-        trabajo.setLocationRelativeTo(V_R_Trabajo.this);
-        trabajo.setVisible(true);
+        D_buscar_cliente buscar = new D_buscar_cliente(this, true);
+        buscar.setLocationRelativeTo(V_R_Trabajo.this);
+        buscar.setVisible(true);
+
+        // ¡CORRECCIÓN AQUÍ! Usamos la variable global de la línea 386
+        idClienteSeleccionado = buscar.getFila(); 
+
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cliente = dao.obtenerCliente(idClienteSeleccionado);
+
+        if(cliente != null){
+            t_nombre.setText(cliente.getNombre_c());
+            t_telefono.setText(cliente.getTelefono());
+        }
     }//GEN-LAST:event_b_buscarActionPerformed
 
     private void t_nombreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nombreMouseClicked
@@ -962,7 +1053,6 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel l_aviso;
     private javax.swing.JLabel l_descripcion;
     private javax.swing.JLabel l_direccion;
     private javax.swing.JLabel l_fecha;

@@ -13,12 +13,13 @@ import java.time.LocalTime;
  */
 public class Bitacora {
     private int id_bitacora;
-    private String trabajador;
     private LocalDate fecha;
     private LocalTime hora_llegada;
     private LocalTime hora_salida;
     private java.util.List<String> evidencias = new java.util.ArrayList<>();
     private String notas;
+    private String id_trabajador;
+    private String id_trabajo;
     
     public Bitacora(){
         
@@ -38,20 +39,6 @@ public class Bitacora {
     
     public void Buscar(){
         
-    }
-
-    /**
-     * @return the trabajador
-     */
-    public String getTrabajador() {
-        return trabajador;
-    }
-
-    /**
-     * @param trabajador the trabajador to set
-     */
-    public void setTrabajador(String trabajador) {
-        this.trabajador = trabajador;
     }
 
     /**
@@ -136,5 +123,33 @@ public class Bitacora {
      */
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
+    }
+
+    /**
+     * @return the id_trabajador
+     */
+    public String getId_trabajador() {
+        return id_trabajador;
+    }
+
+    /**
+     * @param id_trabajador the id_trabajador to set
+     */
+    public void setId_trabajador(String id_trabajador) {
+        this.id_trabajador = id_trabajador;
+    }
+
+    /**
+     * @return the id_trabajo
+     */
+    public String getId_trabajo() {
+        return id_trabajo;
+    }
+
+    /**
+     * @param id_trabajo the id_trabajo to set
+     */
+    public void setId_trabajo(String id_trabajo) {
+        this.id_trabajo = id_trabajo;
     }
 }

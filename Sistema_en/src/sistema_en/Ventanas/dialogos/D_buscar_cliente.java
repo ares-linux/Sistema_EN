@@ -4,8 +4,10 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.ClienteDAO;
 import java.awt.event.KeyEvent;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -26,7 +28,11 @@ public class D_buscar_cliente extends javax.swing.JDialog {
     }
 
     int fila;
+    int id;
     
+    public int getFila() {
+        return this.id;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,9 +57,7 @@ public class D_buscar_cliente extends javax.swing.JDialog {
         b_limpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(740, 480));
         setMinimumSize(new java.awt.Dimension(740, 480));
-        setPreferredSize(new java.awt.Dimension(740, 480));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -61,9 +65,9 @@ public class D_buscar_cliente extends javax.swing.JDialog {
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Buscar cliente");
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -132,7 +136,7 @@ public class D_buscar_cliente extends javax.swing.JDialog {
 
             },
             new String [] {
-                "id", "nombre", "telefono"
+                "Id", "Nombre", "Telefono"
             }
         ));
         Tabla_clientes.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -315,20 +319,45 @@ public class D_buscar_cliente extends javax.swing.JDialog {
     }//GEN-LAST:event_b_cancelarKeyPressed
 
     private void Tabla_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_clientesMouseClicked
-        fila = this.Tabla_clientes.rowAtPoint(evt.getPoint());
+        
     }//GEN-LAST:event_Tabla_clientesMouseClicked
 
     private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
         fila = Tabla_clientes.getSelectedRow();
-                if (fila == -1) 
-                {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un cliente de la tabla");
-                    return;
-                }
+
+        int columna = 0;
+        if (fila != -1) {
+                        
+            try {
+                
+                String valorCelda = Tabla_clientes.getValueAt(fila, columna).toString();
+                id = Integer.parseInt(valorCelda);
+                
+            } catch (NumberFormatException e) {
+                System.out.println("Error: El dato en esa celda no es un número.");
+            }
+            
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un cliente de la tabla primero.");
+        }
+        this.dispose();
     }//GEN-LAST:event_b_seleccionarActionPerformed
 
+    public void llenar_tabla(){
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_clientes.getModel();
+        modelo.setRowCount(0); 
+
+        ClienteDAO dao = new ClienteDAO();
+        java.util.List<String[]> listaClientes = dao.obtenerClientes();
+
+        for (String[] fila : listaClientes) {
+            modelo.addRow(fila);
+        }
+    }
+    
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         limpiar_text();
+        llenar_tabla();
     }//GEN-LAST:event_formWindowOpened
 
     /**

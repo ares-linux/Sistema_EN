@@ -20,7 +20,7 @@ public class UsuariosDAO {
     
         String nuevoHash = BCrypt.hashpw(contraseña, BCrypt.gensalt());
         
-        String sql = "UPDATE Usuarios SET contraseña = ? WHERE id = ?";
+        String sql = "UPDATE Usuarios SET contraseña = ? WHERE id_usuarios = ?";
 
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sql)) {
@@ -38,7 +38,7 @@ public class UsuariosDAO {
 }
     
     public String obtenerHashPorId(int id) {
-        String sql = "SELECT contraseña FROM Usuarios WHERE id = ?";
+        String sql = "SELECT contraseña FROM Usuarios WHERE id_usuarios = ?";
         
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {

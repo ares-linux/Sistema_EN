@@ -10,6 +10,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import sistema_en.Ventanas.dialogos.D_ficha_cliente;
@@ -317,7 +318,7 @@ public class V_clientes extends javax.swing.JFrame {
         modelo.setRowCount(0); 
 
         ClienteDAO dao = new ClienteDAO();
-        java.util.List<String[]> listaTrabajadores = dao.obtenerCliente();
+        java.util.List<String[]> listaTrabajadores = dao.obtenerClientes();
 
         for (String[] fila : listaTrabajadores) {
             modelo.addRow(fila);
@@ -351,17 +352,23 @@ public class V_clientes extends javax.swing.JFrame {
     }//GEN-LAST:event_b_cerrarActionPerformed
     
     private void Tabla_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_clientesMouseClicked
-     
-        fila = Tabla_clientes.getSelectedRow();
-                if (fila == -1) 
-                {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para ver su ficha.");
-                    return;
-                }
-                else{
-                    fila = this.Tabla_clientes.rowAtPoint(evt.getPoint());
-                    cargar_datos_tabla(fila);
-                }
+    
+        fila = Tabla_clientes.rowAtPoint(evt.getPoint());
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un cliente.");
+            return;
+        }
+
+        // Cerrar la ficha anterior si ya hay una abierta
+        if (ficha != null && ficha.isDisplayable()) {
+            ficha.dispose();
+        }
+
+        int id_cliente = Integer.parseInt( Tabla_clientes.getValueAt(fila, 0).toString());
+
+        ficha = new D_ficha_cliente(id_cliente);
+        ficha.setLocationRelativeTo(this);
+        ficha.setVisible(true);
                 
     }//GEN-LAST:event_Tabla_clientesMouseClicked
 

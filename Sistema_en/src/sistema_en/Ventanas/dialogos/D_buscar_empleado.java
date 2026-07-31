@@ -86,9 +86,7 @@ public class D_buscar_empleado extends javax.swing.JDialog {
         c_puesto = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(740, 480));
         setMinimumSize(new java.awt.Dimension(740, 480));
-        setPreferredSize(new java.awt.Dimension(740, 480));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -173,6 +171,15 @@ public class D_buscar_empleado extends javax.swing.JDialog {
                 "Id", "Nombre", "Sexo", "Puesto", "RFC", "CURP", "Fecha de nacimiento", "Foto"
             }
         ));
+        Tabla_empleados.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                Tabla_empleadosAncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         Tabla_empleados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_empleadosMouseClicked(evt);
@@ -440,6 +447,10 @@ public class D_buscar_empleado extends javax.swing.JDialog {
     private void c_puestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_puestoActionPerformed
         filtrar_tabla();
     }//GEN-LAST:event_c_puestoActionPerformed
+
+    private void Tabla_empleadosAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_Tabla_empleadosAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Tabla_empleadosAncestorAdded
 
     /**
      * @param args the command line arguments

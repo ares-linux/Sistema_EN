@@ -132,6 +132,7 @@
             </Property>
           </Properties>
           <Events>
+            <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="Tabla_empleadosAncestorAdded"/>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Tabla_empleadosMouseClicked"/>
           </Events>
         </Component>

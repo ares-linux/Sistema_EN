@@ -233,7 +233,7 @@ public class V_trabajos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre Cliente", "Teléfono", "Dirección", "Descripción", "Fecha Registro", "Hora Registro", "Estado"
+                "Id", "Nombre del cliente", "Teléfono", "Dirección", "Descripción", "Fecha", "Hora", "Estado", "Fecha de inicio", "Fecha de fin"
             }
         ));
         Tabla_trabajos.setFillsViewportHeight(true);

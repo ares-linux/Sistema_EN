@@ -48,7 +48,7 @@ public class HerramientaDAO {
         List<String[]> lista = new ArrayList<>();
         String sql = "SELECT h.id_herramienta, t.nombre AS tipo, h.n_serie, h.foto "
                    + "FROM Herramienta h "
-                   + "LEFT JOIN Tipos_herramientas t ON h.t_herramienta = t.id";
+                   + "LEFT JOIN Tipos_herramienta t ON h.t_herramienta = t.id_tipo_herramienta";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -85,10 +85,10 @@ public class HerramientaDAO {
 
         String sql = "Todos".equals(nombre_tipo)
             ? "SELECT h.id_herramienta, t.nombre AS tipo, h.n_serie, h.foto "
-            + "FROM Herramienta h LEFT JOIN Tipos_herramientas t ON h.t_herramienta = t.id "
+            + "FROM Herramienta h LEFT JOIN Tipos_herramienta t ON h.t_herramienta = t.id_tipo_herramienta "
             + "WHERE h.n_serie LIKE ?"
             : "SELECT h.id_herramienta, t.nombre AS tipo, h.n_serie, h.foto "
-            + "FROM Herramienta h LEFT JOIN Tipos_herramientas t ON h.t_herramienta = t.id "
+            + "FROM Herramienta h LEFT JOIN Tipos_herramienta t ON h.t_herramienta = t.id_tipo_herramienta "
             + "WHERE h.n_serie LIKE ? AND t.nombre = ?";
 
         try (Connection con = Conexion.conectar();

@@ -4,8 +4,17 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.ClienteDAO;
+import dao.TrabajoDAO;
+import java.awt.Color;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
+import sistema_en.Objetos.Cliente;
 
 /**
  *
@@ -14,6 +23,10 @@ import javax.swing.table.DefaultTableModel;
 public class D_ficha_cliente extends javax.swing.JDialog {
     
     int fila;
+    String hora_fecha;
+    boolean cambios;
+    String nombre;
+    String telefono;
     
     /**
      * Creates new form D_ficha_cliente
@@ -22,24 +35,19 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Tabla_historial_trabajos_clientes.setDefaultEditor(Object.class, null);
-        Tabla_historial_trabajos_clientes.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         
-        DefaultTableModel modelo = (DefaultTableModel) Tabla_historial_trabajos_clientes.getModel();
-        
-            Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
-           
-        modelo.addRow(fila1);
-        
+        Tabla_trabajos.setDefaultEditor(Object.class, null);
+        Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+                
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {   
-        if ("Guardar".equals(b_editar.getText()) || "Guardar".equals(b_editar.getText())) {
+        if ("Guardar".equals(b_editar.getText())) {
             javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
-            //b_cancelar.doClick(); 
-  
-            //dispose(); 
-            
+            b_cerrar.doClick();
+            if (b_editar.getText().equals("Editar")) {
+            dispose(); 
+            }
         } else {
             dispose();
         }
@@ -51,9 +59,12 @@ public class D_ficha_cliente extends javax.swing.JDialog {
     this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         
     }
+    
+    public D_ficha_cliente(int id_cliente) {
+        initComponents();
 
-    public D_ficha_cliente() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        cargarCliente(id_cliente);
+        cargarTrabajos(id_cliente);
     }
     
     /**
@@ -66,20 +77,34 @@ public class D_ficha_cliente extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        P_ficha = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        l_nombre = new javax.swing.JLabel();
+        l_telefono = new javax.swing.JLabel();
         t_nombre = new javax.swing.JTextField();
         t_id = new javax.swing.JTextField();
         t_telefono = new javax.swing.JTextField();
-        b_editar = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        t_ultima_modificacion = new javax.swing.JTextField();
+        t_fecha_rg = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
         b_cerrar = new javax.swing.JButton();
+        b_editar = new javax.swing.JButton();
+        P_trabajos = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Tabla_historial_trabajos_clientes = new javax.swing.JTable();
+        Tabla_trabajos = new javax.swing.JTable();
+        P_resumen = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        t_fecha_ultimo_trabajo = new javax.swing.JTextField();
+        t_numero_trabajos = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -87,108 +112,111 @@ public class D_ficha_cliente extends javax.swing.JDialog {
                 formWindowOpened(evt);
             }
         });
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        P_ficha.setLayout(new java.awt.GridBagLayout());
 
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Ficha de cliente");
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 645;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 705;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("Informacion");
+        jLabel2.setText("Informacion ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(jLabel2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Id");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(jLabel3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setText("Nombre");
+        l_nombre.setText("Nombre");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(jLabel4, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(l_nombre, gridBagConstraints);
 
-        jLabel6.setText("Telefono");
+        l_telefono.setText("Telefono");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(jLabel6, gridBagConstraints);
-
-        jLabel7.setText("Historial de trabajos");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 638;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(jLabel7, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(l_telefono, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 550;
+        gridBagConstraints.ipadx = 716;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(t_nombre, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(t_nombre, gridBagConstraints);
 
         t_id.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 550;
+        gridBagConstraints.ipadx = 716;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(t_id, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(t_id, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 716;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(t_telefono, gridBagConstraints);
+
+        jLabel10.setText("Última modificación");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jLabel10, gridBagConstraints);
+
+        jLabel12.setText("Fecha registro");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jLabel12, gridBagConstraints);
+
+        t_ultima_modificacion.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 550;
+        gridBagConstraints.ipadx = 60;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(t_telefono, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(t_ultima_modificacion, gridBagConstraints);
 
-        b_editar.setText("Editar");
-        b_editar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_editarActionPerformed(evt);
-            }
-        });
+        t_fecha_rg.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(b_editar, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(t_fecha_rg, gridBagConstraints);
+
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
         b_cerrar.setText("Cerrar");
         b_cerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -197,17 +225,41 @@ public class D_ficha_cliente extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
-        jPanel1.add(b_cerrar, gridBagConstraints);
+        jPanel2.add(b_cerrar, gridBagConstraints);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        b_editar.setText("Editar");
+        b_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
+        jPanel2.add(b_editar, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jPanel2, gridBagConstraints);
+
+        P_ficha.add(jPanel3, new java.awt.GridBagConstraints());
+
+        jTabbedPane1.addTab("Ficha", P_ficha);
+
+        P_trabajos.setLayout(new java.awt.BorderLayout());
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(453, 350));
 
-        Tabla_historial_trabajos_clientes.setModel(new javax.swing.table.DefaultTableModel(
+        Tabla_trabajos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -215,18 +267,162 @@ public class D_ficha_cliente extends javax.swing.JDialog {
                 "id", "descripcion", "Direccion", "fecha_r", "hora_r", "estado"
             }
         ));
-        Tabla_historial_trabajos_clientes.addMouseListener(new java.awt.event.MouseAdapter() {
+        Tabla_trabajos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Tabla_historial_trabajos_clientesMouseClicked(evt);
+                Tabla_trabajosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(Tabla_historial_trabajos_clientes);
+        jScrollPane1.setViewportView(Tabla_trabajos);
 
-        getContentPane().add(jScrollPane1, java.awt.BorderLayout.PAGE_END);
+        P_trabajos.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        P_resumen.setLayout(new java.awt.GridBagLayout());
+
+        jLabel5.setText("Número de trabajos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_resumen.add(jLabel5, gridBagConstraints);
+
+        jLabel9.setText("Fecha del último trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_resumen.add(jLabel9, gridBagConstraints);
+
+        t_fecha_ultimo_trabajo.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_resumen.add(t_fecha_ultimo_trabajo, gridBagConstraints);
+
+        t_numero_trabajos.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 60;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_resumen.add(t_numero_trabajos, gridBagConstraints);
+
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel11.setText("Resumen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_resumen.add(jLabel11, gridBagConstraints);
+
+        jPanel4.setLayout(new java.awt.BorderLayout());
+        P_resumen.add(jPanel4, new java.awt.GridBagConstraints());
+
+        P_trabajos.add(P_resumen, java.awt.BorderLayout.PAGE_START);
+
+        jTabbedPane1.addTab("Trabajos", P_trabajos);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        getContentPane().add(jTabbedPane1, gridBagConstraints);
+        jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+        
+    public void edicion_exitosa(){
+            String mensaje;
+            mensaje = "✓ Cambios guardados con éxito.";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+    }
+    
+    public void bloquear_text(){
+        t_nombre.setEnabled(false);
+        t_telefono.setEnabled(false);
+    }
+    
+    public void desbloquear_text(){
+        t_nombre.setEnabled(true);
+        t_telefono.setEnabled(true);
+    }
+    
+    public void aviso_labels(){
+                
+        boolean error = false;
+        
+        if (t_nombre.getText().trim().isEmpty()) {
+            l_nombre.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        
+        if (!t_nombre.getText().trim().isEmpty()) {
+            l_nombre.setForeground(null);
+            error = false;
+        }
 
+        if (t_telefono.getText().trim().isEmpty()) {
+            l_telefono.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        
+        if (!t_telefono.getText().trim().isEmpty()) {
+            l_telefono.setForeground(null);
+            error = false;
+        }
+    }
+    
+    private void llenar_tabla(int idCliente) {
+        int c = 0;
+        int a = 0;
+        
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_trabajos.getModel();
+        modelo.setRowCount(0);
+
+        TrabajoDAO dao = new TrabajoDAO();
+        List<String[]> lista = dao.obtenerTrabajosConClientes();
+
+        for(String[] fila : lista){
+            modelo.addRow(fila);
+            c++;
+            a = c;
+        }  
+    
+        t_numero_trabajos.setText(String.valueOf(a));
+        //System.out.println("Numero de trabajos: " + a);
+    }
+    
+    private void cargarTrabajos(int id_cliente){
+        llenar_tabla(id_cliente);
+    }
+    
+    private void cargarCliente(int id_cliente){
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cliente = dao.obtenerCliente(id_cliente);
+
+        nombre = cliente.getNombre_c();
+        telefono = cliente.getTelefono();
+        
+        
+        t_id.setText(String.valueOf(cliente.getId_cliente()));
+        t_nombre.setText(cliente.getNombre_c());
+        t_telefono.setText(cliente.getTelefono());
+        t_ultima_modificacion.setText(cliente.getU_modificacion());
+        t_fecha_rg.setText(cliente.getFecha_registro());
+    }
+    
     private D_ficha_trabajo  ficha = null;
     
     public void cargar_datos_tabla(int indice) {
@@ -253,42 +449,112 @@ public class D_ficha_cliente extends javax.swing.JDialog {
          
     }
     
-    private void Tabla_historial_trabajos_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_historial_trabajos_clientesMouseClicked
+    private void Tabla_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_trabajosMouseClicked
         
-        fila = Tabla_historial_trabajos_clientes.getSelectedRow();
+        fila = Tabla_trabajos.getSelectedRow();
                 if (fila == -1) 
                 {
                     javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para ver su ficha.");
                     return;
                 }
                 else{
-                    fila = this.Tabla_historial_trabajos_clientes.rowAtPoint(evt.getPoint());
+                    fila = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
                     cargar_datos_tabla(fila);
                 }
                 
-    }//GEN-LAST:event_Tabla_historial_trabajos_clientesMouseClicked
+    }//GEN-LAST:event_Tabla_trabajosMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         t_nombre.setEnabled(false);
         t_telefono.setEnabled(false);
     }//GEN-LAST:event_formWindowOpened
 
+    public void restablecer_color(){
+        l_nombre.setForeground(null);
+        l_telefono.setForeground(null);
+    }
+    
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         
         if("Editar".equals(b_editar.getText())){
+            b_editar.setBackground(Color.decode("#2f65ca"));
             b_editar.setText("Guardar");
             t_nombre.setEnabled(true);
             t_telefono.setEnabled(true);
         }
         else{
-            t_nombre.setEnabled(false);
-            t_telefono.setEnabled(false);
-            b_editar.setText("Editar");
+            if (t_nombre.getText().trim().isEmpty() || t_telefono.getText().trim().isEmpty()){
+                aviso_labels();
+                return;
+            }
+            
+            if (t_nombre.getText().equals(nombre) && t_telefono.getText().equals(telefono)) {
+                restablecer_color(); 
+                b_editar.setBackground(null);
+                t_nombre.setEnabled(false);
+                t_telefono.setEnabled(false);
+                b_editar.setText("Editar");
+                return;
+            }
+            
+            
+            String hora , fecha;
+        
+            fecha = java.time.LocalDate.now().toString();
+            LocalTime horaactual = LocalTime.now();
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
+            hora = horaactual.format(formato);
+        
+            hora_fecha = fecha + " " +  hora;
+            
+            int id_cliente = Integer.valueOf(t_id.getText());
+            String nombre_c = t_nombre.getText();
+            String telefono = t_telefono.getText();  
+            String u_modificacion = hora_fecha;
+            
+            ClienteDAO dao = new ClienteDAO();
+            boolean actualizadoExitoso = dao.actualizarCliente(id_cliente,nombre_c,telefono,u_modificacion);
+
+            if (actualizadoExitoso) { 
+                this.nombre = nombre_c;
+                this.telefono = telefono;
+                restablecer_color(); 
+                b_editar.setBackground(null);
+                t_nombre.setEnabled(false);
+                t_telefono.setEnabled(false);
+                b_editar.setText("Editar");
+                t_ultima_modificacion.setText(u_modificacion);
+                edicion_exitosa();
+            } else { 
+                JOptionPane.showMessageDialog(this, "Error al actualizar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }         
         }
     }//GEN-LAST:event_b_editarActionPerformed
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
-        this.dispose();
+        
+        boolean es_editar = "Guardar".equals(b_editar.getText());
+        
+        if (es_editar) {
+            if (!t_nombre.getText().equals(nombre) || !t_telefono.getText().equals(telefono)){
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                         "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
+                         "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+                
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; 
+                }
+            }
+            
+            restablecer_color();
+            bloquear_text();
+            b_editar.setText("Editar");
+            b_editar.setEnabled(true);
+            Tabla_trabajos.setEnabled(true);
+            Tabla_trabajos.clearSelection();
+        } else {
+            this.dispose();
+        }
     }//GEN-LAST:event_b_cerrarActionPerformed
 
     /**
@@ -334,19 +600,33 @@ public class D_ficha_cliente extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable Tabla_historial_trabajos_clientes;
+    private javax.swing.JPanel P_ficha;
+    private javax.swing.JPanel P_resumen;
+    private javax.swing.JPanel P_trabajos;
+    private javax.swing.JTable Tabla_trabajos;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_editar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel l_nombre;
+    private javax.swing.JLabel l_telefono;
+    private javax.swing.JTextField t_fecha_rg;
+    private javax.swing.JTextField t_fecha_ultimo_trabajo;
     private javax.swing.JTextField t_id;
     private javax.swing.JTextField t_nombre;
+    private javax.swing.JTextField t_numero_trabajos;
     private javax.swing.JTextField t_telefono;
+    private javax.swing.JTextField t_ultima_modificacion;
     // End of variables declaration//GEN-END:variables
 }

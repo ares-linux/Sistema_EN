@@ -17,17 +17,19 @@ import sistema_en.Conexion;
  * @author aresb
  */
 public class TrabajoDAO {
-    public boolean insertarTrabajo(String direccion, String descripcion, String fecha, String hora, String estado, int idCliente) {
     
-    String sql = "INSERT INTO Trabajo (direccion,descripcion, fecha, hora, estado, cliente) VALUES (?, ?, ?, ?, ?, ?)";
+    
+    
+    public boolean insertarTrabajo(String direccion, String descripcion, String fecha_cr, String hora_cr, String estado, int idCliente) {
+    String sql = "INSERT INTO Trabajo (direccion,descripcion, fecha_cr, hora_cr, estado, id_cliente) VALUES (?, ?, ?, ?, ?, ?)";
     
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sql)) {
         
         ps.setString(1, direccion);
         ps.setString(2, descripcion);
-        ps.setString(3, fecha);
-        ps.setString(4, hora);
+        ps.setString(3, fecha_cr);
+        ps.setString(4, hora_cr);
         ps.setString(5, estado);
         ps.setInt(6, idCliente); 
         
@@ -38,12 +40,50 @@ public class TrabajoDAO {
     }
 }
     
+    public List<String[]> obtenerTrabajosCliente(int id_cliente) {
+
+    List<String[]> lista = new ArrayList<>();
+
+    String sql = "SELECT t.id_trabajo, c.nombre_c, c.telefono, t.direccion, t.descripcion, t.fecha_cr, t.hora_cr " +
+                     "FROM Trabajo t " +
+                     "INNER JOIN Cliente c ON t.id_cliente = c.id_cliente";
+
+    Connection con = Conexion.conectar();
+
+    if (con == null) return lista;
+
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setInt(1, id_cliente);
+
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+
+            String[] fila = new String[5];
+            fila[0] = String.valueOf(rs.getInt("id_trabajo"));
+            fila[1] = rs.getString("nombre_c"); 
+            fila[2] = rs.getString("telefono");
+            fila[3] = rs.getString("direccion");
+            fila[4] = rs.getString("descripcion");
+            fila[5] = rs.getString("fecha_cr");
+            fila[6] = rs.getString("hora_cr");
+
+            lista.add(fila);
+        }
+
+    } catch (SQLException e) {
+        System.err.println(e.getMessage());
+    }
+
+    return lista;
+}
+    
     public List<String[]> obtenerTrabajosConClientes() {
     List<String[]> lista = new ArrayList<>();
-    
-    String sql = "SELECT t.id_trabajo, c.nombre_c, c.telefono, t.direccion, t.descripcion, t.fecha, t.hora " +
+    String sql = "SELECT t.id_trabajo, c.nombre_c, c.telefono, t.direccion, t.descripcion, t.fecha_cr, t.hora_cr, t.estado,t.fecha_inicio,t.fecha_fin " +
                  "FROM Trabajo t " +
-                 "INNER JOIN Cliente c ON t.cliente = c.id_cliente";
+                 "INNER JOIN Cliente c ON t.id_cliente = c.id_cliente";
 
     Connection con = Conexion.conectar();
     
@@ -57,14 +97,17 @@ public class TrabajoDAO {
 
         while (rs.next()) {
             
-            String[] fila = new String[7];
+            String[] fila = new String[10];
             fila[0] = String.valueOf(rs.getInt("id_trabajo"));
             fila[1] = rs.getString("nombre_c");
             fila[2] = rs.getString("telefono");
             fila[3] = rs.getString("direccion");
             fila[4] = rs.getString("descripcion");
-            fila[5] = rs.getString("fecha");
-            fila[6] = rs.getString("hora");
+            fila[5] = rs.getString("fecha_cr");
+            fila[6] = rs.getString("hora_cr");
+            fila[7] = rs.getString("estado");
+            fila[8] = rs.getString("fecha_inicio");
+            fila[9] = rs.getString("fecha_fin");
             
             lista.add(fila);
         }
@@ -99,18 +142,15 @@ public boolean eliminarTrabajo(int idTrabajo) {
     }
 }
 
-public boolean actualizarTrabajo(int idTrabajo, String direccion ,String descripcion, String fecha, String hora, String estado) {
-    String sql = "UPDATE Trabajo SET direccion = ?, descripcion = ?, fecha = ?, hora = ?, estado = ? WHERE id_trabajo = ?;";
+public boolean actualizarTrabajo(int id_trabajo, String direccion ,String descripcion) {
+    String sql = "UPDATE Trabajo SET direccion = ?, descripcion = ? WHERE id_trabajo = ?;";
     try {
         Connection con = Conexion.conectar();
         if (con != null) {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, direccion);
             ps.setString(2, descripcion);
-            ps.setString(3, fecha);
-            ps.setString(4, hora);
-            ps.setString(5, estado);
-            ps.setInt(6, idTrabajo);
+            ps.setInt(3, id_trabajo);
             
             return ps.executeUpdate() > 0;
         }

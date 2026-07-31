@@ -16,7 +16,55 @@ import sistema_en.Conexion;
  *
  * @author aresb
  */
+
 public class ConfiguracionesDAO {
+    public boolean actualizarConfiguraciones(String tema, String sonido_error, String modelo_c,String carpeta_ce) {
+    String sql = "UPDATE Configuraciones SET valor = ? WHERE clave = ?";
+        Connection con = Conexion.conectar();
+        
+        if (con == null) return false;
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            // Desactivamos el auto-commit para asegurar consistencia
+            con.setAutoCommit(false);
+
+            
+            ps.setString(1, tema);
+            ps.setString(2, "tema");
+            ps.addBatch();
+
+            ps.setString(1, sonido_error);
+            ps.setString(2, "sonido_error");
+            ps.addBatch();
+
+            ps.setString(1, modelo_c);
+            ps.setString(2, "modelo_c");
+            ps.addBatch();
+
+            ps.setString(1, carpeta_ce);
+            ps.setString(2, "carpeta_ce");
+            ps.addBatch();
+
+            System.out.println("Tema: " + tema);
+System.out.println("Sonido: " + sonido_error);
+System.out.println("Modelo: " + modelo_c);
+System.out.println("Carpeta: " + carpeta_ce);
+            
+            int[] resultados = ps.executeBatch();
+            con.commit();
+
+            return resultados.length > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar configuraciones: " + e.getMessage());
+            try { con.rollback(); } catch (SQLException ex) { /* Ignorar */ }
+        } finally {
+            try { con.close(); } catch (SQLException e) { /* Ignorar */ }
+        }
+        return false;
+    }
+
+
     public boolean actualizarCopias(String frecuencia, String preguntar, String manual, String cotizaciones) {
     String sql = "UPDATE Configuraciones SET valor = ? WHERE clave = ?";
         Connection con = Conexion.conectar();
@@ -50,7 +98,7 @@ public class ConfiguracionesDAO {
             return resultados.length > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error al actualizar configuraciones: " + e.getMessage());
+            System.err.println("Error al actualizar copias: " + e.getMessage());
             try { con.rollback(); } catch (SQLException ex) { /* Ignorar */ }
         } finally {
             try { con.close(); } catch (SQLException e) { /* Ignorar */ }
@@ -99,4 +147,5 @@ public class ConfiguracionesDAO {
 }
        
 }
+
     

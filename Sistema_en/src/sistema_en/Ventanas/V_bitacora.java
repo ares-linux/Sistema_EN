@@ -56,7 +56,7 @@ public class V_bitacora extends javax.swing.JFrame {
             DateTimeFormatter format = DateTimeFormatter.ofPattern("hh:mm a");
             String entrada = bitacoraWrapper.getHora_llegada() != null ? bitacoraWrapper.getHora_llegada().format(format) : "";
             String salida = bitacoraWrapper.getHora_salida() != null ? bitacoraWrapper.getHora_salida().format(format) : "";
-            return bitacoraWrapper.getTrabajador() + " (" + entrada + " - " + salida + ")";
+            return bitacoraWrapper.getId_trabajador() + " (" + entrada + " - " + salida + ")";
         }
     }
 
@@ -117,7 +117,7 @@ public class V_bitacora extends javax.swing.JFrame {
             if (b.getFecha() != null && b.getFecha().equals(fecha)) {
                 listaFiltrada.add(b);
                 Object[] info = new Object[5];
-                info[0] = b.getTrabajador();
+                info[0] = b.getId_trabajador();
                 info[1] = b.getFecha().toString();
                 info[2] = b.getHora_llegada() != null ? b.getHora_llegada().format(formateador) : "";
                 info[3] = b.getHora_salida() != null ? b.getHora_salida().format(formateador) : "";
@@ -136,7 +136,7 @@ public class V_bitacora extends javax.swing.JFrame {
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
         for (Bitacora b : listaFiltrada) {
             Object[] info = new Object[5];
-            info[0] = b.getTrabajador();
+            info[0] = b.getId_trabajador();
             info[1] = b.getFecha().toString();
             info[2] = b.getHora_llegada() != null ? b.getHora_llegada().format(formateador) : "";
             info[3] = b.getHora_salida() != null ? b.getHora_salida().format(formateador) : "";
@@ -761,7 +761,7 @@ public class V_bitacora extends javax.swing.JFrame {
         }
         
         Bitacora b = new Bitacora();
-        b.setTrabajador(c_plomero.getSelectedItem().toString());
+        b.setId_trabajador(c_plomero.getSelectedItem().toString());
         b.setFecha(java.time.LocalDate.parse(t_fecha.getText()));
         b.setHora_llegada(time_hora_llegada.getTime());
         b.setHora_salida(time_hora_salida.getTime());
@@ -779,42 +779,41 @@ public class V_bitacora extends javax.swing.JFrame {
     
     public void cargar_datos_tabla(int indice){
         this.c_plomero.setSelectedItem(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 0)));
-    this.t_fecha.setText(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 1)));
+        this.t_fecha.setText(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 1)));
     
-    // Recuperar los Strings de la tabla
-    String horaEntradaStr = String.valueOf(this.Tabla_bitacora.getValueAt(indice, 2));
-    String horaSalidaStr = String.valueOf(this.Tabla_bitacora.getValueAt(indice, 3));
+        // Recuperar los Strings de la tabla
+        String horaEntradaStr = String.valueOf(this.Tabla_bitacora.getValueAt(indice, 2));
+        String horaSalidaStr = String.valueOf(this.Tabla_bitacora.getValueAt(indice, 3));
     
-    // Formateador para interpretar el texto de la tabla
-    DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
+        // Formateador para interpretar el texto de la tabla
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
     
-    try {
-        // Convertir texto a LocalTime y mandarlo al TimePicker
-        this.time_hora_llegada.setTime(LocalTime.parse(horaEntradaStr, formateador));
-        this.time_hora_salida.setTime(LocalTime.parse(horaSalidaStr, formateador));
-    } catch (Exception e) {
-        // En caso de que la fila seleccionada no tuviera horas válidas o estuviera vacía
-        this.time_hora_llegada.setTime(null);
-        this.time_hora_salida.setTime(null);
-    }
-    
-    Bitacora b = listaFiltrada.get(indice);
-    
-    modeloLista.clear();
-    if (b.getEvidencias() != null) {
-        for (String ev : b.getEvidencias()) {
-            modeloLista.addElement(ev);
+        try {
+            // Convertir texto a LocalTime y mandarlo al TimePicker
+            this.time_hora_llegada.setTime(LocalTime.parse(horaEntradaStr, formateador));
+            this.time_hora_salida.setTime(LocalTime.parse(horaSalidaStr, formateador));
+        } catch (Exception e) {
+            // En caso de que la fila seleccionada no tuviera horas válidas o estuviera vacía
+            this.time_hora_llegada.setTime(null);
+            this.time_hora_salida.setTime(null);
         }
-    }
-    if (modeloLista.getSize() > 0) {
-        L_evidencias.setSelectedIndex(0);
-        t_evidencia.setText(modeloLista.getElementAt(0));
-    } else {
-        t_evidencia.setText("");
-    }
-    cargar_foto();
     
-    this.T_notas.setText(b.getNotas() != null ? b.getNotas() : "");
+        Bitacora b = listaFiltrada.get(indice);
+    
+        modeloLista.clear();
+        if (b.getEvidencias() != null) {
+            for (String ev : b.getEvidencias()) {
+                modeloLista.addElement(ev);
+            }
+        }
+        if (modeloLista.getSize() > 0) {
+            L_evidencias.setSelectedIndex(0);
+            t_evidencia.setText(modeloLista.getElementAt(0));
+        } else {
+            t_evidencia.setText("");
+        }
+        cargar_foto();
+        this.T_notas.setText(b.getNotas() != null ? b.getNotas() : "");
     }
     
     public void llenar_text(){
@@ -831,7 +830,7 @@ public class V_bitacora extends javax.swing.JFrame {
         }
         
         Bitacora b = listaFiltrada.get(fila);
-        b.setTrabajador(c_plomero.getSelectedItem().toString());
+        b.setId_trabajador(c_plomero.getSelectedItem().toString());
         b.setFecha(java.time.LocalDate.parse(t_fecha.getText()));
         b.setHora_llegada(time_hora_llegada.getTime());
         b.setHora_salida(time_hora_salida.getTime());

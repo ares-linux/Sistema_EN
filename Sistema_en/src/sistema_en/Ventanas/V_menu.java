@@ -5,17 +5,20 @@
 package sistema_en.Ventanas;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import dao.ConfiguracionesDAO;
 import sistema_en.Ventanas.Ventanas_consultas.V_historial_c;
 import sistema_en.Ventanas.Ventanas_consultas.V_clientes;
 import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 import java.awt.Image;
 import java.net.URL;
+import java.util.List;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import sistema_en.Ventanas.dialogos.D_configuraciones;
+import sistema_en.Ventanas.dialogos.D_informes;
 
 /**
  *
@@ -24,7 +27,7 @@ import sistema_en.Ventanas.dialogos.D_configuraciones;
 public class V_menu extends javax.swing.JFrame {
     
     // Formularios de consulta
-    
+    private boolean sonido;
     private V_clientes ventana_Clientes = null;
     private V_trabajos ventana_Trabajos = null;
     private V_historial_c ventana_h_cotizaciones = null;
@@ -106,9 +109,28 @@ public class V_menu extends javax.swing.JFrame {
     }
     });
 
-
     this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        
+    
+    ConfiguracionesDAO dao = new ConfiguracionesDAO();
+    List<String[]> configs = dao.obtenerConfiguraciones();
+    
+    for (String[] conf : configs) {
+
+    String clave = conf[1];
+    String valor = conf[2];
+
+    switch (clave) {
+
+        case "sonido_error":
+            if ("true".equals(valor)){
+                sonido = true;
+            }
+            else if ("false".equals(valor)){
+                sonido = false;
+            }
+            break;
+    }
+    }
     }
 
     /**
@@ -144,6 +166,7 @@ public class V_menu extends javax.swing.JFrame {
         m_catalogo = new javax.swing.JMenu();
         m_clientes = new javax.swing.JMenuItem();
         m_trabajos = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         m_sistema = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
         M_cerrar_programa = new javax.swing.JMenuItem();
@@ -269,6 +292,14 @@ public class V_menu extends javax.swing.JFrame {
         });
         m_catalogo.add(m_trabajos);
 
+        jMenuItem6.setText("Informes");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        m_catalogo.add(jMenuItem6);
+
         jMenuBar1.add(m_catalogo);
 
         m_sistema.setText("Sistema ▼");
@@ -295,6 +326,30 @@ public class V_menu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    public void revisar_sonido(){
+        ConfiguracionesDAO dao = new ConfiguracionesDAO();
+        List<String[]> configs = dao.obtenerConfiguraciones();
+    
+        for (String[] conf : configs) {
+
+        String clave = conf[1];
+        String valor = conf[2];
+
+        switch (clave) {
+
+            case "sonido_error":
+                if ("true".equals(valor)){
+                    sonido = true;
+                }
+                else if ("false".equals(valor)){
+                    sonido = false;
+                }
+                break;
+            }
+        }
+    }
+    
     public class r_sonido {
 
     public static void reproducir(String ruta) {
@@ -349,7 +404,12 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void M_cerrar_programaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_cerrar_programaActionPerformed
-        V_menu.r_sonido.reproducir("/audios/error.wav");
+        revisar_sonido();
+        
+        if(sonido == true){
+            V_menu.r_sonido.reproducir("/audios/error.wav");
+        }
+        
         int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea cerrar el programa?", "Confirmar salir", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
         if (respuesta == javax.swing.JOptionPane.YES_OPTION){
             System.exit(0);
@@ -374,7 +434,6 @@ public class V_menu extends javax.swing.JFrame {
     }//GEN-LAST:event_m_herramientaActionPerformed
 
     private void m_empleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_empleadoActionPerformed
-        FlatDarkLaf.setup();
         if (ventana_r_empleados == null || !ventana_r_empleados.isDisplayable()) {
             ventana_r_empleados = new V_R_Empleado();
             ventana_r_empleados.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -490,6 +549,12 @@ public class V_menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_m_cotizacionActionPerformed
 
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        D_informes informes = new D_informes(this,true);
+        informes.setLocationRelativeTo(V_menu.this);
+        informes.setVisible(true); 
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -536,6 +601,7 @@ public class V_menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;

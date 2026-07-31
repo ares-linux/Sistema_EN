@@ -4,26 +4,20 @@
  */
 package sistema_en.Objetos;
 
-import sistema_en.Objetos.Trabajo;
-
 /**
  *
  * @author ares
  */
 public class Cotizacion {
-    
-    
-    public Trabajo id_trabajo;
     private int id_cotizacion;
-    private String concepto;
-    private float precio;
-    private String n_material;
-    private int cantidad;
-    private float precio_uni;
-    private float iva;
     private float subtotal;
+    private float iva;
     private float total;
     private String estado;
+    private int id_trabajo;
+    private String tipo;
+    private String fecha_creacion;
+    
     
     public Cotizacion(String informacionCompleta){
         
@@ -59,33 +53,6 @@ public class Cotizacion {
         this.id_cotizacion = id_cotizacion;
     }
 
-    /**
-     * @return the concepto
-     */
-    public String getConcepto() {
-        return concepto;
-    }
-
-    /**
-     * @param concepto the concepto to set
-     */
-    public void setConcepto(String concepto) {
-        this.concepto = concepto;
-    }
-
-    /**
-     * @return the precio
-     */
-    public float getPrecio() {
-        return precio;
-    }
-
-    /**
-     * @param precio the precio to set
-     */
-    public void setPrecio(float precio) {
-        this.precio = precio;
-    }
 
     /**
      * @return the id_trabajo
@@ -105,61 +72,7 @@ public class Cotizacion {
         this.estado = estado;
     }
 
-    /**
-     * @return the id_trabajo
-     */
-    public Trabajo getId_trabajo() {
-        return id_trabajo;
-    }
 
-    /**
-     * @param id_trabajo the id_trabajo to set
-     */
-    public void setId_trabajo(Trabajo id_trabajo) {
-        this.id_trabajo = id_trabajo;
-    }
-
-    /**
-     * @return the n_material
-     */
-    public String getN_material() {
-        return n_material;
-    }
-
-    /**
-     * @param n_material the n_material to set
-     */
-    public void setN_material(String n_material) {
-        this.n_material = n_material;
-    }
-
-    /**
-     * @return the cantidad
-     */
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    /**
-     * @param cantidad the cantidad to set
-     */
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    /**
-     * @return the precio_uni
-     */
-    public float getPrecio_uni() {
-        return precio_uni;
-    }
-
-    /**
-     * @param precio_uni the precio_uni to set
-     */
-    public void setPrecio_uni(float precio_uni) {
-        this.precio_uni = precio_uni;
-    }
 
     /**
      * @return the iva
@@ -201,6 +114,48 @@ public class Cotizacion {
      */
     public void setTotal(float total) {
         this.total = total;
+    }
+
+    /**
+     * @return the id_trabajo
+     */
+    public int getId_trabajo() {
+        return id_trabajo;
+    }
+
+    /**
+     * @param id_trabajo the id_trabajo to set
+     */
+    public void setId_trabajo(int id_trabajo) {
+        this.id_trabajo = id_trabajo;
+    }
+
+    /**
+     * @return the tipo
+     */
+    public String getTipo() {
+        return tipo;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    /**
+     * @return the fecha_creacion
+     */
+    public String getFecha_creacion() {
+        return fecha_creacion;
+    }
+
+    /**
+     * @param fecha_creacion the fecha_creacion to set
+     */
+    public void setFecha_creacion(String fecha_creacion) {
+        this.fecha_creacion = fecha_creacion;
     }
 
     

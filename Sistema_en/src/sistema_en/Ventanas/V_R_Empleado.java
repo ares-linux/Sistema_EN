@@ -60,9 +60,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
 
     this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        
-    
-    
     }
 
     /**
@@ -103,7 +100,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
         l_curp = new javax.swing.JLabel();
         l_f_nac = new javax.swing.JLabel();
         l_id = new javax.swing.JLabel();
-        l_aviso = new javax.swing.JLabel();
         d_f_nac = new com.github.lgooddatepicker.components.DatePicker();
         J_tabla = new javax.swing.JScrollPane();
         Tabla_empleados = new javax.swing.JTable();
@@ -397,9 +393,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
                         .addGap(64, 64, 64)
                         .addComponent(l_id)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(l_aviso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(t_id))))
+                        .addComponent(t_id)))
                 .addGap(39, 39, 39)
                 .addComponent(l_foto, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -416,11 +410,9 @@ public class V_R_Empleado extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addGap(9, 9, 9)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(l_aviso)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(t_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(l_id))
@@ -458,7 +450,9 @@ public class V_R_Empleado extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(b_foto)
                                     .addComponent(t_foto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addComponent(l_foto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(l_foto, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
@@ -490,7 +484,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-        
+    
     public boolean verificar_edad() {
         java.time.LocalDate fechaNac = d_f_nac.getDate();
         if (fechaNac == null) {
@@ -552,7 +546,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
     
     public void creacion_exitosa(){       
         
-            l_aviso.setForeground(Color.decode("#008000"));
             String mensaje;
             mensaje = "El empleado " + t_nombre.getText() + " fue registrado con éxito.";
             
@@ -573,7 +566,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
     
     public void edicion_exitosa(){
         
-            l_aviso.setForeground(Color.decode("#FFA500"));
             String mensaje;
             mensaje = "✓ Cambios guardados con éxito.";
             
@@ -731,7 +723,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         this.c_sexo.setSelectedItem(trabajador.getSexo());
         this.c_puesto.setSelectedItem(trabajador.getPuesto());
         this.t_rfc.setText(trabajador.getRfc());
-        this.t_curp.setText(trabajador.getCURP());
+        this.t_curp.setText(trabajador.getCurp());
         
         if (trabajador.getF_nac() != null && !trabajador.getF_nac().isEmpty()) {
             java.time.LocalDate fecha = java.time.LocalDate.parse(trabajador.getF_nac());
@@ -922,12 +914,14 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }//GEN-LAST:event_b_fotoActionPerformed
 
     private void Tabla_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_empleadosMouseClicked
-        fila = this.Tabla_empleados.rowAtPoint(evt.getPoint());
-        cargar_datos_tabla(fila);
-        bloquear_text();
-        b_nuevo.setText("Nuevo");
-        //int indice = this.Tabla_empleados.rowAtPoint(evt.getPoint());
-        //cargar_datos_tabla(indice);
+        if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
+            return;
+        }
+        else{
+            fila = this.Tabla_empleados.rowAtPoint(evt.getPoint());
+            cargar_datos_tabla(fila);
+        }
+        
     }//GEN-LAST:event_Tabla_empleadosMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -939,7 +933,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
         bloquear_text();
         b_foto.setEnabled(false);
         b_nuevo.requestFocus();
-        l_aviso.setVisible(false);
         b_cancelar.setEnabled(false);
     }//GEN-LAST:event_formWindowOpened
 
@@ -980,23 +973,22 @@ public class V_R_Empleado extends javax.swing.JFrame {
                
         if ("Nuevo".equals(b_nuevo.getText()))
         {
-            cargar_foto();
+            Tabla_empleados.setEnabled(false);
+            b_cancelar.setBackground(Color.decode("#CE1126"));
+            b_nuevo.setBackground(Color.decode("#2f65ca"));
             t_id.requestFocus();
             desbloquear_text();
             b_foto.setEnabled(true);
             b_cancelar.setEnabled(true);   
             b_nuevo.setText("Guardar");
             limpiar_text();
-            bloquear_botones(); 
+            bloquear_botones();
         }
         else
         {
-            // || t_id.getText().trim().isEmpty()
-            
             if(t_nombre.getText().trim().isEmpty() || c_sexo.getSelectedItem() == null || c_puesto.getSelectedItem() == null || t_rfc.getText().trim().isEmpty() || d_f_nac.getDate() == null || t_curp.getText().trim().isEmpty() || ruta_foto_defecto.equals(t_foto.getText().trim()))
             {
                 aviso_labels();
-                    
                 return;
             }
             
@@ -1019,15 +1011,20 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
     if (guardadoExitoso) {
         //JOptionPane.showMessageDialog(this, "¡Trabajador guardado con éxito en la Base de Datos!");
+        Tabla_empleados.setEnabled(true);
+        b_cancelar.setBackground(null);
+        b_nuevo.setBackground(null);
         limpiar_text();
         llenar_tabla();
         b_nuevo.setText("Nuevo");
+        b_nuevo.setBackground(null);
         desbloquear_botones();
         creacion_exitosa();
         bloquear_text();
         b_foto.setEnabled(false);
         restablecer_color();
         b_cancelar.setEnabled(false);
+        b_cancelar.setBackground(null);
         
     } else {
         JOptionPane.showMessageDialog(this, "Error al guardar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1045,7 +1042,10 @@ public class V_R_Empleado extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, selecciona un empleado de la tabla para editar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+        Tabla_empleados.setEnabled(false);
+        cargar_datos_tabla(filaSeleccionada);
+        b_cancelar.setBackground(Color.decode("#CE1126"));
+        b_editar.setBackground(Color.decode("#2f65ca"));
         b_editar.setText("Guardar");
         desbloquear_text();
         b_foto.setEnabled(true);
@@ -1087,7 +1087,10 @@ public class V_R_Empleado extends javax.swing.JFrame {
         boolean actualizadoExitoso = dao.actualizarTrabajador(id, nombre, sexo, puesto, rfc, curp, fechaNac, foto);
 
         if (actualizadoExitoso) { 
-            //JOptionPane.showMessageDialog(this, "¡Registro actualizado con éxito!"); 
+            //JOptionPane.showMessageDialog(this, "¡Registro actualizado con éxito!");
+            Tabla_empleados.setEnabled(true);
+            b_cancelar.setBackground(null);
+            b_editar.setBackground(null);
             limpiar_text(); 
             llenar_tabla(); // Refresca la tabla visual
             b_editar.setText("Editar"); 
@@ -1279,28 +1282,73 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }//GEN-LAST:event_b_fotoFocusGained
 
     private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-    limpiar_text();         
-    bloquear_text();        
-    desbloquear_botones();  
-    restablecer_color();    
     
-    b_nuevo.setText("Nuevo");
-    b_editar.setText("Editar");
+         
+        // 1. PASO CLAVE: Detectar en qué modo estábamos antes de cancelar
+        boolean es_nuevo = "Guardar".equals(b_nuevo.getText());
+        boolean es_editar = "Guardar".equals(b_editar.getText());
+
+        if (es_nuevo || es_editar) {
     
-    b_foto.setEnabled(false);
-    b_cancelar.setEnabled(false);
-    b_nuevo.setEnabled(true);
+        // --- MODO NUEVO ---
+            if (es_nuevo) {
+                // Validación: Si los campos NO están vacíos, pedimos confirmación
+                if (!campos_vacios()) { 
+                    int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar el registro? Se perderán los datos introducidos.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos y no cancelamos nada
+                }
+            }
+            // Si estaban vacíos o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+    
+        // --- MODO EDITAR ---
+        else if (es_editar) {
+           
+            if (datos_moficados()) { 
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos
+                }
+            }
+            // Si no se modificó nada o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+
+        limpiar_text();         
+        bloquear_text();        
+        desbloquear_botones();  
+        restablecer_color();    
+        b_nuevo.setText("Nuevo");
+        b_editar.setText("Editar");
+        b_foto.setEnabled(false);
+        b_cancelar.setEnabled(false);
+        b_nuevo.setEnabled(true);
+        b_nuevo.setBackground(null);
+        b_cancelar.setBackground(null);
+        b_editar.setBackground(null);
+
+        int filaSeleccionada = Tabla_empleados.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            cargar_datos_tabla(filaSeleccionada);
+        } else {
+            limpiar_text();
+        }
+        b_cancelar.setEnabled(false);
+        Tabla_empleados.clearSelection();
+        Tabla_empleados.setEnabled(true);
+        }
     }//GEN-LAST:event_b_cancelarActionPerformed
 
     private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
-
         D_buscar_empleado emple = new D_buscar_empleado(this, true);
         emple.setLocationRelativeTo(V_R_Empleado.this);
         emple.setVisible(true);
-        
-        //int numero = emple.getFila();
-
-        //System.out.println("El número obtenido del diálogo es: " + fila);
         
         fila = emple.getFila();
         if (fila >= 0 && fila < Tabla_empleados.getRowCount()) {
@@ -1378,7 +1426,6 @@ public class V_R_Empleado extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel l_Foto;
-    private javax.swing.JLabel l_aviso;
     private javax.swing.JLabel l_curp;
     private javax.swing.JLabel l_f_nac;
     private javax.swing.JLabel l_foto;

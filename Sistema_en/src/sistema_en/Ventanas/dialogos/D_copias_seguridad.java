@@ -100,9 +100,6 @@ public class D_copias_seguridad extends javax.swing.JDialog {
             break;
     }
 }
-    
-    
-    
     }
 
     /**

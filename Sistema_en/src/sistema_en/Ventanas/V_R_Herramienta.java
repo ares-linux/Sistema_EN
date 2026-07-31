@@ -94,7 +94,6 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         b_cerrar = new javax.swing.JButton();
         b_cancelar = new javax.swing.JButton();
         b_eliminar = new javax.swing.JButton();
-        l_aviso = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla_herramientas = new javax.swing.JTable();
 
@@ -264,18 +263,14 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(13, 15, 15, 15);
         P_botones.add(b_eliminar, gridBagConstraints);
 
-        l_aviso.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        l_aviso.setText("aviso");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(l_id)
@@ -297,21 +292,19 @@ public class V_R_Herramienta extends javax.swing.JFrame {
                                             .addComponent(l_tipo, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(l_n_serie, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(l_foto, javax.swing.GroupLayout.Alignment.LEADING))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(l_aviso, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGap(18, 18, 18)))
                         .addComponent(h_foto, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(P_botones, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(P_botones, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
+                .addGap(26, 26, 26)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(l_aviso)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
@@ -402,61 +395,24 @@ public class V_R_Herramienta extends javax.swing.JFrame {
 }
     
     public void creacion_exitosa(){       
-            l_aviso.setForeground(Color.decode("#008000"));
             String mensaje;
             mensaje = "La herramienta " + c_tipo.getSelectedItem() + " fue registrado con éxito.";
             Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
-             
-            //toast = mensaje;
-            //l_aviso.setVisible(true);
-            //l_aviso.setText(mensaje);
-            
-            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-            //    @Override
-            //    public void actionPerformed(java.awt.event.ActionEvent e) {
-            //    l_aviso.setText(""); // Se limpia el mensaje solo
-            //    l_aviso.setVisible(false);
-            //}
-            //}).start();  
+ 
     }
     
     public void creacion_tipo(){       
-            l_aviso.setForeground(Color.decode("#008000"));
             String mensaje;
             mensaje = "El tipo de herramienta " + c_tipo.getSelectedItem() + " fue añadido con éxito.";
             Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
-             
-            //toast = mensaje;
-            //l_aviso.setVisible(true);
-            //l_aviso.setText(mensaje);
-            
-            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-            //    @Override
-            //    public void actionPerformed(java.awt.event.ActionEvent e) {
-            //    l_aviso.setText(""); // Se limpia el mensaje solo
-            //    l_aviso.setVisible(false);
-            //}
-            //}).start();  
+ 
     }
     
     public void edicion_exitosa(){
-        
-            l_aviso.setForeground(Color.decode("FFA500"));
             String mensaje;
             mensaje = "✓ Cambios guardados con éxito.";
             Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
-                        
-            //toast = mensaje;
-            //l_aviso.setVisible(true);
-            //l_aviso.setText(mensaje);
-                                    
-            //new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-            //    @Override
-            //    public void actionPerformed(java.awt.event.ActionEvent e) {
-            //    l_aviso.setText(""); // Se limpia el mensaje solo
-            //    l_aviso.setVisible(false);
-            //}
-            //}).start();  
+
     }
     
     public void restablecer_color(){
@@ -525,17 +481,21 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     bloquear_text();
     b_foto.setEnabled(false);
     b_añadir.setEnabled(false);
-    l_aviso.setVisible(false);
+
     b_cancelar.setEnabled(false);
     actualizar_imagenes_tema();
     limpiar_text();
     }//GEN-LAST:event_formWindowOpened
 
     private void Tabla_herramientasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_herramientasMouseClicked
-        fila = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
-        cargar_datos_tabla(fila);
-        //int indice = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
-        //cargar_datos_tabla(indice);
+        if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
+            return;
+        }
+        else{
+            fila = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
+            cargar_datos_tabla(fila);
+        }
+        
     }//GEN-LAST:event_Tabla_herramientasMouseClicked
 
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
@@ -550,6 +510,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
                 return;
             }
 
+            cargar_datos_tabla(fila);
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
             b_eliminar.setEnabled(false);
@@ -598,13 +559,14 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }//GEN-LAST:event_b_editarActionPerformed
 
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
-        b_añadir.setEnabled(true);
-        desbloquear_text();
-        b_foto.setEnabled(true);
-        b_cancelar.setEnabled(true);
-
+        
         if ("Nuevo".equals(b_nuevo.getText()))
         {
+            Tabla_herramientas.setEnabled(false);
+            b_añadir.setEnabled(true);
+            desbloquear_text();
+            b_foto.setEnabled(true);
+            b_cancelar.setEnabled(true);
             b_nuevo.setText("Guardar");
             limpiar_text();
             bloquear_botones();
@@ -631,6 +593,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
             boolean guardadoExitoso = dao.insertarHerramienta(id_tipo, n_serie, foto);
 
             if (guardadoExitoso) {
+                Tabla_herramientas.setEnabled(true);
                 b_nuevo.setText("Nuevo");
                 llenar_tabla();
                 desbloquear_botones();
@@ -806,11 +769,10 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     } else {
         limpiar_text();
     }
-            
-    l_aviso.setVisible(false);
-    l_aviso.setText("");
+
     b_cancelar.setEnabled(false);
-}
+    Tabla_herramientas.clearSelection();
+    }
     }//GEN-LAST:event_b_cancelarActionPerformed
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
@@ -989,7 +951,6 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel l_aviso;
     private javax.swing.JLabel l_foto;
     private javax.swing.JLabel l_id;
     private javax.swing.JLabel l_n_serie;

@@ -10,6 +10,8 @@ import java.util.List;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import sistema_en.Objetos.Configuraciones;
 
@@ -33,8 +35,11 @@ public class D_configuraciones extends javax.swing.JDialog {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {   
         if ("Guardar preferencias".equals(b_guardar_preferencias.getText())) {
+            
+            //javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            b_cerrar.doClick();
             b_guardar_preferencias.requestFocus();
-            javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            
         } else {
             dispose();
         }
@@ -42,10 +47,63 @@ public class D_configuraciones extends javax.swing.JDialog {
     });
 
 
-    this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+    //this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+    
+        c_tema.setSelectedIndex(-1);
+        ch_error.setSelected(false);
+        t_carpeta_c.setText("");
+        c_modelo_pdf.setSelectedIndex(-1);
         
+        ConfiguracionesDAO dao = new ConfiguracionesDAO();
+        List<String[]> configs = dao.obtenerConfiguraciones();
+    
+        for (String[] conf : configs) {
+
+        String clave = conf[1];
+        String valor = conf[2];
+
+        switch (clave) {
+
+            case "tema":
+                if ("Claro".equals(valor)){
+                    c_tema.setSelectedItem("Claro");
+                }
+                else if ("Oscuro".equals(valor)){
+                    c_tema.setSelectedItem("Oscuro");
+                }
+                break;
+            
+            case "sonido_error":
+                ch_error.setSelected(Boolean.parseBoolean(valor));
+                break;
+
+            case "modelo_c":
+                c_modelo_pdf.setSelectedItem(valor);
+            break;
+
+            case "carpeta_ce":
+                    if (valor != null && !valor.isBlank()) {
+
+                    File carpeta = new File(valor);
+
+                    if (carpeta.exists() && carpeta.isDirectory()) {
+                        t_carpeta_c.setText(valor);
+                    } else {
+                        t_carpeta_c.setText("");
+                    }
+
+                    } else {
+                        t_carpeta_c.setText("");
+                    }
+                break;
+        }
+    }
+    
     }
 
+    String tema_comparado;
+    String tema_inicial;
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,18 +129,16 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         b_acerca_de = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
-        C_modelo_pdf = new javax.swing.JComboBox<>();
+        c_modelo_pdf = new javax.swing.JComboBox<>();
         b_vista_previa = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        c_error = new javax.swing.JCheckBox();
+        ch_error = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
         b_copias_seguridad = new javax.swing.JButton();
         b_cambiar_contraseña = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(740, 410));
         setMinimumSize(new java.awt.Dimension(740, 410));
-        setPreferredSize(new java.awt.Dimension(740, 410));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -175,6 +231,11 @@ public class D_configuraciones extends javax.swing.JDialog {
         getContentPane().add(t_carpeta_c, gridBagConstraints);
 
         b_carpeta_c.setText("...");
+        b_carpeta_c.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_carpeta_cActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -210,7 +271,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel14, gridBagConstraints);
 
-        C_modelo_pdf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clasico", "Moderno", "MInimalista", "Tecnico" }));
+        c_modelo_pdf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clasico", "Moderno", "Minimalista", "Tecnico" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
@@ -218,7 +279,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 105);
-        getContentPane().add(C_modelo_pdf, gridBagConstraints);
+        getContentPane().add(c_modelo_pdf, gridBagConstraints);
 
         b_vista_previa.setText("Vista previa");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -236,13 +297,13 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel4, gridBagConstraints);
 
-        c_error.setSelected(true);
-        c_error.setText("Error");
+        ch_error.setSelected(true);
+        ch_error.setText("Error");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(c_error, gridBagConstraints);
+        getContentPane().add(ch_error, gridBagConstraints);
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel8.setText("Copias de seguridad");
@@ -280,6 +341,16 @@ public class D_configuraciones extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    public void cambio_tema(){
+        
+        
+        tema_comparado = c_tema.getSelectedItem().toString();
+        
+        if (tema_inicial != tema_comparado){
+            JOptionPane.showMessageDialog(this, "El tema seleccionado tendra efecto despues de reiniciar el programa");
+        }
+    }
+    
     public class r_sonido {
 
         public static void reproducir(String ruta) {
@@ -299,15 +370,22 @@ public class D_configuraciones extends javax.swing.JDialog {
     
     boolean error = false;
     
+    public void limpiar_text(){
+        c_tema.setSelectedIndex(-1);
+        ch_error.setSelected(false);
+        t_carpeta_c.setText("");
+        c_modelo_pdf.setSelectedIndex(-1);
+    }
+    
     public void bloquear_text(){
         c_tema.setEnabled(false);
 
         t_carpeta_c.setEnabled(false);
         //t_logo.setEnabled(false);
-        c_error.setEnabled(false);
+        ch_error.setEnabled(false);
         
         //Sl_volumen.setEnabled(false);
-        C_modelo_pdf.setEnabled(false);
+        c_modelo_pdf.setEnabled(false);
     }
     
     public void desbloquear_text(){
@@ -316,10 +394,10 @@ public class D_configuraciones extends javax.swing.JDialog {
         //t_contraseña_n.setEnabled(true);
         t_carpeta_c.setEnabled(true);
         //t_logo.setEnabled(true);
-        c_error.setEnabled(true);
+        ch_error.setEnabled(true);
         
         //Sl_volumen.setEnabled(true);
-        C_modelo_pdf.setEnabled(true);
+        c_modelo_pdf.setEnabled(true);
     }
     
     public void bloquear_botones(){
@@ -345,7 +423,6 @@ public class D_configuraciones extends javax.swing.JDialog {
         if("Guardar preferencias".equals(b_guardar_preferencias.getText())){
             
             javax.swing.JOptionPane.showMessageDialog(this, "Guarde los cambios realizados antes de salir.");
-            return;
         }
         else{
             this.dispose();
@@ -354,51 +431,51 @@ public class D_configuraciones extends javax.swing.JDialog {
 
     private void b_guardar_preferenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_guardar_preferenciasActionPerformed
         if (b_guardar_preferencias.getText().equals("Editar configuraciones")) {
-            // Habilitar la edición de campos de texto y botones de búsqueda
             desbloquear_text();
             desbloquear_botones();
             b_carpeta_c.setEnabled(true);
-            //b_logo.setEnabled(true);
             b_guardar_preferencias.setText("Guardar preferencias");
         } else {
-            // AQUÍ GUARDAS LOS DATOS EN TU OBJETO O BD
-            // Ejemplo:
-            // configuracion.setTema(c_tema.getSelectedItem().toString());
-            // configuracion.setRutaCarpeta(t_carpeta_c.getText());
-            // configuracion.setRutaLogo(t_logo.getText());
-            // configuracion.guardar(); // Tu método para persistir datos
+            String tema = String.valueOf(c_tema.getSelectedItem().toString());
+            String sonido_error = String.valueOf(ch_error.isSelected());
             
-            bloquear_text();
-            bloquear_botones();
-            b_guardar_preferencias.setText("Editar configuraciones");
-            javax.swing.JOptionPane.showMessageDialog(this, "Configuraciones guardadas con éxito.", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            System.out.println(c_modelo_pdf.getItemCount());
+            System.out.println(c_modelo_pdf.getSelectedItem());
+            
+            String modelo_c = String.valueOf(c_modelo_pdf.getSelectedItem().toString());
+            String carpeta_ce = String.valueOf(t_carpeta_c.getText());
+        
+            ConfiguracionesDAO dao = new ConfiguracionesDAO();
+            boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, modelo_c, carpeta_ce);
+
+            if (guardadoExitoso) {
+                JOptionPane.showMessageDialog(this, "Configuración guardada correctamente.");
+                this.dispose(); 
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if (guardadoExitoso) {
+                bloquear_text();
+                bloquear_botones();
+                b_guardar_preferencias.setText("Editar configuraciones");
+
+                JOptionPane.showMessageDialog(this, "Configuraciones guardadas con éxito.");
+                cambio_tema();
+                //JOptionPane.showMessageDialog(this, "Configuraciones guardadas con éxito.");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog( this,"Error al guardar en la base de datos.","Error",JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_b_guardar_preferenciasActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         bloquear_text();
         bloquear_botones();
-
-        ConfiguracionesDAO dao = new ConfiguracionesDAO();
-        List<String[]> configs = dao.obtenerConfiguraciones();
-
-        for (String[] conf : configs) {
-            String clave = conf[1];
-        String valor = conf[2];
-
-        switch (clave) {
-            case "tema":
-                // aplicar tema...
-                break;
-            case "sonido_error":
-                // activar/desactivar sonido...
-                break;
-            case "modelo_c":
-                // aplicar modelo...
-                break;
-            // etc.
-        }
-    }
+        
+        
+        
+        tema_inicial = c_tema.getSelectedItem().toString();
         
     }//GEN-LAST:event_formWindowOpened
     
@@ -419,6 +496,21 @@ public class D_configuraciones extends javax.swing.JDialog {
         contra.setLocationRelativeTo(D_configuraciones.this);
         contra.setVisible(true);
     }//GEN-LAST:event_b_cambiar_contraseñaActionPerformed
+
+    private void b_carpeta_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_carpeta_cActionPerformed
+        JFileChooser selector = new JFileChooser();
+        selector.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        selector.setAcceptAllFileFilterUsed(false);
+
+        int resultado = selector.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File carpeta = selector.getSelectedFile();
+            String ruta = carpeta.getAbsolutePath();
+            t_carpeta_c.setText(ruta);
+            System.out.println(ruta);
+        }
+    }//GEN-LAST:event_b_carpeta_cActionPerformed
 
     /**
      * @param args the command line arguments
@@ -463,7 +555,6 @@ public class D_configuraciones extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> C_modelo_pdf;
     private javax.swing.JButton b_acerca_de;
     private javax.swing.JButton b_cambiar_contraseña;
     private javax.swing.JButton b_carpeta_c;
@@ -473,8 +564,9 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.JButton b_vista_previa;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JCheckBox c_error;
+    private javax.swing.JComboBox<String> c_modelo_pdf;
     private javax.swing.JComboBox<String> c_tema;
+    private javax.swing.JCheckBox ch_error;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;

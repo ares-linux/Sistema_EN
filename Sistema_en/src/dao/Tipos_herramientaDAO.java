@@ -25,7 +25,7 @@ public class Tipos_herramientaDAO {
      * @return true si la inserción fue exitosa, false en caso contrario.
      */
     public boolean insertarTipo(String nombre) {
-        String sql = "INSERT INTO Tipos_herramientas (nombre) VALUES (?)";
+        String sql = "INSERT INTO Tipos_herramienta (nombre) VALUES (?)";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -48,7 +48,7 @@ public class Tipos_herramientaDAO {
      */
     public List<String[]> obtenerHerramientas() {
         List<String[]> lista = new ArrayList<>();
-        String sql = "SELECT id, nombre FROM Tipos_herramientas ORDER BY nombre";
+        String sql = "SELECT id_tipo_herramienta, nombre FROM Tipos_herramienta ORDER BY nombre";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -61,7 +61,7 @@ public class Tipos_herramientaDAO {
 
             while (rs.next()) {
                 String[] fila = new String[2];
-                fila[0] = String.valueOf(rs.getInt("id"));
+                fila[0] = String.valueOf(rs.getInt("id_tipo_herramienta"));
                 fila[1] = rs.getString("nombre");
                 lista.add(fila);
             }
@@ -79,7 +79,7 @@ public class Tipos_herramientaDAO {
      * @return true si ya existe, false si no.
      */
     public boolean existeTipo(String nombre) {
-        String sql = "SELECT COUNT(*) FROM Tipos_herramientas WHERE LOWER(nombre) = LOWER(?)";
+        String sql = "SELECT COUNT(*) FROM Tipos_herramienta WHERE LOWER(nombre) = LOWER(?)";
 
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {

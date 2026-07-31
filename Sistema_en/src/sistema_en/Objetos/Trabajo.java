@@ -15,9 +15,12 @@ public class Trabajo {
     private int id_trabajo;
     private String descripcion;
     private String direccion;
-    private LocalDate fecha;
-    private LocalTime hora;
+    private LocalDate fecha_cr;
+    private LocalTime hora_cr;
     private String estado;
+    private int id_cliente;
+    private LocalDate fecha_inicio;
+    private LocalDate fecha_fin;
     
     public Trabajo(){
         
@@ -51,34 +54,6 @@ public class Trabajo {
      */
     public void setId_trabajo(int id_trabajo) {
         this.id_trabajo = id_trabajo;
-    }
-
-    /**
-     * @return the fecha
-     */
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    /**
-     * @param fecha the fecha to set
-     */
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    /**
-     * @return the hora
-     */
-    public LocalTime getHora() {
-        return hora;
-    }
-
-    /**
-     * @param hora the hora to set
-     */
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
     }
 
     /**
@@ -121,6 +96,76 @@ public class Trabajo {
      */
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    /**
+     * @return the fecha_cr
+     */
+    public LocalDate getFecha_cr() {
+        return fecha_cr;
+    }
+
+    /**
+     * @param fecha_cr the fecha_cr to set
+     */
+    public void setFecha_cr(LocalDate fecha_cr) {
+        this.fecha_cr = fecha_cr;
+    }
+
+    /**
+     * @return the hora_cr
+     */
+    public LocalTime getHora_cr() {
+        return hora_cr;
+    }
+
+    /**
+     * @param hora_cr the hora_cr to set
+     */
+    public void setHora_cr(LocalTime hora_cr) {
+        this.hora_cr = hora_cr;
+    }
+
+    /**
+     * @return the fecha_inicio
+     */
+    public LocalDate getFecha_inicio() {
+        return fecha_inicio;
+    }
+
+    /**
+     * @param fecha_inicio the fecha_inicio to set
+     */
+    public void setFecha_inicio(LocalDate fecha_inicio) {
+        this.fecha_inicio = fecha_inicio;
+    }
+
+    /**
+     * @return the fecha_fin
+     */
+    public LocalDate getFecha_fin() {
+        return fecha_fin;
+    }
+
+    /**
+     * @param fecha_fin the fecha_fin to set
+     */
+    public void setFecha_fin(LocalDate fecha_fin) {
+        this.fecha_fin = fecha_fin;
+    }
+
+    /**
+     * @return the id_cliente
+     */
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    /**
+     * @param id_cliente the id_cliente to set
+     */
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
     
     

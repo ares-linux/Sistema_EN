@@ -12,6 +12,8 @@ public class Cliente {
     private int id_cliente;
     private String nombre_c;
     private String telefono;
+    private String u_modificacion;
+    private String fecha_registro;
     
     public Cliente(){
         
@@ -33,6 +35,8 @@ public class Cliente {
         
     }
 
+    
+    
     /**
      * @return the id_cliente
      */
@@ -73,6 +77,34 @@ public class Cliente {
      */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    /**
+     * @return the u_modificacion
+     */
+    public String getU_modificacion() {
+        return u_modificacion;
+    }
+
+    /**
+     * @param u_modificacion the u_modificacion to set
+     */
+    public void setU_modificacion(String u_modificacion) {
+        this.u_modificacion = u_modificacion;
+    }
+
+    /**
+     * @return the fecha_registro
+     */
+    public String getFecha_registro() {
+        return fecha_registro;
+    }
+
+    /**
+     * @param fecha_registro the fecha_registro to set
+     */
+    public void setFecha_registro(String fecha_registro) {
+        this.fecha_registro = fecha_registro;
     }
     
     

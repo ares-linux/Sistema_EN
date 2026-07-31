@@ -9,7 +9,7 @@ package sistema_en.Objetos;
  * @author ares
  */
 public class Tipos_herramienta {
-    private int id;
+    private int id_tipo_herramienta;
     private String nombre;
     
     public Tipos_herramienta(){
@@ -33,20 +33,6 @@ public class Tipos_herramienta {
     }
 
     /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
      * @return the nombre
      */
     public String getNombre() {
@@ -58,6 +44,20 @@ public class Tipos_herramienta {
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    /**
+     * @return the id_tipo_herramienta
+     */
+    public int getId_tipo_herramienta() {
+        return id_tipo_herramienta;
+    }
+
+    /**
+     * @param id_tipo_herramienta the id_tipo_herramienta to set
+     */
+    public void setId_tipo_herramienta(int id_tipo_herramienta) {
+        this.id_tipo_herramienta = id_tipo_herramienta;
     }
     
     
