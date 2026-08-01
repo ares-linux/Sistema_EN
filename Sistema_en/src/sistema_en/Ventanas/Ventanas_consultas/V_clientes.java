@@ -5,9 +5,12 @@
 package sistema_en.Ventanas.Ventanas_consultas;
 
 import dao.ClienteDAO;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -34,12 +37,32 @@ public class V_clientes extends javax.swing.JFrame {
         Tabla_clientes.setDefaultEditor(Object.class, null);
         Tabla_clientes.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         
-        //DefaultTableModel modelo = (DefaultTableModel) Tabla_clientes.getModel();
-        
-        //    Object[] fila1 = {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"};
-        
-        //modelo.addRow(fila1);
-        
+        String placeholder = "Escribe el nombre o id del cliente";
+
+            // Configurar el texto inicial y el color gris
+            t_buscar.setText(placeholder);
+            t_buscar.setForeground(Color.GRAY);
+
+            // Agregar el listener para controlar el foco
+            t_buscar.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Si el texto actual es el placeholder y está en gris, lo borramos
+                    if (t_buscar.getText().equals(placeholder)) {
+                        t_buscar.setText("");
+                        t_buscar.setForeground(Color.BLACK); // Color normal al escribir
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Si el usuario deja el campo vacío, volvemos a poner el placeholder
+                    if (t_buscar.getText().isEmpty()) {
+                        t_buscar.setText(placeholder);
+                        t_buscar.setForeground(Color.GRAY);
+                    }
+                }
+            });
         
     }
     
