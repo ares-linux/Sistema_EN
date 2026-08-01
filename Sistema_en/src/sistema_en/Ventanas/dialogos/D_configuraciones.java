@@ -47,7 +47,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     });
 
 
-    //this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+    this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
     
         c_tema.setSelectedIndex(-1);
         ch_error.setSelected(false);
