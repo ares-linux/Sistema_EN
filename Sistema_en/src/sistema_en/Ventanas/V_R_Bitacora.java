@@ -4,6 +4,10 @@
  */
 package sistema_en.Ventanas;
 
+import com.formdev.flatlaf.FlatLaf;
+import dao.BitacoraDAO;
+import dao.TrabajadorDAO;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -15,21 +19,27 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import sistema_en.Objetos.Bitacora;
 import java.time.LocalDate;
+import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import raven.toast.Notifications;
+import sistema_en.Ventanas.dialogos.D_buscar_bitacora;
 
 /**
  *
  * @author zahid
  */
-public class V_bitacora extends javax.swing.JFrame {
+public class V_R_Bitacora extends javax.swing.JFrame {
     
     Bitacora bitacora = new Bitacora();
     int fila;
+    int id_trabajo;
+    String ruta_foto_defecto;
     
     // =========================================================================
     // [CONFIGURACIÓN JTREE] - Propiedades y Listas para la gestión de la Bitácora
@@ -109,7 +119,7 @@ public class V_bitacora extends javax.swing.JFrame {
     
     // filtrarTablaPorFecha(): Llena la tabla y listaFiltrada solo con los registros de la fecha especificada
     private void filtrarTablaPorFecha(LocalDate fecha) {
-        DefaultTableModel modelo = (DefaultTableModel) Tabla_bitacora.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_bitacoras.getModel();
         modelo.setRowCount(0);
         listaFiltrada.clear();
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
@@ -129,7 +139,7 @@ public class V_bitacora extends javax.swing.JFrame {
     
     // mostrarTodosEnTabla(): Llena la tabla con la totalidad de registros almacenados en listaCompleta
     private void mostrarTodosEnTabla() {
-        DefaultTableModel modelo = (DefaultTableModel) Tabla_bitacora.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_bitacoras.getModel();
         modelo.setRowCount(0);
         listaFiltrada.clear();
         listaFiltrada.addAll(listaCompleta);
@@ -160,7 +170,7 @@ public class V_bitacora extends javax.swing.JFrame {
             Bitacora target = ((BitacoraNodeWrapper) selectedNode.getUserObject()).getBitacora();
             for (int i = 0; i < listaFiltrada.size(); i++) {
                 if (listaFiltrada.get(i) == target) {
-                    Tabla_bitacora.setRowSelectionInterval(i, i);
+                    Tabla_bitacoras.setRowSelectionInterval(i, i);
                     fila = i;
                     cargar_datos_tabla(i);
                     break;
@@ -173,8 +183,30 @@ public class V_bitacora extends javax.swing.JFrame {
     /**
      * Creates new form V_bitacora
      */
-    public V_bitacora() {
+    public V_R_Bitacora() {
         initComponents();
+        
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {   
+        if ("Guardar".equals(b_nuevo.getText()) || "Guardar".equals(b_editar.getText())) {
+            //javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            b_cancelar.doClick(); 
+  
+            if (!b_cancelar.isEnabled()) {
+            dispose(); 
+            }
+        } else {
+            dispose();
+        }
+        
+    }
+    });
+
+
+    
         
         L_evidencias.addKeyListener(new KeyAdapter() {
         @Override
@@ -215,9 +247,16 @@ public class V_bitacora extends javax.swing.JFrame {
                 }
             }
         });
-
         
         
+        
+        
+        
+    }
+        public int recibirTrabajo(int id_trabajo_i){
+        cargarTrabajo(id_trabajo_i); 
+        System.out.println("id del trabajo: " + id_trabajo_i);
+        return id_trabajo_i;
         
     }
 
@@ -241,7 +280,7 @@ public class V_bitacora extends javax.swing.JFrame {
         jTextField6 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        T_pestañas = new javax.swing.JTabbedPane();
         P_registrar_bitacora = new javax.swing.JPanel();
         P_contenedor_registrar = new javax.swing.JPanel();
         P_formulario = new javax.swing.JPanel();
@@ -252,18 +291,18 @@ public class V_bitacora extends javax.swing.JFrame {
         L_evidencias = new javax.swing.JList<>();
         t_evidencia = new javax.swing.JTextField();
         b_foto = new javax.swing.JButton();
-        jLabel12 = new javax.swing.JLabel();
+        l_evidencias = new javax.swing.JLabel();
         b_eliminar_evidencia = new javax.swing.JButton();
         P_datos = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         T_notas = new javax.swing.JTextArea();
-        jLabel10 = new javax.swing.JLabel();
+        l_entrada = new javax.swing.JLabel();
         time_hora_salida = new com.github.lgooddatepicker.components.TimePicker();
         time_hora_llegada = new com.github.lgooddatepicker.components.TimePicker();
         c_plomero = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        l_salida = new javax.swing.JLabel();
+        l_notas = new javax.swing.JLabel();
+        l_plomero = new javax.swing.JLabel();
         P_imagen_evidencia = new javax.swing.JPanel();
         P_visor_imagen = new javax.swing.JPanel();
         P_controles_imagen = new javax.swing.JPanel();
@@ -276,17 +315,17 @@ public class V_bitacora extends javax.swing.JFrame {
         a_bitacora = new javax.swing.JTree();
         P_botones = new javax.swing.JPanel();
         b_cancelar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        b_buscar = new javax.swing.JButton();
+        b_cerrar = new javax.swing.JButton();
         b_editar = new javax.swing.JButton();
-        b_eliminar = new javax.swing.JButton();
         t_id = new javax.swing.JTextField();
         t_fecha = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        P_consultas = new javax.swing.JPanel();
+        P_tabla = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Tabla_bitacora = new javax.swing.JTable();
+        Tabla_bitacoras = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        b_buscar = new javax.swing.JButton();
 
         jLabel5.setText("Fecha");
 
@@ -379,13 +418,13 @@ public class V_bitacora extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_evidencias.add(b_foto, gridBagConstraints);
 
-        jLabel12.setText("Ruta de evidencia");
+        l_evidencias.setText("Ruta de evidencia");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_evidencias.add(jLabel12, gridBagConstraints);
+        P_evidencias.add(l_evidencias, gridBagConstraints);
 
         b_eliminar_evidencia.setText("Eliminar");
         b_eliminar_evidencia.addActionListener(new java.awt.event.ActionListener() {
@@ -424,13 +463,13 @@ public class V_bitacora extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos.add(jScrollPane2, gridBagConstraints);
 
-        jLabel10.setText("Hora de entrada");
+        l_entrada.setText("Hora de entrada");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_datos.add(jLabel10, gridBagConstraints);
+        P_datos.add(l_entrada, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -446,7 +485,6 @@ public class V_bitacora extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos.add(time_hora_llegada, gridBagConstraints);
 
-        c_plomero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLO_00", "PLO_01", "PLO_02", "PLO_03", "PLO_04", "PLO_05", "PLO_06", "PLO_07", "PLO_08", "PLO_09", "Administrador" }));
         c_plomero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 c_plomeroActionPerformed(evt);
@@ -460,29 +498,29 @@ public class V_bitacora extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos.add(c_plomero, gridBagConstraints);
 
-        jLabel11.setText("Hora de salida");
+        l_salida.setText("Hora de salida");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_datos.add(jLabel11, gridBagConstraints);
+        P_datos.add(l_salida, gridBagConstraints);
 
-        jLabel13.setText("Descripcion / Notas");
+        l_notas.setText("Descripcion / Notas");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_datos.add(jLabel13, gridBagConstraints);
+        P_datos.add(l_notas, gridBagConstraints);
 
-        jLabel9.setText("Seleccionar plomero:");
+        l_plomero.setText("Seleccionar plomero:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_datos.add(jLabel9, gridBagConstraints);
+        P_datos.add(l_plomero, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -558,7 +596,7 @@ public class V_bitacora extends javax.swing.JFrame {
 
         P_registrar_bitacora.add(P_contenedor_registrar, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Registrar bitacora", P_registrar_bitacora);
+        T_pestañas.addTab("Registrar bitacora", P_registrar_bitacora);
 
         P_historial.setLayout(new java.awt.BorderLayout());
 
@@ -582,10 +620,10 @@ public class V_bitacora extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_botones.add(b_cancelar, gridBagConstraints);
 
-        jButton1.setText("Cerrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        b_cerrar.setText("Cerrar");
+        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                b_cerrarActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -594,16 +632,7 @@ public class V_bitacora extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_botones.add(jButton1, gridBagConstraints);
-
-        b_buscar.setText("Buscar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_botones.add(b_buscar, gridBagConstraints);
+        P_botones.add(b_cerrar, gridBagConstraints);
 
         b_editar.setText("Editar");
         b_editar.addActionListener(new java.awt.event.ActionListener() {
@@ -618,20 +647,6 @@ public class V_bitacora extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_botones.add(b_editar, gridBagConstraints);
-
-        b_eliminar.setText("Eliminar");
-        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_eliminarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_botones.add(b_eliminar, gridBagConstraints);
 
         t_id.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -667,11 +682,11 @@ public class V_bitacora extends javax.swing.JFrame {
 
         P_historial.add(P_botones, java.awt.BorderLayout.PAGE_START);
 
-        jTabbedPane1.addTab("Historial", P_historial);
+        T_pestañas.addTab("Historial", P_historial);
 
-        P_consultas.setLayout(new java.awt.BorderLayout());
+        P_tabla.setLayout(new java.awt.BorderLayout());
 
-        Tabla_bitacora.setModel(new javax.swing.table.DefaultTableModel(
+        Tabla_bitacoras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -679,21 +694,102 @@ public class V_bitacora extends javax.swing.JFrame {
                 "Plomero", "Fecha", "Hora de entrada", "Hora de salida", "Evidencia", "Notas"
             }
         ));
-        Tabla_bitacora.addMouseListener(new java.awt.event.MouseAdapter() {
+        Tabla_bitacoras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Tabla_bitacoraMouseClicked(evt);
+                Tabla_bitacorasMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(Tabla_bitacora);
+        jScrollPane1.setViewportView(Tabla_bitacoras);
 
-        P_consultas.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        P_tabla.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Consultas", P_consultas);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+        b_buscar.setText("Buscar");
+        b_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_buscarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(b_buscar, gridBagConstraints);
+
+        P_tabla.add(jPanel1, java.awt.BorderLayout.PAGE_START);
+
+        T_pestañas.addTab("Tabla", P_tabla);
+
+        getContentPane().add(T_pestañas, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private final void configurar_tabla(){
+        Tabla_bitacoras.setDefaultEditor(Object.class, null);
+        Tabla_bitacoras.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_bitacoras.getTableHeader().setReorderingAllowed(false);
+        Tabla_bitacoras.getTableHeader().setResizingAllowed(false);
+    }
+    
+    public void actualizar_imagenes_tema() {
+        if (FlatLaf.isLafDark()) {
+            ruta_foto_defecto = "/Imagenes/camara_claro.png";
+        } else {
+            ruta_foto_defecto = "/Imagenes/camara_oscuro.png";
+        }        
+    }
+    
+    private void cargarTrabajo(int id_trabajo_i){
+        
+        id_trabajo = id_trabajo_i;
+        String id = String.valueOf(id_trabajo);
+        t_id.setText(id);
+        
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_bitacoras.getModel();
+        modelo.setRowCount(0); 
+        
+        BitacoraDAO dao = new BitacoraDAO();
+        List<Bitacora> lista = dao.obtenerBitacoras(id_trabajo);
+
+        for (Bitacora b : lista) {
+            modelo.addRow(new Object[]{
+                b.getId_trabajador(),
+                b.getFecha(),
+                b.getHora_llegada(),
+                b.getHora_salida(),
+                b.getEvidencias(),
+                b.getNotas()
+            });
+        }
+
+        this.Tabla_bitacoras.setModel(modelo);
+        
+        //llenar_tabla();
+        
+    }
+    
+    
+    public void creacion_exitosa(){       
+            String mensaje;
+            mensaje = "La bitacora fue registrado con éxito.";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+    }
+    
+    public void edicion_exitosa(){
+            String mensaje;
+            mensaje = "✓ Cambios guardados con éxito.";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje); 
+    }
+    
+    public void eliminacion_exitosa(){
+            String mensaje;
+            mensaje = "Bitacora eliminado correctamente";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje); 
+    }
     
     public void bloquear_text(){
         c_plomero.setEnabled(false);
@@ -726,7 +822,6 @@ public class V_bitacora extends javax.swing.JFrame {
     }
     
     public void bloquear_botones(){
-        b_eliminar.setEnabled(false);
         b_editar.setEnabled(false);
         b_buscar.setEnabled(false);
         //b_nuevo.setEnabled(false);
@@ -734,7 +829,6 @@ public class V_bitacora extends javax.swing.JFrame {
     }
     
     public void desbloquear_botones(){
-        b_eliminar.setEnabled(true);
         b_editar.setEnabled(true);
         b_buscar.setEnabled(true);
         b_nuevo.setEnabled(true);
@@ -743,6 +837,20 @@ public class V_bitacora extends javax.swing.JFrame {
     
     public void fecha(){
         t_fecha.setText(java.time.LocalDate.now().toString());
+    }
+    
+    public void cargar_Trabajadores_Combo() {
+        TrabajadorDAO dao = new TrabajadorDAO();
+        java.util.List<String[]> trabajadores = dao.obtenerTrabajadoresj();
+        
+        c_plomero.removeAllItems();
+        
+        for (String[] t : trabajadores) {
+            // t[0] = id_trabajador, t[1] = nombre
+            c_plomero.addItem(t[0] + " - " + t[1]);
+        }
+        
+        c_plomero.setSelectedIndex(-1);
     }
     
     public void limpiar_text(){
@@ -756,34 +864,25 @@ public class V_bitacora extends javax.swing.JFrame {
     }
     
     public void llenar_tabla(){
-        if (time_hora_llegada.getTime() == null || time_hora_salida.getTime() == null) {
-            return;
+        BitacoraDAO dao = new BitacoraDAO();
+        java.util.List<Bitacora> lista = dao.obtenerBitacoras(id_trabajo);
+        
+        if (lista != null) {
+            listaCompleta.clear();
+            listaCompleta.addAll(lista);
         }
         
-        Bitacora b = new Bitacora();
-        b.setId_trabajador(c_plomero.getSelectedItem().toString());
-        b.setFecha(java.time.LocalDate.parse(t_fecha.getText()));
-        b.setHora_llegada(time_hora_llegada.getTime());
-        b.setHora_salida(time_hora_salida.getTime());
-        java.util.List<String> evidencias = new java.util.ArrayList<>();
-        for (int i = 0; i < modeloLista.getSize(); i++) {
-            evidencias.add(modeloLista.getElementAt(i));
-        }
-        b.setEvidencias(evidencias);
-        b.setNotas(T_notas.getText());
-        
-        listaCompleta.add(b);
         actualizarArbol();
         refrescarTablaSegunSeleccionArbol();
     }
     
     public void cargar_datos_tabla(int indice){
-        this.c_plomero.setSelectedItem(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 0)));
-        this.t_fecha.setText(String.valueOf(this.Tabla_bitacora.getValueAt(indice, 1)));
+        this.c_plomero.setSelectedItem(String.valueOf(this.Tabla_bitacoras.getValueAt(indice, 0)));
+        this.t_fecha.setText(String.valueOf(this.Tabla_bitacoras.getValueAt(indice, 1)));
     
         // Recuperar los Strings de la tabla
-        String horaEntradaStr = String.valueOf(this.Tabla_bitacora.getValueAt(indice, 2));
-        String horaSalidaStr = String.valueOf(this.Tabla_bitacora.getValueAt(indice, 3));
+        String horaEntradaStr = String.valueOf(this.Tabla_bitacoras.getValueAt(indice, 2));
+        String horaSalidaStr = String.valueOf(this.Tabla_bitacoras.getValueAt(indice, 3));
     
         // Formateador para interpretar el texto de la tabla
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("hh:mm a");
@@ -830,7 +929,14 @@ public class V_bitacora extends javax.swing.JFrame {
         }
         
         Bitacora b = listaFiltrada.get(fila);
-        b.setId_trabajador(c_plomero.getSelectedItem().toString());
+        
+        if (c_plomero.getSelectedItem() != null) {
+            String seleccion = c_plomero.getSelectedItem().toString();
+            String idExtraido = seleccion.split(" - ")[0].trim(); // Extrae lo que está antes del guion
+            b.setId_trabajador(Integer.parseInt(idExtraido));
+        }
+        
+        //b.setId_trabajador(c_plomero.getSelectedItem().toString());
         b.setFecha(java.time.LocalDate.parse(t_fecha.getText()));
         b.setHora_llegada(time_hora_llegada.getTime());
         b.setHora_salida(time_hora_salida.getTime());
@@ -881,11 +987,63 @@ public class V_bitacora extends javax.swing.JFrame {
         }
     }
     
+    public void aviso_labels(){
+        
+        boolean error = false;
+        
+        if (c_plomero.getSelectedItem() == null) {
+            l_plomero.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        else{
+            l_plomero.setForeground(null);
+        }          
+                
+        if (time_hora_llegada.getTime() == null) {
+            l_entrada.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        else{
+            l_entrada.setForeground(null);
+        }
+        
+        if (time_hora_salida.getTime() == null) {
+            l_salida.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        else{
+            l_salida.setForeground(null);
+        }
+        
+        /*
+        if (T_notas.getText().trim().isEmpty()) {
+            l_notas.setForeground(Color.decode("#CE1126"));
+            error = false;
+        }
+
+        if (!T_notas.getText().trim().isEmpty()) {
+            l_notas.setForeground(null);
+            error = true;
+        }
+        
+        if (modeloLista.isEmpty()) {
+            l_evidencias.setForeground(Color.decode("#CE1126"));
+            error = false;
+        }
+        else{
+            l_evidencias.setForeground(null);
+        }
+        */
+                
+        
+    }
+    
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
-        cargar_foto();
+        
 
         if ("Nuevo".equals(b_nuevo.getText()))
         {
+            cargar_foto();
             desbloquear_text();
             this.b_foto.setEnabled(true);
             b_nuevo.setText("Guardar");
@@ -897,20 +1055,51 @@ public class V_bitacora extends javax.swing.JFrame {
         }
         else
         {
-            //if(t_n_serie.getText().trim().isEmpty() || t_foto.getText().trim().isEmpty())
-            //{
-              //  return;
-            //}
-            llenar_tabla();
-            b_nuevo.setText("Nuevo");
-            b_foto.setEnabled(false);
-            bloquear_text();
-            desbloquear_botones();
-            bloquear_botones_adicionales();
-            b_nuevo.setEnabled(true);
-            limpiar_text();
-            cargar_foto();
+            if(time_hora_llegada.getTime() == null || time_hora_salida.getTime() == null || c_plomero.getSelectedItem() == null)
+            {
+                aviso_labels();
+                return;
+            }
             
+            String fecha = t_fecha.getText();
+            String hora_llegada = time_hora_llegada.getText();
+            String hora_salida = time_hora_salida.getText();
+            String notas = T_notas.getText();
+            
+            // Convertir la lista de evidencias a un String separado por comas
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < modeloLista.getSize(); i++) {
+                if (i > 0) sb.append(",");
+                sb.append(modeloLista.getElementAt(i));
+            }
+            String evidencia = sb.toString();
+            
+            // Extraer el id del trabajador del combo
+            int idTrabajador = 0;
+            String seleccionPlomero = (String) c_plomero.getSelectedItem();
+            if (seleccionPlomero != null && !seleccionPlomero.isEmpty()) {
+                idTrabajador = Integer.parseInt(seleccionPlomero.split(" - ")[0].trim());
+            }
+            
+            BitacoraDAO dao = new BitacoraDAO();
+            boolean guardadoExitoso = dao.insertarBitacora(fecha, hora_llegada, hora_salida, evidencia, notas, id_trabajo, idTrabajador);
+            
+            if (guardadoExitoso) {
+                creacion_exitosa();
+                llenar_tabla();
+                b_nuevo.setText("Nuevo");
+                b_foto.setEnabled(false);
+                bloquear_text();
+                desbloquear_botones();
+                bloquear_botones_adicionales();
+                b_nuevo.setEnabled(true);
+                limpiar_text();
+                cargar_foto();
+                c_plomero.setSelectedItem(null);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Error al guardar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
 
@@ -919,96 +1108,223 @@ public class V_bitacora extends javax.swing.JFrame {
         {
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
-            b_eliminar.setEnabled(false);
-            b_buscar.setEnabled(false);
-            //b_guardar.setEnabled(false);
+            b_cancelar.setEnabled(true);
             desbloquear_text();
             desbloquear_botones_adicionales();
         }
         else
         {
-            //if(t_evidencia.getText().trim().isEmpty())
-            //{
-              //  return;
-            //}
-            b_editar.setText("Editar");
-            editar_tabla();
-            bloquear_text();
-            desbloquear_botones();
-            bloquear_botones_adicionales();
-            limpiar_text();
-            cargar_foto();
+            if(time_hora_llegada.getTime() == null || time_hora_salida.getTime() == null || c_plomero.getSelectedItem() == null)
+            {
+                aviso_labels();
+                return;
+            }
+            
+            
+            String fecha = t_fecha.getText();
+            String hora_llegada = time_hora_llegada.getText();
+            String hora_salida = time_hora_salida.getText();
+            String notas = T_notas.getText();
+            
+            // Convertir la lista de evidencias a un String separado por comas
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < modeloLista.getSize(); i++) {
+                if (i > 0) sb.append(",");
+                sb.append(modeloLista.getElementAt(i));
+            }
+            String evidencia = sb.toString();
+            
+            // Extraer el id del trabajador del combo
+            int idTrabajador = 0;
+            String seleccionPlomero = (String) c_plomero.getSelectedItem();
+            if (seleccionPlomero != null && !seleccionPlomero.isEmpty()) {
+                idTrabajador = Integer.parseInt(seleccionPlomero.split(" - ")[0].trim());
+            }
+            
+            int filaSeleccionada = Tabla_bitacoras.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un registro para editar.");
+                return;
+            }
+            int id_bitacora = listaFiltrada.get(filaSeleccionada).getId_bitacora();
+            
+            BitacoraDAO dao = new BitacoraDAO();
+            boolean actualizadoExitoso = dao.actualizarBitacora(fecha, hora_llegada, hora_salida, evidencia, notas, idTrabajador, id_bitacora);
+            
+            if (actualizadoExitoso) { 
+                b_editar.setText("Editar");
+                edicion_exitosa();
+                editar_tabla();
+                bloquear_text();
+                desbloquear_botones();
+                bloquear_botones_adicionales();
+                limpiar_text();
+                cargar_foto();
+            } else { 
+                JOptionPane.showMessageDialog(this, "Error al actualizar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            } 
         }
     }//GEN-LAST:event_b_editarActionPerformed
 
-    private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
-        fila = Tabla_bitacora.getSelectedRow();
-        if (fila == -1) {
-            return;
-        }
-        if (fila >= 0 && fila < listaFiltrada.size()) {
-            Bitacora b = listaFiltrada.get(fila);
-            listaCompleta.remove(b);
-            listaFiltrada.remove(fila);
-            
-            actualizarArbol();
-            refrescarTablaSegunSeleccionArbol();
-            
-            fila = fila - 1;
-            if (fila < 0) {
-                limpiar_text();
-            } else {
-                cargar_datos_tabla(fila);
-            }
-        }
-    }//GEN-LAST:event_b_eliminarActionPerformed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         fecha();
+        configurar_tabla();
+        cargar_Trabajadores_Combo();
         llenar_text();
-        //llenar_tabla();
+        llenar_tabla();
         bloquear_text();
         b_foto.setEnabled(false);
-        bloquear_botones();
-        b_nuevo.setEnabled(true);
+        //bloquear_botones();
+        //b_nuevo.setEnabled(true);
+        //b_buscar.setEnabled(true);
         bloquear_botones_adicionales();
         //b_guardar.setEnabled(true);
     }//GEN-LAST:event_formWindowOpened
 
     private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
-        String ruta = "G:\\Mi unidad\\Trabajo\\";
-    JFileChooser foto = new JFileChooser("c:\\fotossoft\\empleados\\");
-    FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
-    foto.setFileFilter(filtrado);
+        String directorioActual = System.getProperty("user.dir");
+        String ruta = "user.dir";
+        JFileChooser foto = new JFileChooser(directorioActual);
     
-    int respuesta = foto.showOpenDialog(this);
+        FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
+        foto.setFileFilter(filtrado);
     
-    if (respuesta == JFileChooser.APPROVE_OPTION)
-    {
-        ruta = foto.getSelectedFile().getPath();
-        modeloLista.addElement(ruta);
-        L_evidencias.setSelectedIndex(modeloLista.getSize() - 1);
-        this.t_evidencia.setText(ruta);
-        cargar_foto();
+        int respuesta = foto.showOpenDialog(this);
+    
+    if (respuesta == JFileChooser.APPROVE_OPTION) {
+            ruta = foto.getSelectedFile().getPath();
+            modeloLista.addElement(ruta);
+            L_evidencias.setSelectedIndex(modeloLista.getSize() - 1);
+            this.t_evidencia.setText(ruta);
+            cargar_foto();
     }
+        
     }//GEN-LAST:event_b_fotoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private boolean datos_moficados() {
+        int fila = Tabla_bitacoras.getSelectedRow();
+        if (fila == -1) return false;
+
+        String id_trabajador_original = String.valueOf(Tabla_bitacoras.getValueAt(fila, 0));
+        String fecha_original = String.valueOf(Tabla_bitacoras.getValueAt(fila, 1));
+        String notas_original = String.valueOf(Tabla_bitacoras.getValueAt(fila, 5));
+        
+        if (notas_original.equals("null")) notas_original = "";
+
+        String seleccionPlomero = c_plomero.getSelectedItem() != null ? c_plomero.getSelectedItem().toString() : "";
+        String idTrabajadorActual = "";
+        if (!seleccionPlomero.isEmpty()) {
+            idTrabajadorActual = seleccionPlomero.split(" - ")[0].trim();
+        }
+
+        String fechaActual = t_fecha.getText() != null ? t_fecha.getText() : "";
+        String notasActual = T_notas.getText() != null ? T_notas.getText() : "";
+
+        return !idTrabajadorActual.equals(id_trabajador_original)
+                || !fechaActual.equals(fecha_original)
+                || !notasActual.equals(notas_original);
+    }
+    
+    private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
+          if ("Guardar".equals(b_nuevo.getText()) || "Guardar".equals(b_editar.getText())) {
+            b_cancelar.doClick(); 
+                
+            if (!b_cancelar.isEnabled()) {
+                this.dispose(); 
+            }
+        } else {
+            this.dispose();
+        }
+    }//GEN-LAST:event_b_cerrarActionPerformed
 
     private void c_plomeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_plomeroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_c_plomeroActionPerformed
 
     private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-        // TODO add your handling code here:
+        // 1. PASO CLAVE: Detectar en qué modo estábamos antes de cancelar
+        boolean es_nuevo = "Guardar".equals(b_nuevo.getText());
+        boolean es_editar = "Guardar".equals(b_editar.getText());
+
+        if (es_nuevo || es_editar) {
+    
+        // --- MODO NUEVO ---
+            if (es_nuevo) {
+                // Validación: Si los campos NO están vacíos, pedimos confirmación
+                if (!campos_vacios()) { 
+                    int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar el registro? Se perderán los datos introducidos.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos y no cancelamos nada
+                }
+            }
+            // Si estaban vacíos o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+    
+        // --- MODO EDITAR ---
+        else if (es_editar) {
+           
+            if (datos_moficados()) { 
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+            
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; // El usuario dijo "No", nos salimos
+                }
+            }
+            // Si no se modificó nada o el usuario dijo "Sí", el código sigue aquí abajo...
+        }
+                 
+        bloquear_text();        
+        desbloquear_botones();  
+        restablecer_color();    
+        b_nuevo.setText("Nuevo");
+        b_editar.setText("Editar");
+        b_foto.setEnabled(false);
+        b_cancelar.setEnabled(false);
+        b_nuevo.setEnabled(true);
+        b_nuevo.setBackground(null);
+        b_cancelar.setBackground(null);
+        b_editar.setBackground(null);
+
+        int filaSeleccionada = Tabla_bitacoras.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            cargar_datos_tabla(filaSeleccionada);
+        } else {
+            limpiar_text();
+        }
+        b_cancelar.setEnabled(false);
+        Tabla_bitacoras.clearSelection();
+        limpiar_text();
+        Tabla_bitacoras.setEnabled(true);
+        }
     }//GEN-LAST:event_b_cancelarActionPerformed
 
-    private void Tabla_bitacoraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_bitacoraMouseClicked
-        fila = this.Tabla_bitacora.rowAtPoint(evt.getPoint());
+    public void restablecer_color(){
+        l_plomero.setForeground(null);
+        l_entrada.setForeground(null);
+        l_salida.setForeground(null);
+        l_notas.setForeground(null);
+        l_evidencias.setForeground(null);
+    }
+    
+    private boolean campos_vacios() {
+        
+    return //t_id.getText().trim().isEmpty()
+        c_plomero.getSelectedItem() == null
+        && time_hora_llegada.getTime() == null
+        && time_hora_salida.getTime() == null
+        && T_notas.getText().trim().isEmpty()
+        && modeloLista.isEmpty();
+    }
+    
+    private void Tabla_bitacorasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_bitacorasMouseClicked
+        fila = this.Tabla_bitacoras.rowAtPoint(evt.getPoint());
         cargar_datos_tabla(fila);
-    }//GEN-LAST:event_Tabla_bitacoraMouseClicked
+    }//GEN-LAST:event_Tabla_bitacorasMouseClicked
 
     private void b_eliminar_evidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminar_evidenciaActionPerformed
         fila = L_evidencias.getSelectedIndex();
@@ -1036,6 +1352,22 @@ public class V_bitacora extends javax.swing.JFrame {
         
     }//GEN-LAST:event_L_evidenciasKeyPressed
 
+    private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+        D_buscar_bitacora bitacora = new D_buscar_bitacora(this, true);
+        bitacora.setLocationRelativeTo(V_R_Bitacora.this);
+        bitacora.recibirTrabajo(id_trabajo);
+        bitacora.setVisible(true);
+        
+        fila = bitacora.getFila();
+        if (fila >= 0 && fila < Tabla_bitacoras.getRowCount()) {
+            Tabla_bitacoras.setRowSelectionInterval(fila, fila);
+        }
+        cargar_datos_tabla(fila);      
+        
+        T_pestañas.setSelectedIndex(0);
+        
+    }//GEN-LAST:event_b_buscarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1053,20 +1385,23 @@ public class V_bitacora extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(V_bitacora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(V_R_Bitacora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(V_bitacora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(V_R_Bitacora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(V_bitacora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(V_R_Bitacora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(V_bitacora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(V_R_Bitacora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new V_bitacora().setVisible(true);
+                new V_R_Bitacora().setVisible(true);
             }
         });
     }
@@ -1074,7 +1409,6 @@ public class V_bitacora extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> L_evidencias;
     private javax.swing.JPanel P_botones;
-    private javax.swing.JPanel P_consultas;
     private javax.swing.JPanel P_contenedor_registrar;
     private javax.swing.JPanel P_controles_imagen;
     private javax.swing.JPanel P_datos;
@@ -1083,27 +1417,24 @@ public class V_bitacora extends javax.swing.JFrame {
     private javax.swing.JPanel P_historial;
     private javax.swing.JPanel P_imagen_evidencia;
     private javax.swing.JPanel P_registrar_bitacora;
+    private javax.swing.JPanel P_tabla;
     private javax.swing.JPanel P_visor_imagen;
     private javax.swing.JTextArea T_notas;
-    private javax.swing.JTable Tabla_bitacora;
+    private javax.swing.JTabbedPane T_pestañas;
+    private javax.swing.JTable Tabla_bitacoras;
     private javax.swing.JTree a_bitacora;
     private javax.swing.JButton b_anterior;
     private javax.swing.JButton b_buscar;
     private javax.swing.JButton b_cancelar;
+    private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_editar;
-    private javax.swing.JButton b_eliminar;
     private javax.swing.JButton b_eliminar_evidencia;
     private javax.swing.JButton b_foto;
     private javax.swing.JButton b_nuevo;
     private javax.swing.JButton b_siguiente;
     private javax.swing.JButton b_ver_imagen;
     private javax.swing.JComboBox<String> c_plomero;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1111,18 +1442,22 @@ public class V_bitacora extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneArbol;
     private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JLabel l_entrada;
     private javax.swing.JLabel l_evidencia;
+    private javax.swing.JLabel l_evidencias;
+    private javax.swing.JLabel l_notas;
+    private javax.swing.JLabel l_plomero;
+    private javax.swing.JLabel l_salida;
     private javax.swing.JTextField t_evidencia;
     private javax.swing.JTextField t_fecha;
     private javax.swing.JTextField t_id;

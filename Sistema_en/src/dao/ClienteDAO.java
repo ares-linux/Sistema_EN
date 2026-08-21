@@ -19,13 +19,14 @@ import sistema_en.Objetos.Cliente;
  */
 public class ClienteDAO {
     
-    public int obtenerOCrearCliente(String nombre, String telefono) {
+    public int obtenerOCrearCliente(String nombre, String telefono,String fecha_registro) {
     // 1. Intentamos buscar si ya existe el cliente por nombre y teléfono
-    String sqlBuscar = "SELECT id_cliente FROM Cliente WHERE nombre_c = ? AND telefono = ?";
+    String sqlBuscar = "SELECT id_cliente FROM Cliente WHERE nombre_c = ? AND telefono = ? AND fecha_registro = ?";
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sqlBuscar)) {
         ps.setString(1, nombre);
         ps.setString(2, telefono);
+        ps.setString(3, fecha_registro);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             return rs.getInt("id_cliente"); // Ya existe, retornamos su ID real
@@ -35,11 +36,12 @@ public class ClienteDAO {
     }
 
     // 2. Si no existe, lo insertamos como nuevo cliente
-    String sqlInsertar = "INSERT INTO Cliente (nombre_c, telefono) VALUES (?, ?)";
+    String sqlInsertar = "INSERT INTO Cliente (nombre_c, telefono, fecha_registro) VALUES (?, ?,?)";
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sqlInsertar, PreparedStatement.RETURN_GENERATED_KEYS)) {
         ps.setString(1, nombre);
         ps.setString(2, telefono);
+        ps.setString(3, fecha_registro);
         ps.executeUpdate();
         
         ResultSet rsKeys = ps.getGeneratedKeys();
@@ -86,10 +88,19 @@ public class ClienteDAO {
     return null;
 }
     
-    
-    public List<String[]> obtenerClientes() {
+    public List<String[]> obtenerClientesNumerosTrabajoFla() {
     List<String[]> lista = new ArrayList<>();
-    String sql = "SELECT id_cliente, nombre_c, telefono FROM Cliente";
+    String sql = "SELECT\n" +
+                    "    c.id_cliente,\n" +
+                    "    c.nombre_c,\n" +
+                    "    c.telefono,\n" +
+                    "    c.fecha_registro,\n" +
+            "    COUNT(t.id_trabajo) AS total_trabajos\n" +
+                "FROM Cliente c\n" +
+                "LEFT JOIN Trabajo t\n" +
+                "    ON c.id_cliente = t.id_cliente\n" +
+            "GROUP BY c.id_cliente\n" +
+            "ORDER BY c.nombre_c DESC;";
     
     Connection con = Conexion.conectar();
 
@@ -106,6 +117,7 @@ public class ClienteDAO {
             fila[0] = String.valueOf(rs.getInt("id_cliente"));
             fila[1] = rs.getString("nombre_c");
             fila[2] = rs.getString("telefono");
+            fila[3] = rs.getString("fecha_registro");
             
             
             lista.add(fila);
@@ -126,15 +138,205 @@ public class ClienteDAO {
     return lista;
 }
     
-    public int insertarClienteYObtenerID(String nombreC, String telefono) {
-    // Usamos las columnas del PDF: nombre_c, direccion, telefono
-    String sql = "INSERT INTO Cliente (nombre_c,telefono) VALUES ( ?, ?)";
+    public List<String[]> obtenerClientesNumerosTrabajoAlf() {
+    List<String[]> lista = new ArrayList<>();
+    String sql = "SELECT\n" +
+                    "    c.id_cliente,\n" +
+                    "    c.nombre_c,\n" +
+                    "    c.telefono,\n" +
+                    "    c.fecha_registro,\n" +
+            "    COUNT(t.id_trabajo) AS total_trabajos\n" +
+                "FROM Cliente c\n" +
+                "LEFT JOIN Trabajo t\n" +
+                "    ON c.id_cliente = t.id_cliente\n" +
+            "GROUP BY c.id_cliente\n" +
+            "ORDER BY c.nombre_c ASC;";
+    
+    Connection con = Conexion.conectar();
+
+    if (con == null) {
+        System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+        return lista; 
+    }
+
+    try (PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            String[] fila = new String[4];
+            fila[0] = String.valueOf(rs.getInt("id_cliente"));
+            fila[1] = rs.getString("nombre_c");
+            fila[2] = rs.getString("telefono");
+            fila[3] = rs.getString("fecha_registro");
+            
+            
+            lista.add(fila);
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Error al obtener el cliente de la BD: " + e.getMessage());
+    } finally {
+
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al cerrar conexión: " + ex.getMessage());
+        }
+    }
+    return lista;
+}
+    
+    public List<String[]> obtenerClientesNumerosTrabajoAsc() {
+    List<String[]> lista = new ArrayList<>();
+    String sql = "SELECT\n" +
+                    "    c.id_cliente,\n" +
+                    "    c.nombre_c,\n" +
+                    "    c.telefono,\n" +
+                    "    c.fecha_registro,\n" +
+            "    COUNT(t.id_trabajo) AS total_trabajos\n" +
+                "FROM Cliente c\n" +
+                "LEFT JOIN Trabajo t\n" +
+                "    ON c.id_cliente = t.id_cliente\n" +
+            "GROUP BY c.id_cliente\n" +
+            "ORDER BY total_trabajos ASC;";
+    
+    Connection con = Conexion.conectar();
+
+    if (con == null) {
+        System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+        return lista; 
+    }
+
+    try (PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            String[] fila = new String[4];
+            fila[0] = String.valueOf(rs.getInt("id_cliente"));
+            fila[1] = rs.getString("nombre_c");
+            fila[2] = rs.getString("telefono");
+            fila[3] = rs.getString("fecha_registro");
+            
+            
+            lista.add(fila);
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Error al obtener el cliente de la BD: " + e.getMessage());
+    } finally {
+
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al cerrar conexión: " + ex.getMessage());
+        }
+    }
+    return lista;
+}
+    
+    public List<String[]> obtenerClientesNumerosTrabajoDesc() {
+    List<String[]> lista = new ArrayList<>();
+    String sql = "SELECT\n" +
+                    "    c.id_cliente,\n" +
+                    "    c.nombre_c,\n" +
+                    "    c.telefono,\n" +
+                    "    c.fecha_registro,\n" +
+            "    COUNT(t.id_trabajo) AS total_trabajos\n" +
+                "FROM Cliente c\n" +
+                "LEFT JOIN Trabajo t\n" +
+                "    ON c.id_cliente = t.id_cliente\n" +
+            "GROUP BY c.id_cliente\n" +
+            "ORDER BY total_trabajos DESC;";
+    
+    Connection con = Conexion.conectar();
+
+    if (con == null) {
+        System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+        return lista; 
+    }
+
+    try (PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            String[] fila = new String[4];
+            fila[0] = String.valueOf(rs.getInt("id_cliente"));
+            fila[1] = rs.getString("nombre_c");
+            fila[2] = rs.getString("telefono");
+            fila[3] = rs.getString("fecha_registro");
+            
+            
+            lista.add(fila);
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Error al obtener el cliente de la BD: " + e.getMessage());
+    } finally {
+
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al cerrar conexión: " + ex.getMessage());
+        }
+    }
+    return lista;
+}
+    
+    public List<String[]> obtenerClientes() {
+    List<String[]> lista = new ArrayList<>();
+    String sql = "SELECT id_cliente, nombre_c, telefono, fecha_registro FROM Cliente";
+    
+    Connection con = Conexion.conectar();
+
+    if (con == null) {
+        System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+        return lista; 
+    }
+
+    try (PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            String[] fila = new String[4];
+            fila[0] = String.valueOf(rs.getInt("id_cliente"));
+            fila[1] = rs.getString("nombre_c");
+            fila[2] = rs.getString("telefono");
+            fila[3] = rs.getString("fecha_registro");
+            
+            
+            lista.add(fila);
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Error al obtener el cliente de la BD: " + e.getMessage());
+    } finally {
+
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al cerrar conexión: " + ex.getMessage());
+        }
+    }
+    return lista;
+}
+    
+    public int insertarClienteYObtenerID(String nombreC, String telefono, String fecha_registro) {
+    String sql = "INSERT INTO Cliente (nombre_c,telefono,fecha_registro) VALUES ( ?, ?,?)";
     
     try (Connection con = Conexion.conectar();
          PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
         ps.setString(1, nombreC);
         ps.setString(2, telefono);
+        ps.setString(3, fecha_registro);
 
         int filasAfectadas = ps.executeUpdate();
         
@@ -170,4 +372,7 @@ public class ClienteDAO {
         return false;
     }
 }
+    
+    
+    
 }

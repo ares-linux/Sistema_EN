@@ -27,6 +27,8 @@ public class D_ficha_cliente extends javax.swing.JDialog {
     boolean cambios;
     String nombre;
     String telefono;
+    private D_ficha_trabajo  ficha = null;
+    int id_cliente_i;
     
     /**
      * Creates new form D_ficha_cliente
@@ -38,6 +40,8 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         
         Tabla_trabajos.setDefaultEditor(Object.class, null);
         Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_trabajos.getTableHeader().setReorderingAllowed(false);
+        Tabla_trabajos.getTableHeader().setResizingAllowed(false);
                 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
@@ -62,7 +66,14 @@ public class D_ficha_cliente extends javax.swing.JDialog {
     
     public D_ficha_cliente(int id_cliente) {
         initComponents();
+        
+        Tabla_trabajos.setDefaultEditor(Object.class, null);
+        Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_trabajos.getTableHeader().setReorderingAllowed(false);
+        Tabla_trabajos.getTableHeader().setResizingAllowed(false);
 
+        id_cliente_i = id_cliente;
+        
         cargarCliente(id_cliente);
         cargarTrabajos(id_cliente);
     }
@@ -104,7 +115,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         t_fecha_ultimo_trabajo = new javax.swing.JTextField();
         t_numero_trabajos = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
+        b_actualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -238,7 +249,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 10);
@@ -264,9 +275,10 @@ public class D_ficha_cliente extends javax.swing.JDialog {
 
             },
             new String [] {
-                "id", "descripcion", "Direccion", "fecha_r", "hora_r", "estado"
+                "Id", "Id cliente", "Nombre", "Telefono", "Descripcion", "Direccion", "Fecha", "Hora", "Estado", "Fecha de inicio", "Fecha de fin"
             }
         ));
+        Tabla_trabajos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         Tabla_trabajos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_trabajosMouseClicked(evt);
@@ -282,14 +294,13 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_resumen.add(jLabel5, gridBagConstraints);
 
-        jLabel9.setText("Fecha del último trabajo");
+        jLabel9.setText("Fecha del último trabajo completado");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_resumen.add(jLabel9, gridBagConstraints);
@@ -297,7 +308,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         t_fecha_ultimo_trabajo.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 60;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -316,8 +327,8 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_resumen.add(t_numero_trabajos, gridBagConstraints);
 
-        jLabel11.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel11.setText("Resumen");
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -325,8 +336,19 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_resumen.add(jLabel11, gridBagConstraints);
 
-        jPanel4.setLayout(new java.awt.BorderLayout());
-        P_resumen.add(jPanel4, new java.awt.GridBagConstraints());
+        b_actualizar.setText("Actualizar");
+        b_actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_actualizarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_resumen.add(b_actualizar, gridBagConstraints);
 
         P_trabajos.add(P_resumen, java.awt.BorderLayout.PAGE_START);
 
@@ -342,8 +364,15 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    public void obtener_fecha_trabajo_completado(){
+        TrabajoDAO trabajoDAO = new TrabajoDAO();
+        String fechaRegistro = trabajoDAO.obtener_fecha_ultimo_trabajo_estado("Completado");
+        
+        t_fecha_ultimo_trabajo.setText(fechaRegistro);
+    }
         
     public void edicion_exitosa(){
+        
             String mensaje;
             mensaje = "✓ Cambios guardados con éxito.";
             Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
@@ -384,7 +413,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         }
     }
     
-    private void llenar_tabla(int idCliente) {
+    private void llenar_tabla(int id_cliente) {
         int c = 0;
         int a = 0;
         
@@ -392,7 +421,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         modelo.setRowCount(0);
 
         TrabajoDAO dao = new TrabajoDAO();
-        List<String[]> lista = dao.obtenerTrabajosConClientes();
+        List<String[]> lista = dao.obtenerTrabajosCliente(id_cliente);
 
         for(String[] fila : lista){
             modelo.addRow(fila);
@@ -401,11 +430,14 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         }  
     
         t_numero_trabajos.setText(String.valueOf(a));
-        //System.out.println("Numero de trabajos: " + a);
+        
     }
     
     private void cargarTrabajos(int id_cliente){
         llenar_tabla(id_cliente);
+        
+        
+        
     }
     
     private void cargarCliente(int id_cliente){
@@ -423,7 +455,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         t_fecha_rg.setText(cliente.getFecha_registro());
     }
     
-    private D_ficha_trabajo  ficha = null;
+    
     
     public void cargar_datos_tabla(int indice) {
                 
@@ -450,23 +482,31 @@ public class D_ficha_cliente extends javax.swing.JDialog {
     }
     
     private void Tabla_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_trabajosMouseClicked
-        
-        fila = Tabla_trabajos.getSelectedRow();
-                if (fila == -1) 
-                {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para ver su ficha.");
-                    return;
-                }
-                else{
-                    fila = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
-                    cargar_datos_tabla(fila);
-                }
-                
+     if (evt.getClickCount() == 2) {
+        fila = Tabla_trabajos.rowAtPoint(evt.getPoint());
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un trabajo.");
+            return;
+        }
+
+        // Cerrar la ficha anterior si ya hay una abierta
+        if (ficha != null && ficha.isDisplayable()) {
+            ficha.dispose();
+        }
+
+        int id_trabajo = Integer.parseInt( Tabla_trabajos.getValueAt(fila, 0).toString());
+        int id_cliente = Integer.parseInt( Tabla_trabajos.getValueAt(fila, 1).toString());
+
+        ficha = new D_ficha_trabajo(id_trabajo,id_cliente);
+        ficha.setLocationRelativeTo(D_ficha_cliente.this);
+        ficha.setVisible(true);
+    } 
     }//GEN-LAST:event_Tabla_trabajosMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         t_nombre.setEnabled(false);
         t_telefono.setEnabled(false);
+        obtener_fecha_trabajo_completado();
     }//GEN-LAST:event_formWindowOpened
 
     public void restablecer_color(){
@@ -479,6 +519,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
         if("Editar".equals(b_editar.getText())){
             b_editar.setBackground(Color.decode("#2f65ca"));
             b_editar.setText("Guardar");
+            b_cerrar.setBackground(Color.decode("#CE1126"));
             t_nombre.setEnabled(true);
             t_telefono.setEnabled(true);
         }
@@ -516,6 +557,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
             boolean actualizadoExitoso = dao.actualizarCliente(id_cliente,nombre_c,telefono,u_modificacion);
 
             if (actualizadoExitoso) { 
+                
                 this.nombre = nombre_c;
                 this.telefono = telefono;
                 restablecer_color(); 
@@ -552,10 +594,16 @@ public class D_ficha_cliente extends javax.swing.JDialog {
             b_editar.setEnabled(true);
             Tabla_trabajos.setEnabled(true);
             Tabla_trabajos.clearSelection();
+            b_editar.setBackground(null);
+            b_cerrar.setBackground(null);
         } else {
             this.dispose();
         }
     }//GEN-LAST:event_b_cerrarActionPerformed
+
+    private void b_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_actualizarActionPerformed
+        cargarTrabajos(id_cliente_i);
+    }//GEN-LAST:event_b_actualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -604,6 +652,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
     private javax.swing.JPanel P_resumen;
     private javax.swing.JPanel P_trabajos;
     private javax.swing.JTable Tabla_trabajos;
+    private javax.swing.JButton b_actualizar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_editar;
     private javax.swing.JLabel jLabel1;
@@ -616,7 +665,6 @@ public class D_ficha_cliente extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel l_nombre;

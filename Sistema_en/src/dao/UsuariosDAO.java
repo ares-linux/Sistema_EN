@@ -32,7 +32,7 @@ public class UsuariosDAO {
         return filasAfectadas > 0; 
 
     } catch (SQLException e) {
-        System.err.println("Error al actualizar trabajador en BD: " + e.getMessage());
+        System.err.println("Error al actualizar contraseña en BD: " + e.getMessage());
         return false;
     }
 }
@@ -58,5 +58,24 @@ public class UsuariosDAO {
         return null;
     }
 
+    public boolean actualizarUsuario(int id ,String usuario) {
     
+        String nuevoNombre = usuario;
+        
+        String sql = "UPDATE Usuarios SET usuario = ? WHERE id_usuarios = ?";
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, nuevoNombre);
+        ps.setInt(2, id);
+
+        int filasAfectadas = ps.executeUpdate();
+        return filasAfectadas > 0; 
+
+    } catch (SQLException e) {
+        System.err.println("Error al actualizar el nombre de usuario en BD: " + e.getMessage());
+        return false;
+    }
+}
 }

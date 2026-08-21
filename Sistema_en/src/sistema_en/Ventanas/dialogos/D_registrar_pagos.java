@@ -4,10 +4,18 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.PagoDAO;
+import dao.TrabajoDAO;
 import java.awt.Color;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
 import sistema_en.Objetos.Pago;
+import sistema_en.Objetos.Trabajo;
 
 /**
  *
@@ -18,7 +26,9 @@ public class D_registrar_pagos extends javax.swing.JDialog {
     int fila;
     Pago pago = new Pago();
     String toast;
-
+    int id_trabajo;
+    boolean salir;
+    
     /**
      * Creates new form D_registrar_ṕagos
      */
@@ -26,10 +36,45 @@ public class D_registrar_pagos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
+        //setAlwaysOnTop(true);
+        
         Tabla_pagos.setDefaultEditor(Object.class, null);
         Tabla_pagos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_pagos.getTableHeader().setReorderingAllowed(false);
+        Tabla_pagos.getTableHeader().setResizingAllowed(false);
+        
+        Tabla_pagos.getColumnModel().getColumn(0).setMinWidth(0);
+        Tabla_pagos.getColumnModel().getColumn(0).setMaxWidth(0);
+        Tabla_pagos.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {   
+        if (!t_concepto.getText().trim().isEmpty() || !t_monto.getText().trim().isEmpty()) {
+            //javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            b_cancelar.doClick(); 
+  
+            if (salir) {
+                dispose(); 
+            }
+        } else {
+            dispose();
+        }
+        
+    }
+    });
+
+
+    
     }
 
+    public int recibirTrabajo(int id_trabajo_i){
+        cargarTrabajo(id_trabajo_i); 
+        return id_trabajo_i;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,18 +96,19 @@ public class D_registrar_pagos extends javax.swing.JDialog {
         t_presupuestado = new javax.swing.JTextField();
         t_abonado = new javax.swing.JTextField();
         t_saldo_pendiente = new javax.swing.JTextField();
-        l_aviso = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
         l_monto = new javax.swing.JLabel();
         l_concepto = new javax.swing.JLabel();
         l_fecha_pago = new javax.swing.JLabel();
         t_monto = new javax.swing.JTextField();
-        c_concepto = new javax.swing.JComboBox<>();
         d_fecha_pago = new com.github.lgooddatepicker.components.DatePicker();
         b_guarda_pago = new javax.swing.JButton();
         b_cancelar = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
+        t_concepto = new javax.swing.JTextField();
+        b_actualizar = new javax.swing.JButton();
+        l_aviso = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla_pagos = new javax.swing.JTable();
 
@@ -73,9 +119,9 @@ public class D_registrar_pagos extends javax.swing.JDialog {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Registrar pagos");
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
         P_datos_no_editables.setLayout(new java.awt.GridBagLayout());
 
@@ -152,9 +198,6 @@ public class D_registrar_pagos extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
         P_datos_no_editables.add(t_saldo_pendiente, gridBagConstraints);
 
-        l_aviso.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        l_aviso.setText("aviso");
-
         jScrollPane2.setAutoscrolls(true);
 
         jPanel2.setLayout(new java.awt.GridBagLayout());
@@ -175,31 +218,20 @@ public class D_registrar_pagos extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
         jPanel2.add(l_fecha_pago, gridBagConstraints);
 
         t_monto.setPreferredSize(new java.awt.Dimension(100, 25));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 60;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel2.add(t_monto, gridBagConstraints);
-
-        c_concepto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Anticipo", "Abono de Avance", "Liquidación Final" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel2.add(c_concepto, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -212,8 +244,8 @@ public class D_registrar_pagos extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel2.add(b_guarda_pago, gridBagConstraints);
 
@@ -224,8 +256,8 @@ public class D_registrar_pagos extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 9, 11, 9);
         jPanel2.add(b_cancelar, gridBagConstraints);
@@ -238,12 +270,34 @@ public class D_registrar_pagos extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 9, 11, 9);
         jPanel2.add(b_cerrar, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(t_concepto, gridBagConstraints);
+
+        b_actualizar.setText("Actualizar");
+        b_actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_actualizarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(b_actualizar, gridBagConstraints);
 
         jScrollPane2.setViewportView(jPanel2);
+
+        l_aviso.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
+        l_aviso.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_aviso.setText("aviso");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -251,11 +305,11 @@ public class D_registrar_pagos extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(l_aviso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(P_datos_no_editables, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 924, Short.MAX_VALUE)
+                    .addComponent(P_datos_no_editables, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
         );
         jPanel3Layout.setVerticalGroup(
@@ -263,13 +317,13 @@ public class D_registrar_pagos extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel8)
-                .addGap(18, 18, 18)
+                .addGap(22, 22, 22)
                 .addComponent(l_aviso)
-                .addGap(16, 16, 16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(P_datos_no_editables, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -295,49 +349,22 @@ public class D_registrar_pagos extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void cargarTrabajo(int id_trabajo_i){
+        TrabajoDAO dao = new TrabajoDAO();
+        Trabajo trabajo = dao.obtenerTrabajo(id_trabajo_i);
+        
+        t_id.setText(String.valueOf(trabajo.getId_trabajo()));
+        
+        id_trabajo = id_trabajo_i;
+    }
+    
     public void restablecer_color() {
         l_monto.setForeground(null);
         l_concepto.setForeground(null);
         l_fecha_pago.setForeground(null);
     }
-
-    public void edicion_exitosa() {
-
-        l_aviso.setForeground(Color.orange);
-        String mensaje;
-        mensaje = "✓ Cambios guardados con éxito.";
-        toast = mensaje;
-        l_aviso.setVisible(true);
-        l_aviso.setText(mensaje);
-
-        new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                l_aviso.setText(""); // Se limpia el mensaje solo
-                l_aviso.setVisible(false);
-            }
-        }).start();
-    }
-
-    public void creacion_exitosa() {
-
-        l_aviso.setForeground(Color.green);
-        String mensaje;
-        mensaje = "El pago por concepto de " + c_concepto.getSelectedItem() + " fue añadido con éxito.";
-        toast = mensaje;
-        l_aviso.setVisible(true);
-        l_aviso.setText(mensaje);
-
-        new javax.swing.Timer(5000, new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                l_aviso.setText(""); // Se limpia el mensaje solo
-                l_aviso.setVisible(false);
-            }
-        }).start();
-    }
-
+    
     public void aviso_labels() {
 
         boolean error = false;
@@ -352,13 +379,16 @@ public class D_registrar_pagos extends javax.swing.JDialog {
             error = false;
         }
 
-        if (c_concepto.getSelectedItem() == null) {
+        if (t_concepto.getText().trim().isEmpty()) {
             l_concepto.setForeground(Color.RED);
             error = true;
-        } else {
-            l_concepto.setForeground(null);
-        }
+        } 
 
+        if (!t_concepto.getText().trim().isEmpty()) {
+            l_concepto.setForeground(null);
+            error = false;
+        } 
+        
         if (d_fecha_pago.getDate() == null) {
             l_fecha_pago.setForeground(Color.red);
             error = true;
@@ -370,14 +400,14 @@ public class D_registrar_pagos extends javax.swing.JDialog {
 
     public void limpiar_text() {
         t_monto.setText("");
-        c_concepto.setSelectedItem(null);
+        t_concepto.setText("");
         d_fecha_pago.setDateToToday();
 
     }
 
     public void llenar_text() {
         this.t_monto.setText(String.valueOf(pago.getMonto()));
-        this.c_concepto.setSelectedItem(pago.getConcepto());
+        this.t_concepto.setText(pago.getConcepto());
 
         if (pago.getFecha_pago() != null) {
             this.d_fecha_pago.setDate(pago.getFecha_pago());
@@ -389,7 +419,7 @@ public class D_registrar_pagos extends javax.swing.JDialog {
 
     public void cargar_datos_tabla(int indice) {
         this.t_monto.setText(String.valueOf(this.Tabla_pagos.getValueAt(indice, 1)));
-        this.c_concepto.setSelectedItem(String.valueOf(this.Tabla_pagos.getValueAt(indice, 2)));
+        this.t_concepto.setText(String.valueOf(this.Tabla_pagos.getValueAt(indice, 2)));
 
         Object valorFecha = this.Tabla_pagos.getValueAt(indice, 3);
 
@@ -417,21 +447,33 @@ public class D_registrar_pagos extends javax.swing.JDialog {
     }
 
     public void llenar_tabla() {
-        String[] info = new String[4];
-        info[0] = "";
-        info[1] = t_monto.getText();
-        info[2] = (c_concepto.getSelectedItem() != null) ? c_concepto.getSelectedItem().toString() : "";
-        info[3] = d_fecha_pago.getDateStringOrSuppliedString("");
-
+        
+        
         DefaultTableModel modelo = (DefaultTableModel) this.Tabla_pagos.getModel();//crea una variable de tipo modelo de tabla 
-        modelo.addRow(info);//agrega una fila al modelo de tabla
+        modelo.setRowCount(0);
+        
+        PagoDAO dao = new PagoDAO();
+        List<Pago> listaPagos = dao.obtenerPagos(id_trabajo);
+        
+        for (Pago p : listaPagos) {
+            Object[] fila = new Object[4]; 
+            fila[0] = p.getId_pago();
+            fila[1] = p.getMonto();
+            fila[2] = p.getConcepto();
+            fila[3] = p.getFecha_pago();
+            modelo.addRow(fila);
+        }
+        
         this.Tabla_pagos.setModel(modelo);
+        
+        int total_abonado = dao.sumarPagosPorTrabajo(id_trabajo);
+        t_abonado.setText(String.valueOf(total_abonado));
     }
 
     public void editar_tabla() {
         DefaultTableModel modelo = (DefaultTableModel) this.Tabla_pagos.getModel();
         modelo.setValueAt(this.t_monto.getText(), fila, 1);
-        modelo.setValueAt(this.c_concepto.getSelectedItem(), fila, 2);
+        modelo.setValueAt(this.t_concepto.getText(), fila, 2);
         modelo.setValueAt(this.d_fecha_pago.getDateStringOrSuppliedString(""), fila, 3);
     }
 
@@ -440,64 +482,213 @@ public class D_registrar_pagos extends javax.swing.JDialog {
     }//GEN-LAST:event_t_saldo_pendienteActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
-        llenar_text();
-        limpiar_text();
         l_aviso.setVisible(false);
+        llenar_text();
+        llenar_tabla();
+        limpiar_text();
     }//GEN-LAST:event_formWindowOpened
 
+    public void creacion_exitosa(){       
+            String mensaje;
+            mensaje = "El pago por concepto de " + t_concepto.getText() + " fue añadido con éxito.";
+            l_aviso.setText(mensaje);
+            l_aviso.setForeground(Color.decode("#008f39"));
+            l_aviso.setVisible(true);
+            
+            Timer timer = new Timer(5000, e -> {
+                l_aviso.setVisible(false);
+            });
+            timer.setRepeats(false);
+            timer.start();
+}
+    
+    public void edicion_exitosa(){
+            String mensaje;
+            mensaje = "✓ Cambios guardados con éxito.";
+            l_aviso.setText(mensaje);
+            l_aviso.setForeground(Color.ORANGE);
+            l_aviso.setVisible(true);
+            
+            Timer timer = new Timer(5000, e -> {
+                l_aviso.setVisible(false);
+            });
+            timer.setRepeats(false);
+            timer.start();
+    }
+    
     private void Tabla_pagosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_pagosMouseClicked
-        fila = this.Tabla_pagos.rowAtPoint(evt.getPoint());
-        cargar_datos_tabla(fila);
+        if (evt.getClickCount() == 2) {
+            fila = this.Tabla_pagos.rowAtPoint(evt.getPoint());
+            cargar_datos_tabla(fila);
+        }
     }//GEN-LAST:event_Tabla_pagosMouseClicked
 
     private void b_guarda_pagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_guarda_pagoActionPerformed
 
-        if (t_monto.getText().trim().isEmpty() || c_concepto.getSelectedItem() == null) {
-            aviso_labels();
-            return;
-        }
+    if (t_monto.getText().trim().isEmpty() || t_concepto.getText().trim().isEmpty() || d_fecha_pago.getDate() == null) {
+        aviso_labels();
+        return;
+    }
+    
+    float monto = 0;
+    String texto;
+    String texto1;
+    
+    try {
+        texto = t_monto.getText().trim();
+        texto1 = texto.replace(" ", "");
+        monto = Float.valueOf(texto1);
+    } catch (NumberFormatException e) {
+            String mensaje;
+            mensaje = "El monto del pago contiene texto";
+            Notifications.getInstance().show( Notifications.Type.ERROR, Notifications.Location.TOP_LEFT, mensaje);
 
-        int filaSeleccionada = Tabla_pagos.getSelectedRow();
+    }
+    
+     
+    
+    String concepto = t_concepto.getText();
+        
+    if (concepto.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "El concepto de pago no puede contener únicamente números.");
+        return;
+    }
+    
+    LocalDate fecha_1 = d_fecha_pago.getDate();
 
-        if (filaSeleccionada == -1) {
+    if (fecha_1.isAfter(LocalDate.now())) {
+        JOptionPane.showMessageDialog(this,"La fecha de pago no puede ser mayor a hoy.");
+        return;
+    }
+    
+    String fecha = d_fecha_pago.getDateStringOrSuppliedString("");
+    
+    PagoDAO dao = new PagoDAO();
+    int filaSeleccionada = Tabla_pagos.getSelectedRow();
+
+    if (filaSeleccionada == -1) {
+        boolean guardadoExitoso = dao.insertarPago(monto, concepto, fecha, id_trabajo); 
+        
+        if (guardadoExitoso) {
             llenar_tabla();
             creacion_exitosa();
+            limpiar_text();
+            restablecer_color();
         } else {
-            editar_tabla();
-            edicion_exitosa();
-            Tabla_pagos.clearSelection(); 
+            JOptionPane.showMessageDialog(this, "Error al guardar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        limpiar_text();
-        restablecer_color();
-
+    } 
+    // 3. Si SÍ hay una fila seleccionada, es una EDICIÓN / ACTUALIZACIÓN
+    else {
+        Tabla_pagos.setEnabled(false);
+        int id_pago = Integer.parseInt(Tabla_pagos.getValueAt(filaSeleccionada, 0).toString());
+        boolean actualizadoExitoso = dao.actualizarPago(monto, concepto, fecha, id_trabajo, id_pago);
+        
+        if (actualizadoExitoso) {
+            Tabla_pagos.setEnabled(true);
+            llenar_tabla();
+            edicion_exitosa();
+            limpiar_text();
+            restablecer_color();
+            Tabla_pagos.clearSelection();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al actualizar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_b_guarda_pagoActionPerformed
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
-
-        if (t_monto.getText().trim().isEmpty() || c_concepto.getSelectedItem() != null) {
-            b_cancelar.doClick();
+           
+        if (!t_concepto.getText().trim().isEmpty() || !t_monto.getText().trim().isEmpty()) {
+            b_cancelar.doClick(); 
+                
+            if (salir == true) {
+                this.dispose(); 
+            }
+        } else {
             this.dispose();
-        }
+        }    
     }//GEN-LAST:event_b_cerrarActionPerformed
 
-    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-
-        restablecer_color();
-
+    private boolean campos_vacios() {
         
+    return
+        t_monto.getText().trim().isEmpty()
+        && t_concepto.getText().trim().isEmpty();
+    }
+    
+     private boolean datos_modificados() {
+        int fila = Tabla_pagos.getSelectedRow();
+        if (fila == -1) return false;
+
+        String monto_original = String.valueOf(Tabla_pagos.getValueAt(fila, 1));
+        String concepto_original = String.valueOf(Tabla_pagos.getValueAt(fila, 2));
+        String fecha_original = String.valueOf(Tabla_pagos.getValueAt(fila, 3));
+        String fechaActual = d_fecha_pago.getText() != null ? d_fecha_pago.getText() : "";
+
+        return !t_monto.getText().equals(monto_original)
+            || !t_concepto.getText().equals(concepto_original)
+            || !fechaActual.equals(fecha_original);
+    }
+    
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
         int filaSeleccionada = Tabla_pagos.getSelectedRow();
-        if (filaSeleccionada != -1) {
+        boolean es_nuevo = (filaSeleccionada == -1);
+
+        // --- MODO NUEVO ---
+        if (es_nuevo) {
+            if (!campos_vacios()) {  
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                    "¿Desea cancelar el registro? Se perderán los datos introducidos.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+        
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    salir = false;
+                    return; // El usuario dijo "No", nos salimos
+                }
+                
+                else if(respuesta == JOptionPane.YES_OPTION){
+                    salir = true;
+                }
+            }   
+        } 
+        // --- MODO EDITAR ---
+        else {
+            if (datos_modificados()) {  
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                     "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
+                     "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+        
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    salir = false;
+                    return; 
+                }
+                
+                else if(respuesta == JOptionPane.YES_OPTION){
+                    salir = true;
+                }
+                
+            }
+        }
+    
+        // Restablecer interfaz limpiando estados
+        restablecer_color();    
+        //b_cancelar.setBackground(null);
+    
+        if (!es_nuevo) {
             cargar_datos_tabla(filaSeleccionada);
         } else {
             limpiar_text();
         }
-
-        l_aviso.setVisible(false);
-        l_aviso.setText("");
-        
+    
+        Tabla_pagos.clearSelection();
+        limpiar_text();
+        Tabla_pagos.setEnabled(true);
     }//GEN-LAST:event_b_cancelarActionPerformed
+
+    private void b_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_actualizarActionPerformed
+        llenar_tabla();
+    }//GEN-LAST:event_b_actualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -545,10 +736,10 @@ public class D_registrar_pagos extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel P_datos_no_editables;
     private javax.swing.JTable Tabla_pagos;
+    private javax.swing.JButton b_actualizar;
     private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_guarda_pago;
-    private javax.swing.JComboBox<String> c_concepto;
     private com.github.lgooddatepicker.components.DatePicker d_fecha_pago;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -564,6 +755,7 @@ public class D_registrar_pagos extends javax.swing.JDialog {
     private javax.swing.JLabel l_fecha_pago;
     private javax.swing.JLabel l_monto;
     private javax.swing.JTextField t_abonado;
+    private javax.swing.JTextField t_concepto;
     private javax.swing.JTextField t_id;
     private javax.swing.JTextField t_monto;
     private javax.swing.JTextField t_presupuestado;

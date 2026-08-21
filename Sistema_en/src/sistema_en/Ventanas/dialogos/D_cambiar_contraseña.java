@@ -32,6 +32,8 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        P_contraseña = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         l_contraseña_a = new javax.swing.JLabel();
         t_contraseña_a = new javax.swing.JPasswordField();
@@ -39,10 +41,21 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         t_contraseña_n = new javax.swing.JPasswordField();
         l_contraseña_c = new javax.swing.JLabel();
         t_contraseña_c = new javax.swing.JPasswordField();
-        b_aceptar = new javax.swing.JButton();
-        b_cancelar = new javax.swing.JButton();
-        l_recordatorio = new javax.swing.JLabel();
+        b_aceptar_c = new javax.swing.JButton();
+        b_cancelar_c = new javax.swing.JButton();
+        l_recordatorio_c = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        P_usuario = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        l_recordatorio_u = new javax.swing.JLabel();
+        l_usuario_a = new javax.swing.JLabel();
+        l_usuario_n = new javax.swing.JLabel();
+        l_usuario_c = new javax.swing.JLabel();
+        b_aceptar_u = new javax.swing.JButton();
+        b_cancelar_u = new javax.swing.JButton();
+        t_usuario_a = new javax.swing.JPasswordField();
+        t_usuario_n = new javax.swing.JPasswordField();
+        t_usuario_c = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -51,7 +64,8 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        P_contraseña.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setText("Cambiar contraseña");
@@ -59,7 +73,7 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel1, gridBagConstraints);
+        P_contraseña.add(jLabel1, gridBagConstraints);
 
         l_contraseña_a.setText("Contraseña actual");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -68,7 +82,7 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(l_contraseña_a, gridBagConstraints);
+        P_contraseña.add(l_contraseña_a, gridBagConstraints);
 
         t_contraseña_a.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -83,7 +97,7 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.ipadx = 75;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(t_contraseña_a, gridBagConstraints);
+        P_contraseña.add(t_contraseña_a, gridBagConstraints);
 
         l_contraseña_n.setText("Contraseña nueva");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -92,7 +106,7 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(l_contraseña_n, gridBagConstraints);
+        P_contraseña.add(l_contraseña_n, gridBagConstraints);
 
         t_contraseña_n.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,7 +126,7 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.ipadx = 75;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(t_contraseña_n, gridBagConstraints);
+        P_contraseña.add(t_contraseña_n, gridBagConstraints);
 
         l_contraseña_c.setText("Confirmar contraseña");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -121,7 +135,7 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(l_contraseña_c, gridBagConstraints);
+        P_contraseña.add(l_contraseña_c, gridBagConstraints);
 
         t_contraseña_c.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -136,12 +150,12 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.ipadx = 75;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(t_contraseña_c, gridBagConstraints);
+        P_contraseña.add(t_contraseña_c, gridBagConstraints);
 
-        b_aceptar.setText("Aceptar");
-        b_aceptar.addActionListener(new java.awt.event.ActionListener() {
+        b_aceptar_c.setText("Aceptar");
+        b_aceptar_c.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_aceptarActionPerformed(evt);
+                b_aceptar_cActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -149,12 +163,12 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_aceptar, gridBagConstraints);
+        P_contraseña.add(b_aceptar_c, gridBagConstraints);
 
-        b_cancelar.setText("Cancelar");
-        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+        b_cancelar_c.setText("Cancelar");
+        b_cancelar_c.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_cancelarActionPerformed(evt);
+                b_cancelar_cActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -162,21 +176,118 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         gridBagConstraints.gridy = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_cancelar, gridBagConstraints);
+        P_contraseña.add(b_cancelar_c, gridBagConstraints);
 
-        l_recordatorio.setText("La contraseña debe tener al menos 4 caracteres.");
+        l_recordatorio_c.setText("La contraseña debe tener al menos 4 caracteres.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(l_recordatorio, gridBagConstraints);
+        P_contraseña.add(l_recordatorio_c, gridBagConstraints);
 
         jLabel3.setText("Se recomienda usar letras y números.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel3, gridBagConstraints);
+        P_contraseña.add(jLabel3, gridBagConstraints);
+
+        jTabbedPane1.addTab("Cambiar contraseña", P_contraseña);
+
+        P_usuario.setLayout(new java.awt.GridBagLayout());
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel2.setText("Cambiar nombre de usuario");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(jLabel2, gridBagConstraints);
+
+        l_recordatorio_u.setText("La contraseña debe tener al menos 4 caracteres.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(l_recordatorio_u, gridBagConstraints);
+
+        l_usuario_a.setText("Usuario actual");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(l_usuario_a, gridBagConstraints);
+
+        l_usuario_n.setText("Usuario nuevo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(l_usuario_n, gridBagConstraints);
+
+        l_usuario_c.setText("Confirmar usuario");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(l_usuario_c, gridBagConstraints);
+
+        b_aceptar_u.setText("Aceptar");
+        b_aceptar_u.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_aceptar_uActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(b_aceptar_u, gridBagConstraints);
+
+        b_cancelar_u.setText("Cancelar");
+        b_cancelar_u.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelar_uActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(b_cancelar_u, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(t_usuario_a, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(t_usuario_n, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_usuario.add(t_usuario_c, gridBagConstraints);
+
+        jTabbedPane1.addTab("Cambiar nombre de usuario", P_usuario);
+
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -185,6 +296,9 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         t_contraseña_a.setText("");
         t_contraseña_n.setText("");
         t_contraseña_c.setText("");
+        t_usuario_a.setText("");
+        t_usuario_n.setText("");
+        t_usuario_c.setText("");
     }
     
     public void aviso_labels(){
@@ -227,22 +341,77 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         String nueva = new String(t_contraseña_n.getPassword());
 
         if (nueva.length() < 4) {
-            l_recordatorio.setForeground(Color.decode("#CE1126"));
+            l_recordatorio_c.setForeground(Color.decode("#CE1126"));
             error = true;
         }
         else{
-            l_recordatorio.setForeground(null);
+            l_recordatorio_c.setForeground(null);
             error = false;
         }
         
         if (nueva.trim().length() < 4) {
-            l_recordatorio.setForeground(Color.decode("#CE1126"));
+            l_recordatorio_c.setForeground(Color.decode("#CE1126"));
             error = true;
         }
         else{
-            l_recordatorio.setForeground(null);
+            l_recordatorio_c.setForeground(null);
             error = false;
         }
+        
+        
+        if (t_contraseña_a.getPassword().length == 0) {
+            l_contraseña_a.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        
+        
+        if (t_usuario_a.getPassword().length != 0) {
+            l_usuario_a.setForeground(null);
+            error = false;
+        }
+        
+        if (t_usuario_n.getPassword().length == 0) {
+            l_usuario_n.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        
+        
+        if (t_usuario_n.getPassword().length != 0) {
+            l_usuario_n.setForeground(null);
+            error = false;
+        }
+        
+        if (t_usuario_c.getPassword().length == 0) {
+            l_usuario_c.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        
+        
+        if (t_usuario_c.getPassword().length != 0) {
+            l_usuario_c.setForeground(null);
+            error = false;
+        }
+        
+        String nuevo = new String(t_usuario_n.getPassword());
+
+        if (nuevo.length() < 4) {
+            l_recordatorio_u.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        else{
+            l_recordatorio_u.setForeground(null);
+            error = false;
+        }
+        
+        if (nuevo.trim().length() < 4) {
+            l_recordatorio_u.setForeground(Color.decode("#CE1126"));
+            error = true;
+        }
+        else{
+            l_recordatorio_u.setForeground(null);
+            error = false;
+        }
+        
         
     }
     
@@ -250,7 +419,7 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         
     }//GEN-LAST:event_formWindowOpened
 
-    private void b_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_aceptarActionPerformed
+    private void b_aceptar_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_aceptar_cActionPerformed
         String actual = new String(t_contraseña_a.getPassword());
         String nueva = new String(t_contraseña_n.getPassword());
         String confirmacion = new String(t_contraseña_c.getPassword());
@@ -302,11 +471,11 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "No se pudo actualizar la contraseña.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_b_aceptarActionPerformed
+    }//GEN-LAST:event_b_aceptar_cActionPerformed
 
-    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+    private void b_cancelar_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelar_cActionPerformed
         this.dispose();
-    }//GEN-LAST:event_b_cancelarActionPerformed
+    }//GEN-LAST:event_b_cancelar_cActionPerformed
 
     private void t_contraseña_aKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_contraseña_aKeyPressed
         int Tecla_presionada = evt.getKeyCode();
@@ -332,9 +501,50 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
         int Tecla_presionada = evt.getKeyCode();
 
     if (Tecla_presionada == KeyEvent.VK_ENTER){
-        b_aceptar.doClick();
+        b_aceptar_c.doClick();
     }
     }//GEN-LAST:event_t_contraseña_cKeyPressed
+
+    private void b_aceptar_uActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_aceptar_uActionPerformed
+        String actual = new String(t_usuario_a.getPassword());
+        String nueva = new String(t_usuario_n.getPassword());
+        String confirmacion = new String(t_usuario_c.getPassword());
+
+        if (actual.isEmpty() || nueva.isEmpty() || confirmacion.isEmpty()) {
+            aviso_labels();
+            //javax.swing.JOptionPane.showMessageDialog(this, "Por favor, llena todos los campos.", "Campos vacíos", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+    
+        if (nueva.length() < 4 || nueva.trim().length() < 4){
+            aviso_labels();
+            //javax.swing.JOptionPane.showMessageDialog(this, "El nuevo nombre de usuario debe tener al menos 4 caracteres.", "Contraseña no válida", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!nueva.equals(confirmacion)) {
+            l_usuario_c.setForeground(Color.decode("#CE1126"));
+            //javax.swing.JOptionPane.showMessageDialog(this, "El nuevo nombre de usuario y la confirmación no coinciden.", "Error de coincidencia", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        } else {
+            l_usuario_c.setForeground(null);
+        }
+        
+        int id = 1; 
+        UsuariosDAO dao = new UsuariosDAO();
+
+        boolean guardadoExitoso = dao.actualizarUsuario(id, nueva);
+                
+        if(guardadoExitoso){
+            limpiar_text();
+            javax.swing.JOptionPane.showMessageDialog(this, "¡Nombre de usuario cambiado exitosamente!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        }
+    }//GEN-LAST:event_b_aceptar_uActionPerformed
+
+    private void b_cancelar_uActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelar_uActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_cancelar_uActionPerformed
 
     
     
@@ -381,16 +591,29 @@ public class D_cambiar_contraseña extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton b_aceptar;
-    private javax.swing.JButton b_cancelar;
+    private javax.swing.JPanel P_contraseña;
+    private javax.swing.JPanel P_usuario;
+    private javax.swing.JButton b_aceptar_c;
+    private javax.swing.JButton b_aceptar_u;
+    private javax.swing.JButton b_cancelar_c;
+    private javax.swing.JButton b_cancelar_u;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel l_contraseña_a;
     private javax.swing.JLabel l_contraseña_c;
     private javax.swing.JLabel l_contraseña_n;
-    private javax.swing.JLabel l_recordatorio;
+    private javax.swing.JLabel l_recordatorio_c;
+    private javax.swing.JLabel l_recordatorio_u;
+    private javax.swing.JLabel l_usuario_a;
+    private javax.swing.JLabel l_usuario_c;
+    private javax.swing.JLabel l_usuario_n;
     private javax.swing.JPasswordField t_contraseña_a;
     private javax.swing.JPasswordField t_contraseña_c;
     private javax.swing.JPasswordField t_contraseña_n;
+    private javax.swing.JPasswordField t_usuario_a;
+    private javax.swing.JPasswordField t_usuario_c;
+    private javax.swing.JPasswordField t_usuario_n;
     // End of variables declaration//GEN-END:variables
 }

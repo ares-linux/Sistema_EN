@@ -4,11 +4,29 @@
  */
 package sistema_en.Ventanas;
 
+import dao.ClienteDAO;
+import dao.ConfiguracionesDAO;
+import dao.CotizacionDAO;
+import dao.Detalles_cotizacionDAO;
+import dao.TrabajoDAO;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
+import java.net.URI;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
+import sistema_en.GoogleDriveProvider;
+import sistema_en.Objetos.Cliente;
+import sistema_en.Objetos.Cotizacion;
+import sistema_en.Objetos.Detalles_cotizacion;
+import sistema_en.Objetos.Exportar_PDF;
+import sistema_en.Objetos.Trabajo;
 
 /**
  *
@@ -23,21 +41,42 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     float iva;
     float subtotal;
     float total2;
+    int id_trabajo_c;
+    int id_cotizacion_c;
+    boolean nuevo;
+    boolean editar;
+    String n_cliente;
+    String ruta_pdf;
+    boolean abrir_automaticamente;
+    boolean prueba;
     
     /**
      * Creates new form V_registrarco
      */
     public V_R_Cotizacion() {
         initComponents();
-        
-        Tabla_conceptos.setDefaultEditor(Object.class, null);
-        Tabla_conceptos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
-        
-        Tabla_materiales.setDefaultEditor(Object.class, null);
-        Tabla_materiales.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
-        
+                
+        config_tablas();
+               
+        //llenar_tabla(0);
+        obtener_configuraciones();
     }
 
+    public int recibirTrabajo(int id_trabajo_i){
+        cargarTrabajo(id_trabajo_i); 
+        cargarCotizacion(id_trabajo_i);
+        cargarDetalles_cotizacion(id_trabajo_i);
+        llenar_tabla(id_trabajo_i); 
+        return id_trabajo_i;
+    }
+    
+    public int recibirCliente(int id_cliente_i) {
+        cargarCliente(id_cliente_i);        
+        return id_cliente_i;
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -58,34 +97,30 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        S_botones = new javax.swing.JScrollPane();
-        P_botones = new javax.swing.JPanel();
-        b_eliminar = new javax.swing.JButton();
-        b_editar = new javax.swing.JButton();
-        b_aceptar = new javax.swing.JButton();
-        b_cancelar = new javax.swing.JButton();
-        b_exportar = new javax.swing.JButton();
-        b_convertir = new javax.swing.JButton();
-        b_cerrar = new javax.swing.JButton();
+        T_pestañas = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        P_botones_c = new javax.swing.JPanel();
+        b_nuevo_c = new javax.swing.JButton();
+        b_editar_c = new javax.swing.JButton();
+        b_buscar_c = new javax.swing.JButton();
+        b_eliminar_c = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        Tabla_cotizaciones = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
         P_datos_estaticos = new javax.swing.JPanel();
-        t_n_trabajo = new javax.swing.JTextField();
-        t_n_cotizacion = new javax.swing.JTextField();
+        t_id_trabajo = new javax.swing.JTextField();
+        t_id_cotizacion = new javax.swing.JTextField();
         t_tipo_c = new javax.swing.JTextField();
         t_fecha_r = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        P_calculos_automaticos = new javax.swing.JPanel();
-        t_subtotal = new javax.swing.JTextField();
-        t_iva = new javax.swing.JTextField();
-        t_total = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        S_tablas = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
+        c_estado = new javax.swing.JComboBox<>();
+        jLabel17 = new javax.swing.JLabel();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
         P_tabla_conceptos = new javax.swing.JPanel();
         P_conceptos = new javax.swing.JPanel();
         t_concepto = new javax.swing.JTextField();
@@ -108,8 +143,20 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         S_materiales = new javax.swing.JScrollPane();
         Tabla_materiales = new javax.swing.JTable();
-        b_derecha = new javax.swing.JButton();
-        b_izquierda = new javax.swing.JButton();
+        jPanel12 = new javax.swing.JPanel();
+        P_botones_sistema = new javax.swing.JPanel();
+        b_exportar = new javax.swing.JButton();
+        b_convertir = new javax.swing.JButton();
+        b_cancelar = new javax.swing.JButton();
+        b_guardar = new javax.swing.JButton();
+        b_cerrar = new javax.swing.JButton();
+        P_calculos_automaticos = new javax.swing.JPanel();
+        t_subtotal = new javax.swing.JTextField();
+        t_iva = new javax.swing.JTextField();
+        t_total = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -161,267 +208,209 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(305, 170));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel2.setText("Cotizacion");
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jLabel16.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel16.setText("Cotizaciones");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel2, gridBagConstraints);
+        jPanel3.add(jLabel16, gridBagConstraints);
 
-        S_botones.setAutoscrolls(true);
-        S_botones.setMinimumSize(new java.awt.Dimension(20, 60));
+        P_botones_c.setLayout(new java.awt.GridBagLayout());
 
-        P_botones.setLayout(new java.awt.GridBagLayout());
-
-        b_eliminar.setText("Eliminar");
-        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+        b_nuevo_c.setText("Nuevo");
+        b_nuevo_c.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_eliminarActionPerformed(evt);
+                b_nuevo_cActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_botones_c.add(b_nuevo_c, gridBagConstraints);
+
+        b_editar_c.setText("Editar");
+        b_editar_c.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_editar_cActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_botones_c.add(b_editar_c, gridBagConstraints);
+
+        b_buscar_c.setText("Buscar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
-        P_botones.add(b_eliminar, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_botones_c.add(b_buscar_c, gridBagConstraints);
 
-        b_editar.setText("Editar");
-        b_editar.addActionListener(new java.awt.event.ActionListener() {
+        b_eliminar_c.setText("Eliminar");
+        b_eliminar_c.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_editarActionPerformed(evt);
+                b_eliminar_cActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 15;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
-        P_botones.add(b_editar, gridBagConstraints);
-
-        b_aceptar.setText("Aceptar");
-        b_aceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_aceptarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
-        P_botones.add(b_aceptar, gridBagConstraints);
-
-        b_cancelar.setText("Cancelar");
-        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_cancelarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
-        P_botones.add(b_cancelar, gridBagConstraints);
-
-        b_exportar.setText("Exportar");
-        b_exportar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_exportarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
-        P_botones.add(b_exportar, gridBagConstraints);
-
-        b_convertir.setText("Convertir a trabajo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
-        P_botones.add(b_convertir, gridBagConstraints);
-
-        b_cerrar.setText("Cerrar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
-        P_botones.add(b_cerrar, gridBagConstraints);
-
-        S_botones.setViewportView(P_botones);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_botones_c.add(b_eliminar_c, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(P_botones_c, gridBagConstraints);
+
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(450, 400));
+
+        Tabla_cotizaciones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id cotizacion", "Tipo", "Fecha de creacion", "Subtotal", "IVA", "Total", "Estado"
+            }
+        ));
+
+        Tabla_cotizaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_cotizacionesMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(Tabla_cotizaciones);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 10, 10);
-        getContentPane().add(S_botones, gridBagConstraints);
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jScrollPane3, gridBagConstraints);
+
+        T_pestañas.addTab("Cotizaciones", jPanel3);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel11.setLayout(new java.awt.GridBagLayout());
 
         P_datos_estaticos.setLayout(new java.awt.GridBagLayout());
 
-        t_n_trabajo.setEditable(false);
+        t_id_trabajo.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
-        P_datos_estaticos.add(t_n_trabajo, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_datos_estaticos.add(t_id_trabajo, gridBagConstraints);
 
-        t_n_cotizacion.setEditable(false);
+        t_id_cotizacion.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
-        P_datos_estaticos.add(t_n_cotizacion, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_datos_estaticos.add(t_id_cotizacion, gridBagConstraints);
 
         t_tipo_c.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos_estaticos.add(t_tipo_c, gridBagConstraints);
 
         t_fecha_r.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos_estaticos.add(t_fecha_r, gridBagConstraints);
 
         jLabel1.setText("Fecha de creacion");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos_estaticos.add(jLabel1, gridBagConstraints);
 
         jLabel12.setText("Tipo de cotizacion");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos_estaticos.add(jLabel12, gridBagConstraints);
 
         jLabel3.setText("Numero de trabajo");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos_estaticos.add(jLabel3, gridBagConstraints);
 
         jLabel4.setText("Numero de cotizacion");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 12, 10, 11);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos_estaticos.add(jLabel4, gridBagConstraints);
 
+        c_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Borrador", "Pendiente", "Enviada", "Aprobada", "Rechazada", "Cancelada" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 709;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_datos_estaticos.add(c_estado, gridBagConstraints);
+
+        jLabel17.setText("Estado");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_datos_estaticos.add(jLabel17, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(P_datos_estaticos, gridBagConstraints);
-
-        P_calculos_automaticos.setLayout(new java.awt.GridBagLayout());
-
-        t_subtotal.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 95;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_calculos_automaticos.add(t_subtotal, gridBagConstraints);
-
-        t_iva.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 85;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_calculos_automaticos.add(t_iva, gridBagConstraints);
-
-        t_total.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 75;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_calculos_automaticos.add(t_total, gridBagConstraints);
-
-        jLabel9.setText("Subtotal");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_calculos_automaticos.add(jLabel9, gridBagConstraints);
-
-        jLabel10.setText("Iva 16%");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_calculos_automaticos.add(jLabel10, gridBagConstraints);
-
-        jLabel11.setText("Total");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_calculos_automaticos.add(jLabel11, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 110;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(P_calculos_automaticos, gridBagConstraints);
-
-        S_tablas.setAutoscrolls(true);
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        jPanel11.add(P_datos_estaticos, gridBagConstraints);
 
         P_tabla_conceptos.setLayout(new java.awt.GridBagLayout());
 
@@ -435,12 +424,11 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 225;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_conceptos.add(t_concepto, gridBagConstraints);
 
         t_precio.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -449,13 +437,13 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 235;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_conceptos.add(t_precio, gridBagConstraints);
 
         b_añadir_concepto.setFont(new java.awt.Font("Inter", 0, 18)); // NOI18N
@@ -471,10 +459,10 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_conceptos.add(b_añadir_concepto, gridBagConstraints);
 
         jLabel15.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -482,25 +470,24 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_conceptos.add(jLabel15, gridBagConstraints);
 
         jLabel6.setText("Precio");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipady = 3;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_conceptos.add(jLabel6, gridBagConstraints);
 
         jLabel5.setText("Concepto");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipady = 3;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_conceptos.add(jLabel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -511,21 +498,19 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(1, 0, 0, 0);
         P_tabla_conceptos.add(P_conceptos, gridBagConstraints);
 
-        S_conceptos.setMaximumSize(new java.awt.Dimension(450, 200));
-        S_conceptos.setMinimumSize(new java.awt.Dimension(450, 200));
-        S_conceptos.setPreferredSize(new java.awt.Dimension(450, 200));
+        S_conceptos.setMaximumSize(new java.awt.Dimension(100, 200));
+        S_conceptos.setMinimumSize(new java.awt.Dimension(100, 200));
+        S_conceptos.setPreferredSize(new java.awt.Dimension(100, 200));
 
         Tabla_conceptos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Concepto", "Precio"
+                "id", "Concepto", "Precio"
             }
         ));
-        Tabla_conceptos.setMaximumSize(null);
-        Tabla_conceptos.setMinimumSize(null);
-        Tabla_conceptos.setPreferredSize(null);
+
         Tabla_conceptos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_conceptosMouseClicked(evt);
@@ -536,18 +521,12 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_tabla_conceptos.add(S_conceptos, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipady = 96;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 9, 10);
-        jPanel1.add(P_tabla_conceptos, gridBagConstraints);
+        jTabbedPane2.addTab("Conceptos", P_tabla_conceptos);
 
         P_tabla_materiales.setLayout(new java.awt.GridBagLayout());
 
@@ -569,7 +548,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(b_añadir_materiales, gridBagConstraints);
 
         t_nombre_m.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -593,7 +572,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 320;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(t_nombre_m, gridBagConstraints);
 
         t_precio_uni.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -612,7 +591,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 85;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(t_precio_uni, gridBagConstraints);
 
         t_cantidad.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -631,21 +610,21 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 155;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(t_cantidad, gridBagConstraints);
 
         jLabel13.setText("Cantidad");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(jLabel13, gridBagConstraints);
 
         jLabel8.setText("Precio uni");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(jLabel8, gridBagConstraints);
 
         jLabel7.setText("Nombre del material");
@@ -653,7 +632,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.ipady = 3;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(jLabel7, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -662,33 +641,28 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(jLabel14, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 308;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_tabla_materiales.add(P_materiales, gridBagConstraints);
 
-        S_materiales.setMaximumSize(new java.awt.Dimension(450, 200));
-        S_materiales.setMinimumSize(new java.awt.Dimension(450, 200));
+        S_materiales.setMaximumSize(new java.awt.Dimension(100, 200));
+        S_materiales.setMinimumSize(new java.awt.Dimension(100, 200));
         S_materiales.setName(""); // NOI18N
-        S_materiales.setPreferredSize(new java.awt.Dimension(450, 200));
+        S_materiales.setPreferredSize(new java.awt.Dimension(100, 200));
 
         Tabla_materiales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nombre", "Precio uni", "Cantidad", "Total"
+                "id", "Nombre", "Precio uni", "Cantidad", "Total"
             }
         ));
-        Tabla_materiales.setMaximumSize(null);
-        Tabla_materiales.setMinimumSize(null);
-        Tabla_materiales.setPreferredSize(null);
+
         Tabla_materiales.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_materialesMouseClicked(evt);
@@ -699,64 +673,268 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_tabla_materiales.add(S_materiales, gridBagConstraints);
 
+        jTabbedPane2.addTab("Materiales", P_tabla_materiales);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        jPanel11.add(jTabbedPane2, gridBagConstraints);
+
+        jPanel12.setLayout(new java.awt.GridBagLayout());
+
+        P_botones_sistema.setLayout(new java.awt.GridBagLayout());
+
+        b_exportar.setText("Exportar");
+        b_exportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_exportarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 101;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_botones_sistema.add(b_exportar, gridBagConstraints);
+
+        b_convertir.setText("Convertir a trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 95;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_botones_sistema.add(b_convertir, gridBagConstraints);
+
+        b_cancelar.setText("Cancelar");
+        b_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cancelarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones_sistema.add(b_cancelar, gridBagConstraints);
+
+        b_guardar.setText("Guardar");
+        b_guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_guardarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones_sistema.add(b_guardar, gridBagConstraints);
+
+        b_cerrar.setText("Cerrar");
+        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cerrarActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 306;
-        gridBagConstraints.ipady = 91;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 9, 9, 10);
-        jPanel1.add(P_tabla_materiales, gridBagConstraints);
-
-        S_tablas.setViewportView(jPanel1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 95;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        getContentPane().add(S_tablas, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 11, 11);
+        P_botones_sistema.add(b_cerrar, gridBagConstraints);
 
-        b_derecha.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        b_derecha.setText(">>");
-        b_derecha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_derechaActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_derecha, gridBagConstraints);
+        jPanel12.add(P_botones_sistema, gridBagConstraints);
 
-        b_izquierda.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        b_izquierda.setText("<<");
-        b_izquierda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_izquierdaActionPerformed(evt);
-            }
-        });
+        P_calculos_automaticos.setLayout(new java.awt.GridBagLayout());
+
+        t_subtotal.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 95;
+        gridBagConstraints.weightx = 1.0;
+        P_calculos_automaticos.add(t_subtotal, gridBagConstraints);
+
+        t_iva.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 85;
+        gridBagConstraints.weightx = 1.0;
+        P_calculos_automaticos.add(t_iva, gridBagConstraints);
+
+        t_total.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 75;
+        gridBagConstraints.weightx = 1.0;
+        P_calculos_automaticos.add(t_total, gridBagConstraints);
+
+        jLabel9.setText("Subtotal");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        P_calculos_automaticos.add(jLabel9, gridBagConstraints);
+
+        jLabel10.setText("Iva 16%");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        P_calculos_automaticos.add(jLabel10, gridBagConstraints);
+
+        jLabel11.setText("Total");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        P_calculos_automaticos.add(jLabel11, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_izquierda, gridBagConstraints);
+        jPanel12.add(P_calculos_automaticos, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel11.add(jPanel12, gridBagConstraints);
+
+        jPanel1.add(jPanel11, java.awt.BorderLayout.CENTER);
+
+        T_pestañas.addTab("Sistema de Cotizaciones", jPanel1);
+
+        getContentPane().add(T_pestañas, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
         
+    public void cotizacion_prueba(){
+        t_tipo_c.setText("Prueba");
+        
+        cargarCotizacionPrueba();
+    }
+    
+    private void cargarCotizacionPrueba(){
+        CotizacionDAO dao = new CotizacionDAO();
+        dao.obtenerCotizacionesPrueba();
+    }
+    
+    private void obtener_configuraciones(){
+        ConfiguracionesDAO dao = new ConfiguracionesDAO();
+        List<String[]> configs = dao.obtenerConfiguraciones();
+    
+        for (String[] conf : configs) {
+
+        String clave = conf[1];
+        String valor = conf[2];
+
+        switch (clave) {
+            case "carpeta_ce":
+                ruta_pdf = valor;
+            break;
+            
+            case "automaticamente_ce":
+                abrir_automaticamente = Boolean.parseBoolean(valor);
+            break;
+        }
+        
+        }
+    }
+    
+    private final void config_tablas(){
+        
+        Tabla_cotizaciones.setDefaultEditor(Object.class, null);
+        Tabla_cotizaciones.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_cotizaciones.getTableHeader().setReorderingAllowed(false);
+        Tabla_cotizaciones.getTableHeader().setResizingAllowed(false);
+        
+        Tabla_conceptos.setDefaultEditor(Object.class, null);
+        Tabla_conceptos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_conceptos.getTableHeader().setReorderingAllowed(false);
+        Tabla_conceptos.getTableHeader().setResizingAllowed(false);
+        
+        Tabla_materiales.setDefaultEditor(Object.class, null);
+        Tabla_materiales.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_materiales.getTableHeader().setReorderingAllowed(false);
+        Tabla_materiales.getTableHeader().setResizingAllowed(false);
+                
+        Tabla_materiales.getColumnModel().getColumn(0).setMinWidth(0);
+        Tabla_materiales.getColumnModel().getColumn(0).setMaxWidth(0);
+        Tabla_materiales.getColumnModel().getColumn(0).setPreferredWidth(0);
+        
+        Tabla_conceptos.getColumnModel().getColumn(0).setMinWidth(0);
+        Tabla_conceptos.getColumnModel().getColumn(0).setMaxWidth(0);
+        Tabla_conceptos.getColumnModel().getColumn(0).setPreferredWidth(0);
+    }
+    
+    private void cargarTrabajo(int id_trabajo_i){
+        TrabajoDAO dao = new TrabajoDAO();
+        Trabajo trabajo = dao.obtenerTrabajo(id_trabajo_i);
+        
+        t_id_trabajo.setText(String.valueOf(trabajo.getId_trabajo()));
+        id_trabajo_c = id_trabajo_i;
+        System.out.println("El id del trabajo es: " + id_trabajo_i);
+        
+        
+        if (id_trabajo_i == 0){
+            t_tipo_c.setText("Prueba");
+        }
+        else{
+            t_tipo_c.setText("Normal");
+        }
+    }
+    
+    
+    
+    private void cargarCliente(int id_cliente_i){
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cliente = dao.obtenerCliente(id_cliente_i);       
+        
+        n_cliente = String.valueOf(cliente.getNombre_c());
+    }
+    
+    private void cargarCotizacion(int id_trabajo_i){
+        CotizacionDAO dao = new CotizacionDAO();
+        dao.obtenerCotizacion(id_trabajo_i);
+    }
+    
+    private void cargarDetalles_cotizacion(int id_trabajo_i){
+        
+    }
+    
     public void calcular_total_m(){
         float cant, precio_uni, total1;
         
@@ -772,7 +950,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     DefaultTableModel modeloConceptos = (DefaultTableModel) this.Tabla_conceptos.getModel();
     for (int i = 0; i < modeloConceptos.getRowCount(); i++) {
         try {
-            subtotal += Float.parseFloat(modeloConceptos.getValueAt(i, 1).toString());
+            subtotal += Float.parseFloat(modeloConceptos.getValueAt(i, 2).toString());
         } catch (Exception e) { 
         }
     }
@@ -780,7 +958,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     DefaultTableModel modeloMateriales = (DefaultTableModel) this.Tabla_materiales.getModel();
     for (int i = 0; i < modeloMateriales.getRowCount(); i++) {
         try {
-            subtotal += Float.parseFloat(modeloMateriales.getValueAt(i, 3).toString());
+            subtotal += Float.parseFloat(modeloMateriales.getValueAt(i, 4).toString());
         } catch (Exception e) {
         }
     }
@@ -796,10 +974,57 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     }   
     
         
+private void agregarConcepto() {
+    // 1. Validar campos vacíos y dar feedback
+    if (t_concepto.getText().trim().isEmpty() || t_precio.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, llene el concepto y el precio.", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // 2. Validar que el precio sea un número
+    try {
+        Float.parseFloat(t_precio.getText().trim()); 
+        
+        // 3. Si todo está bien, ejecutar la lógica original
+        desbloquear_text();
+        llenar_tabla_c();
+        calcular_total();
+        desbloquear_botones();
+        limpiar_text_c();
+        t_concepto.requestFocus();
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El precio debe ser un número válido.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+private void agregarMaterial() {
+    if (t_nombre_m.getText().trim().isEmpty() || t_precio_uni.getText().trim().isEmpty() || t_cantidad.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, llene todos los campos del material.", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    try {
+        Float.parseFloat(t_precio_uni.getText().trim());
+        Float.parseFloat(t_cantidad.getText().trim());
+
+        desbloquear_text();
+        llenar_tabla_m(); // Este ya llama internamente a calcular_total_m()
+        calcular_total();
+        desbloquear_botones();
+        limpiar_text_m();
+        t_nombre_m.requestFocus();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El precio unitario y la cantidad deben ser números válidos.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+    }
+}
+    
     public void llenar_tabla_c(){
-        String [] info = new String[2];
-        info[0] = t_concepto.getText();
-        info[1] = t_precio.getText();
+        String [] info = new String[3];
+        info[0] = "";
+        info[1] = t_concepto.getText();
+        info[2] = t_precio.getText();
         DefaultTableModel modelo=(DefaultTableModel) this.Tabla_conceptos.getModel();//crea una variable de tipo modelo de tabla 
         modelo.addRow(info);//agrega una fila al modelo de tabla
         this.Tabla_conceptos.setModel(modelo);
@@ -807,11 +1032,12 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     
     public void llenar_tabla_m(){
         calcular_total_m();
-        Object [] info = new Object[4];
-        info[0] = t_nombre_m.getText();
-        info[1] = t_precio_uni.getText();
-        info[2] = t_cantidad.getText();
-        info[3] = total;
+        Object [] info = new Object[5];
+        info[0] = "";
+        info[1] = t_nombre_m.getText();
+        info[2] = t_precio_uni.getText();
+        info[3] = t_cantidad.getText();
+        info[4] = total;
         DefaultTableModel modelo=(DefaultTableModel) this.Tabla_materiales.getModel();//crea una variable de tipo modelo de tabla 
         modelo.addRow(info);//agrega una fila al modelo de tabla
         this.Tabla_materiales.setModel(modelo);
@@ -849,6 +1075,21 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         t_nombre_m.setEnabled(false);
         t_precio_uni.setEnabled(false);
         t_cantidad.setEnabled(false);
+        c_estado.setEnabled(false);
+    }
+    
+    private void bloquear_tablas(){
+        Tabla_conceptos.setEnabled(false);
+        Tabla_materiales.setEnabled(false);
+        b_añadir_concepto.setEnabled(false);
+        b_añadir_materiales.setEnabled(false);
+    }
+    
+    private void desbloquear_tabla(){
+        Tabla_conceptos.setEnabled(true);
+        Tabla_materiales.setEnabled(true);
+        b_añadir_concepto.setEnabled(true);
+        b_añadir_materiales.setEnabled(true);
     }
     
     public void desbloquear_text(){
@@ -857,20 +1098,31 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         t_nombre_m.setEnabled(true);
         t_precio_uni.setEnabled(true);
         t_cantidad.setEnabled(true);
+        c_estado.setEnabled(true);
     }
     
     public void bloquear_botones(){
-        b_eliminar.setEnabled(false);
-        b_editar.setEnabled(false);
-        b_aceptar.setEnabled(false);
-        b_cancelar.setEnabled(false);
+        b_eliminar_c.setEnabled(false);
+        b_editar_c.setEnabled(false);
+        b_buscar_c.setEnabled(false);
     }
     
     public void desbloquear_botones(){
-        b_eliminar.setEnabled(true);
-        b_editar.setEnabled(true);
-        b_aceptar.setEnabled(true);
-        b_cancelar.setEnabled(true);
+        b_eliminar_c.setEnabled(true);
+        b_editar_c.setEnabled(true);
+        b_buscar_c.setEnabled(true);
+    }
+    
+    public void bloquear_botones_sistema(){
+        b_guardar.setEnabled(false);
+        b_cancelar.setEnabled(false);
+        b_convertir.setEnabled(false);
+        b_exportar.setEnabled(false);
+    }
+    
+    public void desbloquear_botones_sistema(){
+        b_convertir.setEnabled(true);
+        b_exportar.setEnabled(true);
     }
     
     public void cargar_datos_tabla_conceptos(int indice){
@@ -898,6 +1150,13 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         calcular_total();
     }
     
+    public void limpiar_tablas(){
+        DefaultTableModel modelo =(DefaultTableModel) this.Tabla_conceptos.getModel();
+        modelo.setRowCount(0);
+        DefaultTableModel modelo1 =(DefaultTableModel) this.Tabla_materiales.getModel();
+        modelo1.setRowCount(0);
+    }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -907,281 +1166,685 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-                
+        fecha();
         b_añadir_materiales.setText("+");
-        
-        
+        //llenar_tabla();
+        bloquear_text();
+        bloquear_tablas();
+        bloquear_botones_sistema();
     }//GEN-LAST:event_formWindowOpened
 
-    private void Tabla_conceptosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_conceptosMouseClicked
-        fila = this.Tabla_conceptos.rowAtPoint(evt.getPoint());
-        this.Tabla_materiales.clearSelection();
-    }//GEN-LAST:event_Tabla_conceptosMouseClicked
+    private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_b_cerrarActionPerformed
+
+    private void b_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_guardarActionPerformed
+        if (nuevo == true){
+            try {
+                // 1. Validar que existan importes válidos
+                if (t_subtotal.getText().trim().isEmpty() || t_iva.getText().trim().isEmpty() || t_total.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Debe ingresar al menos un concepto o material para calcular los montos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                float subtotal = Float.parseFloat(t_subtotal.getText().replace(",", "."));
+                float iva = Float.parseFloat(t_iva.getText().replace(",", "."));
+                float total = Float.parseFloat(t_total.getText().replace(",", "."));
+
+                String estado = (c_estado.getSelectedItem() != null) ? c_estado.getSelectedItem().toString() : "Borrador";
+                String tipo = t_tipo_c.getText();
+
+                // 2. Crear el objeto principal Cotización
+                Cotizacion cot = new Cotizacion();
+                cot.setSubtotal(subtotal);
+                cot.setIva(iva);
+                cot.setTotal(total);
+                cot.setEstado(estado);
+                cot.setTipo(tipo);
+                cot.setFecha_creacion(java.time.LocalDate.now());
+                cot.setId_trabajo(id_trabajo_c);
+
+                // 3. Recopilar todos los detalles (Conceptos + Materiales)
+                List<Detalles_cotizacion> listaDetalles = new ArrayList<>();
+
+                // Extraer de Tabla_conceptos
+                for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
+                    Detalles_cotizacion det = new Detalles_cotizacion();
+                    det.setConcepto(Tabla_conceptos.getValueAt(i, 1).toString());
+                    det.setPrecio(Float.parseFloat(Tabla_conceptos.getValueAt(i, 2).toString()));
+                    det.setN_material("");
+                    det.setCantidad(0);
+                    det.setPrecio_uni(0);
+                    listaDetalles.add(det);
+                }
+
+                // Extraer de Tabla_materiales
+                for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
+                    Detalles_cotizacion det = new Detalles_cotizacion();
+                    det.setConcepto("");
+                    det.setN_material(Tabla_materiales.getValueAt(i, 1).toString());
+                    det.setPrecio_uni(Float.parseFloat(Tabla_materiales.getValueAt(i, 2).toString()));
+                    det.setCantidad(Float.parseFloat(Tabla_materiales.getValueAt(i, 3).toString()));
+                    det.setPrecio(Float.parseFloat(Tabla_materiales.getValueAt(i, 4).toString()));
+                    listaDetalles.add(det);
+                }
+
+                // 4. Ejecutar la transacción completa
+                CotizacionDAO dao = new CotizacionDAO();
+                boolean exito = dao.insertarCotizacionConDetalles(cot, listaDetalles);
+
+                if (exito) {
+                    Tabla_cotizaciones.setEnabled(true);
+                    limpiar_text();
+                    llenar_tabla(id_trabajo_c);
+                    b_nuevo_c.setText("Nuevo");
+                    desbloquear_botones();
+                    creacion_exitosa();
+                    bloquear_text();
+                    bloquear_botones_sistema();
+                    bloquear_tablas();
+                    b_nuevo_c.setEnabled(true);
+                    
+                    T_pestañas.setSelectedIndex(0);
+                    nuevo = false;
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ocurrió un error al intentar guardar la cotización. Ningún dato fue modificado.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Por favor verifica que los importes y precios sean valores numéricos válidos.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        if (editar == true){
+            try {
+                // 1. Obtener y validar datos principales
+                if (t_subtotal.getText().trim().isEmpty() || t_iva.getText().trim().isEmpty() || t_total.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Los totales no pueden estar vacíos.", "Error", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int id_cotizacion = Integer.parseInt(t_id_cotizacion.getText().trim());
+                float subtotal = Float.parseFloat(t_subtotal.getText().replace(",", ".").trim());
+                float iva = Float.parseFloat(t_iva.getText().replace(",", ".").trim());
+                float total = Float.parseFloat(t_total.getText().replace(",", ".").trim());
+        
+                String estado = (c_estado.getSelectedItem() != null) ? c_estado.getSelectedItem().toString() : "Borrador";
+                String tipo = t_tipo_c.getText().trim();
+                String fecha_creacion = t_fecha_r.getText().trim();
+                int id_trabajo = id_trabajo_c;
+
+                CotizacionDAO DAO = new CotizacionDAO();
+                Detalles_cotizacionDAO dao = new Detalles_cotizacionDAO();
+
+                // 2. Actualizar la cabecera de la cotización
+                boolean cotizacionActualizado = DAO.actualizarCotizacion(subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo, id_cotizacion);
+
+                if (cotizacionActualizado) {
+            
+                    // 3. Procesar Tabla de Conceptos
+                    for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
+                        Object valId = Tabla_conceptos.getValueAt(i, 0);
+                        String idStr = (valId != null) ? valId.toString().trim() : "";
+                
+                        String concepto = Tabla_conceptos.getValueAt(i, 1).toString();
+                        float precio = Float.parseFloat(Tabla_conceptos.getValueAt(i, 2).toString());
+
+                        if (idStr.isEmpty()) {
+                            // Es un registro nuevo
+                            dao.insertarDetalles_cotizacion(concepto, "", 0, 0, precio, id_cotizacion);
+                        } else {
+                            // Es un registro existente
+                            int id_detalle = Integer.parseInt(idStr);
+                            dao.actualizarDetalles_cotizacion(concepto, "", 0, 0, precio, id_cotizacion, id_detalle);
+                        }
+                    }
+
+                    // 4. Procesar Tabla de Materiales
+                    for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
+                        Object valId = Tabla_materiales.getValueAt(i, 0);
+                        String idStr = (valId != null) ? valId.toString().trim() : "";
+
+                        String n_material = Tabla_materiales.getValueAt(i, 1).toString();
+                        float precio_uni = Float.parseFloat(Tabla_materiales.getValueAt(i, 2).toString());
+                        float cantidad = Float.parseFloat(Tabla_materiales.getValueAt(i, 3).toString());
+                        float precio = Float.parseFloat(Tabla_materiales.getValueAt(i, 4).toString());
+
+                        if (idStr.isEmpty()) {
+                            // Es un registro nuevo
+                            dao.insertarDetalles_cotizacion("", n_material, cantidad, precio_uni, precio, id_cotizacion);
+                        } else {
+                            // Es un registro existente
+                            int id_detalle = Integer.parseInt(idStr);
+                            dao.actualizarDetalles_cotizacion("", n_material, cantidad, precio_uni, precio, id_cotizacion, id_detalle);
+                        }
+                    }
+
+                    // 5. Restablecer interfaz
+                    Tabla_cotizaciones.setEnabled(true);
+                    edicion_exitosa();
+                    desbloquear_botones();
+                    limpiar_text();
+                    b_nuevo_c.setEnabled(true);
+                    b_cancelar.setEnabled(false);
+                    bloquear_text();
+                    b_editar_c.setText("Editar");
+                    llenar_tabla(id_trabajo_c);
+                    b_editar_c.setEnabled(true);
+                    b_guardar.setEnabled(false);
+                    bloquear_tablas();
+                    limpiar_tablas();
+                    editar = false;
+                    T_pestañas.setSelectedIndex(0);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al actualizar los datos de la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Verifica que todos los campos numéricos tengan un formato válido.", "Error de datos", JOptionPane.ERROR_MESSAGE);
+                }
+        }
+    }//GEN-LAST:event_b_guardarActionPerformed
+
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_cancelarActionPerformed
+
+    private void preguntar(){
+        String[] opciones = {"Cerrar", "Abrir Hojas de calculo de Google"};
+        int respuesta = javax.swing.JOptionPane.showOptionDialog(this, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+
+        if (respuesta == 0){
+            
+        }
+        
+        else if (respuesta == 1){
+            try {
+            //desclaramos la url en una variable porque uri no acepta texto   
+            String url = "https://docs.google.com/spreadsheets/u/0/";
+
+            //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
+            if (Desktop.isDesktopSupported()) {
+                //lanzamos la url
+                Desktop.getDesktop().browse(new URI(url));
+            }
+            } catch (Exception e) {
+                //lazamos una exepcion si falla
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
+        String[] opciones = {"PDF", "EXCEL"};
+        int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "¿En que formato desea exportar la cotizacion?", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+
+        if (respuesta1 == 0) {
+
+            // Extraer datos de la interfaz igual que lo hacías para Sheets
+    String numero_cotizacion = t_id_cotizacion.getText();
+    String fecha = java.time.LocalDate.now().toString();
+    String estado = c_estado.getSelectedItem().toString();
+    String subtotal = t_subtotal.getText();
+    String iva = t_iva.getText();
+    String total = t_total.getText();
+
+    List<List<Object>> filasConceptos = new ArrayList<>();
+    for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
+        filasConceptos.add(Arrays.asList(
+            Tabla_conceptos.getValueAt(i, 1), "", Tabla_conceptos.getValueAt(i, 2)
+        ));
+    }
+
+    List<List<Object>> filasMateriales = new ArrayList<>();
+    for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
+        filasMateriales.add(Arrays.asList(
+            Tabla_materiales.getValueAt(i, 1), Tabla_materiales.getValueAt(i, 2), Tabla_materiales.getValueAt(i, 3),Tabla_materiales.getValueAt(i, 4)
+        ));
+    }
+
+    String rutaDestino;
+    
+    if (ruta_pdf.isEmpty()){
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        fileChooser.setDialogTitle("Guardar PDF de Cotización");
+        fileChooser.setSelectedFile(new java.io.File("Cotizacion_" + numero_cotizacion + ".pdf"));
+    
+        int userSelection = fileChooser.showSaveDialog(this);
+    
+        java.io.File archivoADescargar = fileChooser.getSelectedFile();
+        
+        rutaDestino = archivoADescargar.getAbsolutePath();
+    
+    }
+    else{
+        String carpetaDestino = ruta_pdf;
+        String nombreArchivo = "Cotizacion_" + numero_cotizacion + ".pdf";
+        java.io.File archivoFinal = new java.io.File(carpetaDestino, nombreArchivo);
+        rutaDestino = archivoFinal.getAbsolutePath();
+    }
+    
+        b_exportar.setEnabled(false);
+
+        new SwingWorker<Boolean, Void>() {
+            @Override
+            protected Boolean doInBackground() {
+                return Exportar_PDF.exportarCotizacionPDF(
+                    rutaDestino, 
+                    n_cliente, 
+                    numero_cotizacion, 
+                    fecha, 
+                    estado, 
+                    subtotal, 
+                    iva, 
+                    total, 
+                    filasConceptos, 
+                    filasMateriales
+                );
+            }
+
+            protected void done() {
+                
+                    b_exportar.setEnabled(true);
+                try {
+                    if (get()) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "¡PDF exportado con éxito!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                                    
+                        // Opcional: Abrir el PDF automáticamente
+                        if (abrir_automaticamente == true){
+                            if (java.awt.Desktop.isDesktopSupported()) {
+                            java.awt.Desktop.getDesktop().open(new java.io.File(rutaDestino));
+                        }
+                        }
+                        
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Error al generar el PDF.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+                
+            }
+        }.execute();
+    
+            
+        }
+        
+        else if (respuesta1 == 1) {
+            
+            String numero_cotizacion = t_id_cotizacion.getText();
+            String fecha = java.time.LocalDate.now().toString();
+            String estado = c_estado.getSelectedItem().toString();
+            String iva = t_iva.getText();
+            String subtotal = t_subtotal.getText();
+            String total = t_total.getText();
+            
+            List<List<Object>> contenidoHoja = new ArrayList<>();
+    
+            // Encabezado principal
+            contenidoHoja.add(Arrays.asList("COTIZACIÓN"));
+            contenidoHoja.add(Arrays.asList("Folio:", numero_cotizacion, "Fecha:", fecha));
+            contenidoHoja.add(Arrays.asList("Cliente:", n_cliente,"Estado:",estado));
+            contenidoHoja.add(Arrays.asList("")); // Fila en blanco
+            
+            contenidoHoja.add(Arrays.asList("CONCEPTOS"));
+            contenidoHoja.add(Arrays.asList("Concepto", "Precio"));
+            
+            // Si usas un JTable en tu formulario para los items de la cotización:
+            for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
+                contenidoHoja.add(Arrays.asList(
+                Tabla_conceptos.getValueAt(i, 1), // Concepto
+                Tabla_conceptos.getValueAt(i, 2) // Precio
+                ));
+            }
+            contenidoHoja.add(Arrays.asList("")); // Fila en blanco
+            contenidoHoja.add(Arrays.asList("Nombre del material", "precio uni", "Cantidad","Total"));
+            
+            for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
+                contenidoHoja.add(Arrays.asList(
+                Tabla_materiales.getValueAt(i, 1), // Nombre del material
+                Tabla_materiales.getValueAt(i, 2), // precio uni
+                Tabla_materiales.getValueAt(i, 3), // Cantidad
+                Tabla_materiales.getValueAt(i, 4)
+                ));
+            }
+            contenidoHoja.add(Arrays.asList(""));
+             contenidoHoja.add(Arrays.asList("IVA", "Subtotal", "Total"));
+             contenidoHoja.add(Arrays.asList(iva,subtotal,total));
+            
+            
+            b_exportar.setEnabled(false);
+    
+            new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() {
+                String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
+                return GoogleDriveProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja);
+            }
+
+            @Override
+            protected void done() {
+                b_exportar.setEnabled(true);
+                try {
+                    String idCreado = get();
+                    if (idCreado != null) {
+                        preguntar();
+                        //JOptionPane.showMessageDialog(null, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al exportar la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
+            
+        }
+        
+    }//GEN-LAST:event_b_exportarActionPerformed
 
     private void Tabla_materialesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_materialesMouseClicked
         fila = this.Tabla_materiales.rowAtPoint(evt.getPoint());
         this.Tabla_conceptos.clearSelection();
     }//GEN-LAST:event_Tabla_materialesMouseClicked
 
-    private void t_conceptoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_conceptoKeyPressed
+    private void t_cantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_cantidadKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_precio.requestFocus();
-           
+        if (Tecla_presionada == KeyEvent.VK_ENTER)
+        {
+            b_añadir_materiales.requestFocus();
         }
-    }//GEN-LAST:event_t_conceptoKeyPressed
+    }//GEN-LAST:event_t_cantidadKeyPressed
+
+    private void t_cantidadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_cantidadMouseClicked
+
+    }//GEN-LAST:event_t_cantidadMouseClicked
+
+    private void t_precio_uniKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_precio_uniKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+        if (Tecla_presionada == KeyEvent.VK_ENTER) {
+            this.t_cantidad.requestFocus();
+
+        }
+    }//GEN-LAST:event_t_precio_uniKeyPressed
+
+    private void t_precio_uniMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_precio_uniMouseClicked
+
+    }//GEN-LAST:event_t_precio_uniMouseClicked
+
+    private void t_nombre_mKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombre_mKeyPressed
+        int Tecla_presionada = evt.getKeyCode();
+
+        if (Tecla_presionada == KeyEvent.VK_ENTER) {
+            this.t_precio_uni.requestFocus();
+
+        }
+    }//GEN-LAST:event_t_nombre_mKeyPressed
 
     private void t_nombre_mActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_nombre_mActionPerformed
 
     }//GEN-LAST:event_t_nombre_mActionPerformed
 
-    private void t_nombre_mKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombre_mKeyPressed
+    private void t_nombre_mMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nombre_mMouseClicked
+
+    }//GEN-LAST:event_t_nombre_mMouseClicked
+
+    private void b_añadir_materialesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_añadir_materialesKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_precio_uni.requestFocus();
-           
+        if (Tecla_presionada == KeyEvent.VK_ENTER)
+        {
+            agregarMaterial();
         }
-    }//GEN-LAST:event_t_nombre_mKeyPressed
+    }//GEN-LAST:event_b_añadir_materialesKeyPressed
 
-    private void t_precio_uniKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_precio_uniKeyPressed
+    private void b_añadir_materialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_añadir_materialesActionPerformed
+        agregarMaterial();
+    }//GEN-LAST:event_b_añadir_materialesActionPerformed
+
+    private void Tabla_conceptosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_conceptosMouseClicked
+        fila = this.Tabla_conceptos.rowAtPoint(evt.getPoint());
+        this.Tabla_materiales.clearSelection();
+    }//GEN-LAST:event_Tabla_conceptosMouseClicked
+
+    private void b_añadir_conceptoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_añadir_conceptoKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
-    if (Tecla_presionada == KeyEvent.VK_ENTER) {
-        this.t_cantidad.requestFocus();
-           
+        if (Tecla_presionada == KeyEvent.VK_ENTER)
+        {
+            agregarConcepto();
         }
-    }//GEN-LAST:event_t_precio_uniKeyPressed
+    }//GEN-LAST:event_b_añadir_conceptoKeyPressed
 
     private void b_añadir_conceptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_añadir_conceptoActionPerformed
-        desbloquear_text();
-        t_concepto.requestFocus();
-        //limpiar_text_c();
-            if(t_concepto.getText().trim().isEmpty() || t_precio.getText().trim().isEmpty())
-            {
-                return;
-            }
-        //calcular_total_c();
-        llenar_tabla_c();
-        calcular_total();
-        desbloquear_botones();
-        limpiar_text_c();
+        agregarConcepto();
     }//GEN-LAST:event_b_añadir_conceptoActionPerformed
 
     private void t_precioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_precioKeyPressed
         int Tecla = evt.getKeyCode();
-        
+
         if(Tecla == KeyEvent.VK_ENTER)
         {
             this.b_añadir_concepto.requestFocus();
         }
     }//GEN-LAST:event_t_precioKeyPressed
 
-    private void b_añadir_conceptoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_añadir_conceptoKeyPressed
+    private void t_conceptoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_conceptoKeyPressed
         int Tecla_presionada = evt.getKeyCode();
 
-    if (Tecla_presionada == KeyEvent.VK_ENTER) 
-        {
-            t_concepto.requestFocus();
-            //limpiar_text_c();
-            if(t_concepto.getText().trim().isEmpty() || t_precio.getText().trim().isEmpty())
-            {
-                return;
-            }
-        //calcular_total_m();
-        llenar_tabla_c();
-        calcular_total();
-        desbloquear_botones();
-        limpiar_text_c();
+        if (Tecla_presionada == KeyEvent.VK_ENTER) {
+            this.t_precio.requestFocus();
+
         }
-    }//GEN-LAST:event_b_añadir_conceptoKeyPressed
+    }//GEN-LAST:event_t_conceptoKeyPressed
 
-    private void b_añadir_materialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_añadir_materialesActionPerformed
-        desbloquear_text();
-        t_nombre_m.requestFocus();
-        //limpiar_text_m();
-            if(t_nombre_m.getText().trim().isEmpty() || t_precio_uni.getText().trim().isEmpty() || t_cantidad.getText().trim().isEmpty())
-            {
-                
-                return;
-            }
-            
-        llenar_tabla_m();
-        calcular_total_m();
-        desbloquear_botones();
-        calcular_total();
-        limpiar_text_m();
-    }//GEN-LAST:event_b_añadir_materialesActionPerformed
-
-    private void b_añadir_materialesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_añadir_materialesKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-
-    if (Tecla_presionada == KeyEvent.VK_ENTER) 
-        {
-            t_nombre_m.requestFocus();
-        //limpiar_text_m();
-            if(t_nombre_m.getText().trim().isEmpty() || t_precio_uni.getText().trim().isEmpty() || t_cantidad.getText().trim().isEmpty())
-            {
-                return;
-            }
-            
-        
-            
-        llenar_tabla_m();
-        calcular_total_m();
-        desbloquear_botones();
-        calcular_total();
-        limpiar_text_m();
+    private void Tabla_cotizacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_cotizacionesMouseClicked
+        if(b_nuevo_c.getText().equals("Guardar") || b_editar_c.getText().equals("Guardar")){
+            return;
         }
-    }//GEN-LAST:event_b_añadir_materialesKeyPressed
-
-    private void t_cantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_cantidadKeyPressed
-        int Tecla_presionada = evt.getKeyCode();
-
-    if (Tecla_presionada == KeyEvent.VK_ENTER) 
-        {
-            b_añadir_materiales.requestFocus();
+        else{
+            fila = this.Tabla_cotizaciones.rowAtPoint(evt.getPoint());
+            cargar_datos_tabla(fila);
+            b_exportar.setEnabled(true);
         }
-    }//GEN-LAST:event_t_cantidadKeyPressed
+    }//GEN-LAST:event_Tabla_cotizacionesMouseClicked
 
-    private void b_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminarActionPerformed
-        int fila1 = this.Tabla_materiales.getSelectedRow();
-        int fila = this.Tabla_conceptos.getSelectedRow();
-        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_conceptos.getModel();
-        DefaultTableModel modelo1 = (DefaultTableModel) this.Tabla_materiales.getModel();
-        if (fila1>= 0){
-            modelo1.removeRow(fila1);
-            if (Tabla_materiales.getRowCount()>0){
-                calcular_total();
-            }
-            else
-            {
-                calcular_total();
-                //t_iva.setText("0");
-                //t_subtotal.setText("0");
-                //t_total.setText("0");
-            }
-        }
-        
-        
-        else if (fila>= 0){
-            modelo.removeRow(fila);
-            if (Tabla_conceptos.getRowCount()>0){
-                calcular_total();
-            }
-            else
-            {
-                calcular_total();
-                //t_iva.setText("0");
-                //t_subtotal.setText("0");
-                //t_total.setText("0");
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Seleccionar fila");
-        
-        }
-        
-        calcular_total();
-        
-    }//GEN-LAST:event_b_eliminarActionPerformed
+    private void b_eliminar_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminar_cActionPerformed
 
-    private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
-        int selMaterial = this.Tabla_materiales.getSelectedRow();
-        int selConcepto = this.Tabla_conceptos.getSelectedRow();
+        int filaSeleccionada = Tabla_cotizaciones.getSelectedRow();
 
-        if (selMaterial < 0 && selConcepto < 0) {
-            JOptionPane.showMessageDialog(null, "Seleccione una fila para editar");
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona una cotizacion de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if ("Editar".equals(b_editar.getText()))
-        {
-            b_editar.setText("Guardar");
-            b_añadir_concepto.setEnabled(false);
-            b_eliminar.setEnabled(false);
-            b_añadir_materiales.setEnabled(false);
-            b_aceptar.setEnabled(false);
-            b_cancelar.setEnabled(false);
-            
-            if (selMaterial >= 0) {
-                fila = selMaterial;
-                cargar_datos_tabla_materiales(selMaterial);
-            } else if (selConcepto >= 0) {
-                fila = selConcepto;
-                cargar_datos_tabla_conceptos(selConcepto);
+        String idString = Tabla_cotizaciones.getValueAt(filaSeleccionada, 0).toString();
+        int id = Integer.parseInt(idString);
+
+        int respuesta = JOptionPane.showConfirmDialog( this, "¿Estás seguro de que deseas eliminar esta cotizacion: " + id + "?",  "Confirmar Eliminación",  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+
+            CotizacionDAO dao = new CotizacionDAO();
+            boolean eliminadoExitoso = dao.eliminarCotizacion(id);
+
+            if (eliminadoExitoso) {
+                eliminacion_exitosa();
+                limpiar_text();
+                llenar_tabla(id_trabajo_c);
+                desbloquear_botones();
+                bloquear_text();
+            } else {
+                JOptionPane.showMessageDialog(this, "Hubo un error al intentar eliminar el registro de la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            
+        }
+    }//GEN-LAST:event_b_eliminar_cActionPerformed
+
+    private void b_editar_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editar_cActionPerformed
+        if ("Editar".equals(b_editar_c.getText())) {
+            fila = Tabla_cotizaciones.getSelectedRow();
+            if (Tabla_cotizaciones.getSelectedRow() == -1 && t_id_cotizacion.getText().trim().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una cotizacion de la tabla para editar.");
+                return;
+            }
             desbloquear_text();
-        }
-        else
-        {
-            if (selMaterial >= 0) {
-                if (t_nombre_m.getText().trim().isEmpty() || t_precio_uni.getText().trim().isEmpty() || t_cantidad.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor complete todos los campos del material");
-                    return;
-                }
-            } else if (selConcepto >= 0) {
-                if (t_concepto.getText().trim().isEmpty() || t_precio.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Por favor complete todos los campos del concepto");
-                    return;
-                }
-            }
-
-            b_editar.setText("Editar");
-            editar_tabla();
-            b_aceptar.setEnabled(true);
-            b_eliminar.setEnabled(true);
-            b_añadir_materiales.setEnabled(true);
-            b_añadir_concepto.setEnabled(true);
+            Tabla_cotizaciones.setEnabled(false);
+            //campos_bloquedos_edicion();
+            b_editar_c.setText("Guardar");
+            desbloquear_text();
+            b_nuevo_c.setEnabled(false);
+            b_eliminar_c.setEnabled(false);
+            b_buscar_c.setEnabled(false);
             b_cancelar.setEnabled(true);
-            bloquear_text();
-            limpiar_text_c();
-            limpiar_text_m();
+            desbloquear_tabla();
+            T_pestañas.setSelectedIndex(1);
+            b_guardar.setEnabled(true);
+            b_editar_c.setEnabled(false);
+            editar = true;
         }
-    }//GEN-LAST:event_b_editarActionPerformed
+    }//GEN-LAST:event_b_editar_cActionPerformed
 
-    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_b_cancelarActionPerformed
+    private void b_nuevo_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevo_cActionPerformed
+        if ("Nuevo".equals(b_nuevo_c.getText())) {
+            t_concepto.requestFocus();
+            desbloquear_text();
+            desbloquear_tabla();
+            b_nuevo_c.setText("Guardar");
+            limpiar_text();
+            ((DefaultTableModel) Tabla_conceptos.getModel()).setRowCount(0);
+            ((DefaultTableModel) Tabla_materiales.getModel()).setRowCount(0);
+            bloquear_botones();
+            b_cancelar.setEnabled(true);
+            Tabla_cotizaciones.setEnabled(false);
+            Tabla_conceptos.setEnabled(true);
+            T_pestañas.setSelectedIndex(1);
+            b_guardar.setEnabled(true);
+            b_nuevo_c.setEnabled(false);
+            nuevo = true;
+        }
+    }//GEN-LAST:event_b_nuevo_cActionPerformed
 
-    private void t_nombre_mMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nombre_mMouseClicked
-        
-    }//GEN-LAST:event_t_nombre_mMouseClicked
-
-    private void t_precio_uniMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_precio_uniMouseClicked
-        
-    }//GEN-LAST:event_t_precio_uniMouseClicked
-
-    private void t_cantidadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_cantidadMouseClicked
-        
-    }//GEN-LAST:event_t_cantidadMouseClicked
-
-    private void b_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_aceptarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_b_aceptarActionPerformed
-
-    private void b_izquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_izquierdaActionPerformed
-       JScrollBar barra = S_tablas.getHorizontalScrollBar();
-       barra.setValue(barra.getMinimum());
-    }//GEN-LAST:event_b_izquierdaActionPerformed
-
-    private void b_derechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_derechaActionPerformed
-        JScrollBar barra = S_tablas.getHorizontalScrollBar();
-        barra.setValue(barra.getMaximum());
-    }//GEN-LAST:event_b_derechaActionPerformed
-
+    public void limpiar_text(){
+        //t_id_trabajo.setText("");
+        //t_id_cotizacion.setText("");
+        //t_fecha_r.setText("");
+        //t_tipo_c.setText("");
+        t_subtotal.setText("");
+        t_iva.setText("");
+        t_total.setText("");
+        t_concepto.setText("");
+        t_precio.setText("");
+        t_nombre_m.setText("");
+        t_precio_uni.setText("");
+        t_cantidad.setText("");
+        t_id_cotizacion.setText("");
+    }
     
-    private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
-        //D_exportar_opciones exportar_opciones = new D_exportar_opciones((java.awt.Frame) this.getParent(), true);
-        //exportar_opciones.setLocationRelativeTo(V_R_Cotizacion.this);
-        //exportar_opciones.setVisible(true);
-        
-        
-    }//GEN-LAST:event_b_exportarActionPerformed
+    public void creacion_exitosa(){       
+            String mensaje;
+            mensaje = "La cotizacion fue registrada con exito";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje); 
+    }
+    
+    public void edicion_exitosa(){
+            String mensaje;
+            mensaje = "✓ Cambios guardados con éxito.";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+    }
+    
+    public void eliminacion_exitosa(){
+            String mensaje;
+            mensaje = "La cotizacion fue eliminada con exito.";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+    }
+    
+    public void llenar_tabla(int id_trabajo_i){
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_cotizaciones.getModel();
+        modelo.setRowCount(0);
 
+        CotizacionDAO dao = new CotizacionDAO();
+        List<Cotizacion> listaCotizaciones = dao.obtenerCotizaciones(id_trabajo_i);
+        
+        System.out.println("Cantidad recibida: " + listaCotizaciones.size());
+
+for (Cotizacion c : listaCotizaciones) {
+    System.out.println(
+        "Cotización: " + c.getId_cotizacion()
+        + " | Tipo: " + c.getTipo()
+        + " | Total: " + c.getTotal()
+    );
+}
+        
+        for (Cotizacion c : listaCotizaciones) {
+            Object[] fila = new Object[7]; 
+            fila[0] = c.getId_cotizacion();
+            fila[1] = c.getTipo();
+            fila[2] = c.getFecha_creacion();
+            fila[3] = c.getSubtotal();
+            fila[4] = c.getIva();
+            fila[5] = c.getTotal();
+            fila[6] = c.getEstado();
+            
+            modelo.addRow(fila);
+        }
+        System.out.println("Filas en el modelo: " + modelo.getRowCount());
+System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
+        this.Tabla_cotizaciones.setModel(modelo);
+        
+        System.out.println("se supone que se ejecuto el buscar las cotizaciones");
+    }
+    
+    public void fecha(){
+        t_fecha_r.setText(java.time.LocalDate.now().toString());
+        LocalTime horaactual = LocalTime.now();
+    }
+    
+    public void obtener_detalles(int id_cotizacion){
+        DefaultTableModel modeloConceptos = (DefaultTableModel) this.Tabla_conceptos.getModel();
+        modeloConceptos.setRowCount(0);
+
+        DefaultTableModel modeloMateriales = (DefaultTableModel) this.Tabla_materiales.getModel();
+        modeloMateriales.setRowCount(0);
+        
+        Detalles_cotizacionDAO dao = new Detalles_cotizacionDAO();
+        List<Detalles_cotizacion> Detalles_cotizacion = dao.obtenerDetalles_cotizacion(id_cotizacion);
+        
+        for (Detalles_cotizacion d : Detalles_cotizacion) {
+            if (d.getConcepto() != null && !d.getConcepto().trim().isEmpty()) {
+                Object[] fila = new Object[3]; 
+                fila[0] = d.getId_detalle();
+                fila[1] = d.getConcepto();
+                fila[2] = d.getPrecio();
+                modeloConceptos.addRow(fila);
+            }
+        }
+        
+        for (Detalles_cotizacion d : Detalles_cotizacion) {
+            if (d.getN_material() != null && !d.getN_material().trim().isEmpty()) {
+                Object[] fila = new Object[5]; 
+                fila[0] = d.getId_detalle();
+                fila[1] = d.getN_material();
+                fila[2] = d.getPrecio_uni();
+                fila[3] = d.getCantidad();
+                fila[4] = d.getPrecio();
+                modeloMateriales.addRow(fila);
+            }
+        }
+    }
+    
+    public void cargar_datos_tabla(int indice){
+        this.t_id_cotizacion.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 0)));
+        obtener_detalles(Integer.parseInt(this.Tabla_cotizaciones.getValueAt(indice, 0).toString()));
+        this.t_tipo_c.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 1)));
+        this.t_fecha_r.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 2)));
+        this.t_subtotal.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 3)));
+        this.t_iva.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 4)));
+        this.t_total.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 5)));
+        this.c_estado.setSelectedItem(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 6)));
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -1221,30 +1884,32 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel P_botones;
+    private javax.swing.JPanel P_botones_c;
+    private javax.swing.JPanel P_botones_sistema;
     private javax.swing.JPanel P_calculos_automaticos;
     private javax.swing.JPanel P_conceptos;
     private javax.swing.JPanel P_datos_estaticos;
     private javax.swing.JPanel P_materiales;
     private javax.swing.JPanel P_tabla_conceptos;
     private javax.swing.JPanel P_tabla_materiales;
-    private javax.swing.JScrollPane S_botones;
     private javax.swing.JScrollPane S_conceptos;
     private javax.swing.JScrollPane S_materiales;
-    private javax.swing.JScrollPane S_tablas;
+    private javax.swing.JTabbedPane T_pestañas;
     private javax.swing.JTable Tabla_conceptos;
+    private javax.swing.JTable Tabla_cotizaciones;
     private javax.swing.JTable Tabla_materiales;
-    private javax.swing.JButton b_aceptar;
     private javax.swing.JButton b_añadir_concepto;
     private javax.swing.JButton b_añadir_materiales;
+    private javax.swing.JButton b_buscar_c;
     private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_convertir;
-    private javax.swing.JButton b_derecha;
-    private javax.swing.JButton b_editar;
-    private javax.swing.JButton b_eliminar;
+    private javax.swing.JButton b_editar_c;
+    private javax.swing.JButton b_eliminar_c;
     private javax.swing.JButton b_exportar;
-    private javax.swing.JButton b_izquierda;
+    private javax.swing.JButton b_guardar;
+    private javax.swing.JButton b_nuevo_c;
+    private javax.swing.JComboBox<String> c_estado;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -1258,7 +1923,8 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1268,15 +1934,20 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextField t_cantidad;
     private javax.swing.JTextField t_concepto;
     private javax.swing.JTextField t_fecha_r;
+    private javax.swing.JTextField t_id_cotizacion;
+    private javax.swing.JTextField t_id_trabajo;
     private javax.swing.JTextField t_iva;
-    private javax.swing.JTextField t_n_cotizacion;
-    private javax.swing.JTextField t_n_trabajo;
     private javax.swing.JTextField t_nombre_m;
     private javax.swing.JTextField t_precio;
     private javax.swing.JTextField t_precio_uni;

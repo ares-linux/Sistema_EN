@@ -83,6 +83,7 @@
     <Component class="javax.swing.JTextField" name="t_id">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="id"/>
       </Properties>
       <Constraints>
@@ -94,6 +95,7 @@
     <Component class="javax.swing.JTextField" name="t_fecha_registro">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="fecha de registro"/>
       </Properties>
       <Constraints>
@@ -105,6 +107,7 @@
     <Component class="javax.swing.JTextField" name="t_hora_registro">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="hora de registro"/>
       </Properties>
       <Constraints>

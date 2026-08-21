@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JFrame;
 import sistema_en.Ventanas.V_R_Cotizacion;
 import sistema_en.Ventanas.V_R_Trabajo;
-import sistema_en.Ventanas.V_bitacora;
+import sistema_en.Ventanas.V_R_Bitacora;
 import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 
 /**
@@ -257,7 +257,7 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private V_R_Trabajo ventana_trabajo = null;
-    private V_bitacora ventana_bitacora = null;
+    private V_R_Bitacora ventana_bitacora = null;
     private V_R_Cotizacion ventana_cotizacion = null;
     private V_pago_recibido ventana_pago = null;
     
@@ -306,11 +306,11 @@ public class V_ficha_trabajo extends javax.swing.JFrame {
     }//GEN-LAST:event_b_cotizacionActionPerformed
 
     private void b_bitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_bitacoraActionPerformed
-        //V_bitacora bitacora = new V_bitacora();
+        //V_bitacora bitacora = new V_R_Bitacora();
         //bitacora.setVisible(true);
         
         if (ventana_bitacora == null || !ventana_bitacora.isDisplayable()) {
-            ventana_bitacora = new V_bitacora();
+            ventana_bitacora = new V_R_Bitacora();
             ventana_bitacora.setExtendedState(JFrame.MAXIMIZED_BOTH);
             ventana_bitacora.setVisible(true);
         } else {

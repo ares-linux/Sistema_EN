@@ -25,6 +25,8 @@ public class D_buscar_herramienta extends javax.swing.JDialog {
         
         Tabla_herramientas.setDefaultEditor(Object.class, null);
         Tabla_herramientas.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_herramientas.getTableHeader().setReorderingAllowed(false);
+        Tabla_herramientas.getTableHeader().setResizingAllowed(false);
     }
 
     public int getFila() {

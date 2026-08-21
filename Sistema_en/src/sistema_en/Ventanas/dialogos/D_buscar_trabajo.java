@@ -4,15 +4,15 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.TrabajoDAO;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author ares
  */
 public class D_buscar_trabajo extends javax.swing.JDialog {
-
-    int fila;
     
     /**
      * Creates new form D_buscar_trabajo
@@ -23,8 +23,18 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
         
         Tabla_trabajos.setDefaultEditor(Object.class, null);
         Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_trabajos.getTableHeader().setReorderingAllowed(false);
+        Tabla_trabajos.getTableHeader().setResizingAllowed(false);
     }
 
+    
+    int fila;
+    int id;
+    
+    public int getFila() {
+        return this.id;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -202,13 +212,37 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
         c_estado.setSelectedItem(null);
     }//GEN-LAST:event_b_limpiarActionPerformed
 
+    public void llenar_tabla(){
+    DefaultTableModel modelo = (DefaultTableModel) this.Tabla_trabajos.getModel();
+        modelo.setRowCount(0); 
+
+        TrabajoDAO trabajoDao = new TrabajoDAO();
+        java.util.List<String[]> lista = trabajoDao.obtenerTrabajosConClientes();
+
+        for (String[] fila : lista) {
+            modelo.addRow(fila);
+        }
+    }   
+    
     private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
         fila = Tabla_trabajos.getSelectedRow();
-                if (fila == -1) 
-                {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla.");
-                    return;
-                }
+
+        int columna = 0;
+        if (fila != -1) {
+                        
+            try {
+                
+                String valorCelda = Tabla_trabajos.getValueAt(fila, columna).toString();
+                id = Integer.parseInt(valorCelda);
+                
+            } catch (NumberFormatException e) {
+                System.out.println("Error: El dato en esa celda no es un número.");
+            }
+            
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un cliente de la tabla primero.");
+        }
+        this.dispose();
     }//GEN-LAST:event_b_seleccionarActionPerformed
 
     private void Tabla_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_trabajosMouseClicked
@@ -221,6 +255,7 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         limpiar_text();
+        llenar_tabla();
     }//GEN-LAST:event_formWindowOpened
 
     /**

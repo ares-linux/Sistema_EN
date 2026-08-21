@@ -8,7 +8,6 @@ import dao.ClienteDAO;
 import dao.TrabajoDAO;
 import java.awt.Color;
 import java.awt.Cursor;
-import sistema_en.Ventanas.dialogos.D_buscar_cliente;
 import java.awt.event.KeyEvent;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -16,8 +15,11 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
+import sistema_en.GoogleDriveProvider;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Trabajo;
+import sistema_en.Ventanas.dialogos.D_buscar_cliente;
+import sistema_en.Ventanas.dialogos.D_buscar_trabajo;
 
 /**
  *
@@ -32,6 +34,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     int idClienteSeleccionado = -1;
     private int clics = 0;
     private long ultimoAviso = 0;
+    private boolean abierto_ficha_trabajo = false;
 
     /**
      * Creates new form V_Rtrabajo
@@ -41,6 +44,8 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         
         Tabla_trabajos.setDefaultEditor(Object.class, null);
         Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_trabajos.getTableHeader().setReorderingAllowed(false);
+        Tabla_trabajos.getTableHeader().setResizingAllowed(false);
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
@@ -64,6 +69,31 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         
     }
 
+    public void abrirParaEdicionDesdeFicha(int id_cliente_i, int id_trabajo_i) {
+        recibirCliente(id_cliente_i);
+        recibirTrabajo(id_trabajo_i);
+    
+        abierto_ficha_trabajo = true;
+        
+        b_editar.doClick();
+        Tabla_trabajos.setEnabled(false);
+        b_nuevo.setEnabled(false);
+        b_eliminar.setEnabled(false);
+        b_buscar.setEnabled(false);
+        b_cancelar.setEnabled(false);
+    }
+    
+    public int recibirCliente(int id_cliente_i) {
+        cargarCliente(id_cliente_i);     
+        System.out.println("id del cliente: " + id_cliente_i);
+        return id_cliente_i;
+    }
+    
+    public int recibirTrabajo(int id_trabajo_i){
+        cargarTrabajo(id_trabajo_i); 
+        System.out.println("id del trabajo: " + id_trabajo_i);
+        return id_trabajo_i;
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -94,8 +124,8 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         b_buscar_cliente = new javax.swing.JButton();
         P_botones = new javax.swing.JPanel();
         b_cerrar = new javax.swing.JButton();
-        b_nuevo = new javax.swing.JButton();
         b_eliminar = new javax.swing.JButton();
+        b_nuevo = new javax.swing.JButton();
         b_buscar = new javax.swing.JButton();
         b_editar = new javax.swing.JButton();
         b_cancelar = new javax.swing.JButton();
@@ -299,6 +329,18 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_botones.add(b_cerrar, gridBagConstraints);
 
+        b_eliminar.setText("Eliminar");
+        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_eliminarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_botones.add(b_eliminar, gridBagConstraints);
+
         b_nuevo.setText("Nuevo");
         b_nuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -315,18 +357,6 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_botones.add(b_nuevo, gridBagConstraints);
-
-        b_eliminar.setText("Eliminar");
-        b_eliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_eliminarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_botones.add(b_eliminar, gridBagConstraints);
 
         b_buscar.setText("Buscar");
         b_buscar.addActionListener(new java.awt.event.ActionListener() {
@@ -398,7 +428,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre ", "Telefono", "Direccion", "Descripcion", "Fecha", "Hora", "Estado", "fecha de inicio", "fecha de fin"
+                "Id", "Id_cliente", "Nombre ", "Telefono", "Direccion", "Descripcion", "Fecha", "Hora", "Estado", "fecha de inicio", "fecha de fin"
             }
         ));
         Tabla_trabajos.setToolTipText("");
@@ -414,6 +444,43 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
         
+    private final void configurar_tablas(){
+        Tabla_trabajos.getColumnModel().getColumn(1).setMinWidth(1);
+        Tabla_trabajos.getColumnModel().getColumn(1).setMaxWidth(1);
+        Tabla_trabajos.getColumnModel().getColumn(1).setPreferredWidth(1);
+    }
+    
+    private void cargarCliente(int id_cliente_i){
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cliente = dao.obtenerCliente(id_cliente_i);       
+
+        if (cliente != null) {
+            t_nombre.setText(cliente.getNombre_c());
+            t_telefono.setText(cliente.getTelefono());
+        }
+        else{
+            javax.swing.JOptionPane.showMessageDialog(this, "No se encontró el cliente con ID: " + id_cliente_i);
+        }
+        
+    }
+    
+     private void cargarTrabajo(int id_trabajo_i){
+        TrabajoDAO dao = new TrabajoDAO();
+        Trabajo trabajo = dao.obtenerTrabajo(id_trabajo_i);
+        
+        if (trabajo != null){
+            t_id.setText(String.valueOf(id_trabajo_i));
+            t_direccion.setText(trabajo.getDireccion());
+            T_descripcion.setText(trabajo.getDescripcion());
+            t_fecha_r.setText(String.valueOf(trabajo.getFecha_cr()));
+            t_hora_r.setText(String.valueOf(trabajo.getHora_cr()));
+            
+        }
+        else{
+            javax.swing.JOptionPane.showMessageDialog(this, "No se encontró el cliente con ID: " + id_trabajo_i);
+        }
+    }
+    
     public void campos_bloquedos_edicion(){
             t_telefono.setEditable(false);
             t_nombre.setEditable(false);
@@ -443,12 +510,12 @@ public class V_R_Trabajo extends javax.swing.JFrame {
 
     
     String id_original = Tabla_trabajos.getValueAt(fila, 0).toString();
-    String nombre_original = Tabla_trabajos.getValueAt(fila, 1).toString(); 
-    String telefono_original = Tabla_trabajos.getValueAt(fila, 2).toString();
-    String direccion_original = Tabla_trabajos.getValueAt(fila, 3).toString();
-    String descripcion_original = Tabla_trabajos.getValueAt(fila, 4).toString(); 
-    String fecha_original = Tabla_trabajos.getValueAt(fila, 5).toString();
-    String hora_original = Tabla_trabajos.getValueAt(fila, 6).toString();
+    String nombre_original = Tabla_trabajos.getValueAt(fila, 2).toString(); 
+    String telefono_original = Tabla_trabajos.getValueAt(fila, 3).toString();
+    String direccion_original = Tabla_trabajos.getValueAt(fila, 4).toString();
+    String descripcion_original = Tabla_trabajos.getValueAt(fila, 5).toString(); 
+    String fecha_original = Tabla_trabajos.getValueAt(fila, 6).toString();
+    String hora_original = Tabla_trabajos.getValueAt(fila, 7).toString();
        
     
     return !t_id.getText().equals(id_original)
@@ -556,6 +623,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         t_telefono.setEnabled(true);
         t_direccion.setEnabled(true);
         T_descripcion.setEnabled(true);
+        System.out.println("Miau si se ejecuto");
     }
     
     public void bloquear_botones(){
@@ -586,12 +654,12 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     public void editar_tabla(){
         DefaultTableModel modelo =(DefaultTableModel) this.Tabla_trabajos.getModel();
         modelo.setValueAt(this.t_id.getText(), fila, 0);
-        modelo.setValueAt(this.t_nombre.getText(), fila, 1);
-        modelo.setValueAt( this.t_telefono.getText(), fila, 2);
-        modelo.setValueAt(this.t_direccion.getText(), fila, 3);
-        modelo.setValueAt(this.T_descripcion.getText(), fila, 4);
-        modelo.setValueAt(this.t_fecha_r.getText(), fila, 5);
-        modelo.setValueAt(this.t_hora_r.getText(), fila, 6);
+        modelo.setValueAt(this.t_nombre.getText(), fila, 2);
+        modelo.setValueAt( this.t_telefono.getText(), fila, 3);
+        modelo.setValueAt(this.t_direccion.getText(), fila, 4);
+        modelo.setValueAt(this.T_descripcion.getText(), fila, 5);
+        modelo.setValueAt(this.t_fecha_r.getText(), fila, 6);
+        modelo.setValueAt(this.t_hora_r.getText(), fila, 7);
         
     }
     
@@ -603,6 +671,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         java.util.List<String[]> lista = trabajoDao.obtenerTrabajosConClientes();
 
         for (String[] fila : lista) {
+            
             modelo.addRow(fila);
         }
 
@@ -612,12 +681,12 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     
     public void cargar_datos_tabla(int indice){
         this.t_id.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 0)));
-        this.t_nombre.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 1)));
-        this.t_telefono.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 2)));
-        this.t_direccion.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 3)));
-        this.T_descripcion.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 4)));
-        this.t_fecha_r.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 5)));
-        this.t_hora_r.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 6)));
+        this.t_nombre.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 2)));
+        this.t_telefono.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 3)));
+        this.t_direccion.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 4)));
+        this.T_descripcion.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 5)));
+        this.t_fecha_r.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 6)));
+        this.t_hora_r.setText(String.valueOf(this.Tabla_trabajos.getValueAt(indice, 7)));
     }
     
     public void llenar_text(){
@@ -641,12 +710,15 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         llenar_tabla();
+        configurar_tablas();
         b_buscar_cliente.setEnabled(false);
         t_nombre.requestFocus();
         b_cancelar.setEnabled(false);
-        hora_fecha();
-        llenar_text();
-        bloquear_text();
+        //hora_fecha();
+        //llenar_text();
+        if (abierto_ficha_trabajo == false){
+            bloquear_text(); 
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void t_nombreKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_t_nombreKeyPressed
@@ -686,19 +758,23 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     }//GEN-LAST:event_t_idKeyPressed
 
     private void Tabla_trabajosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_trabajosMouseClicked
-        if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
-            return;
-        }
-        else{
-            fila = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
-            cargar_datos_tabla(fila);
-        }
-        
+        if (evt.getClickCount() == 1) {
+            if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
+                return;
+            }
+            else
+            {
+                fila = this.Tabla_trabajos.rowAtPoint(evt.getPoint());
+                cargar_datos_tabla(fila);
+            }
+        }        
     }//GEN-LAST:event_Tabla_trabajosMouseClicked
-
+    
     private void b_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevoActionPerformed
         if ("Nuevo".equals(b_nuevo.getText())) {
             t_nombre.requestFocus(); 
+            b_nuevo.setBackground(Color.decode("#2f65ca"));
+            b_cancelar.setBackground(Color.decode("#CE1126"));
             desbloquear_text();
             t_id.setEnabled(false); 
             b_cancelar.setEnabled(true);   
@@ -717,6 +793,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             
             String nombre = t_nombre.getText().trim();
             String telefono = t_telefono.getText().trim();
+            String fecha_registro = java.time.LocalDate.now().toString();
 
             int idClienteFinal = idClienteSeleccionado;
 
@@ -728,7 +805,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     
                 // Buscamos si ya existe con esos datos o lo creamos sin duplicar
                 ClienteDAO clienteDao = new ClienteDAO();
-                idClienteFinal = clienteDao.obtenerOCrearCliente(nombre, telefono);
+                idClienteFinal = clienteDao.obtenerOCrearCliente(nombre, telefono,fecha_registro);
             }
 
             // 3. Verificamos que tengamos un ID válido antes de registrar el trabajo
@@ -741,13 +818,42 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 String fecha = t_fecha_r.getText();
                 String hora = t_hora_r.getText();
                 String estado = "Pendiente"; // O el estado que manejes
+                
+                int idTrabajo = trabajoDao.insertarTrabajo(direccion, descripcion, fecha, hora, estado, idClienteFinal);
+
+                boolean guardado = false;
+                
+                if (idTrabajo != -1) {
+                    // ¡Listo! Ya tienes el ID de la base de datos (por ejemplo, el 142)
+                    // Ahora armamos tu carpeta con ese mismo ID exacto:
+                    guardado = true;
+                    String nombreCarpeta = "Trabajo_" + idTrabajo + "_" + idClienteFinal + "_" + fecha;
+                    // Creamos la carpeta en Google Drive con este nombre
+                    String idCarpetaDrive = sistema_en.GoogleDriveProvider.crearCarpetaTrabajo(nombreCarpeta);
     
-                boolean guardado = trabajoDao.insertarTrabajo(direccion, descripcion, fecha, hora, estado, idClienteFinal);
+                    if (!GoogleDriveProvider.estaConectado()){
+                       String Carpeta = "Pendiente";
+                       trabajoDao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
+                    }
+                    else{
+                        String Carpeta = "Creada";
+                       trabajoDao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
+                    }
     
+                    System.out.println("✅ ¡Trabajo ID " + idTrabajo + " creado con su carpeta de Drive sincronizada!");
+                } else {
+                    System.out.println("❌ No se pudo registrar el trabajo.");
+                    String Carpeta = "Pendiente";
+                    trabajoDao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
+                }
+                
                 if (guardado) {
+                    
                     JOptionPane.showMessageDialog(this, "¡Trabajo registrado con éxito!");
                     Tabla_trabajos.setEnabled(true);
                     b_buscar_cliente.setEnabled(false);
+                    b_nuevo.setBackground(null);
+                    b_cancelar.setBackground(null);
                     creacion_exitosa();
                     bloquear_text();
                     desbloquear_botones();
@@ -769,19 +875,31 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         if ("Editar".equals(b_editar.getText())) {
             fila = Tabla_trabajos.getSelectedRow();
-            if (fila == -1) {
+            //if (fila == -1) {
+            //    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para editar.");
+            //    return;
+            //}
+            
+            if (Tabla_trabajos.getSelectedRow() == -1 && t_id.getText().trim().isEmpty()) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla para editar.");
-                return;
-            }
+            return;
+        }
+            desbloquear_text();
+            b_editar.setBackground(Color.decode("#2f65ca"));
+            b_cancelar.setBackground(Color.decode("#CE1126"));
             Tabla_trabajos.setEnabled(false);           
             campos_bloquedos_edicion();
             b_editar.setText("Guardar");
+            desbloquear_text();
             b_nuevo.setEnabled(false);
             b_eliminar.setEnabled(false);
             b_buscar.setEnabled(false);
-            b_cancelar.setEnabled(true);
+            if (abierto_ficha_trabajo == false){
+                b_cancelar.setEnabled(true);
+            }
             desbloquear_text();
             t_id.setEnabled(false); 
+            desbloquear_text();
         } else {
             if(t_direccion.getText().trim().isEmpty() || T_descripcion.getText().trim().isEmpty()) {
                 aviso_labels();
@@ -799,13 +917,17 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             if (trabajoActualizado) {
                 Tabla_trabajos.setEnabled(true);
                 edicion_exitosa(); 
-                restablecer_campos_bloquedos_edicion();
-                limpiar_text();
+                if (abierto_ficha_trabajo == false){
+                    b_nuevo.setBackground(null);
+                    b_cancelar.setBackground(null);
+                    desbloquear_botones();
+                    restablecer_campos_bloquedos_edicion();
+                    limpiar_text();
+                    b_nuevo.setEnabled(true);
+                    b_cancelar.setEnabled(false);
+                }
                 bloquear_text();
-                desbloquear_botones();
                 b_editar.setText("Editar");
-                b_nuevo.setEnabled(true);
-                b_cancelar.setEnabled(false);
                 llenar_tabla();
             } else {
                 JOptionPane.showMessageDialog(this, "Error al actualizar los datos en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -871,8 +993,6 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         buscar.setVisible(true);
         
         int idCliente = buscar.getFila();
-        
-        
         ClienteDAO dao = new ClienteDAO();
 
         Cliente cliente = dao.obtenerCliente(idCliente);
@@ -942,7 +1062,9 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         b_editar.setEnabled(true);
         b_cancelar.setEnabled(false);
         Tabla_trabajos.setEnabled(true);
-
+        b_editar.setBackground(null);
+        b_nuevo.setBackground(null);
+        b_cancelar.setBackground(null);
         int filaSeleccionada = Tabla_trabajos.getSelectedRow();
         if (filaSeleccionada != -1) {
             cargar_datos_tabla(filaSeleccionada);
@@ -955,20 +1077,13 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     }//GEN-LAST:event_b_cancelarActionPerformed
 
     private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
-        D_buscar_cliente buscar = new D_buscar_cliente(this, true);
+        D_buscar_trabajo buscar = new D_buscar_trabajo(this, true);
         buscar.setLocationRelativeTo(V_R_Trabajo.this);
         buscar.setVisible(true);
 
         // ¡CORRECCIÓN AQUÍ! Usamos la variable global de la línea 386
-        idClienteSeleccionado = buscar.getFila(); 
+        int id_cliente = buscar.getFila();
 
-        ClienteDAO dao = new ClienteDAO();
-        Cliente cliente = dao.obtenerCliente(idClienteSeleccionado);
-
-        if(cliente != null){
-            t_nombre.setText(cliente.getNombre_c());
-            t_telefono.setText(cliente.getTelefono());
-        }
     }//GEN-LAST:event_b_buscarActionPerformed
 
     private void t_nombreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nombreMouseClicked

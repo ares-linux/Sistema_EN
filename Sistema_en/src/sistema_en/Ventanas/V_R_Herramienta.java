@@ -42,6 +42,8 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         
         Tabla_herramientas.setDefaultEditor(Object.class, null);
         Tabla_herramientas.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_herramientas.getTableHeader().setReorderingAllowed(false);
+        Tabla_herramientas.getTableHeader().setResizingAllowed(false);
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
@@ -488,14 +490,15 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void Tabla_herramientasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_herramientasMouseClicked
-        if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
-            return;
+        if (evt.getClickCount() == 1) {
+            if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
+                return;
+            }
+            else{
+                fila = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
+                cargar_datos_tabla(fila);
+            }
         }
-        else{
-            fila = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
-            cargar_datos_tabla(fila);
-        }
-        
     }//GEN-LAST:event_Tabla_herramientasMouseClicked
 
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
@@ -510,6 +513,8 @@ public class V_R_Herramienta extends javax.swing.JFrame {
                 return;
             }
 
+            b_editar.setBackground(Color.decode("#2f65ca"));
+            b_cancelar.setBackground(Color.decode("#CE1126"));
             cargar_datos_tabla(fila);
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
@@ -543,6 +548,8 @@ public class V_R_Herramienta extends javax.swing.JFrame {
 
             if (actualizadoExitoso) {
                 limpiar_text();
+                b_editar.setBackground(null);
+                b_cancelar.setBackground(null);
                 b_editar.setText("Editar");
                 editar_tabla();
                 b_nuevo.setEnabled(true);
@@ -563,6 +570,8 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         if ("Nuevo".equals(b_nuevo.getText()))
         {
             Tabla_herramientas.setEnabled(false);
+            b_nuevo.setBackground(Color.decode("#2f65ca"));
+            b_cancelar.setBackground(Color.decode("#CE1126"));
             b_añadir.setEnabled(true);
             desbloquear_text();
             b_foto.setEnabled(true);
@@ -595,6 +604,8 @@ public class V_R_Herramienta extends javax.swing.JFrame {
             if (guardadoExitoso) {
                 Tabla_herramientas.setEnabled(true);
                 b_nuevo.setText("Nuevo");
+                b_nuevo.setBackground(null);
+                b_cancelar.setBackground(null);
                 llenar_tabla();
                 desbloquear_botones();
                 creacion_exitosa();
@@ -754,7 +765,9 @@ public class V_R_Herramienta extends javax.swing.JFrame {
     // --- RESTABLECER LA INTERFAZ (Tu código original ordenado) ---
     b_nuevo.setText("Nuevo");
     b_editar.setText("Editar");   
-    
+    b_nuevo.setBackground(null);
+    b_editar.setBackground(null);
+    b_cancelar.setBackground(null);
     b_nuevo.setEnabled(true);
     desbloquear_botones();
     //c_tipo.removeAllItems();

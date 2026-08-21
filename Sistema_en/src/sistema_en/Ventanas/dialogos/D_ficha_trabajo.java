@@ -4,18 +4,33 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.ClienteDAO;
+import dao.TrabajoDAO;
+import java.awt.Color;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import raven.toast.Notifications;
+import sistema_en.Objetos.Cliente;
+import sistema_en.Objetos.Trabajo;
 import sistema_en.Ventanas.V_R_Cotizacion;
-import sistema_en.Ventanas.V_R_Herramienta;
 import sistema_en.Ventanas.V_R_Trabajo;
-import sistema_en.Ventanas.V_bitacora;
-import sistema_en.Ventanas.No_utilizadas.V_pago_recibido;
+import sistema_en.Ventanas.V_R_Bitacora;
 
 /**
  *
  * @author ares
  */
 public class D_ficha_trabajo extends javax.swing.JDialog {
+    
+    int fila;
+    String estado;
+    String fecha_registro;
+    String hora_registro;
+    String fecha_inicio;
+    String fecha_fin;
+    String estado_a;
+    int id_cliente_i = 0;
+    int id_trabajo_i = 0;
 
     /**
      * Creates new form D_ficha_trabajos
@@ -29,9 +44,8 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         public void windowClosing(java.awt.event.WindowEvent e) {   
         if (t_actualizar_estado.isSelected()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
-            //b_cancelar.doClick(); 
-  
-            //dispose(); 
+            b_cerrar.doClick(); 
+            dispose(); 
             
         } else {
             dispose();
@@ -53,7 +67,7 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {   
         if (t_actualizar_estado.isSelected()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
+            //javax.swing.JOptionPane.showMessageDialog(null, "Guarde los cambios realizados antes de salir.");
             //b_cancelar.doClick(); 
   
             //dispose(); 
@@ -68,6 +82,13 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
 
     this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         
+    }
+    
+    public D_ficha_trabajo(int id_trabajo,int id_cliente) {
+        initComponents();
+
+        cargarCliente(id_cliente);
+        cargarTrabajo(id_trabajo);
     }
     
     /**
@@ -144,6 +165,7 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         getContentPane().add(jLabel5, gridBagConstraints);
 
         t_id.setEditable(false);
+        t_id.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         t_id.setText("id");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -155,6 +177,7 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         getContentPane().add(t_id, gridBagConstraints);
 
         t_fecha_registro.setEditable(false);
+        t_fecha_registro.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         t_fecha_registro.setText("fecha de registro");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -166,6 +189,7 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         getContentPane().add(t_fecha_registro, gridBagConstraints);
 
         t_hora_registro.setEditable(false);
+        t_hora_registro.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         t_hora_registro.setText("hora de registro");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -282,16 +306,64 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    public void edicion_exitosa(){
+        String mensaje;
+            mensaje = "✓ Estado actualizado exitosamente.";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+    }
+    
+    private void cargarCliente(int id_cliente){
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cliente = dao.obtenerCliente(id_cliente);       
+        
+        id_cliente = Integer.valueOf(cliente.getId_cliente());
+        System.out.println("id del cliente" + id_cliente);
+        
+        id_cliente_i = id_cliente;
+    }
+    
+    private void cargarTrabajo(int id_trabajo){
+        TrabajoDAO dao = new TrabajoDAO();
+        Trabajo trabajo = dao.obtenerTrabajo(id_trabajo);
+
+        id_trabajo_i = id_trabajo;
+        
+        estado_a = String.valueOf(trabajo.getEstado());
+        fecha_inicio = String.valueOf(trabajo.getFecha_inicio());
+        fecha_fin = String.valueOf(trabajo.getFecha_inicio());
+        
+        t_id.setText(String.valueOf(trabajo.getId_trabajo()));
+        t_fecha_registro.setText(String.valueOf(trabajo.getFecha_cr()));
+        t_hora_registro.setText(String.valueOf(trabajo.getHora_cr()));
+        c_estado.setSelectedItem(String.valueOf(trabajo.getEstado()));
+    }
+    
     //Formularios de registro
     
     private V_R_Trabajo informacion = null;
     private V_R_Cotizacion cotizacion = null;
-    private V_bitacora bitacora = null;
+    private V_R_Bitacora bitacora = null;
     
     //Formularios dependientes de este
     
     private D_registrar_pagos pago = null;
     private D_informacion_estatica estatica = null;
+    
+    public void bloquear_botones(){
+        b_informacion_estatica.setEnabled(false);
+        b_pago_recibido.setEnabled(false);
+        b_informacion.setEnabled(false);
+        b_cotizacion.setEnabled(false);
+        b_bitacora.setEnabled(false);
+    }
+    
+    public void desbloquear_botones(){
+        b_informacion_estatica.setEnabled(true);
+        b_pago_recibido.setEnabled(true);
+        b_informacion.setEnabled(true);
+        b_cotizacion.setEnabled(true);
+        b_bitacora.setEnabled(true);
+    }
     
     private void b_cotizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cotizacionActionPerformed
         
@@ -313,6 +385,8 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         }
     
         this.setVisible(false); 
+        cotizacion.recibirTrabajo(id_trabajo_i);
+        cotizacion.recibirCliente(id_cliente_i);
         cotizacion.setVisible(true);
         cotizacion.toFront();
         cotizacion.requestFocus();
@@ -342,6 +416,7 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
             pago.setBounds(zonaSegura);
         }
         this.setVisible(false); 
+        pago.recibirTrabajo(id_trabajo_i);
         pago.setVisible(true);
         pago.toFront();
         pago.requestFocus();
@@ -353,7 +428,6 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         if (informacion == null || !informacion.isDisplayable()) {
             informacion = new V_R_Trabajo();
             informacion.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
             informacion.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent e) {
@@ -366,19 +440,20 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
                 informacion.setExtendedState(JFrame.MAXIMIZED_BOTH);
             }
         }
-    
+        
         this.setVisible(false); 
+        informacion.abrirParaEdicionDesdeFicha(id_cliente_i, id_trabajo_i);
         informacion.setVisible(true);
         informacion.toFront();
         informacion.requestFocus();
+        
     }//GEN-LAST:event_b_informacionActionPerformed
 
     private void b_bitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_bitacoraActionPerformed
         
         if (bitacora == null || !bitacora.isDisplayable()) {
-            bitacora = new V_bitacora();
+            bitacora = new V_R_Bitacora();
             bitacora.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
             bitacora.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent e) {
@@ -393,6 +468,7 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         }
     
         this.setVisible(false); 
+        bitacora.recibirTrabajo(id_trabajo_i);
         bitacora.setVisible(true);
         bitacora.toFront();
         bitacora.requestFocus();
@@ -405,19 +481,46 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     private void t_actualizar_estadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_actualizar_estadoActionPerformed
         if(t_actualizar_estado.isSelected() == true){
             c_estado.setEnabled(true);
+            t_actualizar_estado.setText("Guardar");
+            bloquear_botones();
+            t_actualizar_estado.setBackground(Color.decode("#2f65ca"));
+            b_cerrar.setBackground(Color.decode("#CE1126"));
         }
         else{
             c_estado.setEnabled(false);
+            
+            int id_trabajo = Integer.valueOf(t_id.getText());
+            
+            String estado = c_estado.getSelectedItem().toString();
+            
+            TrabajoDAO dao = new TrabajoDAO();
+            boolean actualizadoExitoso = dao.actualizarTrabajoDetalles(id_trabajo,estado,fecha_inicio,fecha_fin);
+            
+            if (actualizadoExitoso) {
+                desbloquear_botones();
+                t_actualizar_estado.setText("Actualizar estado");
+                t_actualizar_estado.setBackground(null);
+                c_estado.setEnabled(false);
+                edicion_exitosa();
+                b_cerrar.setBackground(null);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Error al actualizar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
         }
     }//GEN-LAST:event_t_actualizar_estadoActionPerformed
 
     private void b_informacion_estaticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_informacion_estaticaActionPerformed
         //D_informacion_estatica informacion_static = new D_informacion_estatica((java.awt.Frame) this.getParent(), true);
         //informacion_static.setVisible(true);
-        
+                
+        System.out.println("id_cliente_i :" + id_cliente_i);
         if (estatica == null || !estatica.isDisplayable()) {
             // Si tu constructor pide (Frame, boolean), pásale el Frame actual o null si no aplica
             estatica = new D_informacion_estatica((java.awt.Frame) this.getParent(), true);
+            estatica.recibirCliente(id_cliente_i);
+            estatica.recibirTrabajo(id_trabajo_i);
             //java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
             //estatica.setBounds(zonaSegura); // Forzamos al diálogo a tomar todo ese tamaño
             estatica.setLocationRelativeTo(D_ficha_trabajo.this);
@@ -441,7 +544,29 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     }//GEN-LAST:event_b_informacion_estaticaActionPerformed
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
-        this.dispose();
+        
+        boolean es_editar = "Guardar".equals(t_actualizar_estado.getText());
+        
+        if (es_editar) {
+            
+            if (!c_estado.getSelectedItem().toString().equals(estado_a)){
+                int respuesta = JOptionPane.showConfirmDialog(this, 
+                         "¿Desea cancelar la edición? Los cambios realizados no se guardarán.", 
+                         "Confirmar cancelación", JOptionPane.YES_NO_OPTION);
+                
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return; 
+                }
+            }
+            t_actualizar_estado.setText("Actualizar estado");
+            t_actualizar_estado.setSelected(false);
+            t_actualizar_estado.setBackground(null);
+            c_estado.setEnabled(false);
+            desbloquear_botones();
+            b_cerrar.setBackground(null);
+        } else {
+            this.dispose();
+        }
     }//GEN-LAST:event_b_cerrarActionPerformed
 
     

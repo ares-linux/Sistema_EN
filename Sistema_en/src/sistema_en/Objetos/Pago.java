@@ -21,7 +21,6 @@ public class Pago {
         
     }
     
-    
     public void Editar(){
         
     }

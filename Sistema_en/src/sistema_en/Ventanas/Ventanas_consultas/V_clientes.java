@@ -34,57 +34,11 @@ public class V_clientes extends javax.swing.JFrame {
     public V_clientes() {
         initComponents();
         
-        Tabla_clientes.setDefaultEditor(Object.class, null);
-        Tabla_clientes.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        configurar_tabla();
         
-        String placeholder = "Escribe el nombre o id del cliente";
-
-            // Configurar el texto inicial y el color gris
-            t_buscar.setText(placeholder);
-            t_buscar.setForeground(Color.GRAY);
-
-            // Agregar el listener para controlar el foco
-            t_buscar.addFocusListener(new FocusListener() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Si el texto actual es el placeholder y está en gris, lo borramos
-                    if (t_buscar.getText().equals(placeholder)) {
-                        t_buscar.setText("");
-                        t_buscar.setForeground(Color.BLACK); // Color normal al escribir
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Si el usuario deja el campo vacío, volvemos a poner el placeholder
-                    if (t_buscar.getText().isEmpty()) {
-                        t_buscar.setText(placeholder);
-                        t_buscar.setForeground(Color.GRAY);
-                    }
-                }
-            });
-        
+        placeholder();
     }
     
-    public void actualizar_filtro(){
-        //DefaultTableModel modelo = (DefaultTableModel) Tabla_clientes.getModel();
-
-        //modelo.setRowCount(0);
-
-        //String filtro = c_ordenar.getSelectedItem().toString();
-
-        //Object[][] datos = {
-        //    {"1", "Juan Pérez", "555-1234", "Av. Principal 123", "Reparación de tuberia potable", "2026-06-11", "10:00", "Pendiente"},
-        //    
-        //    };
-
-        //for (Object[] fila : datos) {
-        //    if (filtro.equals("Todos") || fila[7].equals(filtro)) {
-        //    modelo.addRow(fila);
-        //    }
-        //}
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -142,8 +96,13 @@ public class V_clientes extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         jPanel1.add(d_periodo_fin, gridBagConstraints);
 
-        c_ordenar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mayor a menor", "Menor a mayor", "Fecha de registro" }));
+        c_ordenar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin orden", "Mayor a menor", "Menor a mayor", "Nombre A-Z", "Nombre Z-A" }));
         c_ordenar.setMaximumSize(new java.awt.Dimension(127, 27));
+        c_ordenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                c_ordenarActionPerformed(evt);
+            }
+        });
         c_ordenar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 c_ordenarKeyPressed(evt);
@@ -155,9 +114,8 @@ public class V_clientes extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = -7;
+        gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(4, 29, 0, 0);
         jPanel1.add(c_ordenar, gridBagConstraints);
 
@@ -245,12 +203,11 @@ public class V_clientes extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Periodo");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        gridBagConstraints.insets = new java.awt.Insets(4, 43, 0, 0);
         jPanel1.add(jLabel4, gridBagConstraints);
 
         b_actualizar.setText("Actualizar");
@@ -310,12 +267,14 @@ public class V_clientes extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nombre", "Telefono"
+                "Id", "Nombre", "Telefono", "Fecha de registro"
             }
         ));
         Tabla_clientes.setColumnSelectionAllowed(true);
         Tabla_clientes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Tabla_clientes.setFillsViewportHeight(true);
+        Tabla_clientes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        Tabla_clientes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         Tabla_clientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_clientesMouseClicked(evt);
@@ -336,6 +295,47 @@ public class V_clientes extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void configurar_tabla(){
+        
+        Tabla_clientes.setDefaultEditor(Object.class, null);
+
+        Tabla_clientes.setRowSelectionAllowed(true);
+        Tabla_clientes.setColumnSelectionAllowed(false);
+        Tabla_clientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        Tabla_clientes.getTableHeader().setReorderingAllowed(false);
+        Tabla_clientes.getTableHeader().setResizingAllowed(false);
+    }
+    
+    public void placeholder(){
+        String placeholder = "Escribe el nombre o id del cliente";
+
+            // Configurar el texto inicial y el color gris
+            t_buscar.setText(placeholder);
+            t_buscar.setForeground(Color.GRAY);
+
+            // Agregar el listener para controlar el foco
+            t_buscar.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Si el texto actual es el placeholder y está en gris, lo borramos
+                    if (t_buscar.getText().equals(placeholder)) {
+                        t_buscar.setText("");
+                        t_buscar.setForeground(Color.BLACK); // Color normal al escribir
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Si el usuario deja el campo vacío, volvemos a poner el placeholder
+                    if (t_buscar.getText().isEmpty()) {
+                        t_buscar.setText(placeholder);
+                        t_buscar.setForeground(Color.GRAY);
+                    }
+                }
+            });
+    }
+    
     public void llenar_tabla(){
         DefaultTableModel modelo = (DefaultTableModel) this.Tabla_clientes.getModel();
         modelo.setRowCount(0); 
@@ -346,18 +346,15 @@ public class V_clientes extends javax.swing.JFrame {
         for (String[] fila : listaTrabajadores) {
             modelo.addRow(fila);
         }
+        
+        configurar_tabla();
+        
     }
     
     public void limpiar_text() {
         t_buscar.setText("");
         d_periodo_inicio.setDate(null);
         d_periodo_fin.setDate(null);
-    }
-
-    public void cargar_datos_tabla(int indice) {
-        //ficha = new D_ficha_cliente(this, true);
-        //ficha.setLocationRelativeTo(V_clientes.this);
-        //ficha.setVisible(true);
     }
 
     public void adaptar_fuentes(Container contenedor, Font nuevaFuente) {
@@ -372,10 +369,11 @@ public class V_clientes extends javax.swing.JFrame {
     
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
         this.dispose();
+        
     }//GEN-LAST:event_b_cerrarActionPerformed
     
     private void Tabla_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_clientesMouseClicked
-    
+    if (evt.getClickCount() == 2) {
         fila = Tabla_clientes.rowAtPoint(evt.getPoint());
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un cliente.");
@@ -390,9 +388,17 @@ public class V_clientes extends javax.swing.JFrame {
         int id_cliente = Integer.parseInt( Tabla_clientes.getValueAt(fila, 0).toString());
 
         ficha = new D_ficha_cliente(id_cliente);
+        ficha.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    // CORRECCIÓN 2: Usamos windowClosed para atrapar el dispose() de tus botones
+                    setVisible(true); 
+                }
+            });
         ficha.setLocationRelativeTo(this);
         ficha.setVisible(true);
-                
+        this.dispose();
+    } 
     }//GEN-LAST:event_Tabla_clientesMouseClicked
 
     private void c_ordenarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_ordenarKeyPressed
@@ -441,6 +447,7 @@ public class V_clientes extends javax.swing.JFrame {
 
     private void b_reiniciar_filtrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_reiniciar_filtrosActionPerformed
         limpiar_text();
+        placeholder();
     }//GEN-LAST:event_b_reiniciar_filtrosActionPerformed
 
     private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
@@ -562,6 +569,90 @@ public class V_clientes extends javax.swing.JFrame {
         llenar_tabla();
     }//GEN-LAST:event_b_actualizarActionPerformed
 
+    
+    public void ordenar_mayor_menor(){
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_clientes.getModel();
+        modelo.setRowCount(0); 
+
+        ClienteDAO dao = new ClienteDAO();
+        java.util.List<String[]> listaTrabajadores = dao.obtenerClientesNumerosTrabajoDesc();
+
+        for (String[] fila : listaTrabajadores) {
+            modelo.addRow(fila);
+        }
+        
+        configurar_tabla();
+    }
+    
+    public void ordenar_menor_mayor(){
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_clientes.getModel();
+        modelo.setRowCount(0); 
+
+        ClienteDAO dao = new ClienteDAO();
+        java.util.List<String[]> listaTrabajadores = dao.obtenerClientesNumerosTrabajoAsc();
+
+        for (String[] fila : listaTrabajadores) {
+            modelo.addRow(fila);
+        }
+        
+        configurar_tabla();
+    }
+    
+    public void ordenar_nombre_az(){
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_clientes.getModel();
+        modelo.setRowCount(0); 
+
+        ClienteDAO dao = new ClienteDAO();
+        java.util.List<String[]> listaTrabajadores = dao.obtenerClientesNumerosTrabajoAlf();
+
+        for (String[] fila : listaTrabajadores) {
+            modelo.addRow(fila);
+        }
+        
+        configurar_tabla();
+    }
+    
+    public void ordenar_nombre_za(){
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_clientes.getModel();
+        modelo.setRowCount(0); 
+
+        ClienteDAO dao = new ClienteDAO();
+        java.util.List<String[]> listaTrabajadores = dao.obtenerClientesNumerosTrabajoFla();
+
+        for (String[] fila : listaTrabajadores) {
+            modelo.addRow(fila);
+        }
+        
+        configurar_tabla();
+    }
+    
+    private void c_ordenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_ordenarActionPerformed
+        String opcion = c_ordenar.getSelectedItem().toString();
+
+        switch (opcion) {
+
+            case "Sin orden":
+                llenar_tabla();
+                break;
+            
+            case "Mayor a menor":
+                ordenar_mayor_menor();
+                break;
+
+            case "Menor a mayor":
+                ordenar_menor_mayor();
+                break;
+                
+            case "Nombre A-Z":
+                ordenar_nombre_az();
+                break;
+                
+            case "Nombre Z-A":
+                ordenar_nombre_za();
+                break;
+        }
+    }//GEN-LAST:event_c_ordenarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -599,8 +690,8 @@ public class V_clientes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable Tabla_clientes;
-    private javax.swing.JButton b_actualizar;
+    public javax.swing.JTable Tabla_clientes;
+    public javax.swing.JButton b_actualizar;
     private javax.swing.JButton b_buscar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_dividir_pantalla;

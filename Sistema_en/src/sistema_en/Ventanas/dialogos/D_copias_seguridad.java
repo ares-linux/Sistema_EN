@@ -6,7 +6,10 @@ package sistema_en.Ventanas.dialogos;
 
 import dao.ConfiguracionesDAO;
 import java.awt.Color;
+import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import sistema_en.GoogleDriveProvider;
 
@@ -16,6 +19,15 @@ import sistema_en.GoogleDriveProvider;
  */
 public class D_copias_seguridad extends javax.swing.JDialog {
 
+    LocalDate ultima_copia;
+    
+    String frecuencia1;
+    String manual1;
+    String preguntar1;
+    String ultima_copia1;
+    String cotizaciones1;
+    String base_c1;
+    
     /**
      * Creates new form D_copias_seguridad
      */
@@ -71,32 +83,51 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     switch (clave) {
 
         case "frecuencia":
-            if ("diaria".equals(valor))
+            if ("diaria".equals(valor)){
                 jr_diaria.setSelected(true);
-            else if ("semanal".equals(valor))
+                frecuencia1 = valor;
+            }
+            else if ("semanal".equals(valor)){
                 jr_semanal.setSelected(true);
-            else if ("cada cierre".equals(valor))
+                frecuencia1 = valor;
+            }   
+            else if ("cada cierre".equals(valor)){
                 jr_cada_cierre.setSelected(true);
+                frecuencia1 = valor;
+            }   
             break;
 
         case "preguntar":
             ch_preguntar.setSelected(Boolean.parseBoolean(valor));
+            preguntar1 = valor;
             break;
 
         case "manual":
             boolean esManual = Boolean.parseBoolean(valor);
 
+            System.out.println(valor);
+            
             ch_manual.setSelected(esManual);
 
             jr_diaria.setEnabled(!esManual);
             jr_semanal.setEnabled(!esManual);
             jr_cada_cierre.setEnabled(!esManual);
             ch_preguntar.setEnabled(!esManual);
+            manual1 = valor;
             break;
 
         case "cotizaciones":
-            ch_copias_cotizaciones.setSelected(
-                    Boolean.parseBoolean(valor));
+            ch_copias_cotizaciones.setSelected( Boolean.parseBoolean(valor));
+            cotizaciones1 = valor;
+            break;
+            
+        case "ultima_copia":
+            ultima_copia1 = valor;
+            break;
+            
+        case "base_c":
+            base_c1 = valor;
+            t_base.setText(valor);
             break;
     }
 }
@@ -129,6 +160,9 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         b_copia = new javax.swing.JButton();
+        b_base = new javax.swing.JButton();
+        t_base = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(550, 475));
@@ -218,7 +252,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_aceptar, gridBagConstraints);
@@ -231,7 +265,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_cancelar, gridBagConstraints);
@@ -244,7 +278,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -253,14 +287,14 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         l_estado_de_conexion.setText("Estado de la conexion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(l_estado_de_conexion, gridBagConstraints);
 
         l_estado.setText("estado");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(l_estado, gridBagConstraints);
 
@@ -277,20 +311,20 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(11, 11, 10, 10);
         getContentPane().add(ch_copias_cotizaciones, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator2, gridBagConstraints);
@@ -303,11 +337,41 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_copia, gridBagConstraints);
+
+        b_base.setText("...");
+        b_base.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_baseActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_base, gridBagConstraints);
+
+        t_base.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(t_base, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel3.setText("Ubicación de la base de datos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel3, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -358,6 +422,8 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowOpened
 
     private void b_aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_aceptarActionPerformed
+        
+        
         String frecuencia = "manual";
     
     if (jr_diaria.isSelected()) {
@@ -371,11 +437,16 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     String preguntar = String.valueOf(ch_preguntar.isSelected());
     String cotizaciones = String.valueOf(ch_copias_cotizaciones.isSelected());
     String manual = String.valueOf(ch_manual.isSelected());
+    String base_c = t_base.getText();
+
+    if (frecuencia.equals(frecuencia1) && preguntar.equals(preguntar1) && cotizaciones.equals(cotizaciones1) && manual.equals(manual1) && base_c.equals(base_c1)){
+        this.dispose();
+        return;
+    }
         
     ConfiguracionesDAO dao = new ConfiguracionesDAO();
     
-    boolean guardadoExitoso = dao.actualizarCopias(frecuencia, preguntar, manual, cotizaciones);
-
+    boolean guardadoExitoso = dao.actualizarCopias(frecuencia, preguntar, manual, cotizaciones, ultima_copia1, base_c); 
     if (guardadoExitoso) {
         JOptionPane.showMessageDialog(this, "Configuración guardada correctamente.");
         this.dispose(); 
@@ -434,6 +505,36 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         
     }//GEN-LAST:event_ch_copias_cotizacionesActionPerformed
 
+    public void subir(){
+        GoogleDriveProvider.subirArchivo("/home/ares/Documentos/Bases de datos/sistema_EN"); 
+        java.awt.EventQueue.invokeLater(() -> {
+        
+        JOptionPane.showMessageDialog(this, "Copia de seguridad manual subida con éxito a Google Drive.");
+        b_copia.setEnabled(true);
+        b_copia.setText("Subir copia de seguridad ahora");
+        
+        ultima_copia = LocalDate.now();
+        this.ultima_copia1 = String.valueOf(ultima_copia);
+        
+        String frecuencia = "manual";
+        if (jr_diaria.isSelected()) {
+            frecuencia = "diaria";
+        } else if (jr_semanal.isSelected()) {
+            frecuencia = "semanal";
+        } else if (jr_cada_cierre.isSelected()) {
+            frecuencia = "cada cierre";
+        }
+        
+        String preguntar = String.valueOf(ch_preguntar.isSelected());
+        String manual = String.valueOf(ch_manual.isSelected());
+        String cotizaciones = String.valueOf(ch_copias_cotizaciones.isSelected());
+        String base_c = t_base.getText();
+        
+        ConfiguracionesDAO dao = new ConfiguracionesDAO();
+        dao.actualizarCopias(frecuencia, preguntar, manual, cotizaciones, this.ultima_copia1, base_c);          
+    });
+    }
+    
     private void b_copiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_copiaActionPerformed
         
         if (!GoogleDriveProvider.estaConectado()) {
@@ -446,15 +547,22 @@ public class D_copias_seguridad extends javax.swing.JDialog {
 
         new Thread(() -> {
         
-            GoogleDriveProvider.subirArchivo("/home/ares/Documentos/Bases de datos/sistema_EN"); 
-            java.awt.EventQueue.invokeLater(() -> {
+            subir();
             
-            JOptionPane.showMessageDialog(this, "Copia de seguridad manual subida con éxito a Google Drive.");
-            b_copia.setEnabled(true);
-            b_copia.setText("Subir copia de seguridad ahora");
-        });
         }).start();
     }//GEN-LAST:event_b_copiaActionPerformed
+
+    private void b_baseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_baseActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        int opcion = chooser.showOpenDialog(this);
+
+        if (opcion == JFileChooser.APPROVE_OPTION) {
+            File carpeta = chooser.getSelectedFile();
+            t_base.setText(carpeta.getAbsolutePath());
+        }
+    }//GEN-LAST:event_b_baseActionPerformed
     
     /**
      * @param args the command line arguments
@@ -500,6 +608,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_aceptar;
+    private javax.swing.JButton b_base;
     private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_copia;
     private javax.swing.JButton b_cuenta;
@@ -509,6 +618,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     private javax.swing.ButtonGroup g_radio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JRadioButton jr_cada_cierre;
@@ -516,5 +626,6 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     private javax.swing.JRadioButton jr_semanal;
     private javax.swing.JLabel l_estado;
     private javax.swing.JLabel l_estado_de_conexion;
+    private javax.swing.JTextField t_base;
     // End of variables declaration//GEN-END:variables
 }

@@ -18,7 +18,7 @@ import sistema_en.Conexion;
  */
 
 public class ConfiguracionesDAO {
-    public boolean actualizarConfiguraciones(String tema, String sonido_error, String modelo_c,String carpeta_ce) {
+    public boolean actualizarConfiguraciones(String tema, String sonido_error, String modelo_c,String carpeta_ce, String automaticamente_ce) {
     String sql = "UPDATE Configuraciones SET valor = ? WHERE clave = ?";
         Connection con = Conexion.conectar();
         
@@ -44,11 +44,15 @@ public class ConfiguracionesDAO {
             ps.setString(1, carpeta_ce);
             ps.setString(2, "carpeta_ce");
             ps.addBatch();
+            
+            ps.setString(1, automaticamente_ce);
+            ps.setString(2, "automaticamente_ce");
+            ps.addBatch();
 
             System.out.println("Tema: " + tema);
-System.out.println("Sonido: " + sonido_error);
-System.out.println("Modelo: " + modelo_c);
-System.out.println("Carpeta: " + carpeta_ce);
+            System.out.println("Sonido: " + sonido_error);
+            System.out.println("Modelo: " + modelo_c);
+            System.out.println("Carpeta: " + carpeta_ce);
             
             int[] resultados = ps.executeBatch();
             con.commit();
@@ -65,7 +69,7 @@ System.out.println("Carpeta: " + carpeta_ce);
     }
 
 
-    public boolean actualizarCopias(String frecuencia, String preguntar, String manual, String cotizaciones) {
+    public boolean actualizarCopias(String frecuencia, String preguntar, String manual, String cotizaciones, String ultima_copia, String base_c) {
     String sql = "UPDATE Configuraciones SET valor = ? WHERE clave = ?";
         Connection con = Conexion.conectar();
         
@@ -92,6 +96,14 @@ System.out.println("Carpeta: " + carpeta_ce);
             ps.setString(2, "cotizaciones");
             ps.addBatch();
 
+            ps.setString(1, ultima_copia);
+            ps.setString(2, "ultima_copia");
+            ps.addBatch();
+            
+            ps.setString(1, base_c);
+            ps.setString(2, "base_c");
+            ps.addBatch();
+            
             int[] resultados = ps.executeBatch();
             con.commit();
 

@@ -20,6 +20,11 @@ public class D_licencias_terceros_tabla extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
+        Tabla_licencias.setDefaultEditor(Object.class, null);
+        Tabla_licencias.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_licencias.getTableHeader().setReorderingAllowed(false);
+        Tabla_licencias.getTableHeader().setResizingAllowed(false);
+        
         DefaultTableModel modelo = (DefaultTableModel) Tabla_licencias.getModel();
         
             Object[] fila1 = {"jsvg", "2.1.0", "MIT"};

@@ -26,6 +26,8 @@ public class D_buscar_empleado extends javax.swing.JDialog {
         
         Tabla_empleados.setDefaultEditor(Object.class, null);
         Tabla_empleados.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_empleados.getTableHeader().setReorderingAllowed(false);
+        Tabla_empleados.getTableHeader().setResizingAllowed(false);
         
         // 1. Carga inicial de datos
         filtrar_tabla(); 

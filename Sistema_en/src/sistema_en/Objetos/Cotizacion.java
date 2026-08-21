@@ -4,6 +4,8 @@
  */
 package sistema_en.Objetos;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author ares
@@ -16,10 +18,10 @@ public class Cotizacion {
     private String estado;
     private int id_trabajo;
     private String tipo;
-    private String fecha_creacion;
+    private LocalDate fecha_creacion;
     
     
-    public Cotizacion(String informacionCompleta){
+    public Cotizacion(){
         
     }
     
@@ -147,16 +149,17 @@ public class Cotizacion {
     /**
      * @return the fecha_creacion
      */
-    public String getFecha_creacion() {
+    public LocalDate getFecha_creacion() {
         return fecha_creacion;
     }
 
     /**
      * @param fecha_creacion the fecha_creacion to set
      */
-    public void setFecha_creacion(String fecha_creacion) {
+    public void setFecha_creacion(LocalDate fecha_creacion) {
         this.fecha_creacion = fecha_creacion;
     }
+
 
     
 }

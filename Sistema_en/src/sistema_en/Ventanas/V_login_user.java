@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import org.mindrot.jbcrypt.BCrypt;
 import java.sql.Connection;
 import java.util.List;
+import raven.toast.Notifications;
 
 /**
  *
@@ -337,6 +338,9 @@ public class V_login_user extends javax.swing.JFrame {
                 }
             } else {
                 System.out.println("Límite alcanzado. Próximos intentos erróneos no sonarán.");
+                String mensaje;
+                mensaje = "Límite alcanzado. Próximos intentos erróneos no sonarán.";
+                Notifications.getInstance().show( Notifications.Type.ERROR, Notifications.Location.TOP_LEFT, mensaje);
             }
         } else {
             // Acceso concedido

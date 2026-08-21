@@ -10,10 +10,10 @@ package sistema_en.Objetos;
  */
 public class Detalles_cotizacion {
     private int id_detalle;
-    private Cotizacion id_cotizacion;
+    private int id_cotizacion;
     private String concepto;
     private String n_material;
-    private int cantidad;
+    private float cantidad;
     private float precio_uni;
     private float precio;
     
@@ -51,19 +51,6 @@ public class Detalles_cotizacion {
         this.id_detalle = id_detalle;
     }
 
-    /**
-     * @return the id_cotizacion
-     */
-    public Cotizacion getId_cotizacion() {
-        return id_cotizacion;
-    }
-
-    /**
-     * @param id_cotizacion the id_cotizacion to set
-     */
-    public void setId_cotizacion(Cotizacion id_cotizacion) {
-        this.id_cotizacion = id_cotizacion;
-    }
 
     /**
      * @return the concepto
@@ -94,20 +81,6 @@ public class Detalles_cotizacion {
     }
 
     /**
-     * @return the cantidad
-     */
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    /**
-     * @param cantidad the cantidad to set
-     */
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    /**
      * @return the precio_uni
      */
     public float getPrecio_uni() {
@@ -133,6 +106,34 @@ public class Detalles_cotizacion {
      */
     public void setPrecio(float precio) {
         this.precio = precio;
+    }
+
+    /**
+     * @return the id_cotizacion
+     */
+    public int getId_cotizacion() {
+        return id_cotizacion;
+    }
+
+    /**
+     * @param id_cotizacion the id_cotizacion to set
+     */
+    public void setId_cotizacion(int id_cotizacion) {
+        this.id_cotizacion = id_cotizacion;
+    }
+
+    /**
+     * @return the cantidad
+     */
+    public float getCantidad() {
+        return cantidad;
+    }
+
+    /**
+     * @param cantidad the cantidad to set
+     */
+    public void setCantidad(float cantidad) {
+        this.cantidad = cantidad;
     }
     
     

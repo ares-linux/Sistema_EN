@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sistema_en;
 
 import com.google.api.client.auth.oauth2.Credential;
@@ -15,12 +11,35 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-
-import java.io.File;
+// IMPORTES NUEVOS PARA GOOGLE SHEETS
+import com.google.api.services.sheets.v4.Sheets;
+import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.Spreadsheet;
+import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
+import com.google.api.services.drive.model.File; // <--- Mantenemos este como predeterminado
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import com.google.api.services.sheets.v4.model.ValueRange;
+import java.util.Arrays;
 import java.util.Collections;
+import java.io.IOException;
 import java.util.List;
+
+import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
+import com.google.api.services.sheets.v4.model.Border;
+import com.google.api.services.sheets.v4.model.Borders;
+import com.google.api.services.sheets.v4.model.CellData;
+import com.google.api.services.sheets.v4.model.CellFormat;
+import com.google.api.services.sheets.v4.model.DimensionProperties;
+import com.google.api.services.sheets.v4.model.DimensionRange;
+import com.google.api.services.sheets.v4.model.GridRange;
+import com.google.api.services.sheets.v4.model.NumberFormat;
+import com.google.api.services.sheets.v4.model.RepeatCellRequest;
+import com.google.api.services.sheets.v4.model.Request;
+import com.google.api.services.sheets.v4.model.TextFormat;
+import com.google.api.services.sheets.v4.model.UpdateDimensionPropertiesRequest;
+import dao.TrabajoDAO;
+import sistema_en.Objetos.Trabajo;
 
 /**
  *
@@ -28,20 +47,19 @@ import java.util.List;
  */
 public class GoogleDriveProvider {
     
-    private static final String APPLICATION_NAME = "Sistema EN";
-    // LÍNEA NUEVA (Usando GSON en lugar de Jackson):
-    private static final JsonFactory JSON_FACTORY = com.google.api.client.json.gson.GsonFactory.getDefaultInstance();
-    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    public static final String APPLICATION_NAME = "Sistema EN";
+    public static final JsonFactory JSON_FACTORY = com.google.api.client.json.gson.GsonFactory.getDefaultInstance();
+    public static final String TOKENS_DIRECTORY_PATH = "tokens";
     
-    // Le otorgamos permisos completos sobre archivos de Drive
-    private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE_FILE);
+    private static final List<String> SCOPES = Arrays.asList(
+            DriveScopes.DRIVE_FILE,
+            SheetsScopes.SPREADSHEETS
+    );
+    
     private static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
-    /**
-     * Se encarga de la autenticación de OAuth 2.0
-     */
-    private static Credential getCredentials(HttpTransport HTTP_TRANSPORT) throws Exception {
-        File credentialsFile = new File(CREDENTIALS_FILE_PATH);
+    public static Credential getCredentials(HttpTransport HTTP_TRANSPORT) throws Exception {
+        java.io.File credentialsFile = new java.io.File(CREDENTIALS_FILE_PATH);
         if (!credentialsFile.exists()) {
             throw new Exception("No se encontró el archivo '" + CREDENTIALS_FILE_PATH + "' en la raíz del proyecto.");
         }
@@ -53,38 +71,36 @@ public class GoogleDriveProvider {
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
+                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
 
-        // Configuramos el receptor local. Si tu Linux bloquea el navegador, esto imprimirá el link en consola.
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(9999).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    /**
-     * Sube un archivo local (como tu base de datos SQLite) a Google Drive.
-     * Si ya existe un archivo con el mismo nombre en Google Drive, actualiza su contenido
-     * en lugar de crear un duplicado.
-     * @param rutaArchivoLocal Ejemplo: "sistema.db"
-     */
-    public static void subirArchivo(String rutaArchivoLocal) {
+    public static Sheets getSheetsService() throws Exception {
+        final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+        return new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+    }
+
+    public static boolean subirArchivo(String rutaArchivoLocal) {
         try {
             final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
-            //final HttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
-            File fileToUpload = new File(rutaArchivoLocal);
+            java.io.File fileToUpload = new java.io.File(rutaArchivoLocal);
             if (!fileToUpload.exists()) {
                 System.out.println("❌ Error: El archivo local a subir no existe: " + rutaArchivoLocal);
-                return;
+                return false;
             }
 
             String nombreArchivo = fileToUpload.getName();
 
-            // Buscar si ya existe un archivo con el mismo nombre en Google Drive
             String fileId = null;
             try {
                 Drive.Files.List request = service.files().list()
@@ -96,17 +112,15 @@ public class GoogleDriveProvider {
                     fileId = files.getFiles().get(0).getId();
                 }
             } catch (Exception e) {
-                System.out.println("⚠️ Advertencia: No se pudo verificar si el archivo ya existe en Google Drive. Se creará uno nuevo.");
+                System.out.println("⚠️ Advertencia: No se pudo verificar si el archivo ya existe en Google Drive.");
             }
 
-            // Metadatos del archivo en la nube
-            com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
+            File fileMetadata = new File();
             fileMetadata.setName(nombreArchivo);
 
-            // Contenido binario del archivo
             FileContent mediaContent = new FileContent("application/x-sqlite3", fileToUpload);
 
-            com.google.api.services.drive.model.File uploadedFile;
+            File uploadedFile;
             if (fileId != null) {
                 System.out.println("Actualizando archivo existente en Google Drive con ID: " + fileId + "...");
                 uploadedFile = service.files().update(fileId, null, mediaContent)
@@ -124,27 +138,320 @@ public class GoogleDriveProvider {
         } catch (Exception e) {
             System.out.println("❌ Ocurrió un error al interactuar con Google Drive:");
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
-    
-    
+
     public static boolean estaConectado() {
-        File carpetaTokens = new File("tokens");
+        java.io.File carpetaTokens = new java.io.File("tokens");
         return carpetaTokens.exists() && carpetaTokens.isDirectory() && carpetaTokens.list().length > 0;
     }
-    
+
     public static boolean desconectar() {
-        File carpetaTokens = new File("tokens");
+        java.io.File carpetaTokens = new java.io.File("tokens");
         if (carpetaTokens.exists()) {
-            File[] archivos = carpetaTokens.listFiles();
+            java.io.File[] archivos = carpetaTokens.listFiles();
             if (archivos != null) {
-                for (File f : archivos) {
+                for (java.io.File f : archivos) {
                     f.delete();
                 }
             }
             return carpetaTokens.delete(); 
         }
         return false;
+    }
+    
+    public static String crearHojaCotizacion(String tituloArchivo, List<List<Object>> datosMatriz) {
+        try {
+            Sheets service = getSheetsService();
+
+            Spreadsheet spreadsheet = new Spreadsheet()
+                    .setProperties(new SpreadsheetProperties().setTitle(tituloArchivo));
+
+            Spreadsheet createdSheet = service.spreadsheets().create(spreadsheet).execute();
+            String spreadsheetId = createdSheet.getSpreadsheetId();
+
+            int sheetId = createdSheet.getSheets().get(0).getProperties().getSheetId();
+
+            ValueRange body = new ValueRange().setValues(datosMatriz);
+
+            service.spreadsheets().values()
+                    .update(spreadsheetId, "A1", body)
+                    .setValueInputOption("USER_ENTERED")
+                    .execute();
+
+            aplicarFormatoCotizacion(service, spreadsheetId, sheetId, datosMatriz);
+
+            System.out.println("✅ Hoja de cotización creada exitosamente. ID: " + spreadsheetId);
+            return spreadsheetId;
+
+        } catch (Exception e) {
+            System.out.println("❌ Error al crear la hoja de cotización:");
+            e.printStackTrace();
+            return null;
+        }
+    }
+ 
+    private static void aplicarFormatoCotizacion(
+        Sheets service,
+        String spreadsheetId,
+        int sheetId,
+        List<List<Object>> datosMatriz) throws Exception {
+
+        List<Request> requests = new java.util.ArrayList<>();
+
+        requests.add(new Request()
+                .setMergeCells(new com.google.api.services.sheets.v4.model.MergeCellsRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(0)
+                                .setEndRowIndex(1)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(4))
+                        .setMergeType("MERGE_ALL")));
+
+        requests.add(new Request()
+                .setRepeatCell(new RepeatCellRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(0)
+                                .setEndRowIndex(1)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(4))
+                        .setCell(new CellData()
+                                .setUserEnteredFormat(new CellFormat()
+                                        .setTextFormat(new TextFormat()
+                                                .setBold(true)
+                                                .setFontSize(18))
+                                        .setHorizontalAlignment("CENTER")
+                                        .setVerticalAlignment("MIDDLE")))
+                        .setFields("userEnteredFormat")));
+
+        requests.add(new Request()
+                .setRepeatCell(new RepeatCellRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(1)
+                                .setEndRowIndex(3)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(4))
+                        .setCell(new CellData()
+                                .setUserEnteredFormat(new CellFormat()
+                                        .setTextFormat(new TextFormat().setBold(true))))
+                        .setFields("userEnteredFormat.textFormat.bold")));
+
+        int filaMateriales = 6;
+
+        for (int i = 0; i < datosMatriz.size(); i++) {
+            if (!datosMatriz.get(i).isEmpty()
+                    && "Nombre del material".equals(datosMatriz.get(i).get(0))) {
+
+                filaMateriales = i;
+                break;
+            }
+        }
+
+        requests.add(new Request()
+                .setRepeatCell(new RepeatCellRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(filaMateriales)
+                                .setEndRowIndex(filaMateriales + 1)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(3))
+                        .setCell(new CellData()
+                                .setUserEnteredFormat(new CellFormat()
+                                        .setTextFormat(new TextFormat().setBold(true))
+                                        .setHorizontalAlignment("CENTER")
+                                        .setBorders(new Borders()
+                                                .setTop(new Border().setStyle("SOLID"))
+                                                .setBottom(new Border().setStyle("SOLID"))
+                                                .setLeft(new Border().setStyle("SOLID"))
+                                                .setRight(new Border().setStyle("SOLID")))))
+                        .setFields("userEnteredFormat")));
+
+        NumberFormat formatoMoneda = new NumberFormat()
+                .setType("NUMBER")
+                .setPattern("$#,##0.00");
+
+        requests.add(new Request()
+                .setRepeatCell(new RepeatCellRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(5)
+                                .setEndRowIndex(filaMateriales - 1)
+                                .setStartColumnIndex(1)
+                                .setEndColumnIndex(2))
+                        .setCell(new CellData()
+                                .setUserEnteredFormat(new CellFormat()
+                                        .setNumberFormat(formatoMoneda)))
+                        .setFields("userEnteredFormat.numberFormat")));
+
+        requests.add(new Request()
+                .setUpdateDimensionProperties(
+                        new UpdateDimensionPropertiesRequest()
+                                .setRange(new DimensionRange()
+                                        .setSheetId(sheetId)
+                                        .setDimension("COLUMNS")
+                                        .setStartIndex(0)
+                                        .setEndIndex(1))
+                                .setProperties(new DimensionProperties()
+                                        .setPixelSize(300))
+                                .setFields("pixelSize")));
+
+        requests.add(new Request()
+                .setUpdateDimensionProperties(
+                        new UpdateDimensionPropertiesRequest()
+                                .setRange(new DimensionRange()
+                                        .setSheetId(sheetId)
+                                        .setDimension("COLUMNS")
+                                        .setStartIndex(1)
+                                        .setEndIndex(2))
+                                .setProperties(new DimensionProperties()
+                                        .setPixelSize(130))
+                                .setFields("pixelSize")));
+
+        requests.add(new Request()
+                .setUpdateDimensionProperties(
+                        new UpdateDimensionPropertiesRequest()
+                                .setRange(new DimensionRange()
+                                        .setSheetId(sheetId)
+                                        .setDimension("COLUMNS")
+                                        .setStartIndex(2)
+                                        .setEndIndex(3))
+                                .setProperties(new DimensionProperties()
+                                        .setPixelSize(100))
+                                .setFields("pixelSize")));
+
+        requests.add(new Request()
+                .setUpdateDimensionProperties(
+                        new UpdateDimensionPropertiesRequest()
+                                .setRange(new DimensionRange()
+                                        .setSheetId(sheetId)
+                                        .setDimension("COLUMNS")
+                                        .setStartIndex(3)
+                                        .setEndIndex(4))
+                                .setProperties(new DimensionProperties()
+                                        .setPixelSize(130))
+                                .setFields("pixelSize")));
+
+        BatchUpdateSpreadsheetRequest batchRequest =
+                new BatchUpdateSpreadsheetRequest()
+                        .setRequests(requests);
+
+        service.spreadsheets()
+                .batchUpdate(spreadsheetId, batchRequest)
+                .execute();
+    }
+    
+    public static String buscarOCrearCarpeta(Drive driveService, String nombreCarpeta, String parentId) throws IOException {
+        String query = "mimeType = 'application/vnd.google-apps.folder' and name = '" + nombreCarpeta + "' and trashed = false";
+        
+        if (parentId != null) {
+            query += " and '" + parentId + "' in parents";
+        } else {
+            query += " and 'root' in parents";
+        }
+
+        com.google.api.services.drive.model.FileList resultado = driveService.files().list()
+                .setQ(query)
+                .setSpaces("drive")
+                .setFields("files(id, name)")
+                .execute();
+
+        if (resultado.getFiles() != null && !resultado.getFiles().isEmpty()) {
+            return resultado.getFiles().get(0).getId();
+        } else {
+            File fileMetadata = new File();
+            fileMetadata.setName(nombreCarpeta);
+            fileMetadata.setMimeType("application/vnd.google-apps.folder");
+
+            if (parentId != null) {
+                fileMetadata.setParents(Collections.singletonList(parentId));
+            }
+
+            File carpetaCreada = driveService.files().create(fileMetadata)
+                    .setFields("id")
+                    .execute();
+
+            return carpetaCreada.getId();
+        }
+    }
+
+    public static String crearCarpetaTrabajo(String nombreTrabajo) {
+    try {
+        final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
+        // 1. Busca o crea la carpeta maestra "Trabajos" en la raíz de Drive
+        String idTrabajos = buscarOCrearCarpeta(service, "Trabajos", null);
+
+        // 2. Busca o crea la carpeta específica de este trabajo (Ej: Trabajo_142_Cliente_2026-08-19)
+        String idTrabajoEspecifico = buscarOCrearCarpeta(service, nombreTrabajo, idTrabajos);
+
+        // 3. (Opcional pero recomendado) Deja lista la carpeta general de "Evidencias" vacía
+        buscarOCrearCarpeta(service, "Evidencias", idTrabajoEspecifico);
+        
+        // ¡Listo! Ya no creamos la carpeta con la fecha.
+        // Retornamos el ID de la carpeta principal del trabajo para que lo guardes en tu Base de Datos
+        return idTrabajoEspecifico;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+}
+
+    public static String obtenerIdCarpetaBaseDatos() {
+        try {
+            final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+            Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+
+            return buscarOCrearCarpeta(service, "Base_datos", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public static void sincronizarTrabajosPendientes() {
+    
+        if (!estaConectado()) {
+            return; 
+        }
+    
+        new javax.swing.SwingWorker<Void, Void>() {
+    
+        @Override
+        protected Void doInBackground() throws Exception {
+            TrabajoDAO dao = new TrabajoDAO();
+            List<Trabajo> listaTrabajos = dao.obtenerTrabajosPendientes();
+
+            for (Trabajo trabajo : listaTrabajos) {
+            
+                int idTrabajo = trabajo.getId_trabajo();
+            
+                String nombreCarpeta = "Trabajo_" + trabajo.getId_trabajo() + "_" + trabajo.getId_cliente() + "_" + trabajo.getFecha_cr();
+                String idCarpetaDrive = sistema_en.GoogleDriveProvider.crearCarpetaTrabajo(nombreCarpeta);
+                System.out.println("✅ ¡Trabajo ID " + trabajo.getId_trabajo() + " creado con su carpeta de Drive sincronizada!");
+            
+                String Carpeta = "Creada";
+                dao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
+            }
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            javax.swing.JOptionPane.showMessageDialog(null, "¡Sincronización con Drive completada!");
+        }
+        }.execute();
+    
     }
     
 }

@@ -18,8 +18,8 @@ public class Bitacora {
     private LocalTime hora_salida;
     private java.util.List<String> evidencias = new java.util.ArrayList<>();
     private String notas;
-    private String id_trabajador;
-    private String id_trabajo;
+    private int id_trabajador;
+    private int id_trabajo;
     
     public Bitacora(){
         
@@ -128,28 +128,29 @@ public class Bitacora {
     /**
      * @return the id_trabajador
      */
-    public String getId_trabajador() {
+    public int getId_trabajador() {
         return id_trabajador;
     }
 
     /**
      * @param id_trabajador the id_trabajador to set
      */
-    public void setId_trabajador(String id_trabajador) {
+    public void setId_trabajador(int id_trabajador) {
         this.id_trabajador = id_trabajador;
     }
 
     /**
      * @return the id_trabajo
      */
-    public String getId_trabajo() {
+    public int getId_trabajo() {
         return id_trabajo;
     }
 
     /**
      * @param id_trabajo the id_trabajo to set
      */
-    public void setId_trabajo(String id_trabajo) {
+    public void setId_trabajo(int id_trabajo) {
         this.id_trabajo = id_trabajo;
     }
+
 }

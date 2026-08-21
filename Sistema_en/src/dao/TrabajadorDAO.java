@@ -161,4 +161,41 @@ public boolean actualizarTrabajador(int id_trabajador, String nombre, String sex
     }
 }
 
+public List<String[]> obtenerTrabajadoresj() {
+    List<String[]> lista = new ArrayList<>();
+    String sql = "SELECT id_trabajador, nombre FROM Trabajador";
+    
+    Connection con = Conexion.conectar();
+
+    if (con == null) {
+        System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+        return lista; 
+    }
+
+    try (PreparedStatement ps = con.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            String[] fila = new String[8];
+            fila[0] = String.valueOf(rs.getInt("id_trabajador"));
+            fila[1] = rs.getString("nombre");
+            
+            lista.add(fila);
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Error al obtener los trabajadores de la BD: " + e.getMessage());
+    } finally {
+
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al cerrar conexión: " + ex.getMessage());
+        }
+    }
+    return lista;
+}
+
 }

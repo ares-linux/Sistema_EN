@@ -20,6 +20,10 @@ public class V_historial_c extends javax.swing.JFrame {
         
         Tabla_historial_c.setDefaultEditor(Object.class, null);
         Tabla_archivadas_c.setDefaultEditor(Object.class, null);
+        Tabla_historial_c.getTableHeader().setReorderingAllowed(false);
+        Tabla_archivadas_c.getTableHeader().setReorderingAllowed(false);
+        Tabla_historial_c.getTableHeader().setResizingAllowed(false);
+        Tabla_archivadas_c.getTableHeader().setResizingAllowed(false);
         Tabla_historial_c.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         Tabla_archivadas_c.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
     }

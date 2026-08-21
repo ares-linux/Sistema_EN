@@ -40,6 +40,8 @@ public class V_R_Empleado extends javax.swing.JFrame {
         
         Tabla_empleados.setDefaultEditor(Object.class, null);
         Tabla_empleados.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_empleados.getTableHeader().setReorderingAllowed(false);
+        Tabla_empleados.getTableHeader().setResizingAllowed(false);
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
@@ -694,6 +696,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         d_f_nac.setDate(null);
         t_foto.setText(ruta_foto_defecto);
         cargar_foto();
+        
     }
     
     public void desbloquear_text(){
@@ -914,14 +917,15 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }//GEN-LAST:event_b_fotoActionPerformed
 
     private void Tabla_empleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_empleadosMouseClicked
-        if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
-            return;
+        if (evt.getClickCount() == 1) {
+            if(b_nuevo.getText().equals("Guardar") || b_editar.getText().equals("Guardar")){
+                return;
+            }
+            else{
+                fila = this.Tabla_empleados.rowAtPoint(evt.getPoint());
+                cargar_datos_tabla(fila);
+            }
         }
-        else{
-            fila = this.Tabla_empleados.rowAtPoint(evt.getPoint());
-            cargar_datos_tabla(fila);
-        }
-        
     }//GEN-LAST:event_Tabla_empleadosMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -1282,8 +1286,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
     }//GEN-LAST:event_b_fotoFocusGained
 
     private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-    
-         
+       
         // 1. PASO CLAVE: Detectar en qué modo estábamos antes de cancelar
         boolean es_nuevo = "Guardar".equals(b_nuevo.getText());
         boolean es_editar = "Guardar".equals(b_editar.getText());
@@ -1320,7 +1323,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
             // Si no se modificó nada o el usuario dijo "Sí", el código sigue aquí abajo...
         }
 
-        limpiar_text();         
+                 
         bloquear_text();        
         desbloquear_botones();  
         restablecer_color();    
@@ -1341,6 +1344,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         }
         b_cancelar.setEnabled(false);
         Tabla_empleados.clearSelection();
+        limpiar_text();
         Tabla_empleados.setEnabled(true);
         }
     }//GEN-LAST:event_b_cancelarActionPerformed

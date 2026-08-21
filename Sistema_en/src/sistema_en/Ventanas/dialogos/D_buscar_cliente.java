@@ -24,6 +24,8 @@ public class D_buscar_cliente extends javax.swing.JDialog {
         
         Tabla_clientes.setDefaultEditor(Object.class, null);
         Tabla_clientes.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_clientes.getTableHeader().setReorderingAllowed(false);
+        Tabla_clientes.getTableHeader().setResizingAllowed(false);
         setLocationRelativeTo(parent);
     }
 

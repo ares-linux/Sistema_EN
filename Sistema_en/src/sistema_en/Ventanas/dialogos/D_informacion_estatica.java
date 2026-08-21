@@ -4,16 +4,35 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.BitacoraDAO;
+import dao.ClienteDAO;
+import dao.PagoDAO;
+import dao.TrabajoDAO;
+import java.awt.Color;
+import java.awt.Frame;
+import javax.swing.JOptionPane;
+import sistema_en.Objetos.Cliente;
+import sistema_en.Objetos.Trabajo;
+
 /**
  *
  * @author ares
  */
 public class D_informacion_estatica extends javax.swing.JDialog {
 
+    String fecha_inicio;
+    String fecha_fin;
+    int id_cliente_i;
+    int id_cliente;
+    int id_trabajo;
+    String estado;
+    String fecha_fin_g;
+    String fecha_inicio_g;
+    
     /**
      * Creates new form D_informacion_estatica
      */
-    public D_informacion_estatica(java.awt.Frame parent, boolean modal) {
+    public D_informacion_estatica(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
@@ -34,7 +53,17 @@ public class D_informacion_estatica extends javax.swing.JDialog {
     this.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         
     }
-
+    
+    public int recibirCliente(int id_cliente_i) {
+        cargarCliente(id_cliente_i);        
+        return id_cliente_i;
+    }
+    
+    public int recibirTrabajo(int id_trabajo_i){
+        cargarTrabajo(id_trabajo_i); 
+        return id_trabajo_i;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,23 +74,26 @@ public class D_informacion_estatica extends javax.swing.JDialog {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         d_fecha_inicio = new com.github.lgooddatepicker.components.DatePicker();
         d_fecha_fin = new com.github.lgooddatepicker.components.DatePicker();
-        jTextField1 = new javax.swing.JTextField();
+        t_numero_bitacoras = new javax.swing.JTextField();
         b_cerrar = new javax.swing.JButton();
         t_ingresar_manualmente_inicio = new javax.swing.JToggleButton();
         t_ingresar_manualmente_fin = new javax.swing.JToggleButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        t_nombre = new javax.swing.JTextField();
+        t_telefono = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        t_id = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        t_numero_pagos = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -72,6 +104,8 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
         jLabel1.setText("Informacion estatica");
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -79,7 +113,7 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel1, gridBagConstraints);
+        jPanel1.add(jLabel1, gridBagConstraints);
 
         jLabel4.setText("Numero de bitacoras del trabajo");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -87,43 +121,40 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel4, gridBagConstraints);
+        jPanel1.add(jLabel4, gridBagConstraints);
 
-        jLabel2.setText("Fecha de incio oficial");
+        jLabel2.setText("Fecha de inicio oficial");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel2, gridBagConstraints);
+        jPanel1.add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Fecha de fin oficial");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel3, gridBagConstraints);
+        jPanel1.add(jLabel3, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(d_fecha_inicio, gridBagConstraints);
+        jPanel1.add(d_fecha_inicio, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(d_fecha_fin, gridBagConstraints);
+        jPanel1.add(d_fecha_fin, gridBagConstraints);
 
-        jTextField1.setEditable(false);
+        t_numero_bitacoras.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 342;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jTextField1, gridBagConstraints);
+        jPanel1.add(t_numero_bitacoras, gridBagConstraints);
 
         b_cerrar.setText("Cerrar");
         b_cerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -133,10 +164,10 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_cerrar, gridBagConstraints);
+        jPanel1.add(b_cerrar, gridBagConstraints);
 
         t_ingresar_manualmente_inicio.setText("Ingresar manualmente");
         t_ingresar_manualmente_inicio.addActionListener(new java.awt.event.ActionListener() {
@@ -149,7 +180,7 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(t_ingresar_manualmente_inicio, gridBagConstraints);
+        jPanel1.add(t_ingresar_manualmente_inicio, gridBagConstraints);
 
         t_ingresar_manualmente_fin.setText("Ingresar manualmente");
         t_ingresar_manualmente_fin.addActionListener(new java.awt.event.ActionListener() {
@@ -162,16 +193,16 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(t_ingresar_manualmente_fin, gridBagConstraints);
+        jPanel1.add(t_ingresar_manualmente_fin, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel5.setText("Informacion del cliente");
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel5, gridBagConstraints);
+        jPanel1.add(jLabel5, gridBagConstraints);
 
         jLabel6.setText("Nombre");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -179,7 +210,7 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(12, 15, 12, 11);
-        getContentPane().add(jLabel6, gridBagConstraints);
+        jPanel1.add(jLabel6, gridBagConstraints);
 
         jLabel7.setText("Telefono");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -187,22 +218,21 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(12, 13, 12, 11);
-        getContentPane().add(jLabel7, gridBagConstraints);
+        jPanel1.add(jLabel7, gridBagConstraints);
 
-        jTextField2.setEditable(false);
+        t_nombre.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 81, 9, 10);
-        getContentPane().add(jTextField2, gridBagConstraints);
+        jPanel1.add(t_nombre, gridBagConstraints);
 
-        jTextField3.setEditable(false);
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        t_telefono.setEditable(false);
+        t_telefono.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                t_telefonoActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -211,7 +241,7 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 82, 9, 10);
-        getContentPane().add(jTextField3, gridBagConstraints);
+        jPanel1.add(t_telefono, gridBagConstraints);
 
         jLabel8.setText("Id");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -219,51 +249,164 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 11);
-        getContentPane().add(jLabel8, gridBagConstraints);
+        jPanel1.add(jLabel8, gridBagConstraints);
 
-        jTextField4.setEditable(false);
+        t_id.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(11, 43, 10, 9);
-        getContentPane().add(jTextField4, gridBagConstraints);
+        jPanel1.add(t_id, gridBagConstraints);
+
+        jLabel9.setText("Numero de pagos registrados");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel9, gridBagConstraints);
+
+        t_numero_pagos.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(t_numero_pagos, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 23;
+        gridBagConstraints.ipady = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jPanel1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_b_cerrarActionPerformed
-
+    private void cargarCliente(int id_cliente_i){
+        ClienteDAO dao = new ClienteDAO();
+        Cliente cliente = dao.obtenerCliente(id_cliente_i);       
+        
+        if (cliente != null) {
+            t_id.setText(String.valueOf(cliente.getId_cliente()));
+            t_nombre.setText(cliente.getNombre_c());
+            t_telefono.setText(cliente.getTelefono());
+        }
+        else{
+            javax.swing.JOptionPane.showMessageDialog(this, "No se encontró el cliente con ID: " + id_cliente_i);
+        }
+    }
+    
+     private void cargarTrabajo(int id_trabajo_i){
+        TrabajoDAO dao = new TrabajoDAO();
+        Trabajo trabajo = dao.obtenerTrabajo(id_trabajo_i);
+        
+        d_fecha_inicio.setDate(trabajo.getFecha_inicio());
+        d_fecha_fin.setDate(trabajo.getFecha_fin());
+        
+        id_trabajo = id_trabajo_i;
+        estado = trabajo.getEstado();
+        
+        if (trabajo.getFecha_fin() != null) {
+            fecha_fin_g = trabajo.getFecha_fin().toString();
+        } else {
+            fecha_fin_g = "";
+        }
+    
+        if (trabajo.getFecha_inicio() != null) {
+            fecha_inicio_g = trabajo.getFecha_inicio().toString();
+        } else {
+            fecha_inicio_g = "";
+        }
+        
+        BitacoraDAO bitacoras = new BitacoraDAO();
+        int n_bitacora = bitacoras.contarBitacoraPorTrabajo(id_trabajo_i);
+        
+        t_numero_bitacoras.setText(String.valueOf(n_bitacora));
+        
+        PagoDAO pagos = new PagoDAO();
+        int n_Pago = pagos.contarPagosPorTrabajo(id_trabajo_i);
+        
+        t_numero_pagos.setText(String.valueOf(n_Pago));
+        
+    }
+    
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         d_fecha_inicio.setEnabled(false);
         d_fecha_fin.setEnabled(false);
     }//GEN-LAST:event_formWindowOpened
 
-    private void t_ingresar_manualmente_inicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_ingresar_manualmente_inicioActionPerformed
-        if(t_ingresar_manualmente_inicio.isSelected() == true){
-            d_fecha_inicio.setEnabled(true);
-        }
-        else{
-            d_fecha_inicio.setEnabled(false);
-        }
-        
-    }//GEN-LAST:event_t_ingresar_manualmente_inicioActionPerformed
+    private void t_telefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_telefonoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_t_telefonoActionPerformed
 
     private void t_ingresar_manualmente_finActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_ingresar_manualmente_finActionPerformed
         if(t_ingresar_manualmente_fin.isSelected() == true){
             d_fecha_fin.setEnabled(true);
+            t_ingresar_manualmente_fin.setBackground(Color.decode("#2f65ca"));
+            t_ingresar_manualmente_fin.setText("Guardar");
+            t_ingresar_manualmente_inicio.setEnabled(false);
         }
         else{
+
+            //String fecha_inicio = d_fecha_inicio.getDateStringOrSuppliedString("");
+            String fecha_fin = d_fecha_fin.getDateStringOrSuppliedString("");
+
+            TrabajoDAO dao = new TrabajoDAO();
+            boolean actualizadoExitoso = dao.actualizarTrabajoDetalles(id_trabajo,estado,fecha_inicio_g,fecha_fin);
+
+            cargarTrabajo(id_trabajo);
             d_fecha_fin.setEnabled(false);
+            d_fecha_fin.setEnabled(false);
+            t_ingresar_manualmente_fin.setBackground(null);
+            t_ingresar_manualmente_fin.setText("Ingresar manualmente");
+            t_ingresar_manualmente_inicio.setEnabled(true);
         }
     }//GEN-LAST:event_t_ingresar_manualmente_finActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    private void t_ingresar_manualmente_inicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_ingresar_manualmente_inicioActionPerformed
+        if(t_ingresar_manualmente_inicio.isSelected() == true){
+            d_fecha_inicio.setEnabled(true);
+            t_ingresar_manualmente_inicio.setBackground(Color.decode("#2f65ca"));
+            t_ingresar_manualmente_inicio.setText("Guardar");
+            t_ingresar_manualmente_fin.setEnabled(false);
+
+        }
+        else{
+            String fecha_inicio = d_fecha_inicio.getDateStringOrSuppliedString("");
+            //String fecha_fin = d_fecha_fin.getDateStringOrSuppliedString("");
+
+            TrabajoDAO dao = new TrabajoDAO();
+            boolean actualizadoExitoso = dao.actualizarTrabajoDetalles(id_trabajo,estado,fecha_inicio,fecha_fin_g);
+
+            if (actualizadoExitoso) {
+                cargarTrabajo(id_trabajo);
+                d_fecha_inicio.setEnabled(false);
+                t_ingresar_manualmente_inicio.setBackground(null);
+                t_ingresar_manualmente_inicio.setText("Ingresar manualmente");
+                t_ingresar_manualmente_fin.setEnabled(true);
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Error al actualizar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }//GEN-LAST:event_t_ingresar_manualmente_inicioActionPerformed
+
+    private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_b_cerrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -295,6 +438,7 @@ public class D_informacion_estatica extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 D_informacion_estatica dialog = new D_informacion_estatica(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
@@ -319,11 +463,14 @@ public class D_informacion_estatica extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField t_id;
     private javax.swing.JToggleButton t_ingresar_manualmente_fin;
     private javax.swing.JToggleButton t_ingresar_manualmente_inicio;
+    private javax.swing.JTextField t_nombre;
+    private javax.swing.JTextField t_numero_bitacoras;
+    private javax.swing.JTextField t_numero_pagos;
+    private javax.swing.JTextField t_telefono;
     // End of variables declaration//GEN-END:variables
 }

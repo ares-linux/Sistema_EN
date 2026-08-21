@@ -53,6 +53,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_error.setSelected(false);
         t_carpeta_c.setText("");
         c_modelo_pdf.setSelectedIndex(-1);
+        ch_automaticamente.setSelected(false);
         
         ConfiguracionesDAO dao = new ConfiguracionesDAO();
         List<String[]> configs = dao.obtenerConfiguraciones();
@@ -96,6 +97,10 @@ public class D_configuraciones extends javax.swing.JDialog {
                         t_carpeta_c.setText("");
                     }
                 break;
+                
+            case "automaticamente_ce":
+                ch_automaticamente.setSelected(Boolean.parseBoolean(valor));
+                break;
         }
     }
     
@@ -136,6 +141,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         b_copias_seguridad = new javax.swing.JButton();
         b_cambiar_contraseña = new javax.swing.JButton();
+        ch_automaticamente = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(740, 410));
@@ -153,15 +159,15 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_cerrar, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel1.setText("Configuraciones");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -169,7 +175,7 @@ public class D_configuraciones extends javax.swing.JDialog {
 
         c_tema.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Claro", "Oscuro", "Automatico" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -178,7 +184,7 @@ public class D_configuraciones extends javax.swing.JDialog {
 
         jLabel2.setText("Tema de la interfaz");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -190,8 +196,8 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -200,7 +206,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel3.setText("Apariencia");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel3, gridBagConstraints);
@@ -208,7 +214,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel5.setText("Impresión");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel5, gridBagConstraints);
@@ -216,12 +222,12 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel6.setText("Seguridad");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel6, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 135;
@@ -237,15 +243,15 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_carpeta_c, gridBagConstraints);
 
-        jLabel9.setText("Carpeta de guardado de cotizaciones exportadas");
+        jLabel9.setText("Carpeta de guardado de cotizaciones exportadas a pdf");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel9, gridBagConstraints);
@@ -257,7 +263,7 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -265,7 +271,7 @@ public class D_configuraciones extends javax.swing.JDialog {
 
         jLabel14.setText("Modelo de cotizacion en pdf");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -273,7 +279,7 @@ public class D_configuraciones extends javax.swing.JDialog {
 
         c_modelo_pdf.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clasico", "Moderno", "Minimalista", "Tecnico" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -283,7 +289,7 @@ public class D_configuraciones extends javax.swing.JDialog {
 
         b_vista_previa.setText("Vista previa");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -292,7 +298,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel4.setText("Sonido");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel4, gridBagConstraints);
@@ -300,7 +306,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_error.setSelected(true);
         ch_error.setText("Error");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(ch_error, gridBagConstraints);
@@ -308,8 +314,8 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel8.setText("Copias de seguridad");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel8, gridBagConstraints);
 
@@ -320,8 +326,8 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_copias_seguridad, gridBagConstraints);
@@ -333,21 +339,28 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10);
         getContentPane().add(b_cambiar_contraseña, gridBagConstraints);
+
+        ch_automaticamente.setText("Abrir automaticamente las cotizaciones exportadas a pdf");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(ch_automaticamente, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
     public void cambio_tema(){
-        
-        
-        tema_comparado = c_tema.getSelectedItem().toString();
-        
-        if (tema_inicial != tema_comparado){
-            JOptionPane.showMessageDialog(this, "El tema seleccionado tendra efecto despues de reiniciar el programa");
+        tema_comparado = (c_tema.getSelectedItem() != null) 
+                     ? c_tema.getSelectedItem().toString() 
+                     : "";
+    
+        if (!tema_inicial.equals(tema_comparado)) {
+            JOptionPane.showMessageDialog(this, "El tema seleccionado tendrá efecto después de reiniciar el programa");
         }
     }
     
@@ -375,6 +388,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_error.setSelected(false);
         t_carpeta_c.setText("");
         c_modelo_pdf.setSelectedIndex(-1);
+        ch_automaticamente.setSelected(false);
     }
     
     public void bloquear_text(){
@@ -383,7 +397,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         t_carpeta_c.setEnabled(false);
         //t_logo.setEnabled(false);
         ch_error.setEnabled(false);
-        
+        ch_automaticamente.setEnabled(false);
         //Sl_volumen.setEnabled(false);
         c_modelo_pdf.setEnabled(false);
     }
@@ -395,7 +409,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         t_carpeta_c.setEnabled(true);
         //t_logo.setEnabled(true);
         ch_error.setEnabled(true);
-        
+        ch_automaticamente.setEnabled(true);
         //Sl_volumen.setEnabled(true);
         c_modelo_pdf.setEnabled(true);
     }
@@ -404,7 +418,6 @@ public class D_configuraciones extends javax.swing.JDialog {
         b_carpeta_c.setEnabled(false);
         //b_logo.setEnabled(false);
         b_vista_previa.setEnabled(false);
-        
         b_copias_seguridad.setEnabled(false);
         b_cambiar_contraseña.setEnabled(false);
     }
@@ -413,7 +426,6 @@ public class D_configuraciones extends javax.swing.JDialog {
         b_carpeta_c.setEnabled(true);
         //b_logo.setEnabled(true);
         b_vista_previa.setEnabled(true);
-        
         b_copias_seguridad.setEnabled(true);
         b_cambiar_contraseña.setEnabled(true);
     }
@@ -436,45 +448,31 @@ public class D_configuraciones extends javax.swing.JDialog {
             b_carpeta_c.setEnabled(true);
             b_guardar_preferencias.setText("Guardar preferencias");
         } else {
-            String tema = String.valueOf(c_tema.getSelectedItem().toString());
+            String tema = (c_tema.getSelectedItem() != null) ? c_tema.getSelectedItem().toString() : "";
             String sonido_error = String.valueOf(ch_error.isSelected());
-            
-            System.out.println(c_modelo_pdf.getItemCount());
-            System.out.println(c_modelo_pdf.getSelectedItem());
-            
-            String modelo_c = String.valueOf(c_modelo_pdf.getSelectedItem().toString());
-            String carpeta_ce = String.valueOf(t_carpeta_c.getText());
-        
+            String modelo_c = (c_modelo_pdf.getSelectedItem() != null) ? c_modelo_pdf.getSelectedItem().toString() : "";
+            String carpeta_ce = t_carpeta_c.getText();
+            String automaticamente_ce = String.valueOf(ch_automaticamente.isSelected());
+
             ConfiguracionesDAO dao = new ConfiguracionesDAO();
-            boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, modelo_c, carpeta_ce);
-
-            if (guardadoExitoso) {
-                JOptionPane.showMessageDialog(this, "Configuración guardada correctamente.");
-                this.dispose(); 
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (guardadoExitoso) {
-                bloquear_text();
-                bloquear_botones();
-                b_guardar_preferencias.setText("Editar configuraciones");
-
-                JOptionPane.showMessageDialog(this, "Configuraciones guardadas con éxito.");
-                cambio_tema();
-                //JOptionPane.showMessageDialog(this, "Configuraciones guardadas con éxito.");
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog( this,"Error al guardar en la base de datos.","Error",JOptionPane.ERROR_MESSAGE);
-            }
+            boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, modelo_c, carpeta_ce,automaticamente_ce);
+        
+        if (guardadoExitoso) {
+            bloquear_text();
+            bloquear_botones();
+            b_guardar_preferencias.setText("Editar configuraciones");
+            JOptionPane.showMessageDialog(this, "Configuraciones guardadas con éxito.");
+            cambio_tema();
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
     }//GEN-LAST:event_b_guardar_preferenciasActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         bloquear_text();
         bloquear_botones();
-        
-        
-        
         tema_inicial = c_tema.getSelectedItem().toString();
         
     }//GEN-LAST:event_formWindowOpened
@@ -566,6 +564,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox<String> c_modelo_pdf;
     private javax.swing.JComboBox<String> c_tema;
+    private javax.swing.JCheckBox ch_automaticamente;
     private javax.swing.JCheckBox ch_error;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;

@@ -4,13 +4,13 @@
  */
 package sistema_en.Ventanas;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import dao.ConfiguracionesDAO;
 import sistema_en.Ventanas.Ventanas_consultas.V_historial_c;
 import sistema_en.Ventanas.Ventanas_consultas.V_clientes;
 import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 import java.awt.Image;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -19,6 +19,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import sistema_en.Ventanas.dialogos.D_configuraciones;
 import sistema_en.Ventanas.dialogos.D_informes;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeParseException;
+import javax.swing.JOptionPane;
+import raven.toast.Notifications;
+import sistema_en.GoogleDriveProvider;
 
 /**
  *
@@ -39,7 +45,20 @@ public class V_menu extends javax.swing.JFrame {
     private V_R_Empleado ventana_r_empleados = null;
     
     private V_R_Cotizacion ventana_r_cotizaciones = null;
-                        
+    
+    LocalDate fecha_hoy = LocalDate.now();
+    long dias;
+    long diasTranscurridos;
+    boolean cierre;
+    boolean preguntar;
+    
+    String frecuencia1;
+    String manual1;
+    String preguntar1;
+    String cotizaciones1;
+    String carpeta;
+    String base_c1;
+                            
      /**
      * Creates new form V_menu
      */
@@ -121,6 +140,19 @@ public class V_menu extends javax.swing.JFrame {
 
     switch (clave) {
 
+        case "preguntar":
+            preguntar1 = valor;
+            preguntar = Boolean.parseBoolean(valor);
+            break;
+
+        case "manual":
+            manual1 = valor;
+            break;
+
+        case "cotizaciones":
+            cotizaciones1 = valor;
+            break;
+        
         case "sonido_error":
             if ("true".equals(valor)){
                 sonido = true;
@@ -128,9 +160,68 @@ public class V_menu extends javax.swing.JFrame {
             else if ("false".equals(valor)){
                 sonido = false;
             }
+            break;   
+            
+        case "base_c":
+            base_c1 = valor;
+            System.out.println(base_c1);
+            break;
+                    
+        case "ultima_copia":
+                if (valor != null && !valor.isEmpty() && !valor.equals("null")) {
+                    try { 
+                        
+                        LocalDate fechaGuardada = LocalDate.parse(valor);
+                        
+                        // 3. Calculamos la diferencia en días
+                        diasTranscurridos = ChronoUnit.DAYS.between(fechaGuardada, fecha_hoy);
+                        
+                        // 4. Comparamos para tomar decisiones
+                        if (diasTranscurridos == 0) {
+                            System.out.println("La copia está al día (se hizo hoy).");
+                            System.out.println(diasTranscurridos);
+                        } else if (diasTranscurridos > 0) {
+                            System.out.println("Han pasado " + diasTranscurridos + " días desde la última copia.");
+                            
+                            // Ejemplo: Si pasaron más de 7 días, podrías mostrar una alerta
+                            if (diasTranscurridos >= 7) {
+                                // javax.swing.JOptionPane.showMessageDialog(null, "¡Hace más de una semana que no haces copia!");
+                            }
+                        }
+                    } catch (DateTimeParseException e) {
+                        // En caso de que la fecha guardada tenga un formato extraño o incorrecto
+                        System.out.println("Error al leer la fecha de la última copia: " + valor);
+                    }
+                }
+                break;
+                
+        case "frecuencia":
+            if ("diaria".equals(valor)){
+                dias = 1;
+                frecuencia1 = valor;
+            }
+            else if ("semanal".equals(valor)){
+                dias = 7;
+                frecuencia1 = valor;
+            }   
+            else if("cada cierre".equals(valor)){
+                cierre = true;
+                frecuencia1 = valor;
+            }
             break;
     }
     }
+    
+        if (!cierre && diasTranscurridos >= dias) {
+            if (preguntar) {
+                int respuesta = JOptionPane.showConfirmDialog( this,"¿Desea realizar una copia de seguridad?","Copia de seguridad",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    realizar_respaldo();
+                }
+            } else {
+                realizar_respaldo();
+            }
+        }
     }
 
     /**
@@ -327,6 +418,36 @@ public class V_menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    public void verificar_conexion(){
+     if (!GoogleDriveProvider.estaConectado()) {
+            String mensaje;
+            mensaje = "No se encontró ninguna cuenta de Google vinculada. Puedes conectarla en Configuración > Copias de seguridad. ";
+            Notifications.getInstance().show( Notifications.Type.INFO, Notifications.Location.TOP_RIGHT, mensaje);
+        }
+    }
+    
+    private void realizar_respaldo(){
+        
+        String ruta = Paths.get(base_c1, "sistema_EN").toString();
+        
+        boolean exito = GoogleDriveProvider.subirArchivo(ruta);
+        if (exito){
+            String ultima_copia = LocalDate.now().toString();
+            ConfiguracionesDAO dao = new ConfiguracionesDAO();
+            dao.actualizarCopias(frecuencia1, preguntar1, manual1, cotizaciones1, ultima_copia,base_c1);
+            System.out.println("la copia de seguridad funciona");
+            
+            String mensaje;
+            mensaje = "La copia de seguridad se creo con exito";
+            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+            
+            
+        }else{
+            JOptionPane.showMessageDialog(this, "la copia de seguridad fallo, revise su conexion a internet."); 
+            System.out.println("supuestamente fallo");
+        }
+    }
+    
     public void revisar_sonido(){
         ConfiguracionesDAO dao = new ConfiguracionesDAO();
         List<String[]> configs = dao.obtenerConfiguraciones();
@@ -400,19 +521,35 @@ public class V_menu extends javax.swing.JFrame {
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
+        verificar_conexion();
+        GoogleDriveProvider.sincronizarTrabajosPendientes();
         //r_sonido.reproducir("/audios/inicio.wav");
     }//GEN-LAST:event_formWindowOpened
 
     private void M_cerrar_programaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_cerrar_programaActionPerformed
         revisar_sonido();
-        
         if(sonido == true){
             V_menu.r_sonido.reproducir("/audios/error.wav");
         }
-        
+ 
         int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea cerrar el programa?", "Confirmar salir", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
         if (respuesta == javax.swing.JOptionPane.YES_OPTION){
+            if (cierre == true){
+                if (preguntar == true){
+                    int respuesta1 = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea realizar una copia de seguridad antes de salir?", "Copia de seguridad", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
+                    if (respuesta1 == javax.swing.JOptionPane.YES_OPTION){
+                        realizar_respaldo();
+                    }
+                }
+                else{
+                    realizar_respaldo();
+                }
+            }
             System.exit(0);
+        }
+        else{
+            return;
+            //this.toBack();
         }
     }//GEN-LAST:event_M_cerrar_programaActionPerformed
 
@@ -537,6 +674,7 @@ public class V_menu extends javax.swing.JFrame {
         if (ventana_r_cotizaciones == null || !ventana_r_cotizaciones.isDisplayable()) {
             ventana_r_cotizaciones = new V_R_Cotizacion();
             ventana_r_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ventana_r_cotizaciones.cotizacion_prueba();
             ventana_r_cotizaciones.setVisible(true);
             ventana_r_cotizaciones.toFront();
             ventana_r_cotizaciones.requestFocus();
@@ -547,6 +685,7 @@ public class V_menu extends javax.swing.JFrame {
             ventana_r_cotizaciones.toFront();
             ventana_r_cotizaciones.requestFocus();
         }
+        
     }//GEN-LAST:event_m_cotizacionActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
