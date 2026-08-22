@@ -53,7 +53,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_error.setSelected(false);
         t_carpeta_c.setText("");
         c_modelo_pdf.setSelectedIndex(-1);
-        ch_automaticamente.setSelected(false);
+        ch_automaticamente_pdf.setSelected(false);
         
         ConfiguracionesDAO dao = new ConfiguracionesDAO();
         List<String[]> configs = dao.obtenerConfiguraciones();
@@ -99,7 +99,12 @@ public class D_configuraciones extends javax.swing.JDialog {
                 break;
                 
             case "automaticamente_ce":
-                ch_automaticamente.setSelected(Boolean.parseBoolean(valor));
+                ch_automaticamente_pdf.setSelected(Boolean.parseBoolean(valor));
+                break;
+                
+                
+            case "automaticamente_ce_excel":
+                ch_automaticamente_excel.setSelected(Boolean.parseBoolean(valor));
                 break;
         }
     }
@@ -141,7 +146,8 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         b_copias_seguridad = new javax.swing.JButton();
         b_cambiar_contraseña = new javax.swing.JButton();
-        ch_automaticamente = new javax.swing.JCheckBox();
+        ch_automaticamente_pdf = new javax.swing.JCheckBox();
+        ch_automaticamente_excel = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(740, 410));
@@ -160,7 +166,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_cerrar, gridBagConstraints);
 
@@ -197,7 +203,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -307,7 +313,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_error.setText("Error");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(ch_error, gridBagConstraints);
 
@@ -315,7 +321,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel8.setText("Copias de seguridad");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel8, gridBagConstraints);
 
@@ -327,7 +333,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_copias_seguridad, gridBagConstraints);
@@ -344,12 +350,21 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10);
         getContentPane().add(b_cambiar_contraseña, gridBagConstraints);
 
-        ch_automaticamente.setText("Abrir automaticamente las cotizaciones exportadas a pdf");
+        ch_automaticamente_pdf.setText("Abrir automaticamente las cotizaciones exportadas a pdf");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(ch_automaticamente, gridBagConstraints);
+        getContentPane().add(ch_automaticamente_pdf, gridBagConstraints);
+
+        ch_automaticamente_excel.setText("Abrir automaticamente las cotizaciones exportadas a hojas de calculo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(ch_automaticamente_excel, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -388,16 +403,17 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_error.setSelected(false);
         t_carpeta_c.setText("");
         c_modelo_pdf.setSelectedIndex(-1);
-        ch_automaticamente.setSelected(false);
+        ch_automaticamente_pdf.setSelected(false);
+        ch_automaticamente_excel.setSelected(false);
     }
     
     public void bloquear_text(){
         c_tema.setEnabled(false);
-
         t_carpeta_c.setEnabled(false);
         //t_logo.setEnabled(false);
         ch_error.setEnabled(false);
-        ch_automaticamente.setEnabled(false);
+        ch_automaticamente_pdf.setEnabled(false);
+        ch_automaticamente_excel.setEnabled(false);
         //Sl_volumen.setEnabled(false);
         c_modelo_pdf.setEnabled(false);
     }
@@ -409,7 +425,8 @@ public class D_configuraciones extends javax.swing.JDialog {
         t_carpeta_c.setEnabled(true);
         //t_logo.setEnabled(true);
         ch_error.setEnabled(true);
-        ch_automaticamente.setEnabled(true);
+        ch_automaticamente_pdf.setEnabled(true);
+        ch_automaticamente_excel.setEnabled(true);
         //Sl_volumen.setEnabled(true);
         c_modelo_pdf.setEnabled(true);
     }
@@ -452,10 +469,11 @@ public class D_configuraciones extends javax.swing.JDialog {
             String sonido_error = String.valueOf(ch_error.isSelected());
             String modelo_c = (c_modelo_pdf.getSelectedItem() != null) ? c_modelo_pdf.getSelectedItem().toString() : "";
             String carpeta_ce = t_carpeta_c.getText();
-            String automaticamente_ce = String.valueOf(ch_automaticamente.isSelected());
-
+            String automaticamente_ce = String.valueOf(ch_automaticamente_pdf.isSelected());
+            String automaticamente_ce_excel = String.valueOf(ch_automaticamente_excel.isSelected());
+            
             ConfiguracionesDAO dao = new ConfiguracionesDAO();
-            boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, modelo_c, carpeta_ce,automaticamente_ce);
+            boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, modelo_c, carpeta_ce,automaticamente_ce,automaticamente_ce_excel);
         
         if (guardadoExitoso) {
             bloquear_text();
@@ -564,7 +582,8 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox<String> c_modelo_pdf;
     private javax.swing.JComboBox<String> c_tema;
-    private javax.swing.JCheckBox ch_automaticamente;
+    private javax.swing.JCheckBox ch_automaticamente_excel;
+    private javax.swing.JCheckBox ch_automaticamente_pdf;
     private javax.swing.JCheckBox ch_error;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;

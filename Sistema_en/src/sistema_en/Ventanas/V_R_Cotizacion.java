@@ -48,6 +48,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     String n_cliente;
     String ruta_pdf;
     boolean abrir_automaticamente;
+    boolean abrir_automaticamente_excel;
     boolean prueba;
     
     /**
@@ -129,6 +130,8 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        b_borrar_conceptos = new javax.swing.JButton();
+        b_editar_conceptos = new javax.swing.JButton();
         S_conceptos = new javax.swing.JScrollPane();
         Tabla_conceptos = new javax.swing.JTable();
         P_tabla_materiales = new javax.swing.JPanel();
@@ -141,6 +144,8 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        b_borrar_materiales = new javax.swing.JButton();
+        b_editar_materiales = new javax.swing.JButton();
         S_materiales = new javax.swing.JScrollPane();
         Tabla_materiales = new javax.swing.JTable();
         jPanel12 = new javax.swing.JPanel();
@@ -290,6 +295,8 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(P_botones_c, gridBagConstraints);
 
+        jScrollPane3.setMaximumSize(new java.awt.Dimension(450, 400));
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(450, 400));
         jScrollPane3.setPreferredSize(new java.awt.Dimension(450, 400));
 
         Tabla_cotizaciones.setModel(new javax.swing.table.DefaultTableModel(
@@ -300,7 +307,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 "Id cotizacion", "Tipo", "Fecha de creacion", "Subtotal", "IVA", "Total", "Estado"
             }
         ));
-
+        Tabla_cotizaciones.setMaximumSize(new java.awt.Dimension(450, 400));
+        Tabla_cotizaciones.setMinimumSize(new java.awt.Dimension(450, 400));
+        Tabla_cotizaciones.setPreferredSize(new java.awt.Dimension(450, 400));
         Tabla_cotizaciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_cotizacionesMouseClicked(evt);
@@ -412,6 +421,10 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel11.add(P_datos_estaticos, gridBagConstraints);
 
+        P_tabla_conceptos.setMaximumSize(new java.awt.Dimension(500, 500));
+        P_tabla_conceptos.setMinimumSize(new java.awt.Dimension(500, 300));
+        P_tabla_conceptos.setPreferredSize(new java.awt.Dimension(500, 300));
+        P_tabla_conceptos.setVerifyInputWhenFocusTarget(false);
         P_tabla_conceptos.setLayout(new java.awt.GridBagLayout());
 
         P_conceptos.setLayout(new java.awt.GridBagLayout());
@@ -490,6 +503,34 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_conceptos.add(jLabel5, gridBagConstraints);
 
+        b_borrar_conceptos.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        b_borrar_conceptos.setText("-");
+        b_borrar_conceptos.setMaximumSize(new java.awt.Dimension(24, 31));
+        b_borrar_conceptos.setMinimumSize(new java.awt.Dimension(24, 31));
+        b_borrar_conceptos.setPreferredSize(new java.awt.Dimension(24, 31));
+        b_borrar_conceptos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_borrar_conceptosActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        P_conceptos.add(b_borrar_conceptos, gridBagConstraints);
+
+        b_editar_conceptos.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        b_editar_conceptos.setText("E");
+        b_editar_conceptos.setMaximumSize(new java.awt.Dimension(24, 31));
+        b_editar_conceptos.setMinimumSize(new java.awt.Dimension(24, 31));
+        b_editar_conceptos.setPreferredSize(new java.awt.Dimension(24, 31));
+        b_editar_conceptos.setSelected(true);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        P_conceptos.add(b_editar_conceptos, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -510,7 +551,10 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 "id", "Concepto", "Precio"
             }
         ));
-
+        Tabla_conceptos.setMaximumSize(new java.awt.Dimension(100, 200));
+        Tabla_conceptos.setMinimumSize(new java.awt.Dimension(100, 200));
+        Tabla_conceptos.setName(""); // NOI18N
+        Tabla_conceptos.setPreferredSize(new java.awt.Dimension(100, 200));
         Tabla_conceptos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_conceptosMouseClicked(evt);
@@ -640,9 +684,31 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         P_materiales.add(jLabel14, gridBagConstraints);
+
+        b_borrar_materiales.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        b_borrar_materiales.setText("-");
+        b_borrar_materiales.setMaximumSize(new java.awt.Dimension(24, 31));
+        b_borrar_materiales.setMinimumSize(new java.awt.Dimension(24, 31));
+        b_borrar_materiales.setPreferredSize(new java.awt.Dimension(24, 31));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        P_materiales.add(b_borrar_materiales, gridBagConstraints);
+
+        b_editar_materiales.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        b_editar_materiales.setText("E");
+        b_editar_materiales.setMaximumSize(new java.awt.Dimension(24, 31));
+        b_editar_materiales.setMinimumSize(new java.awt.Dimension(24, 31));
+        b_editar_materiales.setPreferredSize(new java.awt.Dimension(24, 31));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        P_materiales.add(b_editar_materiales, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -662,7 +728,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
                 "id", "Nombre", "Precio uni", "Cantidad", "Total"
             }
         ));
-
+        Tabla_materiales.setMaximumSize(new java.awt.Dimension(100, 200));
+        Tabla_materiales.setMinimumSize(new java.awt.Dimension(100, 200));
+        Tabla_materiales.setPreferredSize(new java.awt.Dimension(100, 200));
         Tabla_materiales.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_materialesMouseClicked(evt);
@@ -685,6 +753,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
         jPanel11.add(jTabbedPane2, gridBagConstraints);
 
         jPanel12.setLayout(new java.awt.GridBagLayout());
@@ -836,7 +905,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
 
         T_pestañas.addTab("Sistema de Cotizaciones", jPanel1);
 
-        getContentPane().add(T_pestañas, java.awt.BorderLayout.CENTER);
+        getContentPane().add(T_pestañas, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -868,6 +937,10 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
             
             case "automaticamente_ce":
                 abrir_automaticamente = Boolean.parseBoolean(valor);
+            break;
+            
+            case "automaticamente_ce_excel":
+                abrir_automaticamente_excel = Boolean.parseBoolean(valor);
             break;
         }
         
@@ -1083,6 +1156,10 @@ private void agregarMaterial() {
         Tabla_materiales.setEnabled(false);
         b_añadir_concepto.setEnabled(false);
         b_añadir_materiales.setEnabled(false);
+        b_borrar_conceptos.setEnabled(false);
+        b_borrar_materiales.setEnabled(false);
+        b_editar_conceptos.setEnabled(false);
+        b_editar_materiales.setEnabled(false);
     }
     
     private void desbloquear_tabla(){
@@ -1090,6 +1167,10 @@ private void agregarMaterial() {
         Tabla_materiales.setEnabled(true);
         b_añadir_concepto.setEnabled(true);
         b_añadir_materiales.setEnabled(true);
+        b_borrar_conceptos.setEnabled(true);
+        b_borrar_materiales.setEnabled(true);
+        b_editar_conceptos.setEnabled(true);
+        b_editar_materiales.setEnabled(true);
     }
     
     public void desbloquear_text(){
@@ -1528,7 +1609,27 @@ private void agregarMaterial() {
                 try {
                     String idCreado = get();
                     if (idCreado != null) {
-                        preguntar();
+                        
+                        if (abrir_automaticamente_excel = true){
+                        
+                            String url = GoogleDriveProvider.Obtener_url_google_sheets();
+                        
+                            try {
+            
+                                //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
+                                if (Desktop.isDesktopSupported()) {
+                                    //lanzamos la url
+                                    Desktop.getDesktop().browse(new URI(url));
+                                }
+                            } catch (Exception e) {
+                                //lazamos una exepcion si falla
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            preguntar();
+                        }
+                        
                         //JOptionPane.showMessageDialog(null, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null, "Error al exportar la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1726,6 +1827,53 @@ private void agregarMaterial() {
         }
     }//GEN-LAST:event_b_nuevo_cActionPerformed
 
+    private void b_borrar_conceptosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_borrar_conceptosActionPerformed
+        int filaSeleccionada = Tabla_conceptos.getSelectedRow();
+        boolean eliminadoExitoso = false;
+        
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un concepto de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        Object valor = Tabla_conceptos.getValueAt(filaSeleccionada, 0);
+
+        if (valor == null || valor.toString().trim().isEmpty()) {
+            DefaultTableModel modelo = (DefaultTableModel) Tabla_conceptos.getModel();
+
+            int fila = Tabla_conceptos.getSelectedRow();
+
+            if (fila != -1) {
+                modelo.removeRow(fila);
+            }
+            eliminadoExitoso = true;
+            
+        } else {
+            String idString = valor.toString();
+            int id = Integer.parseInt(idString);
+            String Concepto = Tabla_conceptos.getValueAt(filaSeleccionada, 1).toString();
+            int respuesta = JOptionPane.showConfirmDialog( this, "¿Estás seguro de que deseas eliminar este concepto: " + Concepto + "?",  "Confirmar Eliminación",  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (respuesta == JOptionPane.YES_OPTION) {
+                Detalles_cotizacionDAO dao = new Detalles_cotizacionDAO();
+                dao.eliminarDetalles_cotizacion(id);
+                eliminadoExitoso = true;
+            } 
+        }
+        
+        if (eliminadoExitoso) {
+            limpiar_text();            
+            desbloquear_text();
+            llenar_tabla_c();
+            calcular_total();
+            desbloquear_botones();
+            t_concepto.requestFocus();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hubo un error al intentar eliminar el registro de la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_b_borrar_conceptosActionPerformed
+
     public void limpiar_text(){
         //t_id_trabajo.setText("");
         //t_id_cotizacion.setText("");
@@ -1900,11 +2048,15 @@ System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
     private javax.swing.JTable Tabla_materiales;
     private javax.swing.JButton b_añadir_concepto;
     private javax.swing.JButton b_añadir_materiales;
+    private javax.swing.JButton b_borrar_conceptos;
+    private javax.swing.JButton b_borrar_materiales;
     private javax.swing.JButton b_buscar_c;
     private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_convertir;
     private javax.swing.JButton b_editar_c;
+    private javax.swing.JButton b_editar_conceptos;
+    private javax.swing.JButton b_editar_materiales;
     private javax.swing.JButton b_eliminar_c;
     private javax.swing.JButton b_exportar;
     private javax.swing.JButton b_guardar;

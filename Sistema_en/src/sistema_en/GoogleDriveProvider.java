@@ -41,11 +41,15 @@ import com.google.api.services.sheets.v4.model.UpdateDimensionPropertiesRequest;
 import dao.TrabajoDAO;
 import sistema_en.Objetos.Trabajo;
 
+
+
 /**
  *
  * @author ares
  */
 public class GoogleDriveProvider {
+
+    private static String url;
     
     public static final String APPLICATION_NAME = "Sistema EN";
     public static final JsonFactory JSON_FACTORY = com.google.api.client.json.gson.GsonFactory.getDefaultInstance();
@@ -184,15 +188,20 @@ public class GoogleDriveProvider {
             aplicarFormatoCotizacion(service, spreadsheetId, sheetId, datosMatriz);
 
             System.out.println("✅ Hoja de cotización creada exitosamente. ID: " + spreadsheetId);
+            url = "https://docs.google.com/spreadsheets/d/" + spreadsheetId + "/edit";
             return spreadsheetId;
-
+            
         } catch (Exception e) {
             System.out.println("❌ Error al crear la hoja de cotización:");
             e.printStackTrace();
             return null;
         }
     }
- 
+    
+    public static String Obtener_url_google_sheets(){
+        return url;
+    }
+    
     private static void aplicarFormatoCotizacion(
         Sheets service,
         String spreadsheetId,

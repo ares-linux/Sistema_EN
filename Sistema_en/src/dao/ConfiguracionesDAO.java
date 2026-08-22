@@ -18,7 +18,7 @@ import sistema_en.Conexion;
  */
 
 public class ConfiguracionesDAO {
-    public boolean actualizarConfiguraciones(String tema, String sonido_error, String modelo_c,String carpeta_ce, String automaticamente_ce) {
+    public boolean actualizarConfiguraciones(String tema, String sonido_error, String modelo_c,String carpeta_ce, String automaticamente_ce,String automaticamente_ce_excel) {
     String sql = "UPDATE Configuraciones SET valor = ? WHERE clave = ?";
         Connection con = Conexion.conectar();
         
@@ -49,6 +49,10 @@ public class ConfiguracionesDAO {
             ps.setString(2, "automaticamente_ce");
             ps.addBatch();
 
+            ps.setString(1, automaticamente_ce_excel);
+            ps.setString(2, "automaticamente_ce");
+            ps.addBatch();
+            
             System.out.println("Tema: " + tema);
             System.out.println("Sonido: " + sonido_error);
             System.out.println("Modelo: " + modelo_c);
