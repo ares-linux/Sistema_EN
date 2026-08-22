@@ -3,6 +3,7 @@ package sistema_en.Objetos;
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
+import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
@@ -15,7 +16,7 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 public class Exportar_PDF {
-
+    
     public static boolean exportarCotizacionPDF(
             String rutaArchivo, 
             String cliente, 
@@ -34,11 +35,24 @@ public class Exportar_PDF {
             PdfWriter.getInstance(documento, new FileOutputStream(new File(rutaArchivo)));
             documento.open();
 
+            
+            // Usa el nombre de la clase seguidos de .class en lugar de getClass()
+            java.net.URL urlImagen = Exportar_PDF.class.getResource("/Imagenes/logo.png");
+            Image imagen;
+            
+            if (urlImagen != null) {
+                imagen = Image.getInstance(urlImagen);
+                imagen.scaleToFit(400, 200);
+                documento.add(imagen);
+            } else {
+                System.out.println("No se encontró la imagen en los recursos.");
+            }
+
             // Fuentes personalizadas
             Font fuenteTitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Color.decode("#2f65ca"));
             Font fuenteSubtitulo = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Color.DARK_GRAY);
             Font fuenteTexto = FontFactory.getFont(FontFactory.HELVETICA, 10, Color.BLACK);
-
+            
             // 1. Encabezado del documento
             documento.add(new Paragraph("COTIZACIÓN", fuenteTitulo));
             documento.add(new Paragraph("Folio: " + folio + " | Fecha: " + fecha, fuenteTexto));
