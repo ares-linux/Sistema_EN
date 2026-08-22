@@ -1746,9 +1746,12 @@ private void agregarMaterial() {
             return;
         }
         else{
-            fila = this.Tabla_cotizaciones.rowAtPoint(evt.getPoint());
-            cargar_datos_tabla(fila);
-            b_exportar.setEnabled(true);
+            if (evt.getClickCount() == 2) {
+                fila = this.Tabla_cotizaciones.rowAtPoint(evt.getPoint());
+                cargar_datos_tabla(fila);
+                b_exportar.setEnabled(true);
+                T_pestañas.setSelectedIndex(1);
+            }
         }
     }//GEN-LAST:event_Tabla_cotizacionesMouseClicked
 
