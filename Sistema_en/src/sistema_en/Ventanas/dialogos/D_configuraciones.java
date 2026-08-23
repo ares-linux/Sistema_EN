@@ -12,6 +12,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import sistema_en.Carpetas;
 
 import sistema_en.Objetos.Configuraciones;
 
@@ -24,6 +25,8 @@ public class D_configuraciones extends javax.swing.JDialog {
     
     Configuraciones configuracion = new Configuraciones();
 
+    String carpeta_obtenida;
+    boolean cambio_carpeta_cotizaciones = false;
     /**
      * Creates new form D_configuraciones
      */
@@ -89,6 +92,7 @@ public class D_configuraciones extends javax.swing.JDialog {
 
                     if (carpeta.exists() && carpeta.isDirectory()) {
                         t_carpeta_c.setText(valor);
+                        carpeta_obtenida = String.valueOf(valor);
                     } else {
                         t_carpeta_c.setText("");
                     }
@@ -469,8 +473,21 @@ public class D_configuraciones extends javax.swing.JDialog {
             String sonido_error = String.valueOf(ch_error.isSelected());
             String modelo_c = (c_modelo_pdf.getSelectedItem() != null) ? c_modelo_pdf.getSelectedItem().toString() : "";
             String carpeta_ce = t_carpeta_c.getText();
+            
+            String Nombre_carpet_cotizaciones = "Cotizaciones";
+            
+            Carpetas.actualizarRutaCotizaciones(carpeta_obtenida, carpeta_ce, Nombre_carpet_cotizaciones);
+            
             String automaticamente_ce = String.valueOf(ch_automaticamente_pdf.isSelected());
             String automaticamente_ce_excel = String.valueOf(ch_automaticamente_excel.isSelected());
+            
+            if (Carpetas.Carpetas_cambio_cotizaciones() == true){
+                carpeta_ce = t_carpeta_c.getText();
+                cambio_carpeta_cotizaciones = true;
+            }else{
+                carpeta_ce = carpeta_obtenida;
+                cambio_carpeta_cotizaciones = false;
+            }
             
             ConfiguracionesDAO dao = new ConfiguracionesDAO();
             boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, modelo_c, carpeta_ce,automaticamente_ce,automaticamente_ce_excel);
@@ -480,6 +497,9 @@ public class D_configuraciones extends javax.swing.JDialog {
             bloquear_botones();
             b_guardar_preferencias.setText("Editar configuraciones");
             JOptionPane.showMessageDialog(this, "Configuraciones guardadas con éxito.");
+            if (cambio_carpeta_cotizaciones == false){
+                JOptionPane.showMessageDialog(this, "No se pudo cambiar la ubicación de las cotizaciones. La ruta anterior se conservará.");
+            }
             cambio_tema();
             dispose();
         } else {

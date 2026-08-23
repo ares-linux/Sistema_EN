@@ -932,7 +932,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
 
         switch (clave) {
             case "carpeta_ce":
-                ruta_pdf = valor;
+                ruta_pdf = valor + "/Cotizaciones/";
             break;
             
             case "automaticamente_ce":
