@@ -922,6 +922,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     }
     
     private void obtener_configuraciones(){
+        
         ConfiguracionesDAO dao = new ConfiguracionesDAO();
         List<String[]> configs = dao.obtenerConfiguraciones();
     

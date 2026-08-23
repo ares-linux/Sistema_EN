@@ -27,6 +27,7 @@ public class D_configuraciones extends javax.swing.JDialog {
 
     String carpeta_obtenida;
     boolean cambio_carpeta_cotizaciones = false;
+    String Nombre_carpet_cotizaciones;
     /**
      * Creates new form D_configuraciones
      */
@@ -114,7 +115,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     }
     
     }
-
+    
     String tema_comparado;
     String tema_inicial;
     
@@ -474,7 +475,7 @@ public class D_configuraciones extends javax.swing.JDialog {
             String modelo_c = (c_modelo_pdf.getSelectedItem() != null) ? c_modelo_pdf.getSelectedItem().toString() : "";
             String carpeta_ce = t_carpeta_c.getText();
             
-            String Nombre_carpet_cotizaciones = "Cotizaciones";
+            Nombre_carpet_cotizaciones = "Cotizaciones";
             
             Carpetas.actualizarRutaCotizaciones(carpeta_obtenida, carpeta_ce, Nombre_carpet_cotizaciones);
             
