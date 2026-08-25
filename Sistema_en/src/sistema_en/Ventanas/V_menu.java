@@ -58,6 +58,7 @@ public class V_menu extends javax.swing.JFrame {
     String cotizaciones1;
     String carpeta;
     String base_c1;
+    boolean subir_pdf;
                             
      /**
      * Creates new form V_menu
@@ -151,6 +152,10 @@ public class V_menu extends javax.swing.JFrame {
 
         case "cotizaciones":
             cotizaciones1 = valor;
+            break;
+            
+        case "carpeta_ce":
+            carpeta = valor + "/Cotizaciones/";
             break;
         
         case "sonido_error":
@@ -427,10 +432,10 @@ public class V_menu extends javax.swing.JFrame {
     }
     
     private void realizar_respaldo(){
-        
+        String idCarpetaDestino = GoogleDriveProvider.obtenerIdCarpetaBaseDatos();
         String ruta = Paths.get(base_c1, "sistema_EN").toString();
         
-        boolean exito = GoogleDriveProvider.subirArchivo(ruta);
+        boolean exito = GoogleDriveProvider.subirArchivo(ruta,idCarpetaDestino);
         if (exito){
             String ultima_copia = LocalDate.now().toString();
             ConfiguracionesDAO dao = new ConfiguracionesDAO();
@@ -522,7 +527,7 @@ public class V_menu extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
         verificar_conexion();
-        GoogleDriveProvider.sincronizarTrabajosPendientes();
+        
         //r_sonido.reproducir("/audios/inicio.wav");
     }//GEN-LAST:event_formWindowOpened
 

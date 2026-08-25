@@ -42,7 +42,7 @@ public class Exportar_PDF {
             
             if (urlImagen != null) {
                 imagen = Image.getInstance(urlImagen);
-                imagen.scaleToFit(400, 200);
+                imagen.scaleToFit(200, 100);
                 documento.add(imagen);
             } else {
                 System.out.println("No se encontró la imagen en los recursos.");

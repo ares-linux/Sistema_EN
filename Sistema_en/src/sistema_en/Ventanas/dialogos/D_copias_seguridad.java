@@ -183,7 +183,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("Realizar copia de seguridad automática");
+        jLabel2.setText("Frecuencia de la copia de seguridad automatica:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -298,7 +298,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(l_estado, gridBagConstraints);
 
-        ch_copias_cotizaciones.setText("Realizar copias de seguridad de cotizaciones exportadas");
+        ch_copias_cotizaciones.setText("Realizar copias de seguridad de cotizaciones exportadas a pdf");
         ch_copias_cotizaciones.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 ch_copias_cotizacionesItemStateChanged(evt);
@@ -390,7 +390,8 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         JOptionPane.showMessageDialog(this, "Se abrirá el navegador para vincular la nueva cuenta.");
     
         new Thread(() -> {
-            GoogleDriveProvider.subirArchivo("credentials.json");
+            String idCarpetaDestino = GoogleDriveProvider.obtenerIdCarpetaBaseDatos();
+            GoogleDriveProvider.subirArchivo("credentials.json",idCarpetaDestino);
         }).start();
     }
     
@@ -506,7 +507,8 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     }//GEN-LAST:event_ch_copias_cotizacionesActionPerformed
 
     public void subir(){
-        GoogleDriveProvider.subirArchivo("/home/ares/Documentos/Bases de datos/sistema_EN"); 
+        String idCarpetaDestino = GoogleDriveProvider.obtenerIdCarpetaBaseDatos();
+        GoogleDriveProvider.subirArchivo("/home/ares/Documentos/Bases de datos/sistema_EN",idCarpetaDestino); 
         java.awt.EventQueue.invokeLater(() -> {
         
         JOptionPane.showMessageDialog(this, "Copia de seguridad manual subida con éxito a Google Drive.");

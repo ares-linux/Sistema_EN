@@ -50,6 +50,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     boolean abrir_automaticamente;
     boolean abrir_automaticamente_excel;
     boolean prueba;
+    String cotizaciones1;
+    boolean subir_pdf;
+    private boolean formularioVisible = true;
     
     /**
      * Creates new form V_registrarco
@@ -162,6 +165,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        t_ocultarFormulario = new javax.swing.JToggleButton();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -565,8 +569,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_tabla_conceptos.add(S_conceptos, gridBagConstraints);
 
@@ -741,8 +746,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_tabla_materiales.add(S_materiales, gridBagConstraints);
 
@@ -751,9 +757,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
         jPanel11.add(jTabbedPane2, gridBagConstraints);
 
         jPanel12.setLayout(new java.awt.GridBagLayout());
@@ -897,9 +903,23 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel11.add(jPanel12, gridBagConstraints);
+
+        t_ocultarFormulario.setText("▲ Ocultar Panel superior");
+        t_ocultarFormulario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                t_ocultarFormularioActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel11.add(t_ocultarFormulario, gridBagConstraints);
 
         jPanel1.add(jPanel11, java.awt.BorderLayout.CENTER);
 
@@ -939,6 +959,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
             case "automaticamente_ce":
                 abrir_automaticamente = Boolean.parseBoolean(valor);
             break;
+            
+            case "cotizaciones":
+                cotizaciones1 = valor;
             
             case "automaticamente_ce_excel":
                 abrir_automaticamente_excel = Boolean.parseBoolean(valor);
@@ -1254,6 +1277,7 @@ private void agregarMaterial() {
         bloquear_text();
         bloquear_tablas();
         bloquear_botones_sistema();
+        GoogleDriveProvider.sincronizarTrabajosPendientes();
     }//GEN-LAST:event_formWindowOpened
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
@@ -1536,6 +1560,11 @@ private void agregarMaterial() {
                             if (java.awt.Desktop.isDesktopSupported()) {
                             java.awt.Desktop.getDesktop().open(new java.io.File(rutaDestino));
                         }
+                            
+                        if (subir_pdf = Boolean.parseBoolean(cotizaciones1)){
+                            GoogleDriveProvider.subirCotizacionesPdf(ruta_pdf);
+                        }
+                            
                         }
                         
                     } else {
@@ -1748,6 +1777,7 @@ private void agregarMaterial() {
         }
         else{
             if (evt.getClickCount() == 2) {
+                setFormulariosVisibles(true);
                 fila = this.Tabla_cotizaciones.rowAtPoint(evt.getPoint());
                 cargar_datos_tabla(fila);
                 b_exportar.setEnabled(true);
@@ -1794,6 +1824,7 @@ private void agregarMaterial() {
                 javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una cotizacion de la tabla para editar.");
                 return;
             }
+            setFormulariosVisibles(true);
             desbloquear_text();
             Tabla_cotizaciones.setEnabled(false);
             //campos_bloquedos_edicion();
@@ -1813,6 +1844,7 @@ private void agregarMaterial() {
 
     private void b_nuevo_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevo_cActionPerformed
         if ("Nuevo".equals(b_nuevo_c.getText())) {
+            setFormulariosVisibles(true);
             t_concepto.requestFocus();
             desbloquear_text();
             desbloquear_tabla();
@@ -1877,6 +1909,25 @@ private void agregarMaterial() {
         }
 
     }//GEN-LAST:event_b_borrar_conceptosActionPerformed
+
+    private void t_ocultarFormularioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_ocultarFormularioActionPerformed
+        setFormulariosVisibles(!t_ocultarFormulario.isSelected());
+    }//GEN-LAST:event_t_ocultarFormularioActionPerformed
+
+    private void setFormulariosVisibles(boolean visible) {
+        formularioVisible = visible;
+        t_ocultarFormulario.setSelected(!visible);
+        if (visible) {
+            t_ocultarFormulario.setText("▲ Ocultar Panel superior");
+        } else {
+            t_ocultarFormulario.setText("▼ Mostrar Panel superior");
+        }
+        P_datos_estaticos.setVisible(visible);
+        P_conceptos.setVisible(visible);
+        P_materiales.setVisible(visible);
+        this.revalidate();
+        this.repaint();
+    }
 
     public void limpiar_text(){
         //t_id_trabajo.setText("");
@@ -2105,6 +2156,7 @@ System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
     private javax.swing.JTextField t_id_trabajo;
     private javax.swing.JTextField t_iva;
     private javax.swing.JTextField t_nombre_m;
+    private javax.swing.JToggleButton t_ocultarFormulario;
     private javax.swing.JTextField t_precio;
     private javax.swing.JTextField t_precio_uni;
     private javax.swing.JTextField t_subtotal;

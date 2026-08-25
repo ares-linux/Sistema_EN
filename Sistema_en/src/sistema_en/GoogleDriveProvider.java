@@ -42,6 +42,7 @@ import sistema_en.Objetos.Trabajo;
 
 import java.io.IOException;
 
+
 /**
  *
  * @author ares
@@ -53,6 +54,7 @@ public class GoogleDriveProvider {
     public static final String APPLICATION_NAME = "Sistema EN";
     public static final JsonFactory JSON_FACTORY = com.google.api.client.json.gson.GsonFactory.getDefaultInstance();
     public static final String TOKENS_DIRECTORY_PATH = "tokens";
+    public static final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
     
     private static final List<String> SCOPES = Arrays.asList(
             DriveScopes.DRIVE_FILE,
@@ -89,7 +91,7 @@ public class GoogleDriveProvider {
                 .build();
     }
 
-    public static boolean subirArchivo(String rutaArchivoLocal) {
+    public static boolean subirArchivo(String rutaArchivoLocal,String ruta) {
         try {
             final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
             Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -121,6 +123,11 @@ public class GoogleDriveProvider {
             File fileMetadata = new File();
             fileMetadata.setName(nombreArchivo);
 
+            String idCarpetaDestino = ruta; // O el ID que necesites
+            if (idCarpetaDestino != null) {
+                fileMetadata.setParents(Collections.singletonList(idCarpetaDestino));
+            }
+            
             FileContent mediaContent = new FileContent("application/x-sqlite3", fileToUpload);
 
             File uploadedFile;
@@ -175,6 +182,22 @@ public class GoogleDriveProvider {
             Spreadsheet createdSheet = service.spreadsheets().create(spreadsheet).execute();
             String spreadsheetId = createdSheet.getSpreadsheetId();
 
+            try {
+                Drive driveService = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                        .setApplicationName(APPLICATION_NAME)
+                        .build();
+            
+            String idCotizacion = buscarOCrearCarpeta(driveService, "Cotizaciones", null);
+                String idCarpetaDestino = buscarOCrearCarpeta(driveService, "Excel", idCotizacion);
+                
+            moverDesdeRaiz(driveService,spreadsheetId,idCarpetaDestino);
+                
+                System.out.println("✅ Hoja de cálculo movida exitosamente a la carpeta 'Excel'.");
+            } catch (Exception e) {
+                System.out.println("⚠️ Advertencia: No se pudo mover la hoja de cálculo a la carpeta específica.");
+                e.printStackTrace(); // Opcional: te ayuda a ver si falla por algún detalle de permisos o red
+            }
+            
             int sheetId = createdSheet.getSheets().get(0).getProperties().getSheetId();
 
             ValueRange body = new ValueRange().setValues(datosMatriz);
@@ -188,8 +211,8 @@ public class GoogleDriveProvider {
 
             System.out.println("✅ Hoja de cotización creada exitosamente. ID: " + spreadsheetId);
             url = "https://docs.google.com/spreadsheets/d/" + spreadsheetId + "/edit";
-            return spreadsheetId;
             
+            return spreadsheetId;
         } catch (Exception e) {
             System.out.println("❌ Error al crear la hoja de cotización:");
             e.printStackTrace();
@@ -420,7 +443,7 @@ public class GoogleDriveProvider {
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
-            return buscarOCrearCarpeta(service, "Base_datos", null);
+            return buscarOCrearCarpeta(service, "Base de datos", null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -462,6 +485,53 @@ public class GoogleDriveProvider {
     
     }
     
+    public static void subirCotizacionesPdf(String ruta){
+        if (!estaConectado()) {
+            return; 
+        }
+    
+        new javax.swing.SwingWorker<Void, Void>() {
+    
+        @Override
+        protected Void doInBackground() throws Exception {
+            
+            final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+            Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+            String idCotizaciones = buscarOCrearCarpeta(service, "Cotizaciones", null);
+            String idCotizaciones_PDF = buscarOCrearCarpeta(service, "PDF", idCotizaciones);
+            
+            java.io.File carpeta = new java.io.File(ruta);
+            java.io.File[] archivos = carpeta.listFiles();
+            if (archivos != null) {
+                for (java.io.File f : archivos) {
+                System.out.println(f.getName());
+                
+                String ruta2 = ruta + f.getName();
+                
+                GoogleDriveProvider.subirArchivo(ruta2, idCotizaciones_PDF);
+                }
+            }
+
+            return null;
+        }
+        
+        @Override
+        protected void done() {
+            javax.swing.JOptionPane.showMessageDialog(null, "¡Sincronización con Drive completada!");
+        }
+        }.execute();
+    }
     
     
+    public static void moverDesdeRaiz(Drive service, String fileId, String nuevaCarpetaId) throws IOException {
+        // Usamos "root" para remover el archivo de la raíz de Drive
+        Drive.Files.Update update = service.files().update(fileId, null)
+                .setAddParents(nuevaCarpetaId)
+                .setRemoveParents("root")
+                .setFields("id, parents");
+            
+        update.execute();
+    }
 }
