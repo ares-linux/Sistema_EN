@@ -1630,7 +1630,7 @@ private void agregarMaterial() {
             @Override
             protected String doInBackground() {
                 String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
-                return GoogleDriveProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja);
+                return GoogleDriveProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja,id_trabajo_c);
             }
 
             @Override
@@ -1640,7 +1640,7 @@ private void agregarMaterial() {
                     String idCreado = get();
                     if (idCreado != null) {
                         
-                        if (abrir_automaticamente_excel = true){
+                        if (abrir_automaticamente_excel){
                         
                             String url = GoogleDriveProvider.Obtener_url_google_sheets();
                         

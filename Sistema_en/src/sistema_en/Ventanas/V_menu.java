@@ -527,7 +527,7 @@ public class V_menu extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
         verificar_conexion();
-        
+        GoogleDriveProvider.sincronizarTrabajosPendientes();
         //r_sonido.reproducir("/audios/inicio.wav");
     }//GEN-LAST:event_formWindowOpened
 

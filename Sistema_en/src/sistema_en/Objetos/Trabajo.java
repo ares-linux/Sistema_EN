@@ -21,6 +21,8 @@ public class Trabajo {
     private int id_cliente;
     private LocalDate fecha_inicio;
     private LocalDate fecha_fin;
+    private String carpeta;
+    private String id_carpeta;
     
     public Trabajo(){
         
@@ -166,6 +168,34 @@ public class Trabajo {
      */
     public void setId_cliente(int id_cliente) {
         this.id_cliente = id_cliente;
+    }
+
+    /**
+     * @return the carpeta
+     */
+    public String getCarpeta() {
+        return carpeta;
+    }
+
+    /**
+     * @param carpeta the carpeta to set
+     */
+    public void setCarpeta(String carpeta) {
+        this.carpeta = carpeta;
+    }
+
+    /**
+     * @return the id_carpeta
+     */
+    public String getId_carpeta() {
+        return id_carpeta;
+    }
+
+    /**
+     * @param id_carpeta the id_carpeta to set
+     */
+    public void setId_carpeta(String id_carpeta) {
+        this.id_carpeta = id_carpeta;
     }
     
     

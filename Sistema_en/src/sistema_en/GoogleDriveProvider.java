@@ -172,7 +172,7 @@ public class GoogleDriveProvider {
         return false;
     }
     
-    public static String crearHojaCotizacion(String tituloArchivo, List<List<Object>> datosMatriz) {
+    public static String crearHojaCotizacion(String tituloArchivo, List<List<Object>> datosMatriz, int id_trabajo) {
         try {
             Sheets service = getSheetsService();
 
@@ -187,7 +187,11 @@ public class GoogleDriveProvider {
                         .setApplicationName(APPLICATION_NAME)
                         .build();
             
-            String idCotizacion = buscarOCrearCarpeta(driveService, "Cotizaciones", null);
+                TrabajoDAO trabajoDao = new TrabajoDAO();
+                Trabajo trabajo = trabajoDao.obtenerTrabajoIdCarpeta(id_trabajo);
+                String id_carpeta = (trabajo != null) ? trabajo.getId_carpeta() : null;
+                
+            String idCotizacion = buscarOCrearCarpeta(driveService, "Cotizaciones", id_carpeta);
                 String idCarpetaDestino = buscarOCrearCarpeta(driveService, "Excel", idCotizacion);
                 
             moverDesdeRaiz(driveService,spreadsheetId,idCarpetaDestino);
@@ -425,6 +429,7 @@ public class GoogleDriveProvider {
 
         // 3. (Opcional pero recomendado) Deja lista la carpeta general de "Evidencias" vacía
         buscarOCrearCarpeta(service, "Evidencias", idTrabajoEspecifico);
+         buscarOCrearCarpeta(service, "Cotizaciones", idTrabajoEspecifico);
         
         // ¡Listo! Ya no creamos la carpeta con la fecha.
         // Retornamos el ID de la carpeta principal del trabajo para que lo guardes en tu Base de Datos
@@ -471,6 +476,8 @@ public class GoogleDriveProvider {
                 String idCarpetaDrive = sistema_en.GoogleDriveProvider.crearCarpetaTrabajo(nombreCarpeta);
                 System.out.println("✅ ¡Trabajo ID " + trabajo.getId_trabajo() + " creado con su carpeta de Drive sincronizada!");
             
+                dao.actualizarTrabajoIdCarpeta(trabajo.getId_trabajo(), idCarpetaDrive);
+                
                 String Carpeta = "Creada";
                 dao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
             }

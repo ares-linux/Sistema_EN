@@ -473,4 +473,46 @@ public List<Trabajo> obtenerTrabajosPendientes() {
     return trabajos;
 }
 
+
+public boolean actualizarTrabajoIdCarpeta(int id_trabajo, String id_carpeta) {
+    String sql = "UPDATE Trabajo SET id_carpeta = ? WHERE id_trabajo = ?;";
+    try {
+        Connection con = Conexion.conectar();
+        if (con != null) {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, id_carpeta);
+            ps.setInt(2, id_trabajo);
+            
+            return ps.executeUpdate() > 0;
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al actualizar trabajo: " + e.getMessage());
+    }
+    return false;
+}
+
+public Trabajo obtenerTrabajoIdCarpeta(int id_trabajo) {
+    String sql = "SELECT id_trabajo, id_carpeta FROM Trabajo WHERE id_trabajo = ?";
+
+    try (Connection con = Conexion.conectar();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setInt(1, id_trabajo);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                Trabajo t = new Trabajo();
+
+                t.setId_trabajo(rs.getInt("id_trabajo")); 
+                t.setId_carpeta(rs.getString("id_carpeta"));
+
+                return t;
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error SQL: " + e.getMessage());
+    }
+
+    return null;
+}
+
 }

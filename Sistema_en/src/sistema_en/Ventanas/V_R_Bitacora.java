@@ -28,6 +28,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import raven.toast.Notifications;
+import sistema_en.GoogleDriveProvider;
 import sistema_en.Ventanas.dialogos.D_buscar_bitacora;
 
 /**
@@ -769,6 +770,16 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         this.Tabla_bitacoras.setModel(modelo);
         
         //llenar_tabla();
+        
+    }
+    
+    private void cargarEvidencias(int id_trabajo_i){
+        
+        if(!GoogleDriveProvider.estaConectado()){
+            return;
+        }
+        
+        
         
     }
     
