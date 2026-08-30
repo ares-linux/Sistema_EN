@@ -80,5 +80,32 @@ public class Carpetas {
         return exito_cambiar_carpeta_cotizaciones;
         
     }
+ 
+public class ObtenerImagenes {
+    public static void main(String[] args) {
+        Path rutaImagenes = obtenerCarpetaImagenes();
+        System.out.println("Ruta: " + rutaImagenes);
+    }
+
+    public static Path obtenerCarpetaImagenes() {
+        String userHome = System.getProperty("user.home");
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            // Windows suele usar "Pictures" o "Imágenes" dependiendo de la localización,
+            // pero el estándar moderno en Java NIO o JNA usa "Pictures" o se lee del registro.
+            // Una forma segura en Windows en español/inglés es verificar cuál existe:
+            Path p1 = Paths.get(userHome, "Pictures");
+            Path p2 = Paths.get(userHome, "Imágenes");
+            return java.nio.file.Files.exists(p1) ? p1 : (java.nio.file.Files.exists(p2) ? p2 : p1);
+        } else {
+            // Linux y macOS usan "Pictures" o "Imágenes"
+            Path p1 = Paths.get(userHome, "Pictures");
+            Path p2 = Paths.get(userHome, "Imágenes");
+            return java.nio.file.Files.exists(p2) ? p2 : p1;
+        }
+    }
+}
+
     
 }

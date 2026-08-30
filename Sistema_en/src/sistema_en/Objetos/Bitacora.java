@@ -16,7 +16,7 @@ public class Bitacora {
     private LocalDate fecha;
     private LocalTime hora_llegada;
     private LocalTime hora_salida;
-    private java.util.List<String> evidencias = new java.util.ArrayList<>();
+    private java.util.List<Evidencia> evidencias;
     private String notas;
     private int id_trabajador;
     private int id_trabajo;
@@ -67,20 +67,6 @@ public class Bitacora {
      */
     public void setHora_salida(LocalTime hora_salida) {
         this.hora_salida = hora_salida;
-    }
-
-    /**
-     * @return the evidencias
-     */
-    public java.util.List<String> getEvidencias() {
-        return evidencias;
-    }
-
-    /**
-     * @param evidencias the evidencias to set
-     */
-    public void setEvidencias(java.util.List<String> evidencias) {
-        this.evidencias = evidencias;
     }
 
     /**
@@ -151,6 +137,20 @@ public class Bitacora {
      */
     public void setId_trabajo(int id_trabajo) {
         this.id_trabajo = id_trabajo;
+    }
+
+    /**
+     * @return the evidencias
+     */
+    public java.util.List<Evidencia> getEvidencias() {
+        return evidencias;
+    }
+
+    /**
+     * @param evidencias the evidencias to set
+     */
+    public void setEvidencias(java.util.List<Evidencia> evidencias) {
+        this.evidencias = evidencias;
     }
 
 }

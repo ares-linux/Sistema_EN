@@ -6,7 +6,9 @@ package sistema_en.Ventanas;
 
 import com.formdev.flatlaf.FlatLaf;
 import dao.BitacoraDAO;
+import dao.EvidenciaDAO;
 import dao.TrabajadorDAO;
+import dao.TrabajoDAO;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
@@ -19,6 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import sistema_en.Objetos.Bitacora;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -28,7 +31,10 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import raven.toast.Notifications;
+import sistema_en.Carpetas;
 import sistema_en.GoogleDriveProvider;
+import sistema_en.Objetos.Evidencia;
+import sistema_en.Objetos.Trabajo;
 import sistema_en.Ventanas.dialogos.D_buscar_bitacora;
 
 /**
@@ -41,6 +47,12 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     int fila;
     int id_trabajo;
     String ruta_foto_defecto;
+    List<Evidencia> listaTemporalFotos = new ArrayList<>();
+    List<Evidencia> listaFotosNuevas = new ArrayList<>();
+    List<Integer> listaIdsFotosEliminadas = new ArrayList<>();
+    List<Evidencia> evidenciasDisponiblesDrive = new ArrayList<>();
+    List<Evidencia> evidenciasVisibles = new ArrayList<>();
+    private final DefaultListModel<String> modeloLista = new DefaultListModel<>();
     
     // =========================================================================
     // [CONFIGURACIÓN JTREE] - Propiedades y Listas para la gestión de la Bitácora
@@ -180,7 +192,6 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         }
     }
 
-    private DefaultListModel<String> modeloLista = new DefaultListModel<>();
     /**
      * Creates new form V_bitacora
      */
@@ -687,6 +698,10 @@ public class V_R_Bitacora extends javax.swing.JFrame {
 
         P_tabla.setLayout(new java.awt.BorderLayout());
 
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(450, 450));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(450, 450));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(450, 450));
+
         Tabla_bitacoras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -695,6 +710,9 @@ public class V_R_Bitacora extends javax.swing.JFrame {
                 "Plomero", "Fecha", "Hora de entrada", "Hora de salida", "Evidencia", "Notas"
             }
         ));
+        Tabla_bitacoras.setMaximumSize(new java.awt.Dimension(450, 450));
+        Tabla_bitacoras.setMinimumSize(new java.awt.Dimension(450, 450));
+        Tabla_bitacoras.setPreferredSize(new java.awt.Dimension(450, 450));
         Tabla_bitacoras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_bitacorasMouseClicked(evt);
@@ -769,18 +787,68 @@ public class V_R_Bitacora extends javax.swing.JFrame {
 
         this.Tabla_bitacoras.setModel(modelo);
         
-        //llenar_tabla();
+        cargarEvidenciasDeDrive();
         
     }
     
-    private void cargarEvidencias(int id_trabajo_i){
-        
-        if(!GoogleDriveProvider.estaConectado()){
+    // cargarEvidenciasDeDrive(): Obtiene las imágenes disponibles de la carpeta
+    // "Evidencias" del trabajo en Google Drive (si está conectado) y las cachea.
+    private void cargarEvidenciasDeDrive() {
+        evidenciasDisponiblesDrive.clear();
+        if (!GoogleDriveProvider.estaConectado()) {
             return;
         }
-        
-        
-        
+
+        new javax.swing.SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    TrabajoDAO trabajoDao = new TrabajoDAO();
+                    Trabajo trabajo = trabajoDao.obtenerTrabajoIdCarpeta(id_trabajo);
+                    if (trabajo == null || trabajo.getId_carpeta() == null) {
+                        return null;
+                    }
+
+                    final com.google.api.client.http.javanet.NetHttpTransport HTTP_TRANSPORT =
+                            new com.google.api.client.http.javanet.NetHttpTransport();
+                    DriveServiceHolder holder = new DriveServiceHolder();
+                    holder.service = new com.google.api.services.drive.Drive.Builder(
+                            HTTP_TRANSPORT,
+                            GoogleDriveProvider.JSON_FACTORY,
+                            GoogleDriveProvider.getCredentials(HTTP_TRANSPORT))
+                            .setApplicationName(GoogleDriveProvider.APPLICATION_NAME)
+                            .build();
+
+                    String idEvidencias = GoogleDriveProvider.buscarOCrearCarpeta(
+                            holder.service, "Evidencias", trabajo.getId_carpeta());
+
+                    List<Evidencia> disponibles = GoogleDriveProvider.listarArchivosDeCarpeta(idEvidencias);
+                    synchronized (evidenciasDisponiblesDrive) {
+                        evidenciasDisponiblesDrive.clear();
+                        evidenciasDisponiblesDrive.addAll(disponibles);
+                    }
+                } catch (Exception e) {
+                    System.out.println("❌ Error al cargar evidencias desde Drive: " + e.getMessage());
+                }
+                return null;
+            }
+        }.execute();
+    }
+
+    private static class DriveServiceHolder {
+        com.google.api.services.drive.Drive service;
+    }
+
+    // obtenerCarpetaEvidenciasLocal(): Devuelve la carpeta local base donde se
+    // guardan las evidencias descargadas del trabajo (ej: ~/Imágenes/Sistema_EN/Trabajo_42/evidencias/).
+    private String obtenerCarpetaEvidenciasLocal() {
+        try {
+            java.nio.file.Path base = Carpetas.ObtenerImagenes.obtenerCarpetaImagenes();
+            java.nio.file.Path ruta = base.resolve("Sistema_EN").resolve("Trabajo_" + id_trabajo).resolve("evidencias");
+            return ruta.toString();
+        } catch (Exception e) {
+            return System.getProperty("user.home");
+        }
     }
     
     
@@ -872,6 +940,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         T_notas.setText("");
         DefaultListModel<String> modelo = (DefaultListModel<String>) L_evidencias.getModel();
         modelo.clear();
+        evidenciasVisibles.clear();
     }
     
     public void llenar_tabla(){
@@ -910,15 +979,17 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     
         Bitacora b = listaFiltrada.get(indice);
     
+        evidenciasVisibles.clear();
         modeloLista.clear();
         if (b.getEvidencias() != null) {
-            for (String ev : b.getEvidencias()) {
-                modeloLista.addElement(ev);
+            for (Evidencia ev : b.getEvidencias()) {
+                evidenciasVisibles.add(ev);
+                modeloLista.addElement(ev.getNombre_archivo() != null ? ev.getNombre_archivo() : "");
             }
         }
         if (modeloLista.getSize() > 0) {
             L_evidencias.setSelectedIndex(0);
-            t_evidencia.setText(modeloLista.getElementAt(0));
+            t_evidencia.setText(evidenciasVisibles.get(0).getRuta_local() != null ? evidenciasVisibles.get(0).getRuta_local() : "");
         } else {
             t_evidencia.setText("");
         }
@@ -951,11 +1022,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         b.setFecha(java.time.LocalDate.parse(t_fecha.getText()));
         b.setHora_llegada(time_hora_llegada.getTime());
         b.setHora_salida(time_hora_salida.getTime());
-        java.util.List<String> evidencias = new java.util.ArrayList<>();
-        for (int i = 0; i < modeloLista.getSize(); i++) {
-            evidencias.add(modeloLista.getElementAt(i));
-        }
-        b.setEvidencias(evidencias);
+        b.setEvidencias(new java.util.ArrayList<>(evidenciasVisibles));
         b.setNotas(T_notas.getText());
         
         actualizarArbol();
@@ -970,16 +1037,48 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         if (anchoLabel <= 0) anchoLabel = 260;
         if (altoLabel <= 0) altoLabel = 270;
         
-        if (t_evidencia.getText().trim().isEmpty()) {
-            l_evidencia.setIcon(null); // Quita cualquier imagen previa que se haya quedado en el contenedor
-            return; // Sale del método de forma segura para evitar el error gráfico
+        int indice = L_evidencias.getSelectedIndex();
+        if (indice < 0 || indice >= evidenciasVisibles.size()) {
+            String texto = t_evidencia.getText();
+            if (texto != null && !texto.trim().isEmpty()) {
+                mostrarImagenRuta(texto, anchoLabel, altoLabel);
+            } else {
+                l_evidencia.setIcon(null);
+            }
+            return;
         }
         
-        ImageIcon iconoOriginal = new ImageIcon(t_evidencia.getText());
+        Evidencia ev = evidenciasVisibles.get(indice);
+        String ruta = ev.getRuta_local();
+        
+        // Si no existe localmente pero tenemos su id de Drive, la descargamos.
+        if ((ruta == null || !new java.io.File(ruta).exists())
+                && ev.getId_google_drive() != null && !ev.getId_google_drive().isEmpty()) {
+            String carpeta = obtenerCarpetaEvidenciasLocal();
+            String nombre = ev.getNombre_archivo() != null ? ev.getNombre_archivo() : ("evidencia_" + ev.getId_google_drive());
+            ruta = carpeta + java.io.File.separator + nombre;
+            GoogleDriveProvider.verificarYDescargarEvidencia(ev.getId_google_drive(), ruta);
+            ev.setRuta_local(ruta);
+        }
+        
+        String pathMostrar = (ruta != null) ? ruta : "";
+        t_evidencia.setText(pathMostrar);
+        
+        if (pathMostrar.trim().isEmpty()) {
+            l_evidencia.setIcon(null);
+            return;
+        }
+        
+        mostrarImagenRuta(pathMostrar, anchoLabel, altoLabel);
+    }
+    
+    private void mostrarImagenRuta(String ruta, int anchoLabel, int altoLabel) {
+        ImageIcon iconoOriginal = new ImageIcon(ruta);
         int anchoImagen = iconoOriginal.getIconWidth();
         int altoImagen = iconoOriginal.getIconHeight();
 
         if (anchoImagen <= 0 || altoImagen <= 0) {
+            l_evidencia.setIcon(null);
             return;
         }
 
@@ -1054,6 +1153,8 @@ public class V_R_Bitacora extends javax.swing.JFrame {
 
         if ("Nuevo".equals(b_nuevo.getText()))
         {
+            listaTemporalFotos = new ArrayList<>();
+            evidenciasVisibles.clear();
             cargar_foto();
             desbloquear_text();
             this.b_foto.setEnabled(true);
@@ -1077,14 +1178,6 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             String hora_salida = time_hora_salida.getText();
             String notas = T_notas.getText();
             
-            // Convertir la lista de evidencias a un String separado por comas
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < modeloLista.getSize(); i++) {
-                if (i > 0) sb.append(",");
-                sb.append(modeloLista.getElementAt(i));
-            }
-            String evidencia = sb.toString();
-            
             // Extraer el id del trabajador del combo
             int idTrabajador = 0;
             String seleccionPlomero = (String) c_plomero.getSelectedItem();
@@ -1092,8 +1185,29 @@ public class V_R_Bitacora extends javax.swing.JFrame {
                 idTrabajador = Integer.parseInt(seleccionPlomero.split(" - ")[0].trim());
             }
             
+            boolean guardadoExitoso = false;
+            
             BitacoraDAO dao = new BitacoraDAO();
-            boolean guardadoExitoso = dao.insertarBitacora(fecha, hora_llegada, hora_salida, evidencia, notas, id_trabajo, idTrabajador);
+            int id_bitacora = dao.insertarBitacora(fecha, hora_llegada, hora_salida, notas, id_trabajo, idTrabajador);
+            
+            if (id_bitacora > 0) {
+                EvidenciaDAO evidenciaDAO = new EvidenciaDAO();
+                guardadoExitoso = true;
+                
+                for (Evidencia ev : listaTemporalFotos) {
+                    boolean insertoFoto = evidenciaDAO.insertarEvidencia(
+                        id_bitacora,      // FK de la Bitácora recien creada
+            ev.getId_google_drive(), // ID de Google Drive
+             ev.getNombre_archivo(),   // Nombre del archivo
+               ev.getRuta_local()       // Ruta local
+                    );
+
+                    if (!insertoFoto) {
+                        guardadoExitoso = false;
+                    }
+                }
+                
+            }
             
             if (guardadoExitoso) {
                 creacion_exitosa();
@@ -1117,6 +1231,26 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         if ("Editar".equals(b_editar.getText()))
         {
+            listaFotosNuevas = new ArrayList<>();
+            listaIdsFotosEliminadas = new ArrayList<>();
+
+            int filaSel = Tabla_bitacoras.getSelectedRow();
+            if (filaSel >= 0 && filaSel < listaFiltrada.size()) {
+                Bitacora b = listaFiltrada.get(filaSel);
+                evidenciasVisibles.clear();
+                modeloLista.clear();
+                if (b.getEvidencias() != null) {
+                    for (Evidencia ev : b.getEvidencias()) {
+                        evidenciasVisibles.add(ev);
+                        modeloLista.addElement(ev.getNombre_archivo() != null ? ev.getNombre_archivo() : "");
+                    }
+                }
+                if (modeloLista.getSize() > 0) {
+                    L_evidencias.setSelectedIndex(0);
+                    cargar_foto();
+                }
+            }
+
             b_editar.setText("Guardar");
             b_nuevo.setEnabled(false);
             b_cancelar.setEnabled(true);
@@ -1136,15 +1270,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             String hora_llegada = time_hora_llegada.getText();
             String hora_salida = time_hora_salida.getText();
             String notas = T_notas.getText();
-            
-            // Convertir la lista de evidencias a un String separado por comas
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < modeloLista.getSize(); i++) {
-                if (i > 0) sb.append(",");
-                sb.append(modeloLista.getElementAt(i));
-            }
-            String evidencia = sb.toString();
-            
+                        
             // Extraer el id del trabajador del combo
             int idTrabajador = 0;
             String seleccionPlomero = (String) c_plomero.getSelectedItem();
@@ -1158,11 +1284,33 @@ public class V_R_Bitacora extends javax.swing.JFrame {
                 return;
             }
             int id_bitacora = listaFiltrada.get(filaSeleccionada).getId_bitacora();
-            
+            boolean exito = false;
             BitacoraDAO dao = new BitacoraDAO();
-            boolean actualizadoExitoso = dao.actualizarBitacora(fecha, hora_llegada, hora_salida, evidencia, notas, idTrabajador, id_bitacora);
+            boolean actualizadoExitoso = dao.actualizarBitacora(fecha, hora_llegada, hora_salida, notas, idTrabajador, id_bitacora);
             
-            if (actualizadoExitoso) { 
+            if(actualizadoExitoso){
+                EvidenciaDAO evidenciaDAO = new EvidenciaDAO();
+                exito = true;
+
+                // Guardar solo las fotos NUEVAS agregadas durante la edición
+                for (Evidencia ev : listaFotosNuevas) {
+                    boolean insertoFoto = evidenciaDAO.insertarEvidencia(
+                        id_bitacora, 
+                        ev.getId_google_drive(), 
+                        ev.getNombre_archivo(), 
+                        ev.getRuta_local()
+                    );
+                    if (!insertoFoto) {
+                        exito = false;
+                    }
+                }
+                
+                // Eliminar las evidencias marcadas para borrar durante la edición
+                for (Integer id_evidencia_eliminar : listaIdsFotosEliminadas) {
+                    evidenciaDAO.eliminarEvidencia(id_evidencia_eliminar);
+                }
+            
+            if (exito) { 
                 b_editar.setText("Editar");
                 edicion_exitosa();
                 editar_tabla();
@@ -1174,6 +1322,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             } else { 
                 JOptionPane.showMessageDialog(this, "Error al actualizar el registro en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
             } 
+        }
         }
     }//GEN-LAST:event_b_editarActionPerformed
 
@@ -1193,24 +1342,167 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void b_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_fotoActionPerformed
+        String[] opciones = { "Seleccionar de Drive", "Subir imagen local" };
+        int eleccion = JOptionPane.showOptionDialog(
+                this,
+                "¿Cómo deseas agregar la evidencia?",
+                "Agregar evidencia",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]);
+
+        if (eleccion == 0) {
+            seleccionarDeDrive();
+        } else if (eleccion == 1) {
+            subirImagenLocal();
+        }
+    }//GEN-LAST:event_b_fotoActionPerformed
+
+    // seleccionarDeDrive(): Muestra un diálogo con los archivos disponibles de la
+    // carpeta "Evidencias" del trabajo en Drive y los agrega a la lista temporal.
+    private void seleccionarDeDrive() {
+        if (!GoogleDriveProvider.estaConectado()) {
+            JOptionPane.showMessageDialog(this,
+                    "Google Drive no está conectado.",
+                    "Drive no disponible",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        List<Evidencia> disponibles;
+        synchronized (evidenciasDisponiblesDrive) {
+            disponibles = new ArrayList<>(evidenciasDisponiblesDrive);
+        }
+
+        if (disponibles.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay imágenes disponibles en la carpeta Evidencias de Drive.\nUsa la opción 'Subir imagen local'.",
+                    "Sin archivos",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        DefaultListModel<String> nombresModelo = new DefaultListModel<>();
+        for (Evidencia e : disponibles) {
+            nombresModelo.addElement(e.getNombre_archivo() != null ? e.getNombre_archivo() : "");
+        }
+
+        javax.swing.JList<String> listaNombres = new javax.swing.JList<>(nombresModelo);
+        listaNombres.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        Object[] mensaje = { "Seleccione una imagen de Drive:", new javax.swing.JScrollPane(listaNombres) };
+        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Evidencias en Drive",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (opcion == JOptionPane.OK_OPTION && listaNombres.getSelectedIndex() >= 0) {
+            Evidencia seleccionada = disponibles.get(listaNombres.getSelectedIndex());
+            String carpeta = obtenerCarpetaEvidenciasLocal();
+            String nombre = seleccionada.getNombre_archivo();
+            String rutaLocal = carpeta + java.io.File.separator + nombre;
+
+            Evidencia ev = new Evidencia();
+            ev.setId_google_drive(seleccionada.getId_google_drive());
+            ev.setNombre_archivo(nombre);
+            ev.setRuta_local(rutaLocal);
+
+            agregarEvidenciaALista(ev);
+        }
+    }
+
+    // subirImagenLocal(): Abre el JFileChooser, sube la imagen a la carpeta
+    // "Evidencias" del trabajo en Drive y agrega la Evidencia a la lista temporal.
+    private void subirImagenLocal() {
         String directorioActual = System.getProperty("user.dir");
-        String ruta = "user.dir";
         JFileChooser foto = new JFileChooser(directorioActual);
-    
+
         FileNameExtensionFilter filtrado = new FileNameExtensionFilter("JPG, PNG & GIF", "jpg", "png", "gif");
         foto.setFileFilter(filtrado);
-    
+
         int respuesta = foto.showOpenDialog(this);
-    
-    if (respuesta == JFileChooser.APPROVE_OPTION) {
-            ruta = foto.getSelectedFile().getPath();
-            modeloLista.addElement(ruta);
-            L_evidencias.setSelectedIndex(modeloLista.getSize() - 1);
-            this.t_evidencia.setText(ruta);
-            cargar_foto();
+
+        if (respuesta == JFileChooser.APPROVE_OPTION) {
+            String rutaLocal = foto.getSelectedFile().getPath();
+            java.io.File archivo = new java.io.File(rutaLocal);
+            String nombre = archivo.getName();
+
+            String idDrive = subirImagenAEvidenciasDrive(rutaLocal);
+            if (idDrive == null) {
+                JOptionPane.showMessageDialog(this,
+                        "No se pudo subir la imagen a Google Drive.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Evidencia ev = new Evidencia();
+            ev.setId_google_drive(idDrive);
+            ev.setNombre_archivo(nombre);
+            ev.setRuta_local(rutaLocal);
+
+            agregarEvidenciaALista(ev);
+        }
     }
-        
-    }//GEN-LAST:event_b_fotoActionPerformed
+
+    // subirImagenAEvidenciasDrive(): Busca/crea la carpeta "Evidencias" del trabajo
+    // y sube la imagen local, devolviendo el ID del archivo creado en Drive.
+    private String subirImagenAEvidenciasDrive(String rutaLocalImagen) {
+        try {
+            final com.google.api.client.http.javanet.NetHttpTransport HTTP_TRANSPORT =
+                    new com.google.api.client.http.javanet.NetHttpTransport();
+            com.google.api.services.drive.Drive service =
+                    new com.google.api.services.drive.Drive.Builder(
+                            HTTP_TRANSPORT,
+                            GoogleDriveProvider.JSON_FACTORY,
+                            GoogleDriveProvider.getCredentials(HTTP_TRANSPORT))
+                            .setApplicationName(GoogleDriveProvider.APPLICATION_NAME)
+                            .build();
+
+            TrabajoDAO trabajoDao = new TrabajoDAO();
+            Trabajo trabajo = trabajoDao.obtenerTrabajoIdCarpeta(id_trabajo);
+            if (trabajo == null || trabajo.getId_carpeta() == null) {
+                return null;
+            }
+
+            String idEvidencias = GoogleDriveProvider.buscarOCrearCarpeta(service, "Evidencias", trabajo.getId_carpeta());
+            String idArchivo = GoogleDriveProvider.subirImagenACarpeta(rutaLocalImagen, idEvidencias);
+
+            // Recargamos las evidencias disponibles de Drive tras subir una nueva.
+            List<Evidencia> disponibles = GoogleDriveProvider.listarArchivosDeCarpeta(idEvidencias);
+            synchronized (evidenciasDisponiblesDrive) {
+                evidenciasDisponiblesDrive.clear();
+                evidenciasDisponiblesDrive.addAll(disponibles);
+            }
+
+            return idArchivo;
+        } catch (Exception e) {
+            System.out.println("❌ Error al subir la imagen a la carpeta Evidencias de Drive: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // agregarEvidenciaALista(): Agrega una Evidencia a la vista (modeloLista y
+    // evidenciasVisibles) y, si estamos en modo Nuevo, a listaTemporalFotos.
+    private void agregarEvidenciaALista(Evidencia ev) {
+        String nombre = ev.getNombre_archivo() != null ? ev.getNombre_archivo() : "";
+
+        boolean esNuevo = "Guardar".equals(b_nuevo.getText());
+        boolean esEditar = "Guardar".equals(b_editar.getText());
+
+        if (esNuevo) {
+            listaTemporalFotos.add(ev);
+        } else if (esEditar) {
+            listaFotosNuevas.add(ev);
+        }
+
+        evidenciasVisibles.add(ev);
+        modeloLista.addElement(nombre);
+        L_evidencias.setSelectedIndex(modeloLista.getSize() - 1);
+        t_evidencia.setText(ev.getRuta_local() != null ? ev.getRuta_local() : nombre);
+        cargar_foto();
+    }
 
     private boolean datos_moficados() {
         int fila = Tabla_bitacoras.getSelectedRow();
@@ -1338,25 +1630,48 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     }//GEN-LAST:event_Tabla_bitacorasMouseClicked
 
     private void b_eliminar_evidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_eliminar_evidenciaActionPerformed
-        fila = L_evidencias.getSelectedIndex();
-
-        String mensaje;
-        
-        if (fila != -1) {
-            modeloLista.remove(fila);
-            mensaje = "Evidencia eliminada.";
-            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
-            
-        }
-        
-        if (fila == -1) {
-            mensaje = "Seleccione una evidencia para eliminar.";
-            Notifications.getInstance().show( Notifications.Type.INFO, Notifications.Location.TOP_LEFT, mensaje);
+        int indice = L_evidencias.getSelectedIndex();
+        if (indice < 0 || indice >= evidenciasVisibles.size()) {
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_LEFT,
+                    "Seleccione una evidencia para eliminar.");
             return;
         }
-        
+
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Deseas eliminar esta evidencia?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        Evidencia ev = evidenciasVisibles.get(indice);
+        boolean esNuevo = "Guardar".equals(b_nuevo.getText());
+        boolean esEditar = "Guardar".equals(b_editar.getText());
+
+        if (esNuevo) {
+            // En modo Nuevo: solo quitamos de la lista temporal.
+            listaTemporalFotos.remove(ev);
+        } else if (esEditar) {
+            // En modo Editar: si la evidencia ya existía en BD, la marcamos para eliminarla.
+            if (ev.getId_evidencia() > 0) {
+                listaIdsFotosEliminadas.add(ev.getId_evidencia());
+            } else {
+                listaFotosNuevas.remove(ev);
+            }
+        } else {
+            // Sin modo de edición activo: eliminarla directamente de la BD.
+            if (ev.getId_evidencia() > 0) {
+                EvidenciaDAO evidenciaDAO = new EvidenciaDAO();
+                evidenciaDAO.eliminarEvidencia(ev.getId_evidencia());
+            }
+        }
+
+        evidenciasVisibles.remove(indice);
+        modeloLista.remove(indice);
         t_evidencia.setText("");
         cargar_foto();
+
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT,
+                "Evidencia eliminada.");
     }//GEN-LAST:event_b_eliminar_evidenciaActionPerformed
 
     private void L_evidenciasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_L_evidenciasKeyPressed

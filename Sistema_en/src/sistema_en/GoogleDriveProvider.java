@@ -38,9 +38,13 @@ import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.TextFormat;
 import com.google.api.services.sheets.v4.model.UpdateDimensionPropertiesRequest;
 import dao.TrabajoDAO;
+import sistema_en.Objetos.Evidencia;
 import sistema_en.Objetos.Trabajo;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 
 /**
@@ -57,7 +61,7 @@ public class GoogleDriveProvider {
     public static final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
     
     private static final List<String> SCOPES = Arrays.asList(
-            DriveScopes.DRIVE_FILE,
+            DriveScopes.DRIVE,
             SheetsScopes.SPREADSHEETS
     );
     
@@ -89,6 +93,83 @@ public class GoogleDriveProvider {
         return new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
+    }
+
+    public static List<Evidencia> listarArchivosDeCarpeta(String idCarpetaDrive) {
+        List<Evidencia> lista = new java.util.ArrayList<>();
+        if (!estaConectado() || idCarpetaDrive == null) {
+            return lista;
+        }
+        try {
+            final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+            Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+
+            String query = "'" + idCarpetaDrive + "' in parents and trashed = false";
+            com.google.api.services.drive.model.FileList resultado = service.files().list()
+                    .setQ(query)
+                    .setSpaces("drive")
+                    .setFields("files(id, name, mimeType)")
+                    .execute();
+
+            List<com.google.api.services.drive.model.File> archivos = resultado.getFiles();
+            if (archivos != null) {
+                for (com.google.api.services.drive.model.File archivo : archivos) {
+                    if (archivo.getMimeType() != null
+                            && archivo.getMimeType().startsWith("application/vnd.google-apps.")) {
+                        continue;
+                    }
+                    Evidencia e = new Evidencia();
+                    e.setId_google_drive(archivo.getId());
+                    e.setNombre_archivo(archivo.getName());
+                    lista.add(e);
+                }
+            }
+            
+            
+            
+        } catch (Exception e) {
+            System.out.println("❌ Ocurrió un error al listar los archivos de la carpeta:");
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public static String subirImagenACarpeta(String rutaLocalImagen, String idCarpetaDrive) {
+        if (!estaConectado()) {
+            return null;
+        }
+        try {
+            final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+            Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+
+            java.io.File fileToUpload = new java.io.File(rutaLocalImagen);
+            if (!fileToUpload.exists()) {
+                System.out.println("❌ Error: El archivo local a subir no existe: " + rutaLocalImagen);
+                return null;
+            }
+
+            File fileMetadata = new File();
+            fileMetadata.setName(fileToUpload.getName());
+            if (idCarpetaDrive != null) {
+                fileMetadata.setParents(Collections.singletonList(idCarpetaDrive));
+            }
+
+            FileContent mediaContent = new FileContent("image/jpeg", fileToUpload);
+
+            File uploadedFile = service.files().create(fileMetadata, mediaContent)
+                    .setFields("id")
+                    .execute();
+            System.out.println("✅ Imagen subida a Drive con ID: " + uploadedFile.getId());
+            return uploadedFile.getId();
+        } catch (Exception e) {
+            System.out.println("❌ Ocurrió un error al subir la imagen a Google Drive:");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static boolean subirArchivo(String rutaArchivoLocal,String ruta) {
@@ -541,4 +622,136 @@ public class GoogleDriveProvider {
             
         update.execute();
     }
+    
+    public static void descargarContenidoCarpeta(String idCarpetaDrive, String rutaDestinoLocal) {
+    try {
+        // 1. Inicializamos el servicio de Drive
+        Drive driveService = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
+        // 2. Creamos la consulta para buscar todos los archivos que estén dentro de esa carpeta y no estén borrados
+        String query = "'" + idCarpetaDrive + "' in parents and trashed = false";
+        
+        com.google.api.services.drive.model.FileList resultado = driveService.files().list()
+                .setQ(query)
+                .setSpaces("drive")
+                .setFields("files(id, name, mimeType)")
+                .execute();
+
+        List<com.google.api.services.drive.model.File> archivos = resultado.getFiles();
+
+        if (archivos != null && !archivos.isEmpty()) {
+            // Aseguramos que la carpeta local de destino exista
+            java.io.File carpetaDestino = new java.io.File(rutaDestinoLocal);
+            if (!carpetaDestino.exists()) {
+                carpetaDestino.mkdirs();
+            }
+
+            System.out.println("📁 Encontrados " + archivos.size() + " archivos. Descargando...");
+
+            for (com.google.api.services.drive.model.File archivo : archivos) {
+                String idArchivo = archivo.getId();
+                String nombreArchivo = archivo.getName();
+                String mimeType = archivo.getMimeType();
+
+                // ⚠️ Nota importante sobre Google Docs / Sheets / Slides:
+                // Los archivos nativos de Google (como tus hojas de cálculo creadas con Sheets) 
+                // no se pueden descargar directamente con executeMediaAndDownloadTo() a menos que se exporten.
+                // Si es un archivo normal (PDF, imagen, etc.), se descarga así:
+                
+                if (mimeType != null && mimeType.startsWith("application/vnd.google-apps.")) {
+                    System.out.println("⚠️ Omitiendo archivo nativo de Google (requiere exportación): " + nombreArchivo);
+                    continue; // O puedes manejar una exportación si lo necesitas
+                }
+
+                java.io.File archivoLocal = new java.io.File(carpetaDestino, nombreArchivo);
+                
+                try (java.io.FileOutputStream outputStream = new java.io.FileOutputStream(archivoLocal)) {
+                    driveService.files().get(idArchivo).executeMediaAndDownloadTo(outputStream);
+                    System.out.println("✅ Descargado: " + nombreArchivo);
+                } catch (Exception e) {
+                    System.out.println("❌ Error al descargar el archivo individual: " + nombreArchivo);
+                }
+            }
+            System.out.println("🎉 ¡Proceso de descarga de carpeta finalizado!");
+        } else {
+            System.out.println("📂 La carpeta está vacía o no se encontraron archivos.");
+        }
+
+    } catch (Exception e) {
+        System.out.println("❌ Ocurrió un error al listar o descargar el contenido de la carpeta:");
+        e.printStackTrace();
+    }
+}
+    
+    
+    public static void verificarYDescargarEvidencia(String idDrive, String rutaLocalDestino) {
+    java.io.File archivoLocal = new java.io.File(rutaLocalDestino);
+    
+    // Si la imagen NO existe localmente en esta nueva PC, pero tenemos su ID de Drive...
+    if (!archivoLocal.exists()) {
+        try {
+            System.out.println("🔄 Imagen no encontrada localmente. Descargándola desde Google Drive...");
+            Drive driveService = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+            
+            // Creamos las carpetas locales si no existen
+            archivoLocal.getParentFile().mkdirs();
+
+            // Descargamos usando el ID de Drive guardado en la base de datos
+            try (java.io.FileOutputStream outputStream = new java.io.FileOutputStream(archivoLocal)) {
+                driveService.files().get(idDrive).executeMediaAndDownloadTo(outputStream);
+            }
+            System.out.println("✅ Imagen restaurada con éxito desde la nube.");
+            
+        } catch (Exception e) {
+            System.out.println("❌ No se pudo descargar la imagen desde Drive.");
+            e.printStackTrace();
+        }
+    } else {
+        // Si ya existe localmente, la carga directo de la PC (¡súper rápido!)
+        // System.out.println("📂 Cargando imagen desde el disco local.");
+    }
+}
+    
+    public static void limpiarCarpetaTemporal(String rutaTemporal) {
+    try {
+        java.io.File carpetaTemp = new java.io.File(rutaTemporal);
+        if (carpetaTemp.exists()) {
+            java.io.File[] archivos = carpetaTemp.listFiles();
+            if (archivos != null) {
+                for (java.io.File archivo : archivos) {
+                    archivo.delete(); // Borra los archivos basura que no se seleccionaron
+                }
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+    
+public static void guardarEvidenciaSeleccionada(String rutaTemporalOrigen, String rutaCarpetaDefinitiva, String nombreArchivo) {
+    try {
+        Path origen = Path.of(rutaTemporalOrigen, nombreArchivo);
+        Path carpetaDestino = Path.of(rutaCarpetaDefinitiva);
+        
+        // Creamos la carpeta definitiva del trabajo si no existe
+        if (!Files.exists(carpetaDestino)) {
+            Files.createDirectories(carpetaDestino);
+        }
+        
+        Path destino = carpetaDestino.resolve(nombreArchivo);
+        
+        // Copiamos el archivo de la temporal a la definitiva
+        Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("✅ Evidencia guardada permanentemente en: " + destino.toString());
+        
+    } catch (Exception e) {
+        System.out.println("❌ Error al guardar la evidencia seleccionada:");
+        e.printStackTrace();
+    }
+}
+    
 }
