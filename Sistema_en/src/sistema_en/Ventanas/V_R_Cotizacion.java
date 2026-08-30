@@ -962,6 +962,7 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
             
             case "cotizaciones":
                 cotizaciones1 = valor;
+            break;
             
             case "automaticamente_ce_excel":
                 abrir_automaticamente_excel = Boolean.parseBoolean(valor);
