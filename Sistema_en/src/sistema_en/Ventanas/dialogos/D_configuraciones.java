@@ -138,7 +138,6 @@ public class D_configuraciones extends javax.swing.JDialog {
         b_carpeta_c = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         b_acerca_de = new javax.swing.JButton();
-        b_vista_previa = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         ch_error = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
@@ -164,7 +163,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_cerrar, gridBagConstraints);
 
@@ -201,7 +200,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -273,14 +272,6 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_acerca_de, gridBagConstraints);
 
-        b_vista_previa.setText("Vista previa");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_vista_previa, gridBagConstraints);
-
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel4.setText("Sonido");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -293,7 +284,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_error.setText("Error");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(ch_error, gridBagConstraints);
 
@@ -301,7 +292,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel8.setText("Copias de seguridad");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel8, gridBagConstraints);
 
@@ -313,7 +304,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_copias_seguridad, gridBagConstraints);
@@ -333,7 +324,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_automaticamente_pdf.setText("Abrir automaticamente las cotizaciones exportadas a pdf");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(ch_automaticamente_pdf, gridBagConstraints);
@@ -341,7 +332,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_automaticamente_excel.setText("Abrir automaticamente las cotizaciones exportadas a hojas de calculo");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(ch_automaticamente_excel, gridBagConstraints);
@@ -411,7 +402,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     public void bloquear_botones(){
         b_carpeta_c.setEnabled(false);
         //b_logo.setEnabled(false);
-        b_vista_previa.setEnabled(false);
+        //b_vista_previa.setEnabled(false);
         b_copias_seguridad.setEnabled(false);
         b_cambiar_contraseña.setEnabled(false);
     }
@@ -419,7 +410,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     public void desbloquear_botones(){
         b_carpeta_c.setEnabled(true);
         //b_logo.setEnabled(true);
-        b_vista_previa.setEnabled(true);
+        //b_vista_previa.setEnabled(true);
         b_copias_seguridad.setEnabled(true);
         b_cambiar_contraseña.setEnabled(true);
     }
@@ -569,7 +560,6 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_copias_seguridad;
     private javax.swing.JButton b_guardar_preferencias;
-    private javax.swing.JButton b_vista_previa;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox<String> c_tema;
