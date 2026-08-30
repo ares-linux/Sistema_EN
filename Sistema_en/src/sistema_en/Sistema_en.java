@@ -29,6 +29,11 @@ public class Sistema_en {
     
     //V_login_user login = new V_login_user();
 
+    if (!Controlador_arranque.iniciar()) {
+        System.exit(0);
+        return;
+    }
+
     ConfiguracionesDAO dao = new ConfiguracionesDAO();
     List<String[]> configs = dao.obtenerConfiguraciones();
     

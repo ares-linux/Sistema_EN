@@ -51,7 +51,7 @@ import java.nio.file.StandardCopyOption;
  *
  * @author ares
  */
-public class GoogleDriveProvider {
+public class GoogleServicesProvider {
 
     private static String url;
     
@@ -251,6 +251,18 @@ public class GoogleDriveProvider {
             return carpetaTokens.delete(); 
         }
         return false;
+    }
+
+    public static boolean vincularNuevaCuenta() {
+        desconectar();
+        try {
+            String idCarpeta = obtenerIdCarpetaBaseDatos();
+            return estaConectado() && idCarpeta != null;
+        } catch (Exception e) {
+            System.out.println("No se pudo vincular la cuenta de Google:");
+            e.printStackTrace();
+            return false;
+        }
     }
     
     public static String crearHojaCotizacion(String tituloArchivo, List<List<Object>> datosMatriz, int id_trabajo) {
@@ -554,7 +566,7 @@ public class GoogleDriveProvider {
                 int idTrabajo = trabajo.getId_trabajo();
             
                 String nombreCarpeta = "Trabajo_" + trabajo.getId_trabajo() + "_" + trabajo.getId_cliente() + "_" + trabajo.getFecha_cr();
-                String idCarpetaDrive = sistema_en.GoogleDriveProvider.crearCarpetaTrabajo(nombreCarpeta);
+                String idCarpetaDrive = sistema_en.GoogleServicesProvider.crearCarpetaTrabajo(nombreCarpeta);
                 System.out.println("✅ ¡Trabajo ID " + trabajo.getId_trabajo() + " creado con su carpeta de Drive sincronizada!");
             
                 dao.actualizarTrabajoIdCarpeta(trabajo.getId_trabajo(), idCarpetaDrive);
@@ -598,7 +610,7 @@ public class GoogleDriveProvider {
                 
                 String ruta2 = ruta + f.getName();
                 
-                GoogleDriveProvider.subirArchivo(ruta2, idCotizaciones_PDF);
+                GoogleServicesProvider.subirArchivo(ruta2, idCotizaciones_PDF);
                 }
             }
 
@@ -753,5 +765,55 @@ public static void guardarEvidenciaSeleccionada(String rutaTemporalOrigen, Strin
         e.printStackTrace();
     }
 }
-    
+
+    /**
+     * Busca y descarga el respaldo de la base de datos (sistema_EN) desde la
+     * carpeta "Base de datos" de Google Drive al destino local indicado.
+     * @param rutaDestinoLocal ruta completa donde debe quedar el archivo sistema_EN
+     * @return true si el respaldo se descargo correctamente
+     */
+    public static boolean descargarRespaldoBaseDatos(String rutaDestinoLocal) {
+        if (!estaConectado()) {
+            System.out.println("No hay cuenta de Google vinculada para descargar el respaldo.");
+            return false;
+        }
+        try {
+            Drive driveService = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
+
+            String idCarpeta = obtenerIdCarpetaBaseDatos();
+            if (idCarpeta == null) {
+                System.out.println("No se pudo localizar la carpeta Base de datos en Drive.");
+                return false;
+            }
+
+            List<Evidencia> archivos = listarArchivosDeCarpeta(idCarpeta);
+            String idRespaldo = null;
+            for (Evidencia e : archivos) {
+                if ("sistema_EN".equals(e.getNombre_archivo())) {
+                    idRespaldo = e.getId_google_drive();
+                    break;
+                }
+            }
+
+            if (idRespaldo == null) {
+                System.out.println("No se encontro un respaldo de la base de datos en Drive.");
+                return false;
+            }
+
+            java.io.File archivoLocal = new java.io.File(rutaDestinoLocal);
+            archivoLocal.getParentFile().mkdirs();
+            try (java.io.FileOutputStream outputStream = new java.io.FileOutputStream(archivoLocal)) {
+                driveService.files().get(idRespaldo).executeMediaAndDownloadTo(outputStream);
+            }
+            System.out.println("Respaldo de base de datos descargado con exito: " + rutaDestinoLocal);
+            return archivoLocal.exists() && archivoLocal.length() > 0;
+        } catch (Exception e) {
+            System.out.println("Error al descargar el respaldo de la base de datos:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

@@ -32,7 +32,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import raven.toast.Notifications;
 import sistema_en.Carpetas;
-import sistema_en.GoogleDriveProvider;
+import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Evidencia;
 import sistema_en.Objetos.Trabajo;
 import sistema_en.Ventanas.dialogos.D_buscar_bitacora;
@@ -795,7 +795,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     // "Evidencias" del trabajo en Google Drive (si está conectado) y las cachea.
     private void cargarEvidenciasDeDrive() {
         evidenciasDisponiblesDrive.clear();
-        if (!GoogleDriveProvider.estaConectado()) {
+        if (!GoogleServicesProvider.estaConectado()) {
             return;
         }
 
@@ -814,15 +814,15 @@ public class V_R_Bitacora extends javax.swing.JFrame {
                     DriveServiceHolder holder = new DriveServiceHolder();
                     holder.service = new com.google.api.services.drive.Drive.Builder(
                             HTTP_TRANSPORT,
-                            GoogleDriveProvider.JSON_FACTORY,
-                            GoogleDriveProvider.getCredentials(HTTP_TRANSPORT))
-                            .setApplicationName(GoogleDriveProvider.APPLICATION_NAME)
+                            GoogleServicesProvider.JSON_FACTORY,
+                            GoogleServicesProvider.getCredentials(HTTP_TRANSPORT))
+                            .setApplicationName(GoogleServicesProvider.APPLICATION_NAME)
                             .build();
 
-                    String idEvidencias = GoogleDriveProvider.buscarOCrearCarpeta(
+                    String idEvidencias = GoogleServicesProvider.buscarOCrearCarpeta(
                             holder.service, "Evidencias", trabajo.getId_carpeta());
 
-                    List<Evidencia> disponibles = GoogleDriveProvider.listarArchivosDeCarpeta(idEvidencias);
+                    List<Evidencia> disponibles = GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias);
                     synchronized (evidenciasDisponiblesDrive) {
                         evidenciasDisponiblesDrive.clear();
                         evidenciasDisponiblesDrive.addAll(disponibles);
@@ -1057,7 +1057,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             String carpeta = obtenerCarpetaEvidenciasLocal();
             String nombre = ev.getNombre_archivo() != null ? ev.getNombre_archivo() : ("evidencia_" + ev.getId_google_drive());
             ruta = carpeta + java.io.File.separator + nombre;
-            GoogleDriveProvider.verificarYDescargarEvidencia(ev.getId_google_drive(), ruta);
+            GoogleServicesProvider.verificarYDescargarEvidencia(ev.getId_google_drive(), ruta);
             ev.setRuta_local(ruta);
         }
         
@@ -1363,7 +1363,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     // seleccionarDeDrive(): Muestra un diálogo con los archivos disponibles de la
     // carpeta "Evidencias" del trabajo en Drive y los agrega a la lista temporal.
     private void seleccionarDeDrive() {
-        if (!GoogleDriveProvider.estaConectado()) {
+        if (!GoogleServicesProvider.estaConectado()) {
             JOptionPane.showMessageDialog(this,
                     "Google Drive no está conectado.",
                     "Drive no disponible",
@@ -1454,9 +1454,9 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             com.google.api.services.drive.Drive service =
                     new com.google.api.services.drive.Drive.Builder(
                             HTTP_TRANSPORT,
-                            GoogleDriveProvider.JSON_FACTORY,
-                            GoogleDriveProvider.getCredentials(HTTP_TRANSPORT))
-                            .setApplicationName(GoogleDriveProvider.APPLICATION_NAME)
+                            GoogleServicesProvider.JSON_FACTORY,
+                            GoogleServicesProvider.getCredentials(HTTP_TRANSPORT))
+                            .setApplicationName(GoogleServicesProvider.APPLICATION_NAME)
                             .build();
 
             TrabajoDAO trabajoDao = new TrabajoDAO();
@@ -1465,11 +1465,11 @@ public class V_R_Bitacora extends javax.swing.JFrame {
                 return null;
             }
 
-            String idEvidencias = GoogleDriveProvider.buscarOCrearCarpeta(service, "Evidencias", trabajo.getId_carpeta());
-            String idArchivo = GoogleDriveProvider.subirImagenACarpeta(rutaLocalImagen, idEvidencias);
+            String idEvidencias = GoogleServicesProvider.buscarOCrearCarpeta(service, "Evidencias", trabajo.getId_carpeta());
+            String idArchivo = GoogleServicesProvider.subirImagenACarpeta(rutaLocalImagen, idEvidencias);
 
             // Recargamos las evidencias disponibles de Drive tras subir una nueva.
-            List<Evidencia> disponibles = GoogleDriveProvider.listarArchivosDeCarpeta(idEvidencias);
+            List<Evidencia> disponibles = GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias);
             synchronized (evidenciasDisponiblesDrive) {
                 evidenciasDisponiblesDrive.clear();
                 evidenciasDisponiblesDrive.addAll(disponibles);

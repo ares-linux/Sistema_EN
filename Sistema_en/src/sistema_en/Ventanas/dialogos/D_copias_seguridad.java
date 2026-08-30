@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import sistema_en.GoogleDriveProvider;
+import sistema_en.GoogleServicesProvider;
+import sistema_en.Conexion;
 
 /**
  *
@@ -163,6 +164,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         b_base = new javax.swing.JButton();
         t_base = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        b_importar_copia_seguridad = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(550, 475));
@@ -252,7 +254,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_aceptar, gridBagConstraints);
@@ -265,7 +267,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 16;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_cancelar, gridBagConstraints);
@@ -373,6 +375,21 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel3, gridBagConstraints);
 
+        b_importar_copia_seguridad.setText("Importar de copia de seguridad");
+        b_importar_copia_seguridad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_importar_copia_seguridadActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_importar_copia_seguridad, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
@@ -385,13 +402,13 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     
     public void reconectar(){
         
-        GoogleDriveProvider.desconectar();
+        GoogleServicesProvider.desconectar();
     
         JOptionPane.showMessageDialog(this, "Se abrirá el navegador para vincular la nueva cuenta.");
     
         new Thread(() -> {
-            String idCarpetaDestino = GoogleDriveProvider.obtenerIdCarpetaBaseDatos();
-            GoogleDriveProvider.subirArchivo("credentials.json",idCarpetaDestino);
+            String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
+            GoogleServicesProvider.subirArchivo("credentials.json",idCarpetaDestino);
         }).start();
     }
     
@@ -407,7 +424,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
                 
-        if(GoogleDriveProvider.estaConectado() == true){
+        if(GoogleServicesProvider.estaConectado() == true){
             l_estado.setForeground(Color.decode("#008000"));
             l_estado.setText("🟢 Conectado a Google Drive");
             b_cuenta.setText("Cambiar Cuenta / Desconectar");
@@ -466,10 +483,10 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     }//GEN-LAST:event_ch_copias_cotizacionesItemStateChanged
 
     private void b_cuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cuentaActionPerformed
-        if(GoogleDriveProvider.estaConectado() == true){
+        if(GoogleServicesProvider.estaConectado() == true){
             int respuesta = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas desconectar tu cuenta de Google Drive?", "Confirmar desconexión", JOptionPane.YES_NO_OPTION);
             if(respuesta == JOptionPane.YES_OPTION){
-                GoogleDriveProvider.desconectar();
+                GoogleServicesProvider.desconectar();
                 l_estado.setForeground(Color.decode("#CE1126"));
                 l_estado.setText("🔴 Desconectado");
                 b_cuenta.setText("Vincular cuenta");
@@ -507,8 +524,8 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     }//GEN-LAST:event_ch_copias_cotizacionesActionPerformed
 
     public void subir(){
-        String idCarpetaDestino = GoogleDriveProvider.obtenerIdCarpetaBaseDatos();
-        GoogleDriveProvider.subirArchivo("/home/ares/Documentos/Bases de datos/sistema_EN",idCarpetaDestino); 
+        String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
+        GoogleServicesProvider.subirArchivo(Conexion.getRutaBDActual(),idCarpetaDestino); 
         java.awt.EventQueue.invokeLater(() -> {
         
         JOptionPane.showMessageDialog(this, "Copia de seguridad manual subida con éxito a Google Drive.");
@@ -539,7 +556,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     
     private void b_copiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_copiaActionPerformed
         
-        if (!GoogleDriveProvider.estaConectado()) {
+        if (!GoogleServicesProvider.estaConectado()) {
             JOptionPane.showMessageDialog(this, "Primero debes vincular una cuenta de Google Drive para subir respaldos.", "Cuenta no vinculada", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -565,6 +582,17 @@ public class D_copias_seguridad extends javax.swing.JDialog {
             t_base.setText(carpeta.getAbsolutePath());
         }
     }//GEN-LAST:event_b_baseActionPerformed
+
+    private void b_importar_copia_seguridadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_importar_copia_seguridadActionPerformed
+        
+        if(!GoogleServicesProvider.estaConectado()){
+            JOptionPane.showMessageDialog(this, "Primero debes vincular una cuenta de Google Drive para importar la copia de seguridad.", "Cuenta no vinculada", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        
+        
+    }//GEN-LAST:event_b_importar_copia_seguridadActionPerformed
     
     /**
      * @param args the command line arguments
@@ -614,6 +642,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_copia;
     private javax.swing.JButton b_cuenta;
+    private javax.swing.JButton b_importar_copia_seguridad;
     private javax.swing.JCheckBox ch_copias_cotizaciones;
     private javax.swing.JCheckBox ch_manual;
     private javax.swing.JCheckBox ch_preguntar;

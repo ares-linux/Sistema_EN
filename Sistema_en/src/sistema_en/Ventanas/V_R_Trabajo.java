@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
-import sistema_en.GoogleDriveProvider;
+import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Trabajo;
 import sistema_en.Ventanas.dialogos.D_buscar_cliente;
@@ -829,11 +829,11 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                     guardado = true;
                     String nombreCarpeta = "Trabajo_" + idTrabajo + "_" + idClienteFinal + "_" + fecha;
                     // Creamos la carpeta en Google Drive con este nombre
-                    String idCarpetaDrive = sistema_en.GoogleDriveProvider.crearCarpetaTrabajo(nombreCarpeta);
+                    String idCarpetaDrive = sistema_en.GoogleServicesProvider.crearCarpetaTrabajo(nombreCarpeta);
     
                     trabajoDao.actualizarTrabajoIdCarpeta(trabajo.getId_trabajo(), idCarpetaDrive);
                     
-                    if (!GoogleDriveProvider.estaConectado()){
+                    if (!GoogleServicesProvider.estaConectado()){
                        String Carpeta = "Pendiente";
                        trabajoDao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
                     }

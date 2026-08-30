@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
 import raven.toast.Notifications;
-import sistema_en.GoogleDriveProvider;
+import sistema_en.GoogleServicesProvider;
 
 /**
  *
@@ -424,7 +424,7 @@ public class V_menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     public void verificar_conexion(){
-     if (!GoogleDriveProvider.estaConectado()) {
+     if (!GoogleServicesProvider.estaConectado()) {
             String mensaje;
             mensaje = "No se encontró ninguna cuenta de Google vinculada. Puedes conectarla en Configuración > Copias de seguridad. ";
             Notifications.getInstance().show( Notifications.Type.INFO, Notifications.Location.TOP_RIGHT, mensaje);
@@ -432,10 +432,10 @@ public class V_menu extends javax.swing.JFrame {
     }
     
     private void realizar_respaldo(){
-        String idCarpetaDestino = GoogleDriveProvider.obtenerIdCarpetaBaseDatos();
+        String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
         String ruta = Paths.get(base_c1, "sistema_EN").toString();
         
-        boolean exito = GoogleDriveProvider.subirArchivo(ruta,idCarpetaDestino);
+        boolean exito = GoogleServicesProvider.subirArchivo(ruta,idCarpetaDestino);
         if (exito){
             String ultima_copia = LocalDate.now().toString();
             ConfiguracionesDAO dao = new ConfiguracionesDAO();
@@ -527,7 +527,7 @@ public class V_menu extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
         verificar_conexion();
-        GoogleDriveProvider.sincronizarTrabajosPendientes();
+        GoogleServicesProvider.sincronizarTrabajosPendientes();
         //r_sonido.reproducir("/audios/inicio.wav");
     }//GEN-LAST:event_formWindowOpened
 

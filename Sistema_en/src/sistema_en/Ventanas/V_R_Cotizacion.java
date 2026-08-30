@@ -21,7 +21,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
-import sistema_en.GoogleDriveProvider;
+import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Cotizacion;
 import sistema_en.Objetos.Detalles_cotizacion;
@@ -1278,7 +1278,7 @@ private void agregarMaterial() {
         bloquear_text();
         bloquear_tablas();
         bloquear_botones_sistema();
-        GoogleDriveProvider.sincronizarTrabajosPendientes();
+        GoogleServicesProvider.sincronizarTrabajosPendientes();
     }//GEN-LAST:event_formWindowOpened
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
@@ -1563,7 +1563,7 @@ private void agregarMaterial() {
                         }
                             
                         if (subir_pdf = Boolean.parseBoolean(cotizaciones1)){
-                            GoogleDriveProvider.subirCotizacionesPdf(ruta_pdf);
+                            GoogleServicesProvider.subirCotizacionesPdf(ruta_pdf);
                         }
                             
                         }
@@ -1631,7 +1631,7 @@ private void agregarMaterial() {
             @Override
             protected String doInBackground() {
                 String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
-                return GoogleDriveProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja,id_trabajo_c);
+                return GoogleServicesProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja,id_trabajo_c);
             }
 
             @Override
@@ -1643,7 +1643,7 @@ private void agregarMaterial() {
                         
                         if (abrir_automaticamente_excel){
                         
-                            String url = GoogleDriveProvider.Obtener_url_google_sheets();
+                            String url = GoogleServicesProvider.Obtener_url_google_sheets();
                         
                             try {
             

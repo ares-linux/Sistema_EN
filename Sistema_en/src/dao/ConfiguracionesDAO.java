@@ -106,6 +106,10 @@ public class ConfiguracionesDAO {
             int[] resultados = ps.executeBatch();
             con.commit();
 
+            if (resultados.length > 0) {
+                Conexion.actualizarRutaPorBaseC(base_c);
+            }
+
             return resultados.length > 0;
 
         } catch (SQLException e) {

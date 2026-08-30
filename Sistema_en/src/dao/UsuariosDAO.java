@@ -78,4 +78,36 @@ public class UsuariosDAO {
         return false;
     }
 }
+
+    public boolean insertarUsuario(String usuario, String contraseña) {
+        String nuevoHash = BCrypt.hashpw(contraseña, BCrypt.gensalt());
+        String sql = "INSERT INTO Usuarios (usuario, contraseña) VALUES (?, ?)";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            if (con == null) return false;
+
+            ps.setString(1, usuario);
+            ps.setString(2, nuevoHash);
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al crear usuario en BD: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean existeAdministrador() {
+        String sql = "SELECT COUNT(*) FROM Usuarios";
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (con == null) return false;
+            return rs.next() && rs.getInt(1) > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al contar usuarios: " + e.getMessage());
+            return false;
+        }
+    }
 }
