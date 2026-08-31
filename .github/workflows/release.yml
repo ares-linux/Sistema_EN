@@ -26,18 +26,14 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Instalar jDeploy y publicar
+      - name: Configurar autenticación de npm
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      - name: Publicar con jDeploy
         working-directory: ./Sistema_en
         run: |
           npm install -g jdeploy
           jdeploy publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-        - name: Configurar autenticación de npm
-  run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
-- name: Publicar con jDeploy
-  run: npx jdeploy publish
-  env:
-    NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
