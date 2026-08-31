@@ -19,8 +19,7 @@ jobs:
           java-version: '17'
 
       - name: Compilar con Ant
-        working-directory: ./Sistema_en
-        run: ant -f build.xml default
+        run: ant -f Sistema_en/build.xml jar
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
