@@ -1026,7 +1026,24 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     
     private void cargarCotizacion(int id_trabajo_i){
         CotizacionDAO dao = new CotizacionDAO();
-        dao.obtenerCotizacion(id_trabajo_i);
+        Cotizacion c = dao.obtenerUltimaCotizacion(id_trabajo_i);
+        
+        if (c == null) {
+            return;
+        }
+        
+        t_id_cotizacion.setText(String.valueOf(c.getId_cotizacion()));
+        t_tipo_c.setText(c.getTipo());
+        
+        if (c.getFecha_creacion() != null) {
+            t_fecha_r.setText(c.getFecha_creacion().toString());
+        }
+        
+        t_subtotal.setText(String.format("%.2f", c.getSubtotal()));
+        t_iva.setText(String.format("%.2f", c.getIva()));
+        t_total.setText(String.format("%.2f", c.getTotal()));
+        c_estado.setSelectedItem(c.getEstado());
+        obtener_detalles(c.getId_cotizacion());
     }
     
     private void cargarDetalles_cotizacion(int id_trabajo_i){
@@ -1443,9 +1460,13 @@ private void agregarMaterial() {
                     editar = false;
                     T_pestañas.setSelectedIndex(0);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Error al actualizar los datos de la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-
+                    
+                        if (c_estado.getSelectedItem() == "Aprobada"){
+                            JOptionPane.showMessageDialog(this, "No pueden existir mas de una cotizacion aprobada para un mismo trabajo", "Error", JOptionPane.ERROR_MESSAGE);
+                        }else{
+                            JOptionPane.showMessageDialog(this, "Error al actualizar los datos de la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(this, "Verifica que todos los campos numéricos tengan un formato válido.", "Error de datos", JOptionPane.ERROR_MESSAGE);
                 }

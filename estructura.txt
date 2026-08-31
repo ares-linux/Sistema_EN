@@ -1,0 +1,668 @@
+[01;34m.[0m
+├── estructura.txt
+├── [01;32mgit-flow-pr.sh[0m
+├── README.md
+└── [01;34mSistema_en[0m
+    ├── base_de_datos.properties
+    ├── [01;34mbuild[0m
+    │   ├── built-jar.properties
+    │   ├── [01;34mclasses[0m
+    │   │   ├── [01;34maudios[0m
+    │   │   │   ├── [00;36merror.wav[0m
+    │   │   │   └── [00;36minicio.wav[0m
+    │   │   ├── [01;34mdao[0m
+    │   │   │   ├── BitacoraDAO.class
+    │   │   │   ├── ClienteDAO.class
+    │   │   │   ├── ConfiguracionesDAO.class
+    │   │   │   ├── CotizacionDAO.class
+    │   │   │   ├── Detalles_cotizacionDAO.class
+    │   │   │   ├── EvidenciaDAO.class
+    │   │   │   ├── HerramientaDAO.class
+    │   │   │   ├── InicializadorBD.class
+    │   │   │   ├── PagoDAO.class
+    │   │   │   ├── Tipos_herramientaDAO.class
+    │   │   │   ├── TrabajadorDAO.class
+    │   │   │   ├── TrabajoDAO.class
+    │   │   │   └── UsuariosDAO.class
+    │   │   ├── [01;34mImagenes[0m
+    │   │   │   ├── [01;35mcamara_claro.png[0m
+    │   │   │   ├── [01;35mcamara_oscuro.png[0m
+    │   │   │   ├── [01;35mherramientas_claro.png[0m
+    │   │   │   ├── [01;35mherramientas_oscuro.png[0m
+    │   │   │   ├── [01;35mlogo 2.0.png[0m
+    │   │   │   ├── [01;35mlogo.png[0m
+    │   │   │   ├── [01;35msigno-de-pregunta.png[0m
+    │   │   │   ├── [01;35musuario_claro.png[0m
+    │   │   │   └── [01;35musuario_oscuro.png[0m
+    │   │   └── [01;34msistema_en[0m
+    │   │       ├── Carpetas$ObtenerImagenes.class
+    │   │       ├── Carpetas.class
+    │   │       ├── Conexion.class
+    │   │       ├── Controlador_arranque.class
+    │   │       ├── GoogleServicesProvider$1.class
+    │   │       ├── GoogleServicesProvider$2.class
+    │   │       ├── GoogleServicesProvider.class
+    │   │       ├── [01;34mObjetos[0m
+    │   │       │   ├── Bitacora.class
+    │   │       │   ├── Cliente.class
+    │   │       │   ├── Configuraciones.class
+    │   │       │   ├── Cotizacion.class
+    │   │       │   ├── Detalles_cotizacion.class
+    │   │       │   ├── Evidencia.class
+    │   │       │   ├── Exportar_PDF.class
+    │   │       │   ├── Herramienta.class
+    │   │       │   ├── Pago.class
+    │   │       │   ├── Tipos_herramienta.class
+    │   │       │   ├── Trabajador.class
+    │   │       │   └── Trabajo.class
+    │   │       ├── [01;34mRelaciones[0m
+    │   │       │   └── Bitacora_Trabajador.class
+    │   │       ├── Sistema_en.class
+    │   │       └── [01;34mVentanas[0m
+    │   │           ├── [01;34mdialogos[0m
+    │   │           │   ├── D_acerca_de$1.class
+    │   │           │   ├── D_acerca_de$2.class
+    │   │           │   ├── D_acerca_de$3.class
+    │   │           │   ├── D_acerca_de$4.class
+    │   │           │   ├── D_acerca_de$5.class
+    │   │           │   ├── D_acerca_de$6$1.class
+    │   │           │   ├── D_acerca_de$6.class
+    │   │           │   ├── D_acerca_de.class
+    │   │           │   ├── D_buscar_bitacora$1.class
+    │   │           │   ├── D_buscar_bitacora$2.class
+    │   │           │   ├── D_buscar_bitacora$3.class
+    │   │           │   ├── D_buscar_bitacora$4$1.class
+    │   │           │   ├── D_buscar_bitacora$4.class
+    │   │           │   ├── D_buscar_bitacora.class
+    │   │           │   ├── D_buscar_cliente$10.class
+    │   │           │   ├── D_buscar_cliente$11.class
+    │   │           │   ├── D_buscar_cliente$12$1.class
+    │   │           │   ├── D_buscar_cliente$12.class
+    │   │           │   ├── D_buscar_cliente$1.class
+    │   │           │   ├── D_buscar_cliente$2.class
+    │   │           │   ├── D_buscar_cliente$3.class
+    │   │           │   ├── D_buscar_cliente$4.class
+    │   │           │   ├── D_buscar_cliente$5.class
+    │   │           │   ├── D_buscar_cliente$6.class
+    │   │           │   ├── D_buscar_cliente$7.class
+    │   │           │   ├── D_buscar_cliente$8.class
+    │   │           │   ├── D_buscar_cliente$9.class
+    │   │           │   ├── D_buscar_cliente.class
+    │   │           │   ├── D_buscar_empleado$10.class
+    │   │           │   ├── D_buscar_empleado$11.class
+    │   │           │   ├── D_buscar_empleado$12.class
+    │   │           │   ├── D_buscar_empleado$13.class
+    │   │           │   ├── D_buscar_empleado$14.class
+    │   │           │   ├── D_buscar_empleado$15.class
+    │   │           │   ├── D_buscar_empleado$16.class
+    │   │           │   ├── D_buscar_empleado$17$1.class
+    │   │           │   ├── D_buscar_empleado$17.class
+    │   │           │   ├── D_buscar_empleado$1.class
+    │   │           │   ├── D_buscar_empleado$2.class
+    │   │           │   ├── D_buscar_empleado$3.class
+    │   │           │   ├── D_buscar_empleado$4.class
+    │   │           │   ├── D_buscar_empleado$5.class
+    │   │           │   ├── D_buscar_empleado$6.class
+    │   │           │   ├── D_buscar_empleado$7.class
+    │   │           │   ├── D_buscar_empleado$8.class
+    │   │           │   ├── D_buscar_empleado$9.class
+    │   │           │   ├── D_buscar_empleado.class
+    │   │           │   ├── D_buscar_herramienta$1.class
+    │   │           │   ├── D_buscar_herramienta$2.class
+    │   │           │   ├── D_buscar_herramienta$3.class
+    │   │           │   ├── D_buscar_herramienta$4.class
+    │   │           │   ├── D_buscar_herramienta$5.class
+    │   │           │   ├── D_buscar_herramienta$6$1.class
+    │   │           │   ├── D_buscar_herramienta$6.class
+    │   │           │   ├── D_buscar_herramienta.class
+    │   │           │   ├── D_buscar_trabajo$1.class
+    │   │           │   ├── D_buscar_trabajo$2.class
+    │   │           │   ├── D_buscar_trabajo$3.class
+    │   │           │   ├── D_buscar_trabajo$4.class
+    │   │           │   ├── D_buscar_trabajo$5.class
+    │   │           │   ├── D_buscar_trabajo$6$1.class
+    │   │           │   ├── D_buscar_trabajo$6.class
+    │   │           │   ├── D_buscar_trabajo.class
+    │   │           │   ├── D_cambiar_contraseña$10$1.class
+    │   │           │   ├── D_cambiar_contraseña$10.class
+    │   │           │   ├── D_cambiar_contraseña$1.class
+    │   │           │   ├── D_cambiar_contraseña$2.class
+    │   │           │   ├── D_cambiar_contraseña$3.class
+    │   │           │   ├── D_cambiar_contraseña$4.class
+    │   │           │   ├── D_cambiar_contraseña$5.class
+    │   │           │   ├── D_cambiar_contraseña$6.class
+    │   │           │   ├── D_cambiar_contraseña$7.class
+    │   │           │   ├── D_cambiar_contraseña$8.class
+    │   │           │   ├── D_cambiar_contraseña$9.class
+    │   │           │   ├── D_cambiar_contraseña.class
+    │   │           │   ├── D_configuraciones$1.class
+    │   │           │   ├── D_configuraciones$2.class
+    │   │           │   ├── D_configuraciones$3.class
+    │   │           │   ├── D_configuraciones$4.class
+    │   │           │   ├── D_configuraciones$5.class
+    │   │           │   ├── D_configuraciones$6.class
+    │   │           │   ├── D_configuraciones$7.class
+    │   │           │   ├── D_configuraciones$8.class
+    │   │           │   ├── D_configuraciones$9$1.class
+    │   │           │   ├── D_configuraciones$9.class
+    │   │           │   ├── D_configuraciones$r_sonido.class
+    │   │           │   ├── D_configuraciones.class
+    │   │           │   ├── D_copias_seguridad$10.class
+    │   │           │   ├── D_copias_seguridad$11.class
+    │   │           │   ├── D_copias_seguridad$12.class
+    │   │           │   ├── D_copias_seguridad$13.class
+    │   │           │   ├── D_copias_seguridad$14$1.class
+    │   │           │   ├── D_copias_seguridad$14.class
+    │   │           │   ├── D_copias_seguridad$1.class
+    │   │           │   ├── D_copias_seguridad$2.class
+    │   │           │   ├── D_copias_seguridad$3.class
+    │   │           │   ├── D_copias_seguridad$4.class
+    │   │           │   ├── D_copias_seguridad$5.class
+    │   │           │   ├── D_copias_seguridad$6.class
+    │   │           │   ├── D_copias_seguridad$7.class
+    │   │           │   ├── D_copias_seguridad$8.class
+    │   │           │   ├── D_copias_seguridad$9.class
+    │   │           │   ├── D_copias_seguridad.class
+    │   │           │   ├── D_datos_empresa$1.class
+    │   │           │   ├── D_datos_empresa$2.class
+    │   │           │   ├── D_datos_empresa$3.class
+    │   │           │   ├── D_datos_empresa$4.class
+    │   │           │   ├── D_datos_empresa$5.class
+    │   │           │   ├── D_datos_empresa$6.class
+    │   │           │   ├── D_datos_empresa$7$1.class
+    │   │           │   ├── D_datos_empresa$7.class
+    │   │           │   ├── D_datos_empresa.class
+    │   │           │   ├── D_exportar_opciones$1.class
+    │   │           │   ├── D_exportar_opciones$2.class
+    │   │           │   ├── D_exportar_opciones$3$1.class
+    │   │           │   ├── D_exportar_opciones$3.class
+    │   │           │   ├── D_exportar_opciones.class
+    │   │           │   ├── D_ficha_cliente$1.class
+    │   │           │   ├── D_ficha_cliente$2.class
+    │   │           │   ├── D_ficha_cliente$3.class
+    │   │           │   ├── D_ficha_cliente$4.class
+    │   │           │   ├── D_ficha_cliente$5.class
+    │   │           │   ├── D_ficha_cliente$6.class
+    │   │           │   ├── D_ficha_cliente$7.class
+    │   │           │   ├── D_ficha_cliente$8$1.class
+    │   │           │   ├── D_ficha_cliente$8.class
+    │   │           │   ├── D_ficha_cliente.class
+    │   │           │   ├── D_ficha_trabajo$10.class
+    │   │           │   ├── D_ficha_trabajo$11.class
+    │   │           │   ├── D_ficha_trabajo$12.class
+    │   │           │   ├── D_ficha_trabajo$13.class
+    │   │           │   ├── D_ficha_trabajo$14.class
+    │   │           │   ├── D_ficha_trabajo$15.class
+    │   │           │   ├── D_ficha_trabajo$16$1.class
+    │   │           │   ├── D_ficha_trabajo$16.class
+    │   │           │   ├── D_ficha_trabajo$1.class
+    │   │           │   ├── D_ficha_trabajo$2.class
+    │   │           │   ├── D_ficha_trabajo$3.class
+    │   │           │   ├── D_ficha_trabajo$4.class
+    │   │           │   ├── D_ficha_trabajo$5.class
+    │   │           │   ├── D_ficha_trabajo$6.class
+    │   │           │   ├── D_ficha_trabajo$7.class
+    │   │           │   ├── D_ficha_trabajo$8.class
+    │   │           │   ├── D_ficha_trabajo$9.class
+    │   │           │   ├── D_ficha_trabajo.class
+    │   │           │   ├── D_informacion_estatica$1.class
+    │   │           │   ├── D_informacion_estatica$2.class
+    │   │           │   ├── D_informacion_estatica$3.class
+    │   │           │   ├── D_informacion_estatica$4.class
+    │   │           │   ├── D_informacion_estatica$5.class
+    │   │           │   ├── D_informacion_estatica$6.class
+    │   │           │   ├── D_informacion_estatica$7$1.class
+    │   │           │   ├── D_informacion_estatica$7.class
+    │   │           │   ├── D_informacion_estatica.class
+    │   │           │   ├── D_informes$1.class
+    │   │           │   ├── D_informes$2.class
+    │   │           │   ├── D_informes$3$1.class
+    │   │           │   ├── D_informes$3.class
+    │   │           │   ├── D_informes.class
+    │   │           │   ├── D_licencias_terceros$1.class
+    │   │           │   ├── D_licencias_terceros$2$1.class
+    │   │           │   ├── D_licencias_terceros$2.class
+    │   │           │   ├── D_licencias_terceros.class
+    │   │           │   ├── D_licencias_terceros_tabla$1.class
+    │   │           │   ├── D_licencias_terceros_tabla$2.class
+    │   │           │   ├── D_licencias_terceros_tabla$3.class
+    │   │           │   ├── D_licencias_terceros_tabla$4$1.class
+    │   │           │   ├── D_licencias_terceros_tabla$4.class
+    │   │           │   ├── D_licencias_terceros_tabla.class
+    │   │           │   ├── D_registrar_pagos$1.class
+    │   │           │   ├── D_registrar_pagos$2.class
+    │   │           │   ├── D_registrar_pagos$3.class
+    │   │           │   ├── D_registrar_pagos$4.class
+    │   │           │   ├── D_registrar_pagos$5.class
+    │   │           │   ├── D_registrar_pagos$6.class
+    │   │           │   ├── D_registrar_pagos$7.class
+    │   │           │   ├── D_registrar_pagos$8.class
+    │   │           │   ├── D_registrar_pagos$9$1.class
+    │   │           │   ├── D_registrar_pagos$9.class
+    │   │           │   ├── D_registrar_pagos.class
+    │   │           │   ├── D_registro_usuario$1.class
+    │   │           │   ├── D_registro_usuario$2.class
+    │   │           │   └── D_registro_usuario.class
+    │   │           ├── [01;34mNo_utilizadas[0m
+    │   │           │   ├── V_ficha_trabajo$10.class
+    │   │           │   ├── V_ficha_trabajo$11.class
+    │   │           │   ├── V_ficha_trabajo$12.class
+    │   │           │   ├── V_ficha_trabajo$1.class
+    │   │           │   ├── V_ficha_trabajo$2.class
+    │   │           │   ├── V_ficha_trabajo$3.class
+    │   │           │   ├── V_ficha_trabajo$4.class
+    │   │           │   ├── V_ficha_trabajo$5.class
+    │   │           │   ├── V_ficha_trabajo$6.class
+    │   │           │   ├── V_ficha_trabajo$7.class
+    │   │           │   ├── V_ficha_trabajo$8.class
+    │   │           │   ├── V_ficha_trabajo$9.class
+    │   │           │   ├── V_ficha_trabajo.class
+    │   │           │   ├── V_pago_recibido$1.class
+    │   │           │   ├── V_pago_recibido$2.class
+    │   │           │   ├── V_pago_recibido$3.class
+    │   │           │   ├── V_pago_recibido$4.class
+    │   │           │   ├── V_pago_recibido$5.class
+    │   │           │   ├── V_pago_recibido$6.class
+    │   │           │   └── V_pago_recibido.class
+    │   │           ├── [01;34mVentanas_consultas[0m
+    │   │           │   ├── V_clientes$10.class
+    │   │           │   ├── V_clientes$11.class
+    │   │           │   ├── V_clientes$12.class
+    │   │           │   ├── V_clientes$13.class
+    │   │           │   ├── V_clientes$14.class
+    │   │           │   ├── V_clientes$15.class
+    │   │           │   ├── V_clientes$16.class
+    │   │           │   ├── V_clientes$1.class
+    │   │           │   ├── V_clientes$2.class
+    │   │           │   ├── V_clientes$3.class
+    │   │           │   ├── V_clientes$4.class
+    │   │           │   ├── V_clientes$5.class
+    │   │           │   ├── V_clientes$6.class
+    │   │           │   ├── V_clientes$7.class
+    │   │           │   ├── V_clientes$8.class
+    │   │           │   ├── V_clientes$9.class
+    │   │           │   ├── V_clientes.class
+    │   │           │   ├── V_historial_c$1.class
+    │   │           │   ├── V_historial_c$2.class
+    │   │           │   ├── V_historial_c$3.class
+    │   │           │   ├── V_historial_c$4.class
+    │   │           │   ├── V_historial_c$5.class
+    │   │           │   ├── V_historial_c.class
+    │   │           │   ├── V_trabajos$1.class
+    │   │           │   ├── V_trabajos$2.class
+    │   │           │   ├── V_trabajos$3.class
+    │   │           │   ├── V_trabajos$4.class
+    │   │           │   ├── V_trabajos$5.class
+    │   │           │   ├── V_trabajos$6.class
+    │   │           │   ├── V_trabajos$7.class
+    │   │           │   └── V_trabajos.class
+    │   │           ├── V_login_user$10.class
+    │   │           ├── V_login_user$11.class
+    │   │           ├── V_login_user$12.class
+    │   │           ├── V_login_user$1.class
+    │   │           ├── V_login_user$2.class
+    │   │           ├── V_login_user$3.class
+    │   │           ├── V_login_user$4.class
+    │   │           ├── V_login_user$5.class
+    │   │           ├── V_login_user$6.class
+    │   │           ├── V_login_user$7.class
+    │   │           ├── V_login_user$8.class
+    │   │           ├── V_login_user$9.class
+    │   │           ├── V_login_user$r_sonido.class
+    │   │           ├── V_login_user.class
+    │   │           ├── V_menu$10.class
+    │   │           ├── V_menu$11.class
+    │   │           ├── V_menu$12.class
+    │   │           ├── V_menu$13.class
+    │   │           ├── V_menu$14.class
+    │   │           ├── V_menu$15.class
+    │   │           ├── V_menu$16.class
+    │   │           ├── V_menu$17.class
+    │   │           ├── V_menu$18.class
+    │   │           ├── V_menu$19.class
+    │   │           ├── V_menu$1.class
+    │   │           ├── V_menu$2.class
+    │   │           ├── V_menu$3.class
+    │   │           ├── V_menu$4.class
+    │   │           ├── V_menu$5.class
+    │   │           ├── V_menu$6.class
+    │   │           ├── V_menu$7.class
+    │   │           ├── V_menu$8.class
+    │   │           ├── V_menu$9.class
+    │   │           ├── V_menu$r_sonido.class
+    │   │           ├── V_menu.class
+    │   │           ├── V_R_Bitacora$10.class
+    │   │           ├── V_R_Bitacora$11.class
+    │   │           ├── V_R_Bitacora$12.class
+    │   │           ├── V_R_Bitacora$13.class
+    │   │           ├── V_R_Bitacora$14.class
+    │   │           ├── V_R_Bitacora$15.class
+    │   │           ├── V_R_Bitacora$16.class
+    │   │           ├── V_R_Bitacora$17.class
+    │   │           ├── V_R_Bitacora$18.class
+    │   │           ├── V_R_Bitacora$19.class
+    │   │           ├── V_R_Bitacora$1.class
+    │   │           ├── V_R_Bitacora$2.class
+    │   │           ├── V_R_Bitacora$3.class
+    │   │           ├── V_R_Bitacora$4.class
+    │   │           ├── V_R_Bitacora$5.class
+    │   │           ├── V_R_Bitacora$6.class
+    │   │           ├── V_R_Bitacora$7.class
+    │   │           ├── V_R_Bitacora$8.class
+    │   │           ├── V_R_Bitacora$9.class
+    │   │           ├── V_R_Bitacora$BitacoraNodeWrapper.class
+    │   │           ├── V_R_Bitacora$DriveServiceHolder.class
+    │   │           ├── V_R_Bitacora.class
+    │   │           ├── V_R_Cotizacion$10.class
+    │   │           ├── V_R_Cotizacion$11.class
+    │   │           ├── V_R_Cotizacion$12.class
+    │   │           ├── V_R_Cotizacion$13.class
+    │   │           ├── V_R_Cotizacion$14.class
+    │   │           ├── V_R_Cotizacion$15.class
+    │   │           ├── V_R_Cotizacion$16.class
+    │   │           ├── V_R_Cotizacion$17.class
+    │   │           ├── V_R_Cotizacion$18.class
+    │   │           ├── V_R_Cotizacion$19.class
+    │   │           ├── V_R_Cotizacion$1.class
+    │   │           ├── V_R_Cotizacion$20.class
+    │   │           ├── V_R_Cotizacion$21.class
+    │   │           ├── V_R_Cotizacion$22.class
+    │   │           ├── V_R_Cotizacion$23.class
+    │   │           ├── V_R_Cotizacion$24.class
+    │   │           ├── V_R_Cotizacion$25.class
+    │   │           ├── V_R_Cotizacion$26.class
+    │   │           ├── V_R_Cotizacion$27.class
+    │   │           ├── V_R_Cotizacion$28.class
+    │   │           ├── V_R_Cotizacion$29.class
+    │   │           ├── V_R_Cotizacion$2.class
+    │   │           ├── V_R_Cotizacion$30.class
+    │   │           ├── V_R_Cotizacion$31.class
+    │   │           ├── V_R_Cotizacion$32.class
+    │   │           ├── V_R_Cotizacion$3.class
+    │   │           ├── V_R_Cotizacion$4.class
+    │   │           ├── V_R_Cotizacion$5.class
+    │   │           ├── V_R_Cotizacion$6.class
+    │   │           ├── V_R_Cotizacion$7.class
+    │   │           ├── V_R_Cotizacion$8.class
+    │   │           ├── V_R_Cotizacion$9.class
+    │   │           ├── V_R_Cotizacion.class
+    │   │           ├── V_R_Empleado$10.class
+    │   │           ├── V_R_Empleado$11.class
+    │   │           ├── V_R_Empleado$12.class
+    │   │           ├── V_R_Empleado$13.class
+    │   │           ├── V_R_Empleado$14.class
+    │   │           ├── V_R_Empleado$15.class
+    │   │           ├── V_R_Empleado$16.class
+    │   │           ├── V_R_Empleado$17.class
+    │   │           ├── V_R_Empleado$18.class
+    │   │           ├── V_R_Empleado$19.class
+    │   │           ├── V_R_Empleado$1.class
+    │   │           ├── V_R_Empleado$20.class
+    │   │           ├── V_R_Empleado$21.class
+    │   │           ├── V_R_Empleado$22.class
+    │   │           ├── V_R_Empleado$23.class
+    │   │           ├── V_R_Empleado$24.class
+    │   │           ├── V_R_Empleado$25.class
+    │   │           ├── V_R_Empleado$26.class
+    │   │           ├── V_R_Empleado$27.class
+    │   │           ├── V_R_Empleado$28.class
+    │   │           ├── V_R_Empleado$29.class
+    │   │           ├── V_R_Empleado$2.class
+    │   │           ├── V_R_Empleado$30.class
+    │   │           ├── V_R_Empleado$31.class
+    │   │           ├── V_R_Empleado$32.class
+    │   │           ├── V_R_Empleado$3.class
+    │   │           ├── V_R_Empleado$4.class
+    │   │           ├── V_R_Empleado$5.class
+    │   │           ├── V_R_Empleado$6.class
+    │   │           ├── V_R_Empleado$7.class
+    │   │           ├── V_R_Empleado$8.class
+    │   │           ├── V_R_Empleado$9.class
+    │   │           ├── V_R_Empleado.class
+    │   │           ├── V_R_Herramienta$10.class
+    │   │           ├── V_R_Herramienta$11.class
+    │   │           ├── V_R_Herramienta$12.class
+    │   │           ├── V_R_Herramienta$13.class
+    │   │           ├── V_R_Herramienta$14.class
+    │   │           ├── V_R_Herramienta$15.class
+    │   │           ├── V_R_Herramienta$16.class
+    │   │           ├── V_R_Herramienta$1.class
+    │   │           ├── V_R_Herramienta$2.class
+    │   │           ├── V_R_Herramienta$3.class
+    │   │           ├── V_R_Herramienta$4.class
+    │   │           ├── V_R_Herramienta$5.class
+    │   │           ├── V_R_Herramienta$6.class
+    │   │           ├── V_R_Herramienta$7.class
+    │   │           ├── V_R_Herramienta$8.class
+    │   │           ├── V_R_Herramienta$9.class
+    │   │           ├── V_R_Herramienta.class
+    │   │           ├── V_R_Trabajo$10.class
+    │   │           ├── V_R_Trabajo$11.class
+    │   │           ├── V_R_Trabajo$12.class
+    │   │           ├── V_R_Trabajo$13.class
+    │   │           ├── V_R_Trabajo$14.class
+    │   │           ├── V_R_Trabajo$15.class
+    │   │           ├── V_R_Trabajo$16.class
+    │   │           ├── V_R_Trabajo$17.class
+    │   │           ├── V_R_Trabajo$18.class
+    │   │           ├── V_R_Trabajo$1.class
+    │   │           ├── V_R_Trabajo$2.class
+    │   │           ├── V_R_Trabajo$3.class
+    │   │           ├── V_R_Trabajo$4.class
+    │   │           ├── V_R_Trabajo$5.class
+    │   │           ├── V_R_Trabajo$6.class
+    │   │           ├── V_R_Trabajo$7.class
+    │   │           ├── V_R_Trabajo$8.class
+    │   │           ├── V_R_Trabajo$9.class
+    │   │           └── V_R_Trabajo.class
+    │   ├── [01;34mempty[0m
+    │   └── [01;34mgenerated-sources[0m
+    │       └── [01;34map-source-output[0m
+    ├── build.xml
+    ├── credentials.json
+    ├── [01;34mdist[0m
+    │   ├── [01;34mlib[0m
+    │   │   ├── [01;31mAbsoluteLayout.jar[0m
+    │   │   ├── [01;31mflatlaf-3.7.1.jar[0m
+    │   │   ├── [01;31mflatlaf-3.7.1-javadoc.jar[0m
+    │   │   ├── [01;31mflatlaf-extras-3.7.1.jar[0m
+    │   │   ├── [01;31mgoogle-api-client-2.2.0.jar[0m
+    │   │   ├── [01;31mgoogle-api-services-drive-v3-rev20230822-2.0.0.jar[0m
+    │   │   ├── [01;31mgoogle-api-services-sheets-v4-rev20220927-2.0.0.jar[0m
+    │   │   ├── [01;31mgoogle-http-client-1.43.3.jar[0m
+    │   │   ├── [01;31mgoogle-http-client-gson-1.42.3.jar[0m
+    │   │   ├── [01;31mgoogle-http-client-jackson2-1.43.3.jar[0m
+    │   │   ├── [01;31mgoogle-oauth-client-1.34.1.jar[0m
+    │   │   ├── [01;31mgoogle-oauth-client-java6-1.34.1.jar[0m
+    │   │   ├── [01;31mgoogle-oauth-client-jetty-1.34.1.jar[0m
+    │   │   ├── [01;31mgrpc-context-1.53.0.jar[0m
+    │   │   ├── [01;31mgson-2.10.1.jar[0m
+    │   │   ├── [01;31mguava-32.1.2-jre.jar[0m
+    │   │   ├── [01;31mjackson-core-2.15.2.jar[0m
+    │   │   ├── [01;31mjbcrypt-0.4.jar[0m
+    │   │   ├── [01;31mjcalendar-1.4.jar[0m
+    │   │   ├── [01;31mjna-5.19.1.jar[0m
+    │   │   ├── [01;31mjna-platform-5.19.1.jar[0m
+    │   │   ├── [01;31mjsvg-2.1.0.jar[0m
+    │   │   ├── [01;31mjSystemThemeDetector-3.9.jar[0m
+    │   │   ├── [01;31mLGoodDatePicker-11.2.1.jar[0m
+    │   │   ├── [01;31mopencensus-api-0.28.0.jar[0m
+    │   │   ├── [01;31mopencensus-contrib-http-util-0.28.0.jar[0m
+    │   │   ├── [01;31mopenpdf-1.3.39.jar[0m
+    │   │   ├── [01;31moshi-core-6.4.0.jar[0m
+    │   │   ├── [01;31mslf4j-api-2.0.13.jar[0m
+    │   │   ├── [01;31mslf4j-simple-2.0.18.jar[0m
+    │   │   ├── [01;31msqlite-jdbc-3.53.2.0.jar[0m
+    │   │   └── [01;31mswing-toast-notifications-1.0.4.jar[0m
+    │   ├── README.TXT
+    │   └── [01;31mSistema_en.jar[0m
+    ├── [01;34mherramientas[0m
+    │   ├── [01;31mproguard-ant.jar[0m
+    │   └── [01;31mproguard.jar[0m
+    ├── [01;34mlib[0m
+    │   ├── [01;31mAbsoluteLayout.jar[0m
+    │   ├── estructura.txt
+    │   ├── [01;31mflatlaf-3.7.1.jar[0m
+    │   ├── [01;31mflatlaf-3.7.1-javadoc.jar[0m
+    │   ├── [01;31mflatlaf-extras-3.7.1.jar[0m
+    │   ├── [01;31mjbcrypt-0.4.jar[0m
+    │   ├── [01;31mjcalendar-1.4.jar[0m
+    │   ├── [01;31mjna-5.19.1.jar[0m
+    │   ├── [01;31mjna-platform-5.19.1.jar[0m
+    │   ├── [01;31mjsvg-2.1.0.jar[0m
+    │   ├── [01;31mjSystemThemeDetector-3.9.jar[0m
+    │   ├── [01;32mLGoodDatePicker-11.2.1.jar[0m
+    │   ├── [01;34mlibrerias-google[0m
+    │   │   ├── [01;31mgoogle-api-client-2.2.0.jar[0m
+    │   │   ├── [01;31mgoogle-api-services-drive-v3-rev20230822-2.0.0.jar[0m
+    │   │   ├── [01;31mgoogle-api-services-sheets-v4-rev20220927-2.0.0.jar[0m
+    │   │   ├── [01;31mgoogle-http-client-1.43.3.jar[0m
+    │   │   ├── [01;31mgoogle-http-client-gson-1.42.3.jar[0m
+    │   │   ├── [01;31mgoogle-http-client-jackson2-1.43.3.jar[0m
+    │   │   ├── [01;31mgoogle-oauth-client-1.34.1.jar[0m
+    │   │   ├── [01;31mgoogle-oauth-client-java6-1.34.1.jar[0m
+    │   │   ├── [01;31mgoogle-oauth-client-jetty-1.34.1.jar[0m
+    │   │   ├── [01;31mgrpc-context-1.53.0.jar[0m
+    │   │   ├── [01;31mgson-2.10.1.jar[0m
+    │   │   ├── [01;31mguava-32.1.2-jre.jar[0m
+    │   │   ├── [01;31mjackson-core-2.15.2.jar[0m
+    │   │   ├── [01;31mopencensus-api-0.28.0.jar[0m
+    │   │   └── [01;31mopencensus-contrib-http-util-0.28.0.jar[0m
+    │   ├── [01;31mopenpdf-1.3.39.jar[0m
+    │   ├── [01;31moshi-core-6.4.0.jar[0m
+    │   ├── [01;31mslf4j-api-2.0.13.jar[0m
+    │   ├── [01;31mslf4j-simple-2.0.18.jar[0m
+    │   ├── [01;32msqlite-jdbc-3.53.2.0.jar[0m
+    │   └── [01;31mswing-toast-notifications-1.0.4.jar[0m
+    ├── manifest.mf
+    ├── [01;34mnbproject[0m
+    │   ├── build-impl.xml
+    │   ├── genfiles.properties
+    │   ├── opencode.json
+    │   ├── [01;34mprivate[0m
+    │   │   ├── config.properties
+    │   │   ├── private.properties
+    │   │   └── private.xml
+    │   ├── project.properties
+    │   └── project.xml
+    ├── package.json
+    ├── [01;34msrc[0m
+    │   ├── [01;34maudios[0m
+    │   │   ├── [00;36merror.wav[0m
+    │   │   └── [00;36minicio.wav[0m
+    │   ├── [01;34mdao[0m
+    │   │   ├── BitacoraDAO.java
+    │   │   ├── ClienteDAO.java
+    │   │   ├── ConfiguracionesDAO.java
+    │   │   ├── CotizacionDAO.java
+    │   │   ├── Detalles_cotizacionDAO.java
+    │   │   ├── EvidenciaDAO.java
+    │   │   ├── HerramientaDAO.java
+    │   │   ├── InicializadorBD.java
+    │   │   ├── PagoDAO.java
+    │   │   ├── Tipos_herramientaDAO.java
+    │   │   ├── TrabajadorDAO.java
+    │   │   ├── TrabajoDAO.java
+    │   │   └── UsuariosDAO.java
+    │   ├── [01;34mImagenes[0m
+    │   │   ├── [01;35mcamara_claro.png[0m
+    │   │   ├── [01;35mcamara_oscuro.png[0m
+    │   │   ├── [01;35mherramientas_claro.png[0m
+    │   │   ├── [01;35mherramientas_oscuro.png[0m
+    │   │   ├── [01;35mlogo 2.0.png[0m
+    │   │   ├── [01;35mlogo.png[0m
+    │   │   ├── [01;35msigno-de-pregunta.png[0m
+    │   │   ├── [01;35musuario_claro.png[0m
+    │   │   └── [01;35musuario_oscuro.png[0m
+    │   └── [01;34msistema_en[0m
+    │       ├── Carpetas.java
+    │       ├── Conexion.java
+    │       ├── Controlador_arranque.java
+    │       ├── GoogleServicesProvider.java
+    │       ├── [01;34mObjetos[0m
+    │       │   ├── Bitacora.java
+    │       │   ├── Cliente.java
+    │       │   ├── Configuraciones.java
+    │       │   ├── Cotizacion.java
+    │       │   ├── Detalles_cotizacion.java
+    │       │   ├── Evidencia.java
+    │       │   ├── Exportar_PDF.java
+    │       │   ├── Herramienta.java
+    │       │   ├── Pago.java
+    │       │   ├── Tipos_herramienta.java
+    │       │   ├── Trabajador.java
+    │       │   └── Trabajo.java
+    │       ├── [01;34mRelaciones[0m
+    │       │   └── Bitacora_Trabajador.java
+    │       ├── Sistema_en.java
+    │       └── [01;34mVentanas[0m
+    │           ├── [01;34mdialogos[0m
+    │           │   ├── D_acerca_de.form
+    │           │   ├── D_acerca_de.java
+    │           │   ├── D_buscar_bitacora.form
+    │           │   ├── D_buscar_bitacora.java
+    │           │   ├── D_buscar_cliente.form
+    │           │   ├── D_buscar_cliente.java
+    │           │   ├── D_buscar_empleado.form
+    │           │   ├── D_buscar_empleado.java
+    │           │   ├── D_buscar_herramienta.form
+    │           │   ├── D_buscar_herramienta.java
+    │           │   ├── D_buscar_trabajo.form
+    │           │   ├── D_buscar_trabajo.java
+    │           │   ├── D_cambiar_contraseña.form
+    │           │   ├── D_cambiar_contraseña.java
+    │           │   ├── D_configuraciones.form
+    │           │   ├── D_configuraciones.java
+    │           │   ├── D_copias_seguridad.form
+    │           │   ├── D_copias_seguridad.java
+    │           │   ├── D_datos_empresa.form
+    │           │   ├── D_datos_empresa.java
+    │           │   ├── D_exportar_opciones.form
+    │           │   ├── D_exportar_opciones.java
+    │           │   ├── D_ficha_cliente.form
+    │           │   ├── D_ficha_cliente.java
+    │           │   ├── D_ficha_trabajo.form
+    │           │   ├── D_ficha_trabajo.java
+    │           │   ├── D_informacion_estatica.form
+    │           │   ├── D_informacion_estatica.java
+    │           │   ├── D_informes.form
+    │           │   ├── D_informes.java
+    │           │   ├── D_licencias_terceros.form
+    │           │   ├── D_licencias_terceros.java
+    │           │   ├── D_licencias_terceros_tabla.form
+    │           │   ├── D_licencias_terceros_tabla.java
+    │           │   ├── D_registrar_pagos.form
+    │           │   ├── D_registrar_pagos.java
+    │           │   ├── D_registro_usuario.form
+    │           │   └── D_registro_usuario.java
+    │           ├── [01;34mNo_utilizadas[0m
+    │           │   ├── V_ficha_trabajo.form
+    │           │   ├── V_ficha_trabajo.java
+    │           │   ├── V_pago_recibido.form
+    │           │   └── V_pago_recibido.java
+    │           ├── [01;34mVentanas_consultas[0m
+    │           │   ├── V_clientes.form
+    │           │   ├── V_clientes.java
+    │           │   ├── V_historial_c.form
+    │           │   ├── V_historial_c.java
+    │           │   ├── V_trabajos.form
+    │           │   └── V_trabajos.java
+    │           ├── V_login_user.form
+    │           ├── V_login_user.java
+    │           ├── V_menu.form
+    │           ├── V_menu.java
+    │           ├── V_R_Bitacora.form
+    │           ├── V_R_Bitacora.java
+    │           ├── V_R_Cotizacion.form
+    │           ├── V_R_Cotizacion.java
+    │           ├── V_R_Empleado.form
+    │           ├── V_R_Empleado.java
+    │           ├── V_R_Herramienta.form
+    │           ├── V_R_Herramienta.java
+    │           ├── V_R_Trabajo.form
+    │           └── V_R_Trabajo.java
+    ├── [01;34mtest[0m
+    └── [01;34mtokens[0m
+        └── StoredCredential
+
+37 directories, 629 files

@@ -120,6 +120,43 @@ public class CotizacionDAO {
     return listaCotizaciones; 
 }
     
+    public Cotizacion obtenerUltimaCotizacion(int id_trabajo) {
+        String sql = "SELECT * FROM Cotizacion WHERE id_trabajo = ? ORDER BY id_cotizacion DESC LIMIT 1";
+
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            if (con == null) return null;
+
+            ps.setInt(1, id_trabajo);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cotizacion c = new Cotizacion();
+
+                    c.setId_cotizacion(rs.getInt("id_cotizacion"));
+                    c.setId_trabajo(rs.getInt("id_trabajo"));
+                    c.setSubtotal(rs.getFloat("subtotal"));
+                    c.setIva(rs.getFloat("iva"));
+                    c.setTotal(rs.getFloat("total"));
+                    c.setEstado(rs.getString("estado"));
+                    c.setTipo(rs.getString("tipo"));
+
+                    String fecha_creacion = rs.getString("fecha_creacion");
+                    if (fecha_creacion != null && !fecha_creacion.trim().isEmpty()) {
+                        c.setFecha_creacion(LocalDate.parse(fecha_creacion));
+                    }
+
+                    return c;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener la ultima cotizacion: " + e.getMessage());
+        }
+
+        return null;
+    }
+
     public Cotizacion obtenerCotizacion(int id_cotizacion) {
     String sql = "SELECT * FROM Cotizacion WHERE id_cotizacion = ?";
 
@@ -318,4 +355,27 @@ public class CotizacionDAO {
             }
         }
     }
+    
+    public String obtenerTotal(int id_trabajo) {
+        String sql = "SELECT COALESCE(total, 0) AS total FROM Cotizacion WHERE id_trabajo = ? AND tipo = 'Aprobada'";
+        
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+             
+            if (con == null) return "0";
+            
+            ps.setInt(1, id_trabajo);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("total");
+                }
+                return "0";
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener el total de la cotizacion aprobada de la BD: " + e.getMessage());
+        }
+        return "0";
+    }
+    
 }

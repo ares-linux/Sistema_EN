@@ -146,4 +146,6 @@ public class BitacoraDAO {
         }
         return b;
     }
+    
+    
 }

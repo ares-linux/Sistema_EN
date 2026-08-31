@@ -4,6 +4,7 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.CotizacionDAO;
 import dao.PagoDAO;
 import dao.TrabajoDAO;
 import java.awt.Color;
@@ -357,6 +358,26 @@ public class D_registrar_pagos extends javax.swing.JDialog {
         t_id.setText(String.valueOf(trabajo.getId_trabajo()));
         
         id_trabajo = id_trabajo_i;
+        
+        CotizacionDAO DAO = new CotizacionDAO();
+        String total = DAO.obtenerTotal(id_trabajo);
+        
+        t_presupuestado.setText(formatearMoneda(parsearMonto(total)));
+    }
+
+    private float parsearMonto(String monto) {
+        if (monto == null || monto.trim().isEmpty()) {
+            return 0f;
+        }
+        try {
+            return Float.parseFloat(monto.trim());
+        } catch (NumberFormatException e) {
+            return 0f;
+        }
+    }
+
+    private String formatearMoneda(float valor) {
+        return String.format("$%,.2f", valor);
     }
     
     public void restablecer_color() {
@@ -452,6 +473,9 @@ public class D_registrar_pagos extends javax.swing.JDialog {
         DefaultTableModel modelo = (DefaultTableModel) this.Tabla_pagos.getModel();//crea una variable de tipo modelo de tabla 
         modelo.setRowCount(0);
         
+        CotizacionDAO DAO = new CotizacionDAO();
+        String total = DAO.obtenerTotal(id_trabajo);
+        
         PagoDAO dao = new PagoDAO();
         List<Pago> listaPagos = dao.obtenerPagos(id_trabajo);
         
@@ -466,8 +490,17 @@ public class D_registrar_pagos extends javax.swing.JDialog {
         
         this.Tabla_pagos.setModel(modelo);
         
-        int total_abonado = dao.sumarPagosPorTrabajo(id_trabajo);
-        t_abonado.setText(String.valueOf(total_abonado));
+        float total_abonado = dao.sumarPagosPorTrabajo(id_trabajo);
+        t_abonado.setText(formatearMoneda(total_abonado));
+        
+        float total_presupuestado = parsearMonto(total);
+        float diferencia = total_presupuestado - total_abonado;
+        if (diferencia < 0) {
+            diferencia = 0;
+        }
+        
+        t_saldo_pendiente.setText(formatearMoneda(diferencia));
+        
     }
 
     public void editar_tabla() {
