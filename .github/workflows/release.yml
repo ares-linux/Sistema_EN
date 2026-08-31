@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
 
       - name: Compilar con Ant
-        run: ant -f Sistema_en/build.xml jar
+        run: ant -f Sistema_en/build.xml -Dlibs.CopyLibs.classpath=Sistema_en/lib/org-netbeans-modules-java-j2seproject-copylibstask.jar jar
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
