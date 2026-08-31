@@ -11,6 +11,9 @@
     "jar": "dist/Sistema_en.jar",
     "title": "Sistema EN",
     "javaVersion": "17",
-    "icon": "/src/Imagenes/logo.png"
+    "icon": "/src/Imagenes/logo.png",
+    "files": [
+      { "dir": ".", "includes": "credentials.json" }
+    ]
   }
 }

@@ -53,7 +53,7 @@ public class Conexion {
         }
         Properties props = new Properties();
         props.setProperty(CLAVE_RUTA, rutaCompleta);
-        try (FileOutputStream out = new FileOutputStream(ARCHIVO_CONFIG)) {
+        try (FileOutputStream out = new FileOutputStream(UtilidadesRutas.archivoConfig(ARCHIVO_CONFIG))) {
             props.store(out, "Ruta de la base de datos SQLite");
         } catch (IOException e) {
             System.err.println("Error al guardar la ruta de la base de datos: " + e.getMessage());
@@ -75,7 +75,7 @@ public class Conexion {
     }
 
     private static Properties leerArchivoConfig() {
-        File archivo = new File(ARCHIVO_CONFIG);
+        File archivo = UtilidadesRutas.archivoConfig(ARCHIVO_CONFIG);
         if (!archivo.exists()) {
             return null;
         }

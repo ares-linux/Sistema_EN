@@ -68,9 +68,9 @@ public class GoogleServicesProvider {
     private static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
     public static Credential getCredentials(HttpTransport HTTP_TRANSPORT) throws Exception {
-        java.io.File credentialsFile = new java.io.File(CREDENTIALS_FILE_PATH);
+        java.io.File credentialsFile = UtilidadesRutas.archivoConfig(CREDENTIALS_FILE_PATH);
         if (!credentialsFile.exists()) {
-            throw new Exception("No se encontró el archivo '" + CREDENTIALS_FILE_PATH + "' en la raíz del proyecto.");
+            throw new Exception("No se encontró el archivo '" + CREDENTIALS_FILE_PATH + "' junto al ejecutable en: " + credentialsFile.getAbsolutePath());
         }
 
         GoogleClientSecrets clientSecrets;
@@ -80,7 +80,7 @@ public class GoogleServicesProvider {
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                .setDataStoreFactory(new FileDataStoreFactory(UtilidadesRutas.directorioTokens()))
                 .setAccessType("offline")
                 .build();
 
@@ -235,12 +235,12 @@ public class GoogleServicesProvider {
     }
 
     public static boolean estaConectado() {
-        java.io.File carpetaTokens = new java.io.File("tokens");
+        java.io.File carpetaTokens = UtilidadesRutas.directorioTokens();
         return carpetaTokens.exists() && carpetaTokens.isDirectory() && carpetaTokens.list().length > 0;
     }
 
     public static boolean desconectar() {
-        java.io.File carpetaTokens = new java.io.File("tokens");
+        java.io.File carpetaTokens = UtilidadesRutas.directorioTokens();
         if (carpetaTokens.exists()) {
             java.io.File[] archivos = carpetaTokens.listFiles();
             if (archivos != null) {
