@@ -39,7 +39,6 @@ public class D_acerca_de extends javax.swing.JDialog {
         b_descargar_manual = new javax.swing.JButton();
         b_licencias = new javax.swing.JButton();
         b_soporte = new javax.swing.JButton();
-        b_buscar_actualizaciones = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -47,9 +46,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(250, 610));
         setMinimumSize(new java.awt.Dimension(250, 610));
-        setPreferredSize(new java.awt.Dimension(250, 610));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -102,20 +99,11 @@ public class D_acerca_de extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
-        getContentPane().add(b_soporte, gridBagConstraints);
-
-        b_buscar_actualizaciones.setText("Buscar actualizaciones");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
-        getContentPane().add(b_buscar_actualizaciones, gridBagConstraints);
+        getContentPane().add(b_soporte, gridBagConstraints);
 
         b_cerrar.setText("Cerrar");
         b_cerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -125,14 +113,14 @@ public class D_acerca_de extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
         getContentPane().add(b_cerrar, gridBagConstraints);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Version");
+        jLabel1.setText("Version 1.0.1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -270,7 +258,6 @@ public class D_acerca_de extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton b_buscar_actualizaciones;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_descargar_manual;
     private javax.swing.JButton b_licencias;

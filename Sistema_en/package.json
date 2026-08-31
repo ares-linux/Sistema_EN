@@ -1,6 +1,6 @@
 {
   "name": "sistema-en",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Aplicación de gestión Sistema EN",
   "main": "index.js",
   "repository": {
@@ -11,6 +11,6 @@
     "jar": "dist/Sistema_en.jar",
     "title": "Sistema EN",
     "javaVersion": "17",
-    "icon": "src/Imagenes/logo.png"
+    "icon": "/src/Imagenes/logo.png"
   }
 }
