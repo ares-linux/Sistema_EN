@@ -1,0 +1,36 @@
+name: Publicar con jDeploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Compilar con Ant
+        working-directory: ./Sistema_en
+        run: ant jar
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar jDeploy y publicar
+        working-directory: ./Sistema_en
+        run: |
+          npm install -g jdeploy
+          jdeploy publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
