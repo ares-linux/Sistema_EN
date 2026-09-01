@@ -8,6 +8,7 @@ IDE usado: **NetBeans 17** <br>
 Librerias externas usadas: *JCalendar*, *FlatLaf* (para look and feel moderno), *AbsoluteLayout* (para diseño de GUI)
 Sistema administrador de bases de datos usado: **sqlite**.
 Programas adicionales usados: db browser for SQLite.
+Jdeploy: https://www.jdeploy.com/~sistema-en?all=1
 
 <p align="left">
 <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green">
