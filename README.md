@@ -22,7 +22,7 @@ Programas adicionales usados: db browser for SQLite.
 
 # 📖 Manual de GitHub Desktop: La Regla de Oro del Trabajo en Equipo
 
-¡Bienvenidos al proyecto! Para que los tres podamos trabajar al mismo tiempo sin borrar el código de los demás y mantener el proyecto ordenado, vamos a seguir una única **regla de oro obligatoria**:
+¡Bienvenidos al proyecto! Para que todos podamos trabajar al mismo tiempo sin borrar el código de los demás y mantener el proyecto ordenado, vamos a seguir una única **regla de oro obligatoria**:
 
 > 🚨 **PROHIBIDO programar directo en la rama `main`. Cada tarea, por más pequeña que sea, debe tener su propia rama.**
 
