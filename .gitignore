@@ -11,4 +11,8 @@ dist/
 
 # Configuración local de la ruta de la base de datos
 Sistema_en/base_de_datos.properties
+
+# Credenciales de Google OAuth y tokens por-usuario (no versionar)
+Sistema_en/credentials.json
+Sistema_en/tokens/
 *.py

@@ -13,7 +13,8 @@
     "javaVersion": "17",
     "icon": "/src/Imagenes/logo.png",
     "files": [
-      { "dir": ".", "includes": "credentials.json" }
+      { "dir": "dist",
+        "includes": "credentials.json"}
     ]
   }
 }
