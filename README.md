@@ -22,6 +22,12 @@ Jdeploy: https://www.jdeploy.com/~sistema-en?all=1
 
 **Pagina web del proyecto**: https://ares-linux.github.io/herramientas-equipo/
 
+**Documentación tecnica**:
+https://es.overleaf.com/project/6a9937acb90d921dc8580ec1
+
+**Manual de usuario**:
+https://es.overleaf.com/project/6a9937cf2fe2a1465509d3bb
+
 ---
 
 # 📖 Manual de GitHub Desktop: La Regla de Oro del Trabajo en Equipo
