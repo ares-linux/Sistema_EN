@@ -15,4 +15,9 @@ Sistema_en/base_de_datos.properties
 # Credenciales de Google OAuth y tokens por-usuario (no versionar)
 Sistema_en/credentials.json
 Sistema_en/tokens/
+
+# Carpetas generadas por jDeploy (artefactos de build con credenciales/tokens)
+Sistema_en/jdeploy/
+Sistema_en/jdeploy-bundle/
+Sistema_en/icon.png
 *.py
