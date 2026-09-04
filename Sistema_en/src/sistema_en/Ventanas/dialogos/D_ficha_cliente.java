@@ -562,6 +562,7 @@ public class D_ficha_cliente extends javax.swing.JDialog {
                 this.telefono = telefono;
                 restablecer_color(); 
                 b_editar.setBackground(null);
+                b_cerrar.setBackground(null);
                 t_nombre.setEnabled(false);
                 t_telefono.setEnabled(false);
                 b_editar.setText("Editar");

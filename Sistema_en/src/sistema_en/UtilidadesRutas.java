@@ -29,7 +29,44 @@ public class UtilidadesRutas {
         return new File(directorioBaseConfig(), nombre);
     }
 
+    public static File directorioConfigUsuario() {
+        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        String base = windows
+                ? System.getenv("APPDATA")
+                : System.getProperty("user.home");
+        if (base == null || base.isBlank()) {
+            base = System.getProperty("user.home");
+        }
+        File dir = new File(base, ".Sistema_EN");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return dir;
+    }
+
+    public static File archivoConfigUsuario(String nombre) {
+        return new File(directorioConfigUsuario(), nombre);
+    }
+
     public static File directorioTokens() {
-        return new File(directorioBaseConfig(), GoogleServicesProvider.TOKENS_DIRECTORY_PATH);
+        File dir = new File(directorioConfigUsuario(), GoogleServicesProvider.TOKENS_DIRECTORY_PATH);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return dir;
+    }
+
+    public static File buscarCredenciales() {
+        File[] candidatos = {
+            archivoConfig(GoogleServicesProvider.CREDENTIALS_FILE_PATH),
+            archivoConfigUsuario(GoogleServicesProvider.CREDENTIALS_FILE_PATH),
+            new File(System.getProperty("user.dir"), GoogleServicesProvider.CREDENTIALS_FILE_PATH)
+        };
+        for (File f : candidatos) {
+            if (f.exists() && f.isFile() && f.length() > 0) {
+                return f;
+            }
+        }
+        return null;
     }
 }

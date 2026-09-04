@@ -65,12 +65,15 @@ public class GoogleServicesProvider {
             SheetsScopes.SPREADSHEETS
     );
     
-    private static final String CREDENTIALS_FILE_PATH = "credentials.json";
+    public static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
     public static Credential getCredentials(HttpTransport HTTP_TRANSPORT) throws Exception {
-        java.io.File credentialsFile = UtilidadesRutas.archivoConfig(CREDENTIALS_FILE_PATH);
-        if (!credentialsFile.exists()) {
-            throw new Exception("No se encontró el archivo '" + CREDENTIALS_FILE_PATH + "' junto al ejecutable en: " + credentialsFile.getAbsolutePath());
+        java.io.File credentialsFile = UtilidadesRutas.buscarCredenciales();
+        if (credentialsFile == null) {
+            throw new Exception("No se encontró el archivo '" + CREDENTIALS_FILE_PATH + "' junto al ejecutable. "
+                    + "Rutas buscadas: " + UtilidadesRutas.archivoConfig(CREDENTIALS_FILE_PATH).getAbsolutePath()
+                    + ", " + UtilidadesRutas.archivoConfigUsuario(CREDENTIALS_FILE_PATH).getAbsolutePath()
+                    + ", " + new java.io.File(System.getProperty("user.dir"), CREDENTIALS_FILE_PATH).getAbsolutePath());
         }
 
         GoogleClientSecrets clientSecrets;

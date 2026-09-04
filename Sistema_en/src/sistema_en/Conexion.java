@@ -12,7 +12,6 @@ import java.util.Properties;
 
 public class Conexion {
 
-    private static final String RUTA_DEFECTO = "/home/ares/Documentos/Bases de datos/sistema_EN";
     private static final String ARCHIVO_CONFIG = "base_de_datos.properties";
     private static final String CLAVE_RUTA = "ruta";
     private static final String NOMBRE_ARCHIVO_BD = "sistema_EN";
@@ -26,6 +25,19 @@ public class Conexion {
         return rutaMemoria;
     }
 
+    public static String rutaDefectoBD() {
+        String home = System.getProperty("user.home");
+        boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
+        String carpetaDocumentos = "Documents";
+        if (!windows) {
+            java.io.File documentos = new java.io.File(home, "Documentos");
+            if (documentos.isDirectory()) {
+                carpetaDocumentos = "Documentos";
+            }
+        }
+        return Paths.get(home, carpetaDocumentos, "Bases de datos", "sistema_EN").toString();
+    }
+
     public static String obtenerRutaBD() {
         Properties props = leerArchivoConfig();
         if (props != null) {
@@ -34,8 +46,8 @@ public class Conexion {
                 return ruta;
             }
         }
-        guardarRutaBD(RUTA_DEFECTO);
-        return RUTA_DEFECTO;
+        guardarRutaBD(rutaDefectoBD());
+        return rutaDefectoBD();
     }
 
     public static String rutaArchivoBD() {
@@ -53,7 +65,7 @@ public class Conexion {
         }
         Properties props = new Properties();
         props.setProperty(CLAVE_RUTA, rutaCompleta);
-        try (FileOutputStream out = new FileOutputStream(UtilidadesRutas.archivoConfig(ARCHIVO_CONFIG))) {
+        try (FileOutputStream out = new FileOutputStream(UtilidadesRutas.archivoConfigUsuario(ARCHIVO_CONFIG))) {
             props.store(out, "Ruta de la base de datos SQLite");
         } catch (IOException e) {
             System.err.println("Error al guardar la ruta de la base de datos: " + e.getMessage());
@@ -75,7 +87,7 @@ public class Conexion {
     }
 
     private static Properties leerArchivoConfig() {
-        File archivo = UtilidadesRutas.archivoConfig(ARCHIVO_CONFIG);
+        File archivo = UtilidadesRutas.archivoConfigUsuario(ARCHIVO_CONFIG);
         if (!archivo.exists()) {
             return null;
         }

@@ -1354,6 +1354,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
                 opciones[0]);
 
         if (eleccion == 0) {
+            cargarEvidenciasDeDrive();
             seleccionarDeDrive();
         } else if (eleccion == 1) {
             subirImagenLocal();

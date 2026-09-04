@@ -50,6 +50,7 @@ public class Controlador_arranque {
                 opciones.add("Cambiar de cuenta de Google y reintentar");
             }
             opciones.add("Buscar la base de datos manualmente");
+            opciones.add("Usar la ubicación por defecto y crear BD");
             opciones.add("Crear una base de datos nueva");
             opciones.add("Salir del programa");
 
@@ -83,6 +84,12 @@ public class Controlador_arranque {
             }
             if ("Buscar la base de datos manualmente".equals(eleccion)) {
                 if (buscarManual()) {
+                    return true;
+                }
+                continue;
+            }
+            if ("Usar la ubicación por defecto y crear BD".equals(eleccion)) {
+                if (crearEnUbicacionPorDefecto()) {
                     return true;
                 }
                 continue;
@@ -174,6 +181,54 @@ public class Controlador_arranque {
                     "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+
+        Conexion.guardarRutaBD(ruta);
+
+        JOptionPane.showMessageDialog(null,
+                "Base de datos nueva creada correctamente en:\n" + ruta,
+                "Base de datos creada",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        if (GoogleServicesProvider.estaConectado()) {
+            int subir = JOptionPane.showConfirmDialog(null,
+                    "¿Desea subir esta base de datos nueva a Google Drive como respaldo?\n"
+                    + "Esto sobreescribira el respaldo existente en Drive.",
+                    "Subir respaldo a Drive",
+                    JOptionPane.YES_NO_OPTION);
+            if (subir == JOptionPane.YES_OPTION) {
+                String idCarpeta = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
+                GoogleServicesProvider.subirArchivo(ruta, idCarpeta);
+            }
+        }
+
+        mostrarRegistroInicial();
+
+        return true;
+    }
+
+    private static boolean crearEnUbicacionPorDefecto() {
+        String ruta = Conexion.rutaDefectoBD();
+        File archivoBD = new File(ruta);
+        File directorio = archivoBD.getParentFile();
+        if (directorio != null && !directorio.exists()) {
+            directorio.mkdirs();
+        }
+
+        if (archivoBD.exists()) {
+            JOptionPane.showMessageDialog(null,
+                    "Ya existe una base de datos en la ubicación por defecto:\n" + ruta,
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            Conexion.guardarRutaBD(ruta);
+            return true;
+        }
+
+        if (!InicializadorBD.crearBaseDatos(ruta)) {
+            JOptionPane.showMessageDialog(null, "No se pudo crear la base de datos.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        Conexion.guardarRutaBD(ruta);
 
         JOptionPane.showMessageDialog(null,
                 "Base de datos nueva creada correctamente en:\n" + ruta,
