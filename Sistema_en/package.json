@@ -1,6 +1,6 @@
 {
     "author": "SOFTIUM",
-    "name": "Sistema-en",
+    "name": "sistema-en",
     "description": "Aplicación de gestión Sistema EN",
     "main": "index.js",
     "repository": {"url": "https://github.com/ares-linux/Sistema_EN.git"},
