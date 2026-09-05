@@ -291,26 +291,27 @@ public class V_login_user extends javax.swing.JFrame {
 
         String sql = "SELECT contraseña FROM usuarios WHERE usuario = ?";
     
-        try (Connection con = sistema_en.Conexion.conectar();
-            java.sql.PreparedStatement pst = con.prepareStatement(sql)) {
+        try (Connection con = sistema_en.Conexion.conectar()) {
         
             if (con == null) {
                 javax.swing.JOptionPane.showMessageDialog(this, "No se pudo establecer conexión con la base de datos.");
                 return;
             }
 
-            pst.setString(1, usuarioIngresado);
-        
-            try (java.sql.ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
- 
-                hashDesdeBaseDatos = rs.getString("contraseña");
-            } else {
-                // El usuario no existe en la base de datos
-                l_aviso_user.setVisible(true);
-                error = true;
+            try (java.sql.PreparedStatement pst = con.prepareStatement(sql)) {
+                pst.setString(1, usuarioIngresado);
+
+                try (java.sql.ResultSet rs = pst.executeQuery()) {
+                    if (rs.next()) {
+
+                        hashDesdeBaseDatos = rs.getString("contraseña");
+                    } else {
+                        // El usuario no existe en la base de datos
+                        l_aviso_user.setVisible(true);
+                        error = true;
+                    }
+                }
             }
-        }
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
             javax.swing.JOptionPane.showMessageDialog(this, "Error al consultar la base de datos: " + e.getMessage());

@@ -106,34 +106,36 @@ public class TrabajoDAO {
                      "INNER JOIN Cliente c ON t.id_cliente = c.id_cliente " +
                      "WHERE t.id_cliente = ?" ;
 
-    Connection con = Conexion.conectar();
+    try (Connection con = Conexion.conectar()) {
 
-    if (con == null) return lista;
+        if (con == null) return lista;
 
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setInt(1, id_cliente);
+            ps.setInt(1, id_cliente);
 
-        ResultSet rs = ps.executeQuery();
+            try (ResultSet rs = ps.executeQuery()) {
 
-        while (rs.next()) {
+                while (rs.next()) {
 
-            String[] fila = new String[11];
-            fila[0] = String.valueOf(rs.getInt("id_trabajo"));
-            fila[1] = String.valueOf(rs.getInt("id_cliente"));
-            fila[2] = rs.getString("nombre_c"); 
-            fila[3] = rs.getString("telefono");
-            fila[4] = rs.getString("direccion");
-            fila[5] = rs.getString("descripcion");
-            fila[6] = rs.getString("fecha_cr");
-            fila[7] = rs.getString("hora_cr");
-            fila[8] = rs.getString("estado");
-            fila[9] = rs.getString("fecha_inicio");
-            fila[10] = rs.getString("fecha_fin");
+                    String[] fila = new String[11];
+                    fila[0] = String.valueOf(rs.getInt("id_trabajo"));
+                    fila[1] = String.valueOf(rs.getInt("id_cliente"));
+                    fila[2] = rs.getString("nombre_c"); 
+                    fila[3] = rs.getString("telefono");
+                    fila[4] = rs.getString("direccion");
+                    fila[5] = rs.getString("descripcion");
+                    fila[6] = rs.getString("fecha_cr");
+                    fila[7] = rs.getString("hora_cr");
+                    fila[8] = rs.getString("estado");
+                    fila[9] = rs.getString("fecha_inicio");
+                    fila[10] = rs.getString("fecha_fin");
 
-            lista.add(fila);
+                    lista.add(fila);
+                }
+            }
+
         }
-
     } catch (SQLException e) {
         System.err.println(e.getMessage());
     }
@@ -364,16 +366,16 @@ public boolean eliminarTrabajo(int idTrabajo) {
 
 public boolean actualizarTrabajoDetalles(int id_trabajo, String estado, String fecha_inicio, String fecha_fin) {
     String sql = "UPDATE Trabajo SET estado = ?, fecha_inicio = ?, fecha_fin = ? WHERE id_trabajo = ?;";
-    try {
-        Connection con = Conexion.conectar();
+    try (Connection con = Conexion.conectar()) {
         if (con != null) {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, estado);
-            ps.setString(2, fecha_inicio);
-            ps.setString(3, fecha_fin);
-            ps.setInt(4, id_trabajo);
-            
-            return ps.executeUpdate() > 0;
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, estado);
+                ps.setString(2, fecha_inicio);
+                ps.setString(3, fecha_fin);
+                ps.setInt(4, id_trabajo);
+
+                return ps.executeUpdate() > 0;
+            }
         }
     } catch (SQLException e) {
         System.err.println("Error al actualizar trabajo: " + e.getMessage());
@@ -402,15 +404,15 @@ public boolean actualizarTrabajoCarpeta(int id_trabajo, String carpeta) {
 
 public boolean actualizarTrabajo(int id_trabajo, String direccion ,String descripcion) {
     String sql = "UPDATE Trabajo SET direccion = ?, descripcion = ? WHERE id_trabajo = ?;";
-    try {
-        Connection con = Conexion.conectar();
+    try (Connection con = Conexion.conectar()) {
         if (con != null) {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, direccion);
-            ps.setString(2, descripcion);
-            ps.setInt(3, id_trabajo);
-            
-            return ps.executeUpdate() > 0;
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, direccion);
+                ps.setString(2, descripcion);
+                ps.setInt(3, id_trabajo);
+
+                return ps.executeUpdate() > 0;
+            }
         }
     } catch (SQLException e) {
         System.err.println("Error al actualizar trabajo: " + e.getMessage());
@@ -476,14 +478,14 @@ public List<Trabajo> obtenerTrabajosPendientes() {
 
 public boolean actualizarTrabajoIdCarpeta(int id_trabajo, String id_carpeta) {
     String sql = "UPDATE Trabajo SET id_carpeta = ? WHERE id_trabajo = ?;";
-    try {
-        Connection con = Conexion.conectar();
+    try (Connection con = Conexion.conectar()) {
         if (con != null) {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, id_carpeta);
-            ps.setInt(2, id_trabajo);
-            
-            return ps.executeUpdate() > 0;
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, id_carpeta);
+                ps.setInt(2, id_trabajo);
+
+                return ps.executeUpdate() > 0;
+            }
         }
     } catch (SQLException e) {
         System.err.println("Error al actualizar trabajo: " + e.getMessage());

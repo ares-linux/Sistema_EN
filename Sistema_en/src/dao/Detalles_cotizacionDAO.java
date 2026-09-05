@@ -23,28 +23,29 @@ public class Detalles_cotizacionDAO {
     List<Detalles_cotizacion> listaDetalles_cotizacions = new ArrayList<>(); 
     String sql = "SELECT * FROM Detalles_cotizacion WHERE id_cotizacion = ?";
 
-    Connection con = Conexion.conectar();
-    if (con == null) {
-        System.err.println("No se pudo conectar a la base de datos.");
-        return listaDetalles_cotizacions;
-    }
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
+    try (Connection con = Conexion.conectar()) {
+        if (con == null) {
+            System.err.println("No se pudo conectar a la base de datos.");
+            return listaDetalles_cotizacions;
+        }
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setInt(1, id_cotizacion);
-        try (ResultSet rs = ps.executeQuery()) {
-            
-            while (rs.next()) {
-                Detalles_cotizacion d = new Detalles_cotizacion();
+            ps.setInt(1, id_cotizacion);
+            try (ResultSet rs = ps.executeQuery()) {
 
-                d.setId_detalle(rs.getInt("id_detalle"));
-                d.setId_cotizacion(rs.getInt("id_cotizacion"));
-                d.setConcepto(rs.getString("concepto"));
-                d.setN_material(rs.getString("n_material"));
-                d.setCantidad(rs.getFloat("cantidad"));
-                d.setPrecio_uni(rs.getFloat("precio_uni"));
-                d.setPrecio(rs.getFloat("precio"));
-                
-                listaDetalles_cotizacions.add(d); 
+                while (rs.next()) {
+                    Detalles_cotizacion d = new Detalles_cotizacion();
+
+                    d.setId_detalle(rs.getInt("id_detalle"));
+                    d.setId_cotizacion(rs.getInt("id_cotizacion"));
+                    d.setConcepto(rs.getString("concepto"));
+                    d.setN_material(rs.getString("n_material"));
+                    d.setCantidad(rs.getFloat("cantidad"));
+                    d.setPrecio_uni(rs.getFloat("precio_uni"));
+                    d.setPrecio(rs.getFloat("precio"));
+
+                    listaDetalles_cotizacions.add(d);
+                }
             }
         }
     } catch (SQLException e) {
@@ -57,21 +58,22 @@ public class Detalles_cotizacionDAO {
     public boolean insertarDetalles_cotizacion(String concepto,String n_material, float cantidad, float precio_uni,float precio, int id_cotizacion) {
     String sql = "INSERT INTO Detalles_cotizacion (concepto,n_material,cantidad,precio_uni,precio,id_cotizacion) VALUES (?,?,?,?,?,?)";
     
-    Connection con = Conexion.conectar();
-    if (con == null) {
-        System.err.println("No se pudo conectar a la base de datos.");
-        return false;
-    }
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-        
-        ps.setString(1, concepto);
-        ps.setString(2, n_material);
-        ps.setFloat(3, cantidad);
-        ps.setFloat(4, precio_uni);
-        ps.setFloat(5, precio);
-        ps.setInt(6, id_cotizacion);
-        
-        return ps.executeUpdate() > 0;
+    try (Connection con = Conexion.conectar()) {
+        if (con == null) {
+            System.err.println("No se pudo conectar a la base de datos.");
+            return false;
+        }
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, concepto);
+            ps.setString(2, n_material);
+            ps.setFloat(3, cantidad);
+            ps.setFloat(4, precio_uni);
+            ps.setFloat(5, precio);
+            ps.setInt(6, id_cotizacion);
+
+            return ps.executeUpdate() > 0;
+        }
     } catch (SQLException e) {
         System.err.println("Error al insertar los detalles cotizacion: " + e.getMessage());
         return false;
@@ -81,22 +83,23 @@ public class Detalles_cotizacionDAO {
     public boolean actualizarDetalles_cotizacion(String concepto,String n_material, float cantidad, float precio_uni,float precio, int id_cotizacion, int id_detalle) {
         String sql = "UPDATE Detalles_cotizacion SET concepto = ?, n_material = ?, cantidad = ?, precio_uni = ?, precio = ?, id_cotizacion = ? WHERE id_detalle = ?;";
         
-        Connection con = Conexion.conectar();
-        if (con == null) {
-            System.err.println("No se pudo conectar a la base de datos.");
-            return false;
-        }
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            
-            ps.setString(1, concepto);
-            ps.setString(2, n_material);
-            ps.setFloat(3, cantidad);
-            ps.setFloat(4, precio_uni);
-            ps.setFloat(5, precio);
-            ps.setInt(6, id_cotizacion);
-            ps.setInt(7, id_detalle);
-            
-            return ps.executeUpdate() > 0;
+        try (Connection con = Conexion.conectar()) {
+            if (con == null) {
+                System.err.println("No se pudo conectar a la base de datos.");
+                return false;
+            }
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+                ps.setString(1, concepto);
+                ps.setString(2, n_material);
+                ps.setFloat(3, cantidad);
+                ps.setFloat(4, precio_uni);
+                ps.setFloat(5, precio);
+                ps.setInt(6, id_cotizacion);
+                ps.setInt(7, id_detalle);
+
+                return ps.executeUpdate() > 0;
+            }
         } catch (SQLException e) {
             System.err.println("Error al actualizar los detalles cotizacion: " + e.getMessage());
         }
@@ -106,16 +109,17 @@ public class Detalles_cotizacionDAO {
     public boolean eliminarDetalles_cotizacion(int id_detalle) {
     String sql = "DELETE FROM Detalles_cotizacion WHERE id_detalle = ?";
 
-    Connection con = Conexion.conectar();
-    if (con == null) {
-        System.err.println("No se pudo conectar a la base de datos.");
-        return false;
-    }
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
+    try (Connection con = Conexion.conectar()) {
+        if (con == null) {
+            System.err.println("No se pudo conectar a la base de datos.");
+            return false;
+        }
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
 
-        ps.setInt(1, id_detalle);
-        return ps.executeUpdate() > 0;
+            ps.setInt(1, id_detalle);
+            return ps.executeUpdate() > 0;
 
+        }
     } catch (SQLException e) {
         System.err.println("Error al eliminar los detalles cotizacion de la BD: " + e.getMessage());
         return false;

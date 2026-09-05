@@ -86,32 +86,33 @@ public class TrabajadorDAO {
                  ? "SELECT * FROM Trabajador WHERE nombre LIKE ?" 
                  : "SELECT * FROM Trabajador WHERE nombre LIKE ? AND puesto = ?";
     
-    Connection con = Conexion.conectar();
-    if (con == null) return lista;
+    try (Connection con = Conexion.conectar()) {
+        if (con == null) return lista;
 
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-        // El primer parámetro siempre es el nombre con comodines
-        ps.setString(1, "%" + nombre + "%");
-        
-        // El segundo parámetro solo se añade si filtramos por un puesto específico
-        if (!puesto.equals("Todos")) {
-            ps.setString(2, puesto);
-        }
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            // El primer parámetro siempre es el nombre con comodines
+            ps.setString(1, "%" + nombre + "%");
 
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                
-                String[] trabajador = new String[8]; 
-                trabajador[0] = rs.getString("id_trabajador");
-                trabajador[1] = rs.getString("nombre");
-                trabajador[2] = rs.getString("sexo");
-                trabajador[3] = rs.getString("puesto");
-                trabajador[4] = rs.getString("rfc");
-                trabajador[5] = rs.getString("curp");
-                trabajador[6] = rs.getString("f_nac");
-                trabajador[7] = rs.getString("foto");
-                
-                lista.add(trabajador);
+            // El segundo parámetro solo se añade si filtramos por un puesto específico
+            if (!puesto.equals("Todos")) {
+                ps.setString(2, puesto);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+
+                    String[] trabajador = new String[8];
+                    trabajador[0] = rs.getString("id_trabajador");
+                    trabajador[1] = rs.getString("nombre");
+                    trabajador[2] = rs.getString("sexo");
+                    trabajador[3] = rs.getString("puesto");
+                    trabajador[4] = rs.getString("rfc");
+                    trabajador[5] = rs.getString("curp");
+                    trabajador[6] = rs.getString("f_nac");
+                    trabajador[7] = rs.getString("foto");
+
+                    lista.add(trabajador);
+                }
             }
         }
     } catch (SQLException e) {

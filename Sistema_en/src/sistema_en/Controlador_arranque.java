@@ -3,6 +3,9 @@ package sistema_en;
 import dao.InicializadorBD;
 import dao.UsuariosDAO;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
@@ -14,6 +17,7 @@ public class Controlador_arranque {
 
     public static boolean iniciar() {
         String ruta = Conexion.rutaArchivoBD();
+        System.out.println("[arranque] version=" + Conexion.VERSION_APP + " bd=" + ruta);
         if (new File(ruta).exists()) {
             if (!java.nio.file.Files.isWritable(new File(ruta).toPath())) {
                 JOptionPane.showMessageDialog(null,
@@ -25,6 +29,7 @@ public class Controlador_arranque {
             }
             InicializadorBD.asegurarEsquema(ruta);
             InicializadorBD.asegurarConfiguraciones(ruta);
+            verificarSondaEscritura(ruta);
             if (!new UsuariosDAO().existeAdministrador()) {
                 return registrarUsuarioObligatorio();
             }
@@ -41,6 +46,32 @@ public class Controlador_arranque {
             resultado[0] = false;
         }
         return resultado[0];
+    }
+
+    private static void verificarSondaEscritura(String ruta) {
+        try (Connection con = Conexion.conectar()) {
+            if (con == null) {
+                throw new SQLException("conexión nula");
+            }
+            try (Statement st = con.createStatement()) {
+                st.executeUpdate("CREATE TABLE IF NOT EXISTS _sonda_escritura (id INTEGER)");
+                st.executeUpdate("DELETE FROM _sonda_escritura");
+                st.executeUpdate("DROP TABLE IF EXISTS _sonda_escritura");
+            }
+            System.out.println("[arranque] sondaEscritura=OK");
+        } catch (SQLException e) {
+            System.err.println("[arranque] sondaEscritura=BLOQUEADA: " + e.getMessage());
+            JOptionPane.showMessageDialog(null,
+                    "La base de datos está bloqueada por otro proceso.\n\n"
+                    + "No podrá guardar cotizaciones ni modificar registros hasta que se libere.\n\n"
+                    + "Posibles causas y solución:\n"
+                    + "1. Otra instancia del programa abierta: cierre todas (Administrador de tareas)\n"
+                    + "   y finalice los procesos javaw.exe / Sistema_en.exe que queden.\n"
+                    + "2. Antivirus o Backup de Windows reteniendo el archivo: pauselos o excluya\n"
+                    + "   la carpeta " + ruta + " de ellos.\n"
+                    + "3. Viendo el archivo en algún visor de bases de datos: ciérrelo.",
+                    "Base de datos bloqueada", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private static boolean recuperarYResolver() {

@@ -275,89 +275,89 @@ public class CotizacionDAO {
         String sqlCotizacion = "INSERT INTO Cotizacion (subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo) VALUES (?, ?, ?, ?, ?, ?, ?)";
         String sqlDetalle = "INSERT INTO Detalles_cotizacion (concepto, n_material, cantidad, precio_uni, precio, id_cotizacion) VALUES (?, ?, ?, ?, ?, ?)";
 
-        Connection con = null;
-        try {
-            con = Conexion.conectar();
-            if (con == null) {
-                System.err.println("No se pudo conectar a la base de datos.");
-                return false;
-            }
-            // 1. Desactivamos el autoCommit para iniciar manualmente la transacción
-            con.setAutoCommit(false);
-
-            // 2. Insertar la Cotización principal
-            int idCotizacionGenerado = -1;
-            try (PreparedStatement psCotizacion = con.prepareStatement(sqlCotizacion, java.sql.Statement.RETURN_GENERATED_KEYS)) {
-                psCotizacion.setFloat(1, cotizacion.getSubtotal());
-                psCotizacion.setFloat(2, cotizacion.getIva());
-                psCotizacion.setFloat(3, cotizacion.getTotal());
-                psCotizacion.setString(4, cotizacion.getEstado());
-                psCotizacion.setString(5, cotizacion.getTipo());
-                // Asegúrate de enviar la fecha adecuadamente según tu BD (String o LocalDate)
-                psCotizacion.setString(6, cotizacion.getFecha_creacion() != null ? cotizacion.getFecha_creacion().toString() : null);
-
-                if (cotizacion.getId_trabajo() != 0) {
-                    psCotizacion.setInt(7, cotizacion.getId_trabajo());
-                } else {
-                    psCotizacion.setNull(7, java.sql.Types.INTEGER);
+        for (int intento = 1; intento <= 3; intento++) {
+            Connection con = null;
+            try {
+                con = Conexion.conectar();
+                if (con == null) {
+                    System.err.println("No se pudo conectar a la base de datos.");
+                    return false;
                 }
+                // 1. Desactivamos el autoCommit para iniciar manualmente la transacción
+                con.setAutoCommit(false);
 
-                psCotizacion.executeUpdate();
+                // 2. Insertar la Cotización principal
+                int idCotizacionGenerado = -1;
+                try (PreparedStatement psCotizacion = con.prepareStatement(sqlCotizacion, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+                    psCotizacion.setFloat(1, cotizacion.getSubtotal());
+                    psCotizacion.setFloat(2, cotizacion.getIva());
+                    psCotizacion.setFloat(3, cotizacion.getTotal());
+                    psCotizacion.setString(4, cotizacion.getEstado());
+                    psCotizacion.setString(5, cotizacion.getTipo());
+                    // Asegúrate de enviar la fecha adecuadamente según tu BD (String o LocalDate)
+                    psCotizacion.setString(6, cotizacion.getFecha_creacion() != null ? cotizacion.getFecha_creacion().toString() : null);
 
-                try (ResultSet rs = psCotizacion.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        idCotizacionGenerado = rs.getInt(1);
+                    if (cotizacion.getId_trabajo() != 0) {
+                        psCotizacion.setInt(7, cotizacion.getId_trabajo());
+                    } else {
+                        psCotizacion.setNull(7, java.sql.Types.INTEGER);
+                    }
+
+                    psCotizacion.executeUpdate();
+
+                    try (ResultSet rs = psCotizacion.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            idCotizacionGenerado = rs.getInt(1);
+                        }
                     }
                 }
-            }
 
-            if (idCotizacionGenerado == -1) {
-                throw new SQLException("No se pudo obtener el ID de la cotización generada.");
-            }
-
-            // 3. Insertar todos los detalles asociados
-            try (PreparedStatement psDetalle = con.prepareStatement(sqlDetalle)) {
-                for (Detalles_cotizacion det : listaDetalles) {
-                    psDetalle.setString(1, det.getConcepto());
-                    psDetalle.setString(2, det.getN_material());
-                    psDetalle.setFloat(3, det.getCantidad());
-                    psDetalle.setFloat(4, det.getPrecio_uni());
-                    psDetalle.setFloat(5, det.getPrecio());
-                    psDetalle.setInt(6, idCotizacionGenerado);
-                    
-                    // Añadimos la consulta al lote (batch) para mejor rendimiento
-                    psDetalle.addBatch();
+                if (idCotizacionGenerado == -1) {
+                    throw new SQLException("No se pudo obtener el ID de la cotización generada.");
                 }
-                // Ejecutamos la inserción en lote
-                psDetalle.executeBatch();
-            }
 
-            // 4. Si todo salió bien, confirmamos todos los cambios en la BD
-            con.commit();
-            return true;
+                // 3. Insertar todos los detalles asociados
+                try (PreparedStatement psDetalle = con.prepareStatement(sqlDetalle)) {
+                    for (Detalles_cotizacion det : listaDetalles) {
+                        psDetalle.setString(1, det.getConcepto());
+                        psDetalle.setString(2, det.getN_material());
+                        psDetalle.setFloat(3, det.getCantidad());
+                        psDetalle.setFloat(4, det.getPrecio_uni());
+                        psDetalle.setFloat(5, det.getPrecio());
+                        psDetalle.setInt(6, idCotizacionGenerado);
 
-        } catch (SQLException e) {
-            System.err.println("Error en la transacción, realizando rollback: " + e.getMessage());
-            if (con != null) {
-                try {
-                    // Deshacemos cualquier cambio en caso de error
-                    con.rollback();
-                } catch (SQLException ex) {
-                    System.err.println("Error al intentar realizar el rollback: " + ex.getMessage());
+                        // Añadimos la consulta al lote (batch) para mejor rendimiento
+                        psDetalle.addBatch();
+                    }
+                    // Ejecutamos la inserción en lote
+                    psDetalle.executeBatch();
                 }
-            }
-            return false;
-        } finally {
-            if (con != null) {
-                try {
-                    // Restauramos el autoCommit y cerramos la conexión
-                    con.setAutoCommit(true);
-                    con.close();
-                } catch (SQLException e) {
-                    System.err.println("Error al cerrar la conexión: " + e.getMessage());
+
+                // 4. Si todo salió bien, confirmamos todos los cambios en la BD
+                con.commit();
+                return true;
+
+            } catch (SQLException e) {
+                if (esBloqueoBD(e) && intento < 3) {
+                    System.err.println("Base de datos ocupada, reintentando (intento " + intento + " de 3)...");
+                    esperarReintento();
+                    continue;
                 }
+                System.err.println("Error en la transacción, realizando rollback: " + e.getMessage());
+                if (con != null) {
+                    try {
+                        // Deshacemos cualquier cambio en caso de error
+                        con.rollback();
+                    } catch (SQLException ex) {
+                        System.err.println("Error al intentar realizar el rollback: " + ex.getMessage());
+                    }
+                }
+                return false;
+            } finally {
+                cerrarSeguro(con);
             }
         }
+        return false;
     }
     
     public boolean actualizarCotizacionConDetalles(float subtotal, float iva, float total, String estado,
@@ -370,80 +370,105 @@ public class CotizacionDAO {
         String sqlDetalleUpdate = "UPDATE Detalles_cotizacion SET concepto = ?, n_material = ?, cantidad = ?, "
                 + "precio_uni = ?, precio = ? WHERE id_detalle = ? AND id_cotizacion = ?";
 
-        Connection con = null;
-        try {
-            con = Conexion.conectar();
-            if (con == null) {
-                System.err.println("No se pudo conectar a la base de datos.");
-                return false;
-            }
-            con.setAutoCommit(false);
-
-            try (PreparedStatement ps = con.prepareStatement(sqlCotizacion)) {
-                ps.setFloat(1, subtotal);
-                ps.setFloat(2, iva);
-                ps.setFloat(3, total);
-                ps.setString(4, estado);
-                ps.setString(5, tipo);
-                ps.setString(6, fecha_creacion);
-                if (id_trabajo != 0) {
-                    ps.setInt(7, id_trabajo);
-                } else {
-                    ps.setNull(7, java.sql.Types.INTEGER);
+        for (int intento = 1; intento <= 3; intento++) {
+            Connection con = null;
+            try {
+                con = Conexion.conectar();
+                if (con == null) {
+                    System.err.println("No se pudo conectar a la base de datos.");
+                    return false;
                 }
-                ps.setInt(8, id_cotizacion);
-                if (ps.executeUpdate() == 0) {
-                    throw new SQLException("La cotización " + id_cotizacion + " no existe o no fue modificada.");
-                }
-            }
+                con.setAutoCommit(false);
 
-            try (PreparedStatement psNuevo = con.prepareStatement(sqlDetalleNuevo);
-                 PreparedStatement psUpdate = con.prepareStatement(sqlDetalleUpdate)) {
-                for (Detalles_cotizacion det : listaDetalles) {
-                    if (det.getId_detalle() > 0) {
-                        psUpdate.setString(1, det.getConcepto());
-                        psUpdate.setString(2, det.getN_material());
-                        psUpdate.setFloat(3, det.getCantidad());
-                        psUpdate.setFloat(4, det.getPrecio_uni());
-                        psUpdate.setFloat(5, det.getPrecio());
-                        psUpdate.setInt(6, det.getId_detalle());
-                        psUpdate.setInt(7, id_cotizacion);
-                        psUpdate.addBatch();
+                try (PreparedStatement ps = con.prepareStatement(sqlCotizacion)) {
+                    ps.setFloat(1, subtotal);
+                    ps.setFloat(2, iva);
+                    ps.setFloat(3, total);
+                    ps.setString(4, estado);
+                    ps.setString(5, tipo);
+                    ps.setString(6, fecha_creacion);
+                    if (id_trabajo != 0) {
+                        ps.setInt(7, id_trabajo);
                     } else {
-                        psNuevo.setString(1, det.getConcepto());
-                        psNuevo.setString(2, det.getN_material());
-                        psNuevo.setFloat(3, det.getCantidad());
-                        psNuevo.setFloat(4, det.getPrecio_uni());
-                        psNuevo.setFloat(5, det.getPrecio());
-                        psNuevo.setInt(6, id_cotizacion);
-                        psNuevo.addBatch();
+                        ps.setNull(7, java.sql.Types.INTEGER);
+                    }
+                    ps.setInt(8, id_cotizacion);
+                    if (ps.executeUpdate() == 0) {
+                        throw new SQLException("La cotización " + id_cotizacion + " no existe o no fue modificada.");
                     }
                 }
-                psUpdate.executeBatch();
-                psNuevo.executeBatch();
-            }
 
-            con.commit();
-            return true;
+                try (PreparedStatement psNuevo = con.prepareStatement(sqlDetalleNuevo);
+                     PreparedStatement psUpdate = con.prepareStatement(sqlDetalleUpdate)) {
+                    for (Detalles_cotizacion det : listaDetalles) {
+                        if (det.getId_detalle() > 0) {
+                            psUpdate.setString(1, det.getConcepto());
+                            psUpdate.setString(2, det.getN_material());
+                            psUpdate.setFloat(3, det.getCantidad());
+                            psUpdate.setFloat(4, det.getPrecio_uni());
+                            psUpdate.setFloat(5, det.getPrecio());
+                            psUpdate.setInt(6, det.getId_detalle());
+                            psUpdate.setInt(7, id_cotizacion);
+                            psUpdate.addBatch();
+                        } else {
+                            psNuevo.setString(1, det.getConcepto());
+                            psNuevo.setString(2, det.getN_material());
+                            psNuevo.setFloat(3, det.getCantidad());
+                            psNuevo.setFloat(4, det.getPrecio_uni());
+                            psNuevo.setFloat(5, det.getPrecio());
+                            psNuevo.setInt(6, id_cotizacion);
+                            psNuevo.addBatch();
+                        }
+                    }
+                    psUpdate.executeBatch();
+                    psNuevo.executeBatch();
+                }
 
-        } catch (SQLException e) {
-            System.err.println("Error en la transaccion de actualizacion, realizando rollback: " + e.getMessage());
-            if (con != null) {
-                try {
-                    con.rollback();
-                } catch (SQLException ex) {
-                    System.err.println("Error al intentar realizar el rollback: " + ex.getMessage());
+                con.commit();
+                return true;
+
+            } catch (SQLException e) {
+                if (esBloqueoBD(e) && intento < 3) {
+                    System.err.println("Base de datos ocupada, reintentando (intento " + intento + " de 3)...");
+                    esperarReintento();
+                    continue;
                 }
+                System.err.println("Error en la transaccion de actualizacion, realizando rollback: " + e.getMessage());
+                if (con != null) {
+                    try {
+                        con.rollback();
+                    } catch (SQLException ex) {
+                        System.err.println("Error al intentar realizar el rollback: " + ex.getMessage());
+                    }
+                }
+                return false;
+            } finally {
+                cerrarSeguro(con);
             }
-            return false;
-        } finally {
-            if (con != null) {
-                try {
-                    con.setAutoCommit(true);
-                    con.close();
-                } catch (SQLException e) {
-                    System.err.println("Error al cerrar la conexion: " + e.getMessage());
-                }
+        }
+        return false;
+    }
+
+    private static boolean esBloqueoBD(SQLException e) {
+        String msg = e.getMessage();
+        return msg != null && (msg.contains("locked") || e.getErrorCode() == 5);
+    }
+
+    private static void esperarReintento() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private static void cerrarSeguro(Connection con) {
+        if (con != null) {
+            try {
+                con.setAutoCommit(true);
+                con.close();
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar la conexion: " + e.getMessage());
             }
         }
     }

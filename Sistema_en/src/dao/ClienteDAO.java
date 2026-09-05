@@ -59,26 +59,31 @@ public class ClienteDAO {
 
     String sql = "SELECT * FROM Cliente WHERE id_cliente = ?";
 
-    Connection con = Conexion.conectar();
+    try (Connection con = Conexion.conectar()) {
 
-    try {
+        if (con == null) {
+            System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+            return null;
+        }
 
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, id_cliente);
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id_cliente);
 
-        ResultSet rs = ps.executeQuery();
+            try (ResultSet rs = ps.executeQuery()) {
 
-        if(rs.next()){
+                if(rs.next()){
 
-            Cliente c = new Cliente();
+                    Cliente c = new Cliente();
 
-            c.setId_cliente(rs.getInt("id_cliente"));
-            c.setNombre_c(rs.getString("nombre_c"));
-            c.setTelefono(rs.getString("telefono"));
-            c.setU_modificacion(rs.getString("u_modificacion"));
-            c.setFecha_registro(rs.getString("fecha_registro"));
+                    c.setId_cliente(rs.getInt("id_cliente"));
+                    c.setNombre_c(rs.getString("nombre_c"));
+                    c.setTelefono(rs.getString("telefono"));
+                    c.setU_modificacion(rs.getString("u_modificacion"));
+                    c.setFecha_registro(rs.getString("fecha_registro"));
 
-            return c;
+                    return c;
+                }
+            }
         }
 
     } catch(SQLException e){
