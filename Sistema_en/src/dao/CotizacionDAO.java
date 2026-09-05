@@ -278,6 +278,10 @@ public class CotizacionDAO {
         Connection con = null;
         try {
             con = Conexion.conectar();
+            if (con == null) {
+                System.err.println("No se pudo conectar a la base de datos.");
+                return false;
+            }
             // 1. Desactivamos el autoCommit para iniciar manualmente la transacción
             con.setAutoCommit(false);
 
@@ -356,6 +360,94 @@ public class CotizacionDAO {
         }
     }
     
+    public boolean actualizarCotizacionConDetalles(float subtotal, float iva, float total, String estado,
+            String tipo, String fecha_creacion, int id_trabajo, int id_cotizacion,
+            List<Detalles_cotizacion> listaDetalles) {
+        String sqlCotizacion = "UPDATE Cotizacion SET subtotal = ?, iva = ?, total = ?, estado = ?, tipo = ?, "
+                + "fecha_creacion = ?, id_trabajo = ? WHERE id_cotizacion = ?";
+        String sqlDetalleNuevo = "INSERT INTO Detalles_cotizacion (concepto, n_material, cantidad, precio_uni, precio, id_cotizacion) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlDetalleUpdate = "UPDATE Detalles_cotizacion SET concepto = ?, n_material = ?, cantidad = ?, "
+                + "precio_uni = ?, precio = ? WHERE id_detalle = ? AND id_cotizacion = ?";
+
+        Connection con = null;
+        try {
+            con = Conexion.conectar();
+            if (con == null) {
+                System.err.println("No se pudo conectar a la base de datos.");
+                return false;
+            }
+            con.setAutoCommit(false);
+
+            try (PreparedStatement ps = con.prepareStatement(sqlCotizacion)) {
+                ps.setFloat(1, subtotal);
+                ps.setFloat(2, iva);
+                ps.setFloat(3, total);
+                ps.setString(4, estado);
+                ps.setString(5, tipo);
+                ps.setString(6, fecha_creacion);
+                if (id_trabajo != 0) {
+                    ps.setInt(7, id_trabajo);
+                } else {
+                    ps.setNull(7, java.sql.Types.INTEGER);
+                }
+                ps.setInt(8, id_cotizacion);
+                if (ps.executeUpdate() == 0) {
+                    throw new SQLException("La cotización " + id_cotizacion + " no existe o no fue modificada.");
+                }
+            }
+
+            try (PreparedStatement psNuevo = con.prepareStatement(sqlDetalleNuevo);
+                 PreparedStatement psUpdate = con.prepareStatement(sqlDetalleUpdate)) {
+                for (Detalles_cotizacion det : listaDetalles) {
+                    if (det.getId_detalle() > 0) {
+                        psUpdate.setString(1, det.getConcepto());
+                        psUpdate.setString(2, det.getN_material());
+                        psUpdate.setFloat(3, det.getCantidad());
+                        psUpdate.setFloat(4, det.getPrecio_uni());
+                        psUpdate.setFloat(5, det.getPrecio());
+                        psUpdate.setInt(6, det.getId_detalle());
+                        psUpdate.setInt(7, id_cotizacion);
+                        psUpdate.addBatch();
+                    } else {
+                        psNuevo.setString(1, det.getConcepto());
+                        psNuevo.setString(2, det.getN_material());
+                        psNuevo.setFloat(3, det.getCantidad());
+                        psNuevo.setFloat(4, det.getPrecio_uni());
+                        psNuevo.setFloat(5, det.getPrecio());
+                        psNuevo.setInt(6, id_cotizacion);
+                        psNuevo.addBatch();
+                    }
+                }
+                psUpdate.executeBatch();
+                psNuevo.executeBatch();
+            }
+
+            con.commit();
+            return true;
+
+        } catch (SQLException e) {
+            System.err.println("Error en la transaccion de actualizacion, realizando rollback: " + e.getMessage());
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    System.err.println("Error al intentar realizar el rollback: " + ex.getMessage());
+                }
+            }
+            return false;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    System.err.println("Error al cerrar la conexion: " + e.getMessage());
+                }
+            }
+        }
+    }
+
     public String obtenerTotal(int id_trabajo) {
         String sql = "SELECT COALESCE(total, 0) AS total FROM Cotizacion WHERE id_trabajo = ? AND estado = 'Aprobada'";
         

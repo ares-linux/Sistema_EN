@@ -1376,6 +1376,9 @@ private void agregarMaterial() {
                 }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Por favor verifica que los importes y precios sean valores numéricos válidos.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                System.err.println("Error inesperado al guardar la cotización: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Error inesperado al guardar la cotización: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         
@@ -1398,52 +1401,46 @@ private void agregarMaterial() {
                 int id_trabajo = id_trabajo_c;
 
                 CotizacionDAO DAO = new CotizacionDAO();
-                Detalles_cotizacionDAO dao = new Detalles_cotizacionDAO();
 
-                // 2. Actualizar la cabecera de la cotización
-                boolean cotizacionActualizado = DAO.actualizarCotizacion(subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo, id_cotizacion);
+                // 2. Recopilar los detalles (Conceptos + Materiales) manteniendo su id si existen
+                List<Detalles_cotizacion> listaDetalles = new ArrayList<>();
+
+                for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
+                    Detalles_cotizacion det = new Detalles_cotizacion();
+                    Object valId = Tabla_conceptos.getValueAt(i, 0);
+                    String idStr = (valId != null) ? valId.toString().trim() : "";
+                    if (!idStr.isEmpty()) {
+                        det.setId_detalle(Integer.parseInt(idStr));
+                    }
+                    det.setConcepto(Tabla_conceptos.getValueAt(i, 1).toString());
+                    det.setPrecio(Float.parseFloat(Tabla_conceptos.getValueAt(i, 2).toString()));
+                    det.setN_material("");
+                    det.setCantidad(0);
+                    det.setPrecio_uni(0);
+                    listaDetalles.add(det);
+                }
+
+                for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
+                    Detalles_cotizacion det = new Detalles_cotizacion();
+                    Object valId = Tabla_materiales.getValueAt(i, 0);
+                    String idStr = (valId != null) ? valId.toString().trim() : "";
+                    if (!idStr.isEmpty()) {
+                        det.setId_detalle(Integer.parseInt(idStr));
+                    }
+                    det.setConcepto("");
+                    det.setN_material(Tabla_materiales.getValueAt(i, 1).toString());
+                    det.setPrecio_uni(Float.parseFloat(Tabla_materiales.getValueAt(i, 2).toString()));
+                    det.setCantidad(Float.parseFloat(Tabla_materiales.getValueAt(i, 3).toString()));
+                    det.setPrecio(Float.parseFloat(Tabla_materiales.getValueAt(i, 4).toString()));
+                    listaDetalles.add(det);
+                }
+
+                // 3. Actualizar cabecera + detalles en una sola transacción
+                boolean cotizacionActualizado = DAO.actualizarCotizacionConDetalles(
+                        subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo, id_cotizacion, listaDetalles);
 
                 if (cotizacionActualizado) {
-            
-                    // 3. Procesar Tabla de Conceptos
-                    for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
-                        Object valId = Tabla_conceptos.getValueAt(i, 0);
-                        String idStr = (valId != null) ? valId.toString().trim() : "";
-                
-                        String concepto = Tabla_conceptos.getValueAt(i, 1).toString();
-                        float precio = Float.parseFloat(Tabla_conceptos.getValueAt(i, 2).toString());
-
-                        if (idStr.isEmpty()) {
-                            // Es un registro nuevo
-                            dao.insertarDetalles_cotizacion(concepto, "", 0, 0, precio, id_cotizacion);
-                        } else {
-                            // Es un registro existente
-                            int id_detalle = Integer.parseInt(idStr);
-                            dao.actualizarDetalles_cotizacion(concepto, "", 0, 0, precio, id_cotizacion, id_detalle);
-                        }
-                    }
-
-                    // 4. Procesar Tabla de Materiales
-                    for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
-                        Object valId = Tabla_materiales.getValueAt(i, 0);
-                        String idStr = (valId != null) ? valId.toString().trim() : "";
-
-                        String n_material = Tabla_materiales.getValueAt(i, 1).toString();
-                        float precio_uni = Float.parseFloat(Tabla_materiales.getValueAt(i, 2).toString());
-                        float cantidad = Float.parseFloat(Tabla_materiales.getValueAt(i, 3).toString());
-                        float precio = Float.parseFloat(Tabla_materiales.getValueAt(i, 4).toString());
-
-                        if (idStr.isEmpty()) {
-                            // Es un registro nuevo
-                            dao.insertarDetalles_cotizacion("", n_material, cantidad, precio_uni, precio, id_cotizacion);
-                        } else {
-                            // Es un registro existente
-                            int id_detalle = Integer.parseInt(idStr);
-                            dao.actualizarDetalles_cotizacion("", n_material, cantidad, precio_uni, precio, id_cotizacion, id_detalle);
-                        }
-                    }
-
-                    // 5. Restablecer interfaz
+                    // 4. Restablecer interfaz
                     Tabla_cotizaciones.setEnabled(true);
                     edicion_exitosa();
                     desbloquear_botones();
@@ -1460,15 +1457,17 @@ private void agregarMaterial() {
                     editar = false;
                     T_pestañas.setSelectedIndex(0);
                 } else {
-                    
                         if ("Aprobada".equals(c_estado.getSelectedItem())){
                             JOptionPane.showMessageDialog(this, "No pueden existir mas de una cotizacion aprobada para un mismo trabajo", "Error", JOptionPane.ERROR_MESSAGE);
                         }else{
-                            JOptionPane.showMessageDialog(this, "Error al actualizar los datos de la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Error al actualizar los datos de la cotización. Ningún dato fue modificado.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(this, "Verifica que todos los campos numéricos tengan un formato válido.", "Error de datos", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e) {
+                    System.err.println("Error inesperado al actualizar la cotización: " + e.getMessage());
+                    JOptionPane.showMessageDialog(this, "Error inesperado al guardar la cotización: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
         }
     }//GEN-LAST:event_b_guardarActionPerformed

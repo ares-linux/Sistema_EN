@@ -23,8 +23,12 @@ public class Detalles_cotizacionDAO {
     List<Detalles_cotizacion> listaDetalles_cotizacions = new ArrayList<>(); 
     String sql = "SELECT * FROM Detalles_cotizacion WHERE id_cotizacion = ?";
 
-    try (Connection con = Conexion.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+    Connection con = Conexion.conectar();
+    if (con == null) {
+        System.err.println("No se pudo conectar a la base de datos.");
+        return listaDetalles_cotizacions;
+    }
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
 
         ps.setInt(1, id_cotizacion);
         try (ResultSet rs = ps.executeQuery()) {
@@ -53,8 +57,12 @@ public class Detalles_cotizacionDAO {
     public boolean insertarDetalles_cotizacion(String concepto,String n_material, float cantidad, float precio_uni,float precio, int id_cotizacion) {
     String sql = "INSERT INTO Detalles_cotizacion (concepto,n_material,cantidad,precio_uni,precio,id_cotizacion) VALUES (?,?,?,?,?,?)";
     
-    try (Connection con = Conexion.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+    Connection con = Conexion.conectar();
+    if (con == null) {
+        System.err.println("No se pudo conectar a la base de datos.");
+        return false;
+    }
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
         
         ps.setString(1, concepto);
         ps.setString(2, n_material);
@@ -73,8 +81,12 @@ public class Detalles_cotizacionDAO {
     public boolean actualizarDetalles_cotizacion(String concepto,String n_material, float cantidad, float precio_uni,float precio, int id_cotizacion, int id_detalle) {
         String sql = "UPDATE Detalles_cotizacion SET concepto = ?, n_material = ?, cantidad = ?, precio_uni = ?, precio = ?, id_cotizacion = ? WHERE id_detalle = ?;";
         
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        Connection con = Conexion.conectar();
+        if (con == null) {
+            System.err.println("No se pudo conectar a la base de datos.");
+            return false;
+        }
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             
             ps.setString(1, concepto);
             ps.setString(2, n_material);
@@ -94,8 +106,12 @@ public class Detalles_cotizacionDAO {
     public boolean eliminarDetalles_cotizacion(int id_detalle) {
     String sql = "DELETE FROM Detalles_cotizacion WHERE id_detalle = ?";
 
-    try (Connection con = Conexion.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+    Connection con = Conexion.conectar();
+    if (con == null) {
+        System.err.println("No se pudo conectar a la base de datos.");
+        return false;
+    }
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
 
         ps.setInt(1, id_detalle);
         return ps.executeUpdate() > 0;

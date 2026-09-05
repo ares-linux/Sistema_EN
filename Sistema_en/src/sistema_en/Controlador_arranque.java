@@ -15,6 +15,14 @@ public class Controlador_arranque {
     public static boolean iniciar() {
         String ruta = Conexion.rutaArchivoBD();
         if (new File(ruta).exists()) {
+            if (!java.nio.file.Files.isWritable(new File(ruta).toPath())) {
+                JOptionPane.showMessageDialog(null,
+                        "El archivo de la base de datos no es escribible.\n\n"
+                        + "Las consultas funcionarán pero NO podrá guardar cotizaciones ni modificar registros.\n"
+                        + "Si restauró la base de datos desde Google Drive, quite el atributo \"Solo lectura\"\n"
+                        + "del archivo (clic derecho -> Propiedades) y reinicie el programa.",
+                        "Base de datos en solo lectura", JOptionPane.WARNING_MESSAGE);
+            }
             InicializadorBD.asegurarEsquema(ruta);
             InicializadorBD.asegurarConfiguraciones(ruta);
             if (!new UsuariosDAO().existeAdministrador()) {

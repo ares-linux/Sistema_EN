@@ -246,7 +246,7 @@ public class InicializadorBD {
     private static Connection DriverManagerSqliteConectar(String rutaCompleta) {
         try {
             Class.forName("org.sqlite.JDBC");
-            return java.sql.DriverManager.getConnection("jdbc:sqlite:" + rutaCompleta);
+            return java.sql.DriverManager.getConnection("jdbc:sqlite:" + rutaCompleta + "?busy_timeout=5000");
         } catch (Exception e) {
             System.err.println("Error al conectar para crear BD: " + e.getMessage());
             return null;

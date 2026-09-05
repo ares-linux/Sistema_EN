@@ -113,7 +113,7 @@ public class Conexion {
                 return null;
             }
             Class.forName("org.sqlite.JDBC");
-            return DriverManager.getConnection("jdbc:sqlite:" + ruta);
+            return DriverManager.getConnection("jdbc:sqlite:" + ruta + "?busy_timeout=5000");
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Error en la conexion: " + e.getMessage());
             return null;
