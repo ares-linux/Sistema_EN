@@ -7,21 +7,23 @@ import java.sql.Statement;
 
 public class InicializadorBD {
 
+    private static final String DDL_CONFIGURACIONES = "CREATE TABLE IF NOT EXISTS \"Configuraciones\" ("
+            + "\"id_configuracion\" INTEGER,"
+            + "\"clave\" TEXT,"
+            + "\"valor\" TEXT,"
+            + "PRIMARY KEY(\"id_configuracion\" AUTOINCREMENT)"
+            + ");";
+
+    private static final String DDL_USUARIOS = "CREATE TABLE IF NOT EXISTS \"Usuarios\" ("
+            + "\"id_usuarios\" INTEGER,"
+            + "\"usuario\" TEXT UNIQUE,"
+            + "\"contraseña\" TEXT,"
+            + "PRIMARY KEY(\"id_usuarios\" AUTOINCREMENT)"
+            + ");";
+
     private static final String[] DDL = {
-
-        "CREATE TABLE IF NOT EXISTS \"Configuraciones\" ("
-        + "\"id_configuracion\" INTEGER,"
-        + "\"clave\" TEXT,"
-        + "\"valor\" TEXT,"
-        + "PRIMARY KEY(\"id_configuracion\" AUTOINCREMENT)"
-        + ");",
-
-        "CREATE TABLE IF NOT EXISTS \"Usuarios\" ("
-        + "\"id_usuarios\" INTEGER,"
-        + "\"usuario\" TEXT UNIQUE,"
-        + "\"contraseña\" TEXT,"
-        + "PRIMARY KEY(\"id_usuarios\" AUTOINCREMENT)"
-        + ");",
+        DDL_CONFIGURACIONES,
+        DDL_USUARIOS,
 
         "CREATE TABLE IF NOT EXISTS \"Tipos_herramienta\" ("
         + "\"id_tipo_herramienta\" INTEGER,"
@@ -137,7 +139,6 @@ public class InicializadorBD {
     private static final String[][] CONFIGURACIONES_DEFAULT = {
         {"tema", "Claro"},
         {"sonido_error", "false"},
-        {"carpeta_ce", ""},
         {"frecuencia", "diaria"},
         {"preguntar", "true"},
         {"manual", "false"},
@@ -151,24 +152,66 @@ public class InicializadorBD {
         if (rutaCompleta == null || rutaCompleta.isBlank()) {
             return false;
         }
-        String ddlUsuarios = "CREATE TABLE IF NOT EXISTS \"Usuarios\" ("
-                + "\"id_usuarios\" INTEGER,"
-                + "\"usuario\" TEXT UNIQUE,"
-                + "\"contraseña\" TEXT,"
-                + "PRIMARY KEY(\"id_usuarios\" AUTOINCREMENT)"
-                + ");";
         Connection con = DriverManagerSqliteConectar(rutaCompleta);
         if (con == null) {
             return false;
         }
         try (Statement st = con.createStatement()) {
-            st.executeUpdate(ddlUsuarios);
+            st.executeUpdate(DDL_USUARIOS);
             return true;
         } catch (Exception e) {
             System.err.println("Error al asegurar la tabla Usuarios: " + e.getMessage());
             return false;
         } finally {
             try { con.close(); } catch (Exception e) { }
+        }
+    }
+
+    public static boolean asegurarConfiguraciones(String rutaCompleta) {
+        if (rutaCompleta == null || rutaCompleta.isBlank()) {
+            return false;
+        }
+        Connection con = DriverManagerSqliteConectar(rutaCompleta);
+        if (con == null) {
+            return false;
+        }
+        try {
+            try (Statement st = con.createStatement()) {
+                st.executeUpdate(DDL_CONFIGURACIONES);
+                st.executeUpdate("DELETE FROM Configuraciones WHERE id_configuracion NOT IN "
+                        + "(SELECT MIN(id_configuracion) FROM Configuraciones GROUP BY clave)");
+            }
+
+            String directorioBase = Paths.get(rutaCompleta).getParent().toString();
+            String carpetaDocumentos = sistema_en.Conexion.rutaCarpetaDocumentosPorDefecto();
+
+            String sqlConfig = "INSERT INTO Configuraciones (clave, valor) "
+                    + "SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM Configuraciones WHERE clave = ?)";
+            try (PreparedStatement ps = con.prepareStatement(sqlConfig)) {
+                for (String[] cfg : CONFIGURACIONES_DEFAULT) {
+                    ps.setString(1, cfg[0]);
+                    ps.setString(2, cfg[1]);
+                    ps.setString(3, cfg[0]);
+                    ps.addBatch();
+                }
+                ps.setString(1, "carpeta_ce");
+                ps.setString(2, carpetaDocumentos);
+                ps.setString(3, "carpeta_ce");
+                ps.addBatch();
+                ps.setString(1, "base_c");
+                ps.setString(2, directorioBase);
+                ps.setString(3, "base_c");
+                ps.addBatch();
+                ps.executeBatch();
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al asegurar las configuraciones: " + e.getMessage());
+            return false;
+        } finally {
+            if (con != null) {
+                try { con.close(); } catch (Exception e) { }
+            }
         }
     }
 
@@ -187,21 +230,7 @@ public class InicializadorBD {
                     st.executeUpdate(ddl);
                 }
             }
-
-            String directorioBase = Paths.get(rutaCompleta).getParent().toString();
-            String sqlConfig = "INSERT OR REPLACE INTO Configuraciones (clave, valor) VALUES (?, ?)";
-            try (PreparedStatement ps = con.prepareStatement(sqlConfig)) {
-                for (String[] cfg : CONFIGURACIONES_DEFAULT) {
-                    ps.setString(1, cfg[0]);
-                    ps.setString(2, cfg[1]);
-                    ps.addBatch();
-                }
-                ps.setString(1, "base_c");
-                ps.setString(2, directorioBase);
-                ps.addBatch();
-                ps.executeBatch();
-            }
-            return true;
+            return asegurarConfiguraciones(rutaCompleta);
         } catch (Exception e) {
             System.err.println("Error al crear la base de datos: " + e.getMessage());
             return false;

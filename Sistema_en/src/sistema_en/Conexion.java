@@ -25,7 +25,7 @@ public class Conexion {
         return rutaMemoria;
     }
 
-    public static String rutaDefectoBD() {
+    public static String rutaCarpetaDocumentosPorDefecto() {
         String home = System.getProperty("user.home");
         boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
         String carpetaDocumentos = "Documents";
@@ -35,7 +35,11 @@ public class Conexion {
                 carpetaDocumentos = "Documentos";
             }
         }
-        return Paths.get(home, carpetaDocumentos, "Bases de datos", "sistema_EN").toString();
+        return Paths.get(home, carpetaDocumentos).toString();
+    }
+
+    public static String rutaDefectoBD() {
+        return Paths.get(rutaCarpetaDocumentosPorDefecto(), "Bases de datos", "sistema_EN").toString();
     }
 
     public static String obtenerRutaBD() {
