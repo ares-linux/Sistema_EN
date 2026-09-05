@@ -57,7 +57,7 @@ public class V_historial_c extends javax.swing.JFrame {
         b_restaurar = new javax.swing.JButton();
         b_cerrar_2 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 

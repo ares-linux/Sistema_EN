@@ -1188,7 +1188,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             boolean guardadoExitoso = false;
             
             BitacoraDAO dao = new BitacoraDAO();
-            int id_bitacora = dao.insertarBitacora(fecha, hora_llegada, hora_salida, notas, id_trabajo, idTrabajador);
+            int id_bitacora = dao.insertarBitacora(fecha, hora_llegada, hora_salida, notas, idTrabajador, id_trabajo);
             
             if (id_bitacora > 0) {
                 EvidenciaDAO evidenciaDAO = new EvidenciaDAO();

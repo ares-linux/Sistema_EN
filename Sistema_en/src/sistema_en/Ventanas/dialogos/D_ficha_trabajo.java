@@ -315,7 +315,11 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     private void cargarCliente(int id_cliente){
         ClienteDAO dao = new ClienteDAO();
         Cliente cliente = dao.obtenerCliente(id_cliente);       
-        
+        if (cliente == null) {
+            System.out.println("Cliente no encontrado: " + id_cliente);
+            id_cliente_i = -1;
+            return;
+        }
         id_cliente = Integer.valueOf(cliente.getId_cliente());
         System.out.println("id del cliente" + id_cliente);
         
@@ -329,8 +333,8 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         id_trabajo_i = id_trabajo;
         
         estado_a = String.valueOf(trabajo.getEstado());
-        fecha_inicio = String.valueOf(trabajo.getFecha_inicio());
-        fecha_fin = String.valueOf(trabajo.getFecha_inicio());
+        fecha_inicio = fechaToString(trabajo.getFecha_inicio());
+        fecha_fin = fechaToString(trabajo.getFecha_fin());
         
         t_id.setText(String.valueOf(trabajo.getId_trabajo()));
         t_fecha_registro.setText(String.valueOf(trabajo.getFecha_cr()));
@@ -338,6 +342,10 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         c_estado.setSelectedItem(String.valueOf(trabajo.getEstado()));
     }
     
+    private String fechaToString(java.time.LocalDate fecha) {
+        return fecha == null ? "" : fecha.toString();
+    }
+
     //Formularios de registro
     
     private V_R_Trabajo informacion = null;

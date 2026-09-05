@@ -1461,7 +1461,7 @@ private void agregarMaterial() {
                     T_pestañas.setSelectedIndex(0);
                 } else {
                     
-                        if (c_estado.getSelectedItem() == "Aprobada"){
+                        if ("Aprobada".equals(c_estado.getSelectedItem())){
                             JOptionPane.showMessageDialog(this, "No pueden existir mas de una cotizacion aprobada para un mismo trabajo", "Error", JOptionPane.ERROR_MESSAGE);
                         }else{
                             JOptionPane.showMessageDialog(this, "Error al actualizar los datos de la cotización.", "Error", JOptionPane.ERROR_MESSAGE);

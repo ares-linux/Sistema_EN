@@ -357,7 +357,7 @@ public class CotizacionDAO {
     }
     
     public String obtenerTotal(int id_trabajo) {
-        String sql = "SELECT COALESCE(total, 0) AS total FROM Cotizacion WHERE id_trabajo = ? AND tipo = 'Aprobada'";
+        String sql = "SELECT COALESCE(total, 0) AS total FROM Cotizacion WHERE id_trabajo = ? AND estado = 'Aprobada'";
         
         try (Connection con = Conexion.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
