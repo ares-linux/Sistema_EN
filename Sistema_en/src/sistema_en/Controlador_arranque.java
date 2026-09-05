@@ -15,7 +15,7 @@ public class Controlador_arranque {
     public static boolean iniciar() {
         String ruta = Conexion.rutaArchivoBD();
         if (new File(ruta).exists()) {
-            InicializadorBD.asegurarTablaUsuarios(ruta);
+            InicializadorBD.asegurarEsquema(ruta);
             InicializadorBD.asegurarConfiguraciones(ruta);
             if (!new UsuariosDAO().existeAdministrador()) {
                 return registrarUsuarioObligatorio();

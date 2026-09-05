@@ -831,7 +831,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                     // Creamos la carpeta en Google Drive con este nombre
                     String idCarpetaDrive = sistema_en.GoogleServicesProvider.crearCarpetaTrabajo(nombreCarpeta);
     
-                    trabajoDao.actualizarTrabajoIdCarpeta(trabajo.getId_trabajo(), idCarpetaDrive);
+                    trabajoDao.actualizarTrabajoIdCarpeta(idTrabajo, idCarpetaDrive);
                     
                     if (!GoogleServicesProvider.estaConectado()){
                        String Carpeta = "Pendiente";

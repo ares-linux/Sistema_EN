@@ -27,7 +27,7 @@ public class InicializadorBD {
 
         "CREATE TABLE IF NOT EXISTS \"Tipos_herramienta\" ("
         + "\"id_tipo_herramienta\" INTEGER,"
-        + "\"nombre\" INTEGER,"
+        + "\"nombre\" TEXT,"
         + "PRIMARY KEY(\"id_tipo_herramienta\" AUTOINCREMENT)"
         + ");",
 
@@ -148,7 +148,7 @@ public class InicializadorBD {
         {"automaticamente_ce_excel", "true"}
     };
 
-    public static boolean asegurarTablaUsuarios(String rutaCompleta) {
+    public static boolean asegurarEsquema(String rutaCompleta) {
         if (rutaCompleta == null || rutaCompleta.isBlank()) {
             return false;
         }
@@ -157,10 +157,12 @@ public class InicializadorBD {
             return false;
         }
         try (Statement st = con.createStatement()) {
-            st.executeUpdate(DDL_USUARIOS);
+            for (String ddl : DDL) {
+                st.executeUpdate(ddl);
+            }
             return true;
         } catch (Exception e) {
-            System.err.println("Error al asegurar la tabla Usuarios: " + e.getMessage());
+            System.err.println("Error al asegurar el esquema de la base de datos: " + e.getMessage());
             return false;
         } finally {
             try { con.close(); } catch (Exception e) { }
