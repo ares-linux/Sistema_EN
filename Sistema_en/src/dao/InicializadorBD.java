@@ -9,8 +9,6 @@ public class InicializadorBD {
 
     private static final String[] DDL = {
 
-        "CREATE TABLE IF NOT EXISTS \"sqlite_sequence\"(name,seq);",
-
         "CREATE TABLE IF NOT EXISTS \"Configuraciones\" ("
         + "\"id_configuracion\" INTEGER,"
         + "\"clave\" TEXT,"
@@ -148,6 +146,31 @@ public class InicializadorBD {
         {"automaticamente_ce", "true"},
         {"automaticamente_ce_excel", "true"}
     };
+
+    public static boolean asegurarTablaUsuarios(String rutaCompleta) {
+        if (rutaCompleta == null || rutaCompleta.isBlank()) {
+            return false;
+        }
+        String ddlUsuarios = "CREATE TABLE IF NOT EXISTS \"Usuarios\" ("
+                + "\"id_usuarios\" INTEGER,"
+                + "\"usuario\" TEXT UNIQUE,"
+                + "\"contraseña\" TEXT,"
+                + "PRIMARY KEY(\"id_usuarios\" AUTOINCREMENT)"
+                + ");";
+        Connection con = DriverManagerSqliteConectar(rutaCompleta);
+        if (con == null) {
+            return false;
+        }
+        try (Statement st = con.createStatement()) {
+            st.executeUpdate(ddlUsuarios);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al asegurar la tabla Usuarios: " + e.getMessage());
+            return false;
+        } finally {
+            try { con.close(); } catch (Exception e) { }
+        }
+    }
 
     public static boolean crearBaseDatos(String rutaCompleta) {
         if (rutaCompleta == null || rutaCompleta.isBlank()) {

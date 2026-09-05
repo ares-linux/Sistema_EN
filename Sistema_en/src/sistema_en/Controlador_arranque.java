@@ -1,6 +1,7 @@
 package sistema_en;
 
 import dao.InicializadorBD;
+import dao.UsuariosDAO;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,10 @@ public class Controlador_arranque {
     public static boolean iniciar() {
         String ruta = Conexion.rutaArchivoBD();
         if (new File(ruta).exists()) {
+            InicializadorBD.asegurarTablaUsuarios(ruta);
+            if (!new UsuariosDAO().existeAdministrador()) {
+                return registrarUsuarioObligatorio();
+            }
             return true;
         }
 
@@ -201,9 +206,7 @@ public class Controlador_arranque {
             }
         }
 
-        mostrarRegistroInicial();
-
-        return true;
+        return registrarUsuarioObligatorio();
     }
 
     private static boolean crearEnUbicacionPorDefecto() {
@@ -219,6 +222,9 @@ public class Controlador_arranque {
                     "Ya existe una base de datos en la ubicación por defecto:\n" + ruta,
                     "Aviso", JOptionPane.WARNING_MESSAGE);
             Conexion.guardarRutaBD(ruta);
+            if (!new UsuariosDAO().existeAdministrador()) {
+                return registrarUsuarioObligatorio();
+            }
             return true;
         }
 
@@ -247,13 +253,27 @@ public class Controlador_arranque {
             }
         }
 
-        mostrarRegistroInicial();
-
-        return true;
+        return registrarUsuarioObligatorio();
     }
 
-    private static void mostrarRegistroInicial() {
-        D_registro_usuario dlg = new D_registro_usuario(null, true);
-        dlg.setVisible(true);
+    private static boolean registrarUsuarioObligatorio() {
+        while (true) {
+            D_registro_usuario dlg = new D_registro_usuario(null, true);
+            dlg.setVisible(true);
+
+            if (dlg.isRegistrado()) {
+                return true;
+            }
+
+            int respuesta = JOptionPane.showConfirmDialog(null,
+                    "Sin un usuario registrado no podrá iniciar sesión.\n"
+                    + "¿Desea intentar registrar un usuario nuevamente?",
+                    "Registro de usuario",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            if (respuesta != JOptionPane.YES_OPTION) {
+                return false;
+            }
+        }
     }
 }
