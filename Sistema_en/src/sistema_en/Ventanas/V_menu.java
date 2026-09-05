@@ -218,14 +218,21 @@ public class V_menu extends javax.swing.JFrame {
     }
     
         if (!cierre && diasTranscurridos >= dias) {
-            if (preguntar) {
-                int respuesta = JOptionPane.showConfirmDialog( this,"¿Desea realizar una copia de seguridad?","Copia de seguridad",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                if (respuesta == JOptionPane.YES_OPTION) {
-                    realizar_respaldo();
+            final boolean preguntarFinal = preguntar;
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                if (preguntarFinal) {
+                    int respuesta = JOptionPane.showConfirmDialog(this,
+                            "¿Desea realizar una copia de seguridad?",
+                            "Copia de seguridad",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if (respuesta == JOptionPane.YES_OPTION) {
+                        realizarRespaldoSeguro();
+                    }
+                } else {
+                    realizarRespaldoSeguro();
                 }
-            } else {
-                realizar_respaldo();
-            }
+            });
         }
     }
 
@@ -431,25 +438,47 @@ public class V_menu extends javax.swing.JFrame {
         }
     }
     
+    private void realizarRespaldoSeguro() {
+        try {
+            realizar_respaldo();
+        } catch (Exception e) {
+            System.out.println("No se pudo realizar la copia de seguridad:");
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo realizar la copia de seguridad:\n" + e.getMessage(),
+                    "Copia de seguridad",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
     private void realizar_respaldo(){
-        String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
-        String ruta = Paths.get(base_c1, "sistema_EN").toString();
-        
-        boolean exito = GoogleServicesProvider.subirArchivo(ruta,idCarpetaDestino);
-        if (exito){
-            String ultima_copia = LocalDate.now().toString();
-            ConfiguracionesDAO dao = new ConfiguracionesDAO();
-            dao.actualizarCopias(frecuencia1, preguntar1, manual1, cotizaciones1, ultima_copia,base_c1);
-            System.out.println("la copia de seguridad funciona");
-            
-            String mensaje;
-            mensaje = "La copia de seguridad se creo con exito";
-            Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
-            
-            
-        }else{
-            JOptionPane.showMessageDialog(this, "la copia de seguridad fallo, revise su conexion a internet."); 
-            System.out.println("supuestamente fallo");
+        try {
+            String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
+            String ruta = Paths.get(base_c1, "sistema_EN").toString();
+
+            boolean exito = GoogleServicesProvider.subirArchivo(ruta,idCarpetaDestino);
+            if (exito){
+                String ultima_copia = LocalDate.now().toString();
+                ConfiguracionesDAO dao = new ConfiguracionesDAO();
+                dao.actualizarCopias(frecuencia1, preguntar1, manual1, cotizaciones1, ultima_copia,base_c1);
+                System.out.println("la copia de seguridad funciona");
+
+                String mensaje;
+                mensaje = "La copia de seguridad se creo con exito";
+                Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+
+
+            }else{
+                JOptionPane.showMessageDialog(this, "la copia de seguridad fallo, revise su conexion a internet."); 
+                System.out.println("supuestamente fallo");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al realizar la copia de seguridad:");
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "No se pudo realizar la copia de seguridad:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
     

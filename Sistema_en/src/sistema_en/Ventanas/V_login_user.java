@@ -344,10 +344,19 @@ public class V_login_user extends javax.swing.JFrame {
             }
         } else {
             // Acceso concedido
-            V_menu menu = new V_menu();
-            menu.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            menu.setVisible(true);
-            this.dispose();
+            try {
+                V_menu menu = new V_menu();
+                menu.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                menu.setVisible(true);
+                this.dispose();
+            } catch (Exception e) {
+                System.out.println("Error al abrir el menu principal:");
+                e.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Ocurrió un error al abrir el menú principal:\n" + e.getMessage(),
+                        "Error",
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     

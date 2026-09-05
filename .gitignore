@@ -21,3 +21,6 @@ Sistema_en/jdeploy/
 Sistema_en/jdeploy-bundle/
 Sistema_en/icon.png
 *.py
+
+# Artefacto jDeploy generado por accidente en nbproject
+Sistema_en/nbproject/package.json

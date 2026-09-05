@@ -23,79 +23,101 @@ public class Sistema_en {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {  
+public static void main(String[] args) {  
     //System.out.println("🚀 Iniciando prueba de respaldo en Google Drive...");
     //sistema_en.Objetos.GoogleDriveProvider.subirArchivo("credentials.json");
     
     //V_login_user login = new V_login_user();
 
-    if (!Controlador_arranque.iniciar()) {
-        System.exit(0);
-        return;
-    }
+    try {
+        if (!Controlador_arranque.iniciar()) {
+            System.exit(0);
+            return;
+        }
 
-    ConfiguracionesDAO dao = new ConfiguracionesDAO();
-    List<String[]> configs = dao.obtenerConfiguraciones();
-    
-    for (String[] conf : configs) {
+        ConfiguracionesDAO dao = new ConfiguracionesDAO();
+        List<String[]> configs = dao.obtenerConfiguraciones();
+        boolean ventanaAbierta = false;
 
-    String clave = conf[1];
-    String valor = conf[2];
-    
-    switch (clave) {
+        for (String[] conf : configs) {
 
-        case "tema" -> {
-            if ("Claro".equals(valor)){
-            
-            FlatLightLaf.setup();
-            //java.awt.EventQueue.invokeLater(() -> {
-            V_login_user login = new V_login_user();
-            login.setLocationRelativeTo(null);
-            login.setVisible(true);
-            }
-            
-            else if ("Oscuro".equals(valor)){
-            
-            FlatDarkLaf.setup();
-            //java.awt.EventQueue.invokeLater(() -> {
-            V_login_user login = new V_login_user();
-            login.setLocationRelativeTo(null);
-            login.setVisible(true);
-            }
-            
-            else if ("Automatico".equals(valor)){
-                    
-                OsThemeDetector detector = OsThemeDetector.getDetector();
-                Runnable updateTheme = () -> {
-                try {
-                
-                    if (detector.isDark()) {
-                        UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
-                    } else {
-                        UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
-                    }
-                
-                    com.formdev.flatlaf.FlatLaf.updateUI(); 
-                } catch (Exception e) {
-                    e.printStackTrace();
+        String clave = conf[1];
+        String valor = conf[2];
+
+        switch (clave) {
+
+            case "tema" -> {
+                if ("Claro".equals(valor)){
+
+                FlatLightLaf.setup();
+                V_login_user login = new V_login_user();
+                login.setLocationRelativeTo(null);
+                login.setVisible(true);
+                ventanaAbierta = true;
                 }
-                };
 
-                updateTheme.run();
-                detector.registerListener(isDark -> {
-                    SwingUtilities.invokeLater(updateTheme);
-                });
+                else if ("Oscuro".equals(valor)){
 
-                SwingUtilities.invokeLater(() -> {
-                    V_login_user login = new V_login_user();
-                    login.setLocationRelativeTo(null);
-                    login.setVisible(true);
-                });
+                FlatDarkLaf.setup();
+                V_login_user login = new V_login_user();
+                login.setLocationRelativeTo(null);
+                login.setVisible(true);
+                ventanaAbierta = true;
+                }
+
+                else if ("Automatico".equals(valor)){
+
+                    OsThemeDetector detector = OsThemeDetector.getDetector();
+                    Runnable updateTheme = () -> {
+                    try {
+
+                        if (detector.isDark()) {
+                            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());
+                        } else {
+                            UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
+                        }
+
+                        com.formdev.flatlaf.FlatLaf.updateUI(); 
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    };
+
+                    updateTheme.run();
+                    detector.registerListener(isDark -> {
+                        SwingUtilities.invokeLater(updateTheme);
+                    });
+
+                    SwingUtilities.invokeLater(() -> {
+                        V_login_user login = new V_login_user();
+                        login.setLocationRelativeTo(null);
+                        login.setVisible(true);
+                    });
+                    ventanaAbierta = true;
+                }
+
+                          break;
             }
-                                      
-                    break;
-            }
-    }   
+        }   
+        }
+
+        if (!ventanaAbierta) {
+            FlatLightLaf.setup();
+            V_login_user login = new V_login_user();
+            login.setLocationRelativeTo(null);
+            login.setVisible(true);
+        }
+    } catch (Throwable t) {
+        System.out.println("Error al iniciar el programa:");
+        t.printStackTrace();
+        try {
+            JOptionPane.showMessageDialog(null,
+                    "No se pudo iniciar el programa:\n" + t.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ignore) {
+        }
+        System.exit(1);
     }
     }
 }
