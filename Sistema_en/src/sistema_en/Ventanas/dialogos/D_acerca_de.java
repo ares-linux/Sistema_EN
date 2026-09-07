@@ -129,7 +129,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         getContentPane().add(b_cerrar, gridBagConstraints);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Version 1.0.14");
+        jLabel1.setText("Version 1.0.15");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
