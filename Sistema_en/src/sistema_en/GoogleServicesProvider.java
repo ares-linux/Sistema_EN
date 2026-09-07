@@ -17,6 +17,7 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
 import com.google.api.services.drive.model.File; // <--- Mantenemos este como predeterminado
+import com.google.api.services.gmail.Gmail;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import com.google.api.services.sheets.v4.model.ValueRange;
@@ -40,6 +41,8 @@ import com.google.api.services.sheets.v4.model.UpdateDimensionPropertiesRequest;
 import dao.TrabajoDAO;
 import sistema_en.Objetos.Evidencia;
 import sistema_en.Objetos.Trabajo;
+import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.Message;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -62,7 +65,8 @@ public class GoogleServicesProvider {
     
     private static final List<String> SCOPES = Arrays.asList(
             DriveScopes.DRIVE,
-            SheetsScopes.SPREADSHEETS
+            SheetsScopes.SPREADSHEETS,
+            GmailScopes.GMAIL_SEND
     );
     
     public static final String CREDENTIALS_FILE_PATH = "credentials.json";
@@ -94,6 +98,13 @@ public class GoogleServicesProvider {
     public static Sheets getSheetsService() throws Exception {
         final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
         return new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+    }
+    
+    public static Gmail getGmailService() throws Exception {
+        final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
     }
@@ -814,6 +825,37 @@ public static void guardarEvidenciaSeleccionada(String rutaTemporalOrigen, Strin
             return archivoLocal.exists() && archivoLocal.length() > 0;
         } catch (Exception e) {
             System.out.println("Error al descargar el respaldo de la base de datos:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Envia un correo electronico utilizando la API de Gmail.
+     * @param destinatario direccion de correo del destinatario
+     * @param asunto asunto del correo
+     * @param cuerpo cuerpo del correo en texto/html
+     * @return true si se envio correctamente, false en caso contrario
+     */
+    public static boolean enviarCorreo(String destinatario, String asunto, String cuerpo) {
+        try {
+            Gmail service = getGmailService();
+            
+            String rawMessage = "To: " + destinatario + "\r\n" +
+                                "Subject: " + asunto + "\r\n" +
+                                "Content-Type: text/html; charset=utf-8\r\n\r\n" +
+                                cuerpo;
+            
+            String encodedEmail = java.util.Base64.getUrlEncoder().encodeToString(rawMessage.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            
+            Message message = new Message();
+            message.setRaw(encodedEmail);
+            
+            service.users().messages().send("me", message).execute();
+            System.out.println("✅ Correo enviado exitosamente a: " + destinatario);
+            return true;
+        } catch (Exception e) {
+            System.out.println("❌ Error al enviar el correo:");
             e.printStackTrace();
             return false;
         }

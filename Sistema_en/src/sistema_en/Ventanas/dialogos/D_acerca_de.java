@@ -7,7 +7,6 @@ package sistema_en.Ventanas.dialogos;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
-import java.awt.Desktop;
 import java.io.File;
 
 import java.net.URI;
@@ -33,6 +32,8 @@ public class D_acerca_de extends javax.swing.JDialog {
         
     }
 
+    private D_soporte_tecnico soporte = null;
+    private D_nota_version nota = null;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,6 +54,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         b_descargar_documentacion = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(250, 610));
@@ -122,14 +124,14 @@ public class D_acerca_de extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
         getContentPane().add(b_cerrar, gridBagConstraints);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Version 1.0.15");
+        jLabel1.setText("Version 1.0.16");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -175,6 +177,19 @@ public class D_acerca_de extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_descargar_documentacion, gridBagConstraints);
 
+        jButton1.setText("Nota de version");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jButton1, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -207,19 +222,28 @@ public class D_acerca_de extends javax.swing.JDialog {
     }//GEN-LAST:event_b_licenciasActionPerformed
 
     private void b_soporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_soporteActionPerformed
-        try {
-            //desclaramos la url en una variable porque uri no acepta texto   
-            String url = "https://sites.google.com/view/softium-equipo/p%C3%A1gina-principal";
-
-            //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
-            if (Desktop.isDesktopSupported()) {
-                //lanzamos la url
-                Desktop.getDesktop().browse(new URI(url));
+        if (soporte == null || !soporte.isDisplayable()) {
+            // Si tu constructor pide (Frame, boolean), pásale el Frame actual o null si no aplica
+            soporte = new D_soporte_tecnico((java.awt.Frame) this.getParent(), true);
+            //java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+            //soporte.setBounds(zonaSegura); // Forzamos al diálogo a tomar todo ese tamaño
+            soporte.setLocationRelativeTo(D_acerca_de.this);
+            soporte.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                // CORRECCIÓN 2: Usamos windowClosed para atrapar el dispose() de tus botones
+                setVisible(true); 
             }
-        } catch (Exception e) {
-            //lazamos una exepcion si falla
-            e.printStackTrace();
+            });
+        } else {
+            //java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
+            //.getMaximumWindowBounds();
+            //soporte.setBounds(zonaSegura);
         }
+        this.setVisible(false); 
+        soporte.setVisible(true);
+        soporte.toFront();
+        soporte.requestFocus();
     }//GEN-LAST:event_b_soporteActionPerformed
 
     private void b_descargar_manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_manualActionPerformed
@@ -339,6 +363,31 @@ public class D_acerca_de extends javax.swing.JDialog {
     }
     }//GEN-LAST:event_b_descargar_documentacionActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (nota == null || !nota.isDisplayable()) {
+            // Si tu constructor pide (Frame, boolean), pásale el Frame actual o null si no aplica
+            nota = new D_nota_version((java.awt.Frame) this.getParent(), true);
+            //java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+            //nota.setBounds(zonaSegura); // Forzamos al diálogo a tomar todo ese tamaño
+            nota.setLocationRelativeTo(D_acerca_de.this);
+            nota.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                // CORRECCIÓN 2: Usamos windowClosed para atrapar el dispose() de tus botones
+                setVisible(true); 
+            }
+            });
+        } else {
+            //java.awt.Rectangle zonaSegura = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment()
+            //.getMaximumWindowBounds();
+            //nota.setBounds(zonaSegura);
+        }
+        this.setVisible(false); 
+        nota.setVisible(true);
+        nota.toFront();
+        nota.requestFocus();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -387,6 +436,7 @@ public class D_acerca_de extends javax.swing.JDialog {
     private javax.swing.JButton b_descargar_manual;
     private javax.swing.JButton b_licencias;
     private javax.swing.JButton b_soporte;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
