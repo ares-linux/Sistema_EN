@@ -378,6 +378,50 @@ public class ClienteDAO {
     }
 }
     
+    public List<String[]> filtrarClientesNombre(String nombre) {
+    List<String[]> lista = new ArrayList<>();
+
+    String sql = "SELECT id_cliente, nombre_c, telefono, fecha_registro FROM Cliente WHERE nombre_c LIKE ?";
+
+    Connection con = Conexion.conectar();
+
+    if (con == null) {
+        System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+        return lista;
+    }
+
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ps.setString(1, "%" + nombre + "%");
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String[] fila = new String[4];
+
+                fila[0] = String.valueOf(rs.getInt("id_cliente"));
+                fila[1] = rs.getString("nombre_c");
+                fila[2] = rs.getString("telefono");
+                fila[3] = rs.getString("fecha_registro");
+
+                lista.add(fila);
+            }
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Error al obtener clientes de la BD: " + e.getMessage());
+
+    } finally {
+        try {
+            if (!con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al cerrar conexión: " + ex.getMessage());
+        }
+    }
+
+    return lista;
+}
     
     
 }

@@ -8,7 +8,15 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 import java.awt.Desktop;
+import java.io.File;
+
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Path;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -44,7 +52,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        b_descargar_documentacion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(250, 610));
@@ -121,7 +129,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         getContentPane().add(b_cerrar, gridBagConstraints);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Version 1.0.1");
+        jLabel1.setText("Version 1.0.14");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -153,14 +161,19 @@ public class D_acerca_de extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 16, 5, 15);
         getContentPane().add(jLabel6, gridBagConstraints);
 
-        jButton1.setText("Descargar documentacion tecnica");
+        b_descargar_documentacion.setText("Descargar documentacion tecnica");
+        b_descargar_documentacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_descargar_documentacionActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jButton1, gridBagConstraints);
+        getContentPane().add(b_descargar_documentacion, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -210,20 +223,121 @@ public class D_acerca_de extends javax.swing.JDialog {
     }//GEN-LAST:event_b_soporteActionPerformed
 
     private void b_descargar_manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_manualActionPerformed
-        try {
-            //desclaramos la url en una variable porque uri no acepta texto   
-            String url = "https://sites.google.com/view/softium-equipo/p%C3%A1gina-principal";
+        String url = "https://ejemplo.com/documento.pdf";
+        
+        JFileChooser selector = new JFileChooser();
+        selector.setSelectedFile(new File("Manual de usuario Sistema_EN v1.0.14 .pdf"));
 
-            //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
-            if (Desktop.isDesktopSupported()) {
-                //lanzamos la url
-                Desktop.getDesktop().browse(new URI(url));
-            }
-        } catch (Exception e) {
-            //lazamos una exepcion si falla
-            e.printStackTrace();
+        int resultado = selector.showSaveDialog(this);
+
+        if (resultado != JFileChooser.APPROVE_OPTION) {
+            return;
         }
+
+        File archivo = selector.getSelectedFile();
+        
+        String destino = String.valueOf(archivo);
+
+    try {
+        HttpClient cliente = HttpClient.newHttpClient();
+
+        HttpRequest solicitud = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        HttpResponse<Path> respuesta = cliente.send(
+                solicitud,
+                HttpResponse.BodyHandlers.ofFile(Path.of(destino))
+        );
+
+        if (respuesta.statusCode() == 200) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Manual de usuario descargado correctamente.",
+                    "Descarga completada",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se pudo descargar el manual de usuario.\nCódigo HTTP: "
+                    + respuesta.statusCode(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Ocurrió un error al descargar el manual de usuario:\n"
+                + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+
+        e.printStackTrace();
+    }
     }//GEN-LAST:event_b_descargar_manualActionPerformed
+
+    private void b_descargar_documentacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_documentacionActionPerformed
+        String url = "https://ejemplo.com/documento.pdf";
+        
+        JFileChooser selector = new JFileChooser();
+        selector.setSelectedFile(new File("Documentacion tecnica Sistema_EN v1.0.14 .pdf"));
+
+        int resultado = selector.showSaveDialog(this);
+
+        if (resultado != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        File archivo = selector.getSelectedFile();
+        String destino = String.valueOf(archivo);
+
+    try {
+        HttpClient cliente = HttpClient.newHttpClient();
+
+        HttpRequest solicitud = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        HttpResponse<Path> respuesta = cliente.send(
+                solicitud,
+                HttpResponse.BodyHandlers.ofFile(Path.of(destino))
+        );
+
+        if (respuesta.statusCode() == 200) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Documentacion tecnica descargada correctamente en: " + destino,
+                    "Descarga completada",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se pudo descargar la documentacion tecnica.\nCódigo HTTP: "
+                    + respuesta.statusCode(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Ocurrió un error al descargar la documentacion tecnica:\n"
+                + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+        );
+
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_b_descargar_documentacionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,10 +383,10 @@ public class D_acerca_de extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_cerrar;
+    private javax.swing.JButton b_descargar_documentacion;
     private javax.swing.JButton b_descargar_manual;
     private javax.swing.JButton b_licencias;
     private javax.swing.JButton b_soporte;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

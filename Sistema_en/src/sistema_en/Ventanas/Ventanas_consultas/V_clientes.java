@@ -51,15 +51,12 @@ public class V_clientes extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        d_periodo_inicio = new com.github.lgooddatepicker.components.DatePicker();
-        d_periodo_fin = new com.github.lgooddatepicker.components.DatePicker();
         c_ordenar = new javax.swing.JComboBox<>();
         t_buscar = new javax.swing.JTextField();
         b_buscar = new javax.swing.JButton();
         b_reiniciar_filtros = new javax.swing.JButton();
         b_dividir_pantalla = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         b_actualizar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         b_cerrar = new javax.swing.JButton();
@@ -85,16 +82,6 @@ public class V_clientes extends javax.swing.JFrame {
         jPanel1.setAutoscrolls(true);
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel1.setLayout(new java.awt.GridBagLayout());
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(1, 12, 0, 10);
-        jPanel1.add(d_periodo_inicio, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
-        jPanel1.add(d_periodo_fin, gridBagConstraints);
 
         c_ordenar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin orden", "Mayor a menor", "Menor a mayor", "Nombre A-Z", "Nombre Z-A" }));
         c_ordenar.setMaximumSize(new java.awt.Dimension(127, 27));
@@ -155,7 +142,7 @@ public class V_clientes extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(3, 30, 0, 0);
         jPanel1.add(b_buscar, gridBagConstraints);
 
-        b_reiniciar_filtros.setText("Reiniciar filtros");
+        b_reiniciar_filtros.setText("Limpiar busqueda");
         b_reiniciar_filtros.setMaximumSize(new java.awt.Dimension(125, 25));
         b_reiniciar_filtros.setMinimumSize(new java.awt.Dimension(125, 25));
         b_reiniciar_filtros.setPreferredSize(new java.awt.Dimension(125, 25));
@@ -199,16 +186,6 @@ public class V_clientes extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(4, 32, 0, 0);
         jPanel1.add(jLabel2, gridBagConstraints);
-
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Periodo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        jPanel1.add(jLabel4, gridBagConstraints);
 
         b_actualizar.setText("Actualizar");
         b_actualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -308,7 +285,7 @@ public class V_clientes extends javax.swing.JFrame {
     }
     
     public void placeholder(){
-        String placeholder = "Escribe el nombre o id del cliente";
+        String placeholder = "Escribe el nombre del cliente";
 
             // Configurar el texto inicial y el color gris
             t_buscar.setText(placeholder);
@@ -353,8 +330,8 @@ public class V_clientes extends javax.swing.JFrame {
     
     public void limpiar_text() {
         t_buscar.setText("");
-        d_periodo_inicio.setDate(null);
-        d_periodo_fin.setDate(null);
+        //d_periodo_inicio.setDate(null);
+        //d_periodo_fin.setDate(null);
     }
 
     public void adaptar_fuentes(Container contenedor, Font nuevaFuente) {
@@ -427,7 +404,7 @@ public class V_clientes extends javax.swing.JFrame {
         int Tecla_presionada = evt.getKeyCode();
 
         if (Tecla_presionada == KeyEvent.VK_RIGHT) {
-            this.d_periodo_inicio.requestFocus();
+            //this.d_periodo_inicio.requestFocus();
 
         }
         if (Tecla_presionada == KeyEvent.VK_LEFT) {
@@ -440,7 +417,7 @@ public class V_clientes extends javax.swing.JFrame {
         int Tecla_presionada = evt.getKeyCode();
 
         if (Tecla_presionada == KeyEvent.VK_LEFT) {
-            this.d_periodo_fin.requestFocus();
+            //this.d_periodo_fin.requestFocus();
 
         }
     }//GEN-LAST:event_b_reiniciar_filtrosKeyPressed
@@ -448,12 +425,38 @@ public class V_clientes extends javax.swing.JFrame {
     private void b_reiniciar_filtrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_reiniciar_filtrosActionPerformed
         limpiar_text();
         placeholder();
+        llenar_tabla();
+        c_ordenar.setEnabled(true);
+        b_reiniciar_filtros.setBackground(null);
     }//GEN-LAST:event_b_reiniciar_filtrosActionPerformed
 
     private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
-        if (d_periodo_inicio.getDate() == null) {
-            System.out.println("No hay fecha seleccionada");
+        if (t_buscar.getText().isEmpty()) {
+            //System.out.println("No ningun nombre para escribir");
+            JOptionPane.showMessageDialog(this,"No ningun nombre escrito.");
+            return;
         }
+        
+        c_ordenar.setEnabled(false);
+        b_reiniciar_filtros.setBackground(Color.decode("#CE1126"));
+        
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_clientes.getModel();
+        modelo.setRowCount(0); 
+        
+        String nombre_cli = t_buscar.getText().trim();
+        
+        ClienteDAO dao = new ClienteDAO();
+        java.util.List<String[]> listaClienteFiltrados = dao.filtrarClientesNombre(nombre_cli);
+        
+        for (String[] fila : listaClienteFiltrados) {
+            modelo.addRow(fila);
+        }
+        
+        if (listaClienteFiltrados.isEmpty()) {
+            configurar_tabla();
+            JOptionPane.showMessageDialog(this,"No se encontraron coincidencias.");
+        }
+        
     }//GEN-LAST:event_b_buscarActionPerformed
 
     private void b_dividir_pantallaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_dividir_pantallaActionPerformed
@@ -624,6 +627,7 @@ public class V_clientes extends javax.swing.JFrame {
         }
         
         configurar_tabla();
+        
     }
     
     private void c_ordenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_ordenarActionPerformed
@@ -697,11 +701,8 @@ public class V_clientes extends javax.swing.JFrame {
     private javax.swing.JButton b_dividir_pantalla;
     private javax.swing.JButton b_reiniciar_filtros;
     private javax.swing.JComboBox<String> c_ordenar;
-    private com.github.lgooddatepicker.components.DatePicker d_periodo_fin;
-    private com.github.lgooddatepicker.components.DatePicker d_periodo_inicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
