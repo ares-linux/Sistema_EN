@@ -4,6 +4,7 @@
  */
 package sistema_en.Ventanas;
 
+import animaciones.LoadingSpinner;
 import dao.ClienteDAO;
 import dao.ConfiguracionesDAO;
 import dao.CotizacionDAO;
@@ -51,8 +52,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     boolean abrir_automaticamente_excel;
     boolean prueba;
     String cotizaciones1;
-    boolean subir_pdf;
+boolean subir_pdf;
     private boolean formularioVisible = true;
+    private LoadingSpinner spinner;
     
     /**
      * Creates new form V_registrarco
@@ -61,7 +63,10 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
         initComponents();
                 
         config_tablas();
-               
+        
+        spinner = new LoadingSpinner();
+        spinner.setVisible(false);
+                
         //llenar_tabla(0);
         obtener_configuraciones();
     }
@@ -1298,6 +1303,10 @@ private void agregarMaterial() {
         GoogleServicesProvider.sincronizarTrabajosPendientes();
     }//GEN-LAST:event_formWindowOpened
 
+    private void t_ocultarFormularioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_ocultarFormularioActionPerformed
+        setFormulariosVisibles(!t_ocultarFormulario.isSelected());
+    }//GEN-LAST:event_t_ocultarFormularioActionPerformed
+
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_b_cerrarActionPerformed
@@ -1368,7 +1377,7 @@ private void agregarMaterial() {
                     bloquear_botones_sistema();
                     bloquear_tablas();
                     b_nuevo_c.setEnabled(true);
-                    
+
                     T_pestañas.setSelectedIndex(0);
                     nuevo = false;
                 } else {
@@ -1381,7 +1390,7 @@ private void agregarMaterial() {
                 JOptionPane.showMessageDialog(this, "Error inesperado al guardar la cotización: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
+
         if (editar == true){
             try {
                 // 1. Obtener y validar datos principales
@@ -1394,7 +1403,7 @@ private void agregarMaterial() {
                 float subtotal = Float.parseFloat(t_subtotal.getText().replace(",", ".").trim());
                 float iva = Float.parseFloat(t_iva.getText().replace(",", ".").trim());
                 float total = Float.parseFloat(t_total.getText().replace(",", ".").trim());
-        
+
                 String estado = (c_estado.getSelectedItem() != null) ? c_estado.getSelectedItem().toString() : "Borrador";
                 String tipo = t_tipo_c.getText().trim();
                 String fecha_creacion = t_fecha_r.getText().trim();
@@ -1437,7 +1446,7 @@ private void agregarMaterial() {
 
                 // 3. Actualizar cabecera + detalles en una sola transacción
                 boolean cotizacionActualizado = DAO.actualizarCotizacionConDetalles(
-                        subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo, id_cotizacion, listaDetalles);
+                    subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo, id_cotizacion, listaDetalles);
 
                 if (cotizacionActualizado) {
                     // 4. Restablecer interfaz
@@ -1457,242 +1466,241 @@ private void agregarMaterial() {
                     editar = false;
                     T_pestañas.setSelectedIndex(0);
                 } else {
-                        if ("Aprobada".equals(c_estado.getSelectedItem())){
-                            JOptionPane.showMessageDialog(this, "No pueden existir mas de una cotizacion aprobada para un mismo trabajo", "Error", JOptionPane.ERROR_MESSAGE);
-                        }else{
-                            JOptionPane.showMessageDialog(this, "Error al actualizar los datos de la cotización. Ningún dato fue modificado.", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
+                    if ("Aprobada".equals(c_estado.getSelectedItem())){
+                        JOptionPane.showMessageDialog(this, "No pueden existir mas de una cotizacion aprobada para un mismo trabajo", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Error al actualizar los datos de la cotización. Ningún dato fue modificado.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Verifica que todos los campos numéricos tengan un formato válido.", "Error de datos", JOptionPane.ERROR_MESSAGE);
-                } catch (Exception e) {
-                    System.err.println("Error inesperado al actualizar la cotización: " + e.getMessage());
-                    JOptionPane.showMessageDialog(this, "Error inesperado al guardar la cotización: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Verifica que todos los campos numéricos tengan un formato válido.", "Error de datos", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                System.err.println("Error inesperado al actualizar la cotización: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Error inesperado al guardar la cotización: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_b_guardarActionPerformed
 
-    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-        this.dispose();
+private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+
     }//GEN-LAST:event_b_cancelarActionPerformed
 
-    private void preguntar(){
-        String[] opciones = {"Cerrar", "Abrir Hojas de calculo de Google"};
-        int respuesta = javax.swing.JOptionPane.showOptionDialog(this, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
-
-        if (respuesta == 0){
-            
+    private void mostrarSpinnerCarga() {
+        java.awt.Rectangle r = jInternalFrame1.getBounds();
+        spinner.setBounds(r.x + (r.width - 100) / 2, r.y + (r.height - 100) / 2, 100, 100);
+        if (spinner.getParent() == null || spinner.getParent() != jDesktopPane1) {
+            jDesktopPane1.add(spinner, Integer.valueOf(300));
         }
-        
-        else if (respuesta == 1){
-            try {
-            //desclaramos la url en una variable porque uri no acepta texto   
-            String url = "https://docs.google.com/spreadsheets/u/0/";
-
-            //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
-            if (Desktop.isDesktopSupported()) {
-                //lanzamos la url
-                Desktop.getDesktop().browse(new URI(url));
-            }
-            } catch (Exception e) {
-                //lazamos una exepcion si falla
-                e.printStackTrace();
-            }
-        }
+        spinner.startLoading();
+        spinner.setVisible(true);
+        jDesktopPane1.moveToFront(spinner);
     }
-    
+
+    private void ocultarSpinner() {
+        javax.swing.Timer t = new javax.swing.Timer(1200, e -> spinner.setVisible(false));
+        t.setRepeats(false);
+        t.start();
+    }
+
     private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
         String[] opciones = {"PDF", "EXCEL"};
         int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "¿En que formato desea exportar la cotizacion?", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
         if (respuesta1 == 0) {
 
+            
+
             // Extraer datos de la interfaz igual que lo hacías para Sheets
-    String numero_cotizacion = t_id_cotizacion.getText();
-    String fecha = java.time.LocalDate.now().toString();
-    String estado = c_estado.getSelectedItem().toString();
-    String subtotal = t_subtotal.getText();
-    String iva = t_iva.getText();
-    String total = t_total.getText();
+            String numero_cotizacion = t_id_cotizacion.getText();
+            String fecha = java.time.LocalDate.now().toString();
+            String estado = c_estado.getSelectedItem().toString();
+            String subtotal = t_subtotal.getText();
+            String iva = t_iva.getText();
+            String total = t_total.getText();
 
-    List<List<Object>> filasConceptos = new ArrayList<>();
-    for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
-        filasConceptos.add(Arrays.asList(
-            Tabla_conceptos.getValueAt(i, 1), "", Tabla_conceptos.getValueAt(i, 2)
-        ));
-    }
-
-    List<List<Object>> filasMateriales = new ArrayList<>();
-    for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
-        filasMateriales.add(Arrays.asList(
-            Tabla_materiales.getValueAt(i, 1), Tabla_materiales.getValueAt(i, 2), Tabla_materiales.getValueAt(i, 3),Tabla_materiales.getValueAt(i, 4)
-        ));
-    }
-
-    String rutaDestino;
-    
-    if (ruta_pdf.isEmpty()){
-        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
-        fileChooser.setDialogTitle("Guardar PDF de Cotización");
-        fileChooser.setSelectedFile(new java.io.File("Cotizacion_" + numero_cotizacion + ".pdf"));
-    
-        int userSelection = fileChooser.showSaveDialog(this);
-    
-        java.io.File archivoADescargar = fileChooser.getSelectedFile();
-        
-        rutaDestino = archivoADescargar.getAbsolutePath();
-    
-    }
-    else{
-        String carpetaDestino = ruta_pdf;
-        String nombreArchivo = "Cotizacion_" + numero_cotizacion + ".pdf";
-        java.io.File archivoFinal = new java.io.File(carpetaDestino, nombreArchivo);
-        rutaDestino = archivoFinal.getAbsolutePath();
-    }
-    
-        b_exportar.setEnabled(false);
-
-        new SwingWorker<Boolean, Void>() {
-            @Override
-            protected Boolean doInBackground() {
-                return Exportar_PDF.exportarCotizacionPDF(
-                    rutaDestino, 
-                    n_cliente, 
-                    numero_cotizacion, 
-                    fecha, 
-                    estado, 
-                    subtotal, 
-                    iva, 
-                    total, 
-                    filasConceptos, 
-                    filasMateriales
-                );
+            List<List<Object>> filasConceptos = new ArrayList<>();
+            for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
+                filasConceptos.add(Arrays.asList(
+                    Tabla_conceptos.getValueAt(i, 1), "", Tabla_conceptos.getValueAt(i, 2)
+                ));
             }
 
-            protected void done() {
-                
-                    b_exportar.setEnabled(true);
-                try {
-                    if (get()) {
-                        javax.swing.JOptionPane.showMessageDialog(null, "¡PDF exportado con éxito!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                                    
-                        // Opcional: Abrir el PDF automáticamente
-                        if (abrir_automaticamente == true){
-                            if (java.awt.Desktop.isDesktopSupported()) {
-                            java.awt.Desktop.getDesktop().open(new java.io.File(rutaDestino));
-                        }
-                            
-                        if (subir_pdf = Boolean.parseBoolean(cotizaciones1)){
-                            GoogleServicesProvider.subirCotizacionesPdf(ruta_pdf);
-                        }
-                            
-                        }
-                        
-                    } else {
-                        javax.swing.JOptionPane.showMessageDialog(null, "Error al generar el PDF.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+            List<List<Object>> filasMateriales = new ArrayList<>();
+            for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
+                filasMateriales.add(Arrays.asList(
+                    Tabla_materiales.getValueAt(i, 1), Tabla_materiales.getValueAt(i, 2), Tabla_materiales.getValueAt(i, 3),Tabla_materiales.getValueAt(i, 4)
+                ));
+            }
+
+            String rutaDestino;
+
+            if (ruta_pdf.isEmpty()){
+                javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+                fileChooser.setDialogTitle("Guardar PDF de Cotización");
+                fileChooser.setSelectedFile(new java.io.File("Cotizacion_" + numero_cotizacion + ".pdf"));
+
+                int userSelection = fileChooser.showSaveDialog(this);
+
+                java.io.File archivoADescargar = fileChooser.getSelectedFile();
+
+                rutaDestino = archivoADescargar.getAbsolutePath();
+
+            }
+            else{
+                String carpetaDestino = ruta_pdf;
+                String nombreArchivo = "Cotizacion_" + numero_cotizacion + ".pdf";
+                java.io.File archivoFinal = new java.io.File(carpetaDestino, nombreArchivo);
+                rutaDestino = archivoFinal.getAbsolutePath();
+            }
+
+            b_exportar.setEnabled(false);
+
+            new SwingWorker<Boolean, Void>() {
+                @Override
+                protected Boolean doInBackground() {
+                    return Exportar_PDF.exportarCotizacionPDF(
+                        rutaDestino,
+                        n_cliente,
+                        numero_cotizacion,
+                        fecha,
+                        estado,
+                        subtotal,
+                        iva,
+                        total,
+                        filasConceptos,
+                        filasMateriales
+                    );
                 }
-                
-                
-            }
-        }.execute();
-    
-            
+
+                protected void done() {
+
+                    b_exportar.setEnabled(true);
+                    try {
+                        if (get()) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "¡PDF exportado con éxito!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+                            // Opcional: Abrir el PDF automáticamente
+                            if (abrir_automaticamente == true){
+                                if (java.awt.Desktop.isDesktopSupported()) {
+                                    java.awt.Desktop.getDesktop().open(new java.io.File(rutaDestino));
+                                }
+
+                                if (subir_pdf = Boolean.parseBoolean(cotizaciones1)){
+                                    GoogleServicesProvider.subirCotizacionesPdf(ruta_pdf);
+                                }
+
+                            }
+
+                        } else {
+                            javax.swing.JOptionPane.showMessageDialog(null, "Error al generar el PDF.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }.execute();
+
         }
-        
+
         else if (respuesta1 == 1) {
-            
+
             String numero_cotizacion = t_id_cotizacion.getText();
             String fecha = java.time.LocalDate.now().toString();
             String estado = c_estado.getSelectedItem().toString();
             String iva = t_iva.getText();
             String subtotal = t_subtotal.getText();
             String total = t_total.getText();
-            
+
             List<List<Object>> contenidoHoja = new ArrayList<>();
-    
+
             // Encabezado principal
             contenidoHoja.add(Arrays.asList("COTIZACIÓN"));
             contenidoHoja.add(Arrays.asList("Folio:", numero_cotizacion, "Fecha:", fecha));
             contenidoHoja.add(Arrays.asList("Cliente:", n_cliente,"Estado:",estado));
             contenidoHoja.add(Arrays.asList("")); // Fila en blanco
-            
+
             contenidoHoja.add(Arrays.asList("CONCEPTOS"));
             contenidoHoja.add(Arrays.asList("Concepto", "Precio"));
-            
+
             // Si usas un JTable en tu formulario para los items de la cotización:
             for (int i = 0; i < Tabla_conceptos.getRowCount(); i++) {
                 contenidoHoja.add(Arrays.asList(
-                Tabla_conceptos.getValueAt(i, 1), // Concepto
-                Tabla_conceptos.getValueAt(i, 2) // Precio
+                    Tabla_conceptos.getValueAt(i, 1), // Concepto
+                    Tabla_conceptos.getValueAt(i, 2) // Precio
                 ));
             }
             contenidoHoja.add(Arrays.asList("")); // Fila en blanco
             contenidoHoja.add(Arrays.asList("Nombre del material", "precio uni", "Cantidad","Total"));
-            
+
             for (int i = 0; i < Tabla_materiales.getRowCount(); i++) {
                 contenidoHoja.add(Arrays.asList(
-                Tabla_materiales.getValueAt(i, 1), // Nombre del material
-                Tabla_materiales.getValueAt(i, 2), // precio uni
-                Tabla_materiales.getValueAt(i, 3), // Cantidad
-                Tabla_materiales.getValueAt(i, 4)
+                    Tabla_materiales.getValueAt(i, 1), // Nombre del material
+                    Tabla_materiales.getValueAt(i, 2), // precio uni
+                    Tabla_materiales.getValueAt(i, 3), // Cantidad
+                    Tabla_materiales.getValueAt(i, 4)
                 ));
             }
             contenidoHoja.add(Arrays.asList(""));
-             contenidoHoja.add(Arrays.asList("IVA", "Subtotal", "Total"));
-             contenidoHoja.add(Arrays.asList(iva,subtotal,total));
-            
-            
-            b_exportar.setEnabled(false);
-    
-            new SwingWorker<String, Void>() {
-            @Override
-            protected String doInBackground() {
-                String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
-                return GoogleServicesProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja,id_trabajo_c);
-            }
+            contenidoHoja.add(Arrays.asList("IVA", "Subtotal", "Total"));
+            contenidoHoja.add(Arrays.asList(iva,subtotal,total));
 
-            @Override
-            protected void done() {
-                b_exportar.setEnabled(true);
-                try {
-                    String idCreado = get();
-                    if (idCreado != null) {
-                        
-                        if (abrir_automaticamente_excel){
-                        
-                            String url = GoogleServicesProvider.Obtener_url_google_sheets();
-                        
-                            try {
-            
-                                //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
-                                if (Desktop.isDesktopSupported()) {
-                                    //lanzamos la url
-                                    Desktop.getDesktop().browse(new URI(url));
-                                }
-                            } catch (Exception e) {
-                                //lazamos una exepcion si falla
-                                e.printStackTrace();
-                            }
-                        }
-                        else{
-                            preguntar();
-                        }
-                        
-                        //JOptionPane.showMessageDialog(null, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error al exportar la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+            b_exportar.setEnabled(false);
+
+            mostrarSpinnerCarga();
+
+            new SwingWorker<String, Void>() {
+                @Override
+                protected String doInBackground() {
+                    String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
+                    return GoogleServicesProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja,id_trabajo_c);
                 }
-            }
-        }.execute();
-            
+
+                @Override
+                protected void done() {
+                    b_exportar.setEnabled(true);
+                    try {
+                        String idCreado = get();
+                        if (idCreado != null) {
+
+                            spinner.showSuccess();
+                            ocultarSpinner();
+
+                            if (abrir_automaticamente_excel){
+
+                                String url = GoogleServicesProvider.Obtener_url_google_sheets();
+
+                                try {
+
+                                    //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
+                                    if (Desktop.isDesktopSupported()) {
+                                        //lanzamos la url
+                                        Desktop.getDesktop().browse(new URI(url));
+                                    }
+                                } catch (Exception e) {
+                                    //lazamos una exepcion si falla
+                                    e.printStackTrace();
+                                }
+                            }
+                            else{
+                                preguntar();
+                            }
+
+                            //JOptionPane.showMessageDialog(null, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            spinner.showError();
+                            ocultarSpinner();
+                            JOptionPane.showMessageDialog(null, "Error al exportar la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception e) {
+                        spinner.showError();
+                        ocultarSpinner();
+                        e.printStackTrace();
+                    }
+                }
+            }.execute();
+
         }
-        
     }//GEN-LAST:event_b_exportarActionPerformed
 
     private void Tabla_materialesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_materialesMouseClicked
@@ -1760,6 +1768,52 @@ private void agregarMaterial() {
         fila = this.Tabla_conceptos.rowAtPoint(evt.getPoint());
         this.Tabla_materiales.clearSelection();
     }//GEN-LAST:event_Tabla_conceptosMouseClicked
+
+    private void b_borrar_conceptosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_borrar_conceptosActionPerformed
+        int filaSeleccionada = Tabla_conceptos.getSelectedRow();
+        boolean eliminadoExitoso = false;
+
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona un concepto de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Object valor = Tabla_conceptos.getValueAt(filaSeleccionada, 0);
+
+        if (valor == null || valor.toString().trim().isEmpty()) {
+            DefaultTableModel modelo = (DefaultTableModel) Tabla_conceptos.getModel();
+
+            int fila = Tabla_conceptos.getSelectedRow();
+
+            if (fila != -1) {
+                modelo.removeRow(fila);
+            }
+            eliminadoExitoso = true;
+
+        } else {
+            String idString = valor.toString();
+            int id = Integer.parseInt(idString);
+            String Concepto = Tabla_conceptos.getValueAt(filaSeleccionada, 1).toString();
+            int respuesta = JOptionPane.showConfirmDialog( this, "¿Estás seguro de que deseas eliminar este concepto: " + Concepto + "?",  "Confirmar Eliminación",  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+            if (respuesta == JOptionPane.YES_OPTION) {
+                Detalles_cotizacionDAO dao = new Detalles_cotizacionDAO();
+                dao.eliminarDetalles_cotizacion(id);
+                eliminadoExitoso = true;
+            }
+        }
+
+        if (eliminadoExitoso) {
+            limpiar_text();
+            desbloquear_text();
+            llenar_tabla_c();
+            calcular_total();
+            desbloquear_botones();
+            t_concepto.requestFocus();
+        } else {
+            JOptionPane.showMessageDialog(this, "Hubo un error al intentar eliminar el registro de la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_b_borrar_conceptosActionPerformed
 
     private void b_añadir_conceptoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b_añadir_conceptoKeyPressed
         int Tecla_presionada = evt.getKeyCode();
@@ -1884,57 +1938,31 @@ private void agregarMaterial() {
         }
     }//GEN-LAST:event_b_nuevo_cActionPerformed
 
-    private void b_borrar_conceptosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_borrar_conceptosActionPerformed
-        int filaSeleccionada = Tabla_conceptos.getSelectedRow();
-        boolean eliminadoExitoso = false;
-        
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecciona un concepto de la tabla para eliminar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        Object valor = Tabla_conceptos.getValueAt(filaSeleccionada, 0);
+    private void preguntar(){
+        String[] opciones = {"Cerrar", "Abrir Hojas de calculo de Google"};
+        int respuesta = javax.swing.JOptionPane.showOptionDialog(this, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
-        if (valor == null || valor.toString().trim().isEmpty()) {
-            DefaultTableModel modelo = (DefaultTableModel) Tabla_conceptos.getModel();
-
-            int fila = Tabla_conceptos.getSelectedRow();
-
-            if (fila != -1) {
-                modelo.removeRow(fila);
-            }
-            eliminadoExitoso = true;
+        if (respuesta == 0){
             
-        } else {
-            String idString = valor.toString();
-            int id = Integer.parseInt(idString);
-            String Concepto = Tabla_conceptos.getValueAt(filaSeleccionada, 1).toString();
-            int respuesta = JOptionPane.showConfirmDialog( this, "¿Estás seguro de que deseas eliminar este concepto: " + Concepto + "?",  "Confirmar Eliminación",  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-            if (respuesta == JOptionPane.YES_OPTION) {
-                Detalles_cotizacionDAO dao = new Detalles_cotizacionDAO();
-                dao.eliminarDetalles_cotizacion(id);
-                eliminadoExitoso = true;
-            } 
         }
         
-        if (eliminadoExitoso) {
-            limpiar_text();            
-            desbloquear_text();
-            llenar_tabla_c();
-            calcular_total();
-            desbloquear_botones();
-            t_concepto.requestFocus();
-        } else {
-            JOptionPane.showMessageDialog(this, "Hubo un error al intentar eliminar el registro de la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        else if (respuesta == 1){
+            try {
+            //desclaramos la url en una variable porque uri no acepta texto   
+            String url = "https://docs.google.com/spreadsheets/u/0/";
+
+            //verificamos que si esta disponible una interfaz grafica para mostrar la pagina
+            if (Desktop.isDesktopSupported()) {
+                //lanzamos la url
+                Desktop.getDesktop().browse(new URI(url));
+            }
+            } catch (Exception e) {
+                //lazamos una exepcion si falla
+                e.printStackTrace();
+            }
         }
-
-    }//GEN-LAST:event_b_borrar_conceptosActionPerformed
-
-    private void t_ocultarFormularioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_ocultarFormularioActionPerformed
-        setFormulariosVisibles(!t_ocultarFormulario.isSelected());
-    }//GEN-LAST:event_t_ocultarFormularioActionPerformed
-
+    }
+    
     private void setFormulariosVisibles(boolean visible) {
         formularioVisible = visible;
         t_ocultarFormulario.setSelected(!visible);

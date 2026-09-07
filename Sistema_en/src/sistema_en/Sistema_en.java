@@ -29,11 +29,18 @@ public static void main(String[] args) {
     
     //V_login_user login = new V_login_user();
 
+    V_splash splash = new V_splash();
+    splash.actualizarEstado("Verificando base de datos…");
+    splash.mostrar();
+
     try {
         if (!Controlador_arranque.iniciar()) {
+            splash.cerrar();
             System.exit(0);
             return;
         }
+
+        splash.cerrar();
 
         ConfiguracionesDAO dao = new ConfiguracionesDAO();
         List<String[]> configs = dao.obtenerConfiguraciones();
