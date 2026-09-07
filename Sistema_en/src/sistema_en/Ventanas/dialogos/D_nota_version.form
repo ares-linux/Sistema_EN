@@ -60,7 +60,7 @@
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="5"/>
-                    <Property name="text" type="java.lang.String" value="Versión 1.0.16&#xa;&#xa;Novedades:&#xa;- Soporte técnico: envío de solicitudes de soporte por correo electrónico desde el diálogo &quot;Soporte tecnico&quot; en Acerca de.&#xa;- Nota de versión: consulta de las novedades de cada versión y el estado de tus solicitudes de soporte.&#xa;- Integración con la API de Gmail para el envío de correos.&#xa;&#xa;Versión 1.0.15&#xa;- Corrección: se restauró el archivo de credenciales de Google en el instalador, reparando las copias de seguridad y la exportación a Sheets.&#xa;&#xa;Versión 1.0.14&#xa;- Filtro de clientes por nombre.&#xa;- Descarga de documentación técnica y manual de usuario.&#xa;- Pantalla de carga al exportar cotizaciones.&#xa;&#xa;Versión 1.0.13&#xa;- Correcciones de bloqueos de la base de datos (SQLITE_BUSY)."/>
+                    <Property name="text" type="java.lang.String" value="Versi&#xf3;n 1.0.17&#xa;&#xa;Novedades:&#xa;- Redise&#xf1;o del formulario de informes: estad&#xed;sticas organizadas en pesta&#xf1;as (Trabajos, Clientes, Cotizaciones y Otros) y pesta&#xf1;a de historial.&#xa;- La exportaci&#xf3;n del informe a PDF y Excel estar&#xe1; disponible en las pr&#xf3;ximas actualizaciones.&#xa;&#xa;Versi&#xf3;n 1.0.16&#xa;&#xa;Novedades:&#xa;- Soporte t&#xe9;cnico: env&#xed;o de solicitudes de soporte por correo electr&#xf3;nico desde el di&#xe1;logo &quot;Soporte tecnico&quot; en Acerca de.&#xa;- Nota de versi&#xf3;n: consulta de las novedades de cada versi&#xf3;n y el estado de tus solicitudes de soporte.&#xa;- Integraci&#xf3;n con la API de Gmail para el env&#xed;o de correos.&#xa;&#xa;Versi&#xf3;n 1.0.15&#xa;- Correcci&#xf3;n: se restaur&#xf3; el archivo de credenciales de Google en el instalador, reparando las copias de seguridad y la exportaci&#xf3;n a Sheets.&#xa;&#xa;Versi&#xf3;n 1.0.14&#xa;- Filtro de clientes por nombre.&#xa;- Descarga de documentaci&#xf3;n t&#xe9;cnica y manual de usuario.&#xa;- Pantalla de carga al exportar cotizaciones.&#xa;&#xa;Versi&#xf3;n 1.0.13&#xa;- Correcciones de bloqueos de la base de datos (SQLITE_BUSY)."/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -117,7 +117,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="jTable1">
+                <Component class="javax.swing.JTable" name="Tabla_solicitudes">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="3" rowCount="0">

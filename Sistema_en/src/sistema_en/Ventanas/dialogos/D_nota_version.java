@@ -4,6 +4,8 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import javax.swing.ListSelectionModel;
+
 /**
  *
  * @author ares
@@ -16,8 +18,16 @@ public class D_nota_version extends javax.swing.JDialog {
     public D_nota_version(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        tabla();
     }
 
+    private final void tabla(){
+        Tabla_solicitudes.setDefaultEditor(Object.class, null);
+        Tabla_solicitudes.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_solicitudes.getTableHeader().setReorderingAllowed(false);
+        Tabla_solicitudes.getTableHeader().setResizingAllowed(false);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,7 +46,7 @@ public class D_nota_version extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Tabla_solicitudes = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -45,7 +55,7 @@ public class D_nota_version extends javax.swing.JDialog {
         T_nota.setEditable(false);
         T_nota.setColumns(20);
         T_nota.setRows(5);
-        T_nota.setText("Versión 1.0.16\n\nNovedades:\n- Soporte técnico: envío de solicitudes de soporte por correo electrónico desde el diálogo \"Soporte tecnico\" en Acerca de.\n- Nota de versión: consulta de las novedades de cada versión y el estado de tus solicitudes de soporte.\n- Integración con la API de Gmail para el envío de correos.\n\nVersión 1.0.15\n- Corrección: se restauró el archivo de credenciales de Google en el instalador, reparando las copias de seguridad y la exportación a Sheets.\n\nVersión 1.0.14\n- Filtro de clientes por nombre.\n- Descarga de documentación técnica y manual de usuario.\n- Pantalla de carga al exportar cotizaciones.\n\nVersión 1.0.13\n- Correcciones de bloqueos de la base de datos (SQLITE_BUSY).");
+        T_nota.setText("Versión 1.0.17\n\nNovedades:\n- Rediseño del formulario de informes: estadísticas organizadas en pestañas (Trabajos, Clientes, Cotizaciones y Otros) y pestaña de historial.\n- La exportación del informe a PDF y Excel estará disponible en las próximas actualizaciones.\n\nVersión 1.0.16\n\nNovedades:\n- Soporte técnico: envío de solicitudes de soporte por correo electrónico desde el diálogo \"Soporte tecnico\" en Acerca de.\n- Nota de versión: consulta de las novedades de cada versión y el estado de tus solicitudes de soporte.\n- Integración con la API de Gmail para el envío de correos.\n\nVersión 1.0.15\n- Corrección: se restauró el archivo de credenciales de Google en el instalador, reparando las copias de seguridad y la exportación a Sheets.\n\nVersión 1.0.14\n- Filtro de clientes por nombre.\n- Descarga de documentación técnica y manual de usuario.\n- Pantalla de carga al exportar cotizaciones.\n\nVersión 1.0.13\n- Correcciones de bloqueos de la base de datos (SQLITE_BUSY).");
         jScrollPane1.setViewportView(T_nota);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -81,7 +91,7 @@ public class D_nota_version extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel2.add(jLabel2, gridBagConstraints);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Tabla_solicitudes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -89,7 +99,7 @@ public class D_nota_version extends javax.swing.JDialog {
                 "Solicitud", "Fecha de solicitud", "Estado"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(Tabla_solicitudes);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -154,6 +164,7 @@ public class D_nota_version extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea T_nota;
+    private javax.swing.JTable Tabla_solicitudes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -161,6 +172,5 @@ public class D_nota_version extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
