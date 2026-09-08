@@ -4,7 +4,14 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.InformesDAO;
+import java.awt.Color;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -37,13 +44,13 @@ public class D_informes extends javax.swing.JDialog {
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
+        l_mes_año = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         b_exportar = new javax.swing.JButton();
         b_contrastar = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
         jLabel42 = new javax.swing.JLabel();
-        jLabel43 = new javax.swing.JLabel();
+        l_estado = new javax.swing.JLabel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -62,6 +69,11 @@ public class D_informes extends javax.swing.JDialog {
         Tabla_informes_historial = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
@@ -70,7 +82,7 @@ public class D_informes extends javax.swing.JDialog {
 
         jLabel2.setText("Periodo:");
 
-        jLabel23.setText("[ Enero 2027 ▼ ]");
+        l_mes_año.setText("periodo");
 
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
@@ -113,7 +125,7 @@ public class D_informes extends javax.swing.JDialog {
 
         jLabel42.setText("Estado:");
 
-        jLabel43.setText("🟡 Mes en curso (datos parciales)");
+        l_estado.setText("estado");
 
         jPanel6.setLayout(new java.awt.BorderLayout());
 
@@ -192,12 +204,12 @@ public class D_informes extends javax.swing.JDialog {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel23)
+                                .addComponent(l_mes_año)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel42)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel43)))
-                        .addContainerGap(615, Short.MAX_VALUE))
+                                .addComponent(l_estado)))
+                        .addContainerGap(810, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jTabbedPane2)
                         .addGap(18, 18, 18)
@@ -212,9 +224,9 @@ public class D_informes extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel23)
+                    .addComponent(l_mes_año)
                     .addComponent(jLabel42)
-                    .addComponent(jLabel43))
+                    .addComponent(l_estado))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -269,10 +281,59 @@ public class D_informes extends javax.swing.JDialog {
         Tabla_trabajos.getTableHeader().setResizingAllowed(false);
     }
     
+    private void cargarInformeMesActual() {
+        LocalDate hoy = LocalDate.now();
+        LocalDate inicio = hoy.withDayOfMonth(1);
+        LocalDate fin = inicio.plusMonths(1).minusDays(1);
+        int dia = hoy.getDayOfMonth();
+
+        String l_mes = Month.of(hoy.getMonthValue()).getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+        l_mes_año.setText(l_mes + " " + hoy.getYear());
+
+        if (dia == 1) {
+            l_estado.setText("Mes empezado (Sin datos relevantes)");
+            l_estado.setForeground(Color.decode("#00FF00"));
+        } else if (dia < fin.getDayOfMonth()) {
+            l_estado.setText("Mes en curso (datos parciales)");
+            l_estado.setForeground(Color.decode("#FFA500"));
+        } else {
+            l_estado.setText("Mes terminado (datos completos)");
+            l_estado.setForeground(Color.decode("#FF0000"));
+        }
+
+        cargarTablas(inicio, fin);
+    }
+    
+    private void cargarTablas(LocalDate inicio, LocalDate fin) {
+        InformesDAO dao = new InformesDAO();
+
+        DefaultTableModel modeloTrabajos = (DefaultTableModel) Tabla_trabajos.getModel();
+        modeloTrabajos.setRowCount(0);
+        modeloTrabajos.addRow(new Object[]{"Trabajos registrados", dao.contarTrabajosRegistrados(inicio, fin)});
+        modeloTrabajos.addRow(new Object[]{"Trabajos iniciados", dao.contarTrabajosIniciados(inicio, fin)});
+        modeloTrabajos.addRow(new Object[]{"Trabajos finalizados", dao.contarTrabajosFinalizados(inicio, fin)});
+
+        DefaultTableModel modeloClientes = (DefaultTableModel) Tabla_clientes.getModel();
+        modeloClientes.setRowCount(0);
+        modeloClientes.addRow(new Object[]{"Clientes nuevos", dao.contarClientesNuevos(inicio, fin)});
+        modeloClientes.addRow(new Object[]{"Cliente con mas trabajos registrados", dao.clienteConMasTrabajos(inicio, fin)});
+        modeloClientes.addRow(new Object[]{"Clientes con solo un trabajo", dao.contarClientesSoloUnTrabajo(inicio, fin)});
+
+        DefaultTableModel modeloCotizaciones = (DefaultTableModel) Tabla_cotizaciones.getModel();
+        modeloCotizaciones.setRowCount(0);
+        modeloCotizaciones.addRow(new Object[]{"Cotizaciones registradas", dao.contarCotizacionesRegistradas(inicio, fin)});
+        modeloCotizaciones.addRow(new Object[]{"Cotizaciones convertidas en trabajos", dao.contarCotizacionesConvertidas(inicio, fin)});
+
+        DefaultTableModel modeloOtros = (DefaultTableModel) Tabla_otros.getModel();
+        modeloOtros.setRowCount(0);
+        modeloOtros.addRow(new Object[]{"Promedio de trabajos por cliente", dao.promedioTrabajosPorCliente(inicio, fin)});
+        modeloOtros.addRow(new Object[]{"Promedio de duracion de un trabajo (dias)", dao.promedioDuracionTrabajo(inicio, fin)});
+    }
+    
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
         this.dispose();
     }//GEN-LAST:event_b_cerrarActionPerformed
-
+    
     private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
         String[] opciones = {"PDF", "EXCEL"};
         int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "¿En que formato desea exportar la cotizacion?", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
@@ -285,6 +346,10 @@ public class D_informes extends javax.swing.JDialog {
             javax.swing.JOptionPane.showMessageDialog(this, "La exportación a Excel aún no está disponible en esta versión. Estará en las próximas actualizaciones.", "Excel no disponible", javax.swing.JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_b_exportarActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        cargarInformeMesActual();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -340,9 +405,7 @@ public class D_informes extends javax.swing.JDialog {
     private javax.swing.JButton b_exportar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel42;
-    private javax.swing.JLabel jLabel43;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
@@ -358,5 +421,7 @@ public class D_informes extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JLabel l_estado;
+    private javax.swing.JLabel l_mes_año;
     // End of variables declaration//GEN-END:variables
 }
