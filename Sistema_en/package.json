@@ -4,7 +4,7 @@
     "description": "Aplicación de gestión Sistema EN",
     "main": "index.js",
     "repository": {"url": "https://github.com/ares-linux/Sistema_EN.git"},
-    "version": "1.0.18",
+    "version": "1.0.19",
     "jdeploy": {
         "fallbackToUniversal": false,
         "javaVersion": "17",

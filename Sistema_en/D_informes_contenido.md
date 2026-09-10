@@ -39,15 +39,15 @@ Tablas de estadísticas: columnas **["Estadistica", "Resultado"]** (rellenadas p
 
 ## Exportación (PDF / EXCEL)
 - `b_exportar` abre: **"¿En que formato desea exportar la cotizacion?"** con opciones **["PDF", "EXCEL"]**.
-- En esta versión ambos formatos muestran el mensaje:
-  - **"La exportación a PDF aún no está disponible en esta versión. Estará en las próximas actualizaciones."**
-  - **"La exportación a Excel aún no está disponible en esta versión. Estará en las próximas actualizaciones."**
-- La exportación estará disponible en futuras actualizaciones.
+- **PDF** (versión 1.0.19): genera el informe mensual real con las 4 tablas (Trabajos, Clientes, Cotizaciones, Otros). El usuario elige la ubicación (sugerencia: `Informe_<mes_año>.pdf`, predeterminada en `<carpeta_ce>/Informes/`). Se abre automáticamente si la config `automaticamente_ce` está activada.
+- **EXCEL**: muestra el mensaje **"La exportación a Excel aún no está disponible en esta versión. Estará en las próximas actualizaciones."**
+- La exportación a Excel estará disponible en futuras actualizaciones.
 
 ## Configuración de tablas
 - `configuraciones_tabla()`: tablas no editables, selección única, sin reordenar/redimensionar encabezados.
 
 ## Comportamiento al abrir (`formWindowOpened`)
+- Lee `ConfiguracionesDAO` (clave `carpeta_ce` → `ruta_informes` = `<carpeta_ce>/Informes/`; clave `automaticamente_ce` → `abrir_automaticamente`).
 - Llama a `cargarInformeMesActual()`: rellena `l_mes_año` (mes/año actual), `l_estado` según el día de hoy y carga las 4 tablas.
 - Estados posibles de `l_estado`:
   - Día 1: **"Mes empezado (Sin datos relevantes)"** (verde `#00FF00`)

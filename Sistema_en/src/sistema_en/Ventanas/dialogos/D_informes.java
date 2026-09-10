@@ -4,20 +4,28 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import dao.ConfiguracionesDAO;
 import dao.InformesDAO;
 import java.awt.Color;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import sistema_en.Objetos.Exportar_PDF;
 
 /**
  *
  * @author ares
  */
 public class D_informes extends javax.swing.JDialog {
+
+    boolean abrir_automaticamente;
+    String ruta_informes;
 
     /**
      * Creates new form D_informe_mensual
@@ -339,7 +347,64 @@ public class D_informes extends javax.swing.JDialog {
         int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "¿En que formato desea exportar la cotizacion?", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
         if (respuesta1 == 0) {
-            javax.swing.JOptionPane.showMessageDialog(this, "La exportación a PDF aún no está disponible en esta versión. Estará en las próximas actualizaciones.", "PDF no disponible", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            String nombreArchivo = "Informe_" + l_mes_año.getText().replace(" ", "_") + ".pdf";
+            String rutaDestino;
+            javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+            fileChooser.setDialogTitle("Guardar PDF del Informe");
+
+            if (ruta_informes != null && !ruta_informes.isEmpty()) {
+                fileChooser.setCurrentDirectory(new File(ruta_informes));
+            }
+            fileChooser.setSelectedFile(new File(nombreArchivo));
+
+            int userSelection = fileChooser.showSaveDialog(this);
+            if (userSelection != javax.swing.JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+            java.io.File archivoADescargar = fileChooser.getSelectedFile();
+            rutaDestino = archivoADescargar.getAbsolutePath();
+
+            List<List<Object>> filasTrabajos = obtenerFilasTabla(Tabla_trabajos);
+            List<List<Object>> filasClientes = obtenerFilasTabla(Tabla_clientes);
+            List<List<Object>> filasCotizaciones = obtenerFilasTabla(Tabla_cotizaciones);
+            List<List<Object>> filasOtros = obtenerFilasTabla(Tabla_otros);
+
+            b_exportar.setEnabled(false);
+
+            new javax.swing.SwingWorker<Boolean, Void>() {
+                @Override
+                protected Boolean doInBackground() {
+                    return Exportar_PDF.exportarInformePDF(
+                        rutaDestino,
+                        l_mes_año.getText(),
+                        l_estado.getText(),
+                        filasTrabajos,
+                        filasClientes,
+                        filasCotizaciones,
+                        filasOtros
+                    );
+                }
+
+                @Override
+                protected void done() {
+                    b_exportar.setEnabled(true);
+                    try {
+                        if (get()) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "¡PDF exportado con éxito!", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+                            if (abrir_automaticamente) {
+                                if (java.awt.Desktop.isDesktopSupported()) {
+                                    java.awt.Desktop.getDesktop().open(new java.io.File(rutaDestino));
+                                }
+                            }
+                        } else {
+                            javax.swing.JOptionPane.showMessageDialog(null, "Error al generar el PDF.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.execute();
         }
         
         if (respuesta1 == 1){
@@ -347,7 +412,40 @@ public class D_informes extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_b_exportarActionPerformed
 
+    private List<List<Object>> obtenerFilasTabla(javax.swing.JTable tabla) {
+        List<List<Object>> filas = new ArrayList<>();
+        for (int i = 0; i < tabla.getRowCount(); i++) {
+            List<Object> fila = new ArrayList<>();
+            for (int j = 0; j < tabla.getColumnCount(); j++) {
+                fila.add(tabla.getValueAt(i, j));
+            }
+            filas.add(fila);
+        }
+        return filas;
+    }
+
+    private void obtener_configuraciones(){
+        ConfiguracionesDAO dao = new ConfiguracionesDAO();
+        List<String[]> configs = dao.obtenerConfiguraciones();
+
+        for (String[] conf : configs) {
+            String clave = conf[1];
+            String valor = conf[2];
+
+            switch (clave) {
+                case "carpeta_ce":
+                    ruta_informes = valor + "/Informes/";
+                break;
+
+                case "automaticamente_ce":
+                    abrir_automaticamente = Boolean.parseBoolean(valor);
+                break;
+            }
+        }
+    }
+
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        obtener_configuraciones();
         cargarInformeMesActual();
     }//GEN-LAST:event_formWindowOpened
 
