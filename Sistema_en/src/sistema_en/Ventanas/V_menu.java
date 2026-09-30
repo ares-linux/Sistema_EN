@@ -4,8 +4,8 @@
  */
 package sistema_en.Ventanas;
 
+
 import dao.ConfiguracionesDAO;
-import sistema_en.Ventanas.Ventanas_consultas.V_historial_c;
 import sistema_en.Ventanas.Ventanas_consultas.V_clientes;
 import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
 import java.awt.Image;
@@ -24,7 +24,9 @@ import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
 import raven.toast.Notifications;
+import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
+
 
 /**
  *
@@ -36,15 +38,12 @@ public class V_menu extends javax.swing.JFrame {
     private boolean sonido;
     private V_clientes ventana_Clientes = null;
     private V_trabajos ventana_Trabajos = null;
-    private V_historial_c ventana_h_cotizaciones = null;
     
     //Formularios de registro
     
     private V_R_Trabajo ventana_r_trabajos = null;
     private V_R_Herramienta ventana_r_herramientas = null;
     private V_R_Empleado ventana_r_empleados = null;
-    
-    private V_R_Cotizacion ventana_r_cotizaciones = null;
     
     LocalDate fecha_hoy = LocalDate.now();
     long dias;
@@ -217,23 +216,28 @@ public class V_menu extends javax.swing.JFrame {
     }
     }
     
-        if (!cierre && diasTranscurridos >= dias) {
-            final boolean preguntarFinal = preguntar;
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                if (preguntarFinal) {
-                    int respuesta = JOptionPane.showConfirmDialog(this,
-                            "¿Desea realizar una copia de seguridad?",
-                            "Copia de seguridad",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE);
-                    if (respuesta == JOptionPane.YES_OPTION) {
-                        realizarRespaldoSeguro();
-                    }
-                } else {
+    // La comprobacion de internet ya no se hace aqui. Este codigo corre en el
+    // hilo de eventos, y sondear la red durante la construccion de la ventana
+    // la dejaba congelada varios segundos antes de que llegara a verse. Ahora
+    // la hace el hilo de Google, dentro de EjecutorGoogle, y solo si al final
+    // corresponde hacer el respaldo.
+    if (!cierre && diasTranscurridos >= dias) {
+        final boolean preguntarFinal = preguntar;
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            if (preguntarFinal) {
+                int respuesta = JOptionPane.showConfirmDialog(this,
+                        "¿Desea realizar una copia de seguridad?",
+                        "Copia de seguridad",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if (respuesta == JOptionPane.YES_OPTION) {
                     realizarRespaldoSeguro();
                 }
-            });
-        }
+            } else {
+                realizarRespaldoSeguro();
+            }
+        });
+    }
     }
 
     /**
@@ -263,9 +267,7 @@ public class V_menu extends javax.swing.JFrame {
         m_empleado = new javax.swing.JMenuItem();
         m_herramienta = new javax.swing.JMenuItem();
         m_trabajo = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
         m_cotizacion = new javax.swing.JMenuItem();
-        m_cotizacion_c = new javax.swing.JMenuItem();
         m_catalogo = new javax.swing.JMenu();
         m_clientes = new javax.swing.JMenuItem();
         m_trabajos = new javax.swing.JMenuItem();
@@ -355,25 +357,13 @@ public class V_menu extends javax.swing.JFrame {
         });
         m_registros.add(m_trabajo);
 
-        jMenu1.setText("Cotizaciones");
-
-        m_cotizacion.setText("Cotizacion de prueba");
+        m_cotizacion.setText("Cotizacion independiente");
         m_cotizacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 m_cotizacionActionPerformed(evt);
             }
         });
-        jMenu1.add(m_cotizacion);
-
-        m_cotizacion_c.setText("Historial ");
-        m_cotizacion_c.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                m_cotizacion_cActionPerformed(evt);
-            }
-        });
-        jMenu1.add(m_cotizacion_c);
-
-        m_registros.add(jMenu1);
+        m_registros.add(m_cotizacion);
 
         jMenuBar1.add(m_registros);
 
@@ -438,39 +428,68 @@ public class V_menu extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Copia de seguridad que se dispara sola al abrir el programa.
+     *
+     * La subida va por el hilo de Google, asi que la ventana aparece de
+     * inmediato y el usuario puede seguir trabajando mientras se sube. El
+     * aviso final llega cuando la operacion termino.
+     */
     private void realizarRespaldoSeguro() {
-        try {
-            realizar_respaldo();
-        } catch (Exception e) {
-            System.out.println("No se pudo realizar la copia de seguridad:");
-            e.printStackTrace();
+        // Sin reintento: una copia reintentada puede dejar dos respaldos
+        // identicos de la misma base en Drive.
+        EjecutorGoogle.ejecutarSinReintento(this::subirRespaldoADrive, exito -> {
+
+            if (exito) {
+                registrarCopiaExitosa();
+            } else {
+                JOptionPane.showMessageDialog(this, "La copia de seguridad falló, revisá tu conexión a internet.");
+            }
+        }, error -> {
+
             JOptionPane.showMessageDialog(this,
-                    "No se pudo realizar la copia de seguridad:\n" + e.getMessage(),
+                    "No se pudo realizar la copia de seguridad:\n" + EjecutorGoogle.mensajeDeError(error),
                     "Copia de seguridad",
                     JOptionPane.WARNING_MESSAGE);
-        }
+        });
     }
 
+    /**
+     * Sube la base de datos a la carpeta de respaldos. Es la unica parte que
+     * toca Drive, compartida por el camino automatico y el del cierre.
+     *
+     * @return true si la subida se completo
+     */
+    private boolean subirRespaldoADrive() {
+        String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
+        String ruta = Paths.get(base_c1, "sistema_EN").toString();
+        return GoogleServicesProvider.subirArchivo(ruta, idCarpetaDestino);
+    }
+
+    /**
+     * Deja registrada la copia como realizada. Solo se llama si la subida fue
+     * efectiva, para no marcar como respaldado lo que no esta en Drive.
+     */
+    private void registrarCopiaExitosa() {
+        String ultima_copia = LocalDate.now().toString();
+        ConfiguracionesDAO dao = new ConfiguracionesDAO();
+        dao.actualizarCopias(frecuencia1, preguntar1, manual1, cotizaciones1, ultima_copia, base_c1);
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT,
+                "La copia de seguridad se creó con éxito");
+    }
+
+    /**
+     * Copia de seguridad que se ejecuta al cerrar el programa. Sigue siendo
+     * sincronica a proposito: el cierre necesita el resultado antes de llamar
+     * a System.exit, y por eso no puede encolar nada. El cierre migrado a un
+     * dialogo de progreso con opcion de salir sin respaldar es un paso aparte.
+     */
     private void realizar_respaldo(){
         try {
-            String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
-            String ruta = Paths.get(base_c1, "sistema_EN").toString();
-
-            boolean exito = GoogleServicesProvider.subirArchivo(ruta,idCarpetaDestino);
-            if (exito){
-                String ultima_copia = LocalDate.now().toString();
-                ConfiguracionesDAO dao = new ConfiguracionesDAO();
-                dao.actualizarCopias(frecuencia1, preguntar1, manual1, cotizaciones1, ultima_copia,base_c1);
-                System.out.println("la copia de seguridad funciona");
-
-                String mensaje;
-                mensaje = "La copia de seguridad se creo con exito";
-                Notifications.getInstance().show( Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
-
-
+            if (subirRespaldoADrive()){
+                registrarCopiaExitosa();
             }else{
-                JOptionPane.showMessageDialog(this, "la copia de seguridad fallo, revise su conexion a internet."); 
-                System.out.println("supuestamente fallo");
+                JOptionPane.showMessageDialog(this, "la copia de seguridad fallo, revise su conexion a internet.");
             }
         } catch (Exception e) {
             System.out.println("Error al realizar la copia de seguridad:");
@@ -556,9 +575,48 @@ public class V_menu extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_foto();
         verificar_conexion();
-        GoogleServicesProvider.sincronizarTrabajosPendientes();
-        //r_sonido.reproducir("/audios/inicio.wav");
+        sincronizarTrabajosPendientesEnSegundoPlano();
     }//GEN-LAST:event_formWindowOpened
+
+    /**
+     * Crea en Drive las carpetas de los trabajos que quedaron pendientes.
+     *
+     * Va en silencio porque es una tarea que el usuario no disparo: si falla,
+     * un dialogo al abrir el programa seria molesto. El detalle queda en
+     * consola y los trabajos siguen marcados como pendientes, de modo que el
+     * proximo intento los repara.
+     */
+    private void sincronizarTrabajosPendientesEnSegundoPlano() {
+        EjecutorGoogle.ejecutarSilencioso(GoogleServicesProvider::sincronizarTrabajosPendientes, resultado -> {
+
+            if (!isDisplayable()) {
+                return;
+            }
+
+            int sincronizados = resultado[0];
+            int fallidos = resultado[1];
+
+            if (sincronizados == 0 && fallidos == 0) {
+                return;
+            }
+
+            if (fallidos == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Se sincronizaron " + sincronizados
+                        + (sincronizados == 1 ? " trabajo pendiente con Google Drive."
+                                              : " trabajos pendientes con Google Drive."));
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Se sincronizaron " + sincronizados + " de " + (sincronizados + fallidos)
+                        + " trabajos pendientes con Google Drive.\n"
+                        + fallidos + (fallidos == 1 ? " quedó" : " quedaron") + " sin sincronizar.\n"
+                        + "Revisá la conexión a internet o volvé a vincular la cuenta de Google.\n"
+                        + "Se reintentará automáticamente al volver a abrir el programa.",
+                        "Sincronización con Drive",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
+    }
 
     private void M_cerrar_programaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_cerrar_programaActionPerformed
         revisar_sonido();
@@ -688,38 +746,10 @@ public class V_menu extends javax.swing.JFrame {
     
     }//GEN-LAST:event_m_registrosFocusGained
 
-    private void m_cotizacion_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_cotizacion_cActionPerformed
-        if (ventana_h_cotizaciones == null || !ventana_h_cotizaciones.isDisplayable()) {
-            ventana_h_cotizaciones = new V_historial_c();
-            ventana_h_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            ventana_h_cotizaciones.setVisible(true);
-            ventana_h_cotizaciones.toFront();
-            ventana_h_cotizaciones.requestFocus();
-        } else {
-            if (ventana_h_cotizaciones.getExtendedState() == JFrame.ICONIFIED) {
-                ventana_h_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            }
-            ventana_h_cotizaciones.toFront();
-            ventana_h_cotizaciones.requestFocus();
-        }
-    }//GEN-LAST:event_m_cotizacion_cActionPerformed
-
     private void m_cotizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_cotizacionActionPerformed
-        if (ventana_r_cotizaciones == null || !ventana_r_cotizaciones.isDisplayable()) {
-            ventana_r_cotizaciones = new V_R_Cotizacion();
-            ventana_r_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            ventana_r_cotizaciones.cotizacion_prueba();
-            ventana_r_cotizaciones.setVisible(true);
-            ventana_r_cotizaciones.toFront();
-            ventana_r_cotizaciones.requestFocus();
-        } else {
-            if (ventana_r_cotizaciones.getExtendedState() == JFrame.ICONIFIED) {
-                ventana_r_cotizaciones.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            }
-            ventana_r_cotizaciones.toFront();
-            ventana_r_cotizaciones.requestFocus();
-        }
-        
+        // Instancia unica: si la ventana ya esta abierta se reutiliza y se trae al
+        // frente, sin apilar copias del formulario de cotizaciones.
+        V_R_Cotizacion_independiente.abrirNueva();
     }//GEN-LAST:event_m_cotizacionActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
@@ -766,7 +796,6 @@ public class V_menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem M_cerrar_programa;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JDialog jDialog1;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -783,7 +812,6 @@ public class V_menu extends javax.swing.JFrame {
     private javax.swing.JMenu m_catalogo;
     private javax.swing.JMenuItem m_clientes;
     private javax.swing.JMenuItem m_cotizacion;
-    private javax.swing.JMenuItem m_cotizacion_c;
     private javax.swing.JMenuItem m_empleado;
     private javax.swing.JMenuItem m_herramienta;
     private javax.swing.JMenu m_registros;

@@ -5,7 +5,7 @@
 package sistema_en.Ventanas.Ventanas_consultas;
 
 import dao.TrabajoDAO;
-import javax.swing.JFrame;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -49,8 +49,13 @@ public class V_trabajos extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         c_filtro = new javax.swing.JComboBox<>();
-        b_dividir_pantalla = new javax.swing.JButton();
         b_actualizar = new javax.swing.JButton();
+        D_periodo_inicio = new com.github.lgooddatepicker.components.DatePicker();
+        D_periodo_fin = new com.github.lgooddatepicker.components.DatePicker();
+        c_fecha = new javax.swing.JComboBox<>();
+        b_buscar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla_trabajos = new javax.swing.JTable();
         b_cerrar = new javax.swing.JButton();
@@ -63,18 +68,19 @@ public class V_trabajos extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Historial de Trabajos");
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel1.setText("Historial de Trabajos");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(9, 107, 10, 1);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jScrollPane2.setAutoscrolls(true);
         jScrollPane2.setMinimumSize(new java.awt.Dimension(20, 60));
 
+        jPanel1.setMinimumSize(new java.awt.Dimension(749, 80));
+        jPanel1.setPreferredSize(new java.awt.Dimension(749, 80));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         c_filtro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Pendiente", "En progreso", "Completado" }));
@@ -87,24 +93,9 @@ public class V_trabajos extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(c_filtro, gridBagConstraints);
-
-        b_dividir_pantalla.setText("Dividir");
-        b_dividir_pantalla.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_dividir_pantallaActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        jPanel1.add(b_dividir_pantalla, gridBagConstraints);
 
         b_actualizar.setText("Actualizar");
         b_actualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -113,22 +104,64 @@ public class V_trabajos extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(b_actualizar, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(D_periodo_inicio, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(D_periodo_fin, gridBagConstraints);
+
+        c_fecha.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fecha de creacion", "Fecha de fin oficial" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(c_fecha, gridBagConstraints);
+
+        b_buscar.setText("Buscar");
+        b_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_buscarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(b_buscar, gridBagConstraints);
+
+        jLabel2.setText("Periodo de inicio y fin");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel2, gridBagConstraints);
+
+        jLabel3.setText("Fecha");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel3, gridBagConstraints);
 
         jScrollPane2.setViewportView(jPanel1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipady = 25;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jScrollPane2, gridBagConstraints);
 
         Tabla_trabajos.setModel(new javax.swing.table.DefaultTableModel(
@@ -149,15 +182,14 @@ public class V_trabajos extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 1000;
         gridBagConstraints.ipady = 398;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 27, 0, 33);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jScrollPane1, gridBagConstraints);
 
         b_cerrar.setText("Cerrar");
@@ -167,10 +199,10 @@ public class V_trabajos extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(18, 531, 15, 21);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_cerrar, gridBagConstraints);
 
         pack();
@@ -224,91 +256,19 @@ public class V_trabajos extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_Tabla_trabajosMouseClicked
 
-    private void b_dividir_pantallaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_dividir_pantallaActionPerformed
-
-        if (!dividida) {
-
-            int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea dividir el formulario?", "Confirmar accion", javax.swing.JOptionPane.YES_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
-            if (respuesta == javax.swing.JOptionPane.YES_OPTION) {
-                // 1. Definimos los textos personalizados para los botones
-                String[] opciones = {"Izquierda", "Derecha"};
-
-                // 2. Usamos showOptionDialog para personalizar el componente
-                int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "¿En que lado de la pantalla?", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
-
-                if (respuesta1 == 0) {
-                    System.out.println("Seleccionaste Izquierda");
-
-                    b_dividir_pantalla.setText("Maximizar");
-                    dividida = true;
-
-                    try {
-                        // 1. SI ESTÁ MAXIMIZADA, LA RESTAURAMOS A SU ESTADO NORMAL Primero
-                        if ((this.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH) != 0) {
-                            this.setExtendedState(java.awt.Frame.NORMAL);
-                        }
-
-                        java.awt.GraphicsConfiguration config = this.getGraphicsConfiguration();
-                        java.awt.Rectangle bounds = config.getBounds();
-                        java.awt.Insets insets = java.awt.Toolkit.getDefaultToolkit().getScreenInsets(config);
-
-                        int anchoUtil = bounds.width - insets.left - insets.right;
-                        int altoUtil = bounds.height - insets.top - insets.bottom;
-
-                        int nuevaX = insets.left;
-                        int nuevaY = insets.top;
-                        int nuevoAncho = anchoUtil / 2;
-                        int nuevoAlto = altoUtil;
-
-                        this.setBounds(nuevaX, nuevaY, nuevoAncho, nuevoAlto);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                } else if (respuesta1 == 1) {
-                    System.out.println("Seleccionaste Derecha");
-
-                    b_dividir_pantalla.setText("Maximizar");
-                    dividida = true;
-
-                    try {
-                        if ((this.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH) != 0) {
-                            this.setExtendedState(java.awt.Frame.NORMAL);
-                        }
-
-                        java.awt.GraphicsConfiguration config = this.getGraphicsConfiguration();
-                        java.awt.Rectangle bounds = config.getBounds();
-                        java.awt.Insets insets = java.awt.Toolkit.getDefaultToolkit().getScreenInsets(config);
-
-                        int anchoUtil = bounds.width - insets.left - insets.right;
-                        int altoUtil = bounds.height - insets.top - insets.bottom;
-
-                        int nuevoAncho = anchoUtil / 2;
-                        int nuevaX = insets.left + nuevoAncho;
-                        int nuevaY = insets.top;
-                        int nuevoAlto = altoUtil;
-
-                        this.setBounds(nuevaX, nuevaY, nuevoAncho, nuevoAlto);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        } else {
-
-            this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-            b_dividir_pantalla.setText("Dividir");
-            dividida = false;
-        }
-                }//GEN-LAST:event_b_dividir_pantallaActionPerformed
-
     private void b_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_actualizarActionPerformed
-        //c_filtro.setSelectedItem(0);
-        llenar_tabla();
+        // Si c_filtro no estaba en "Todos", setSelectedIndex dispara su propio
+        // actionPerformed y ya recarga la tabla. Solo rellenamos si no iba a pasar.
+        boolean cambiaEstado = c_filtro.getSelectedIndex() != 0;
+
+        D_periodo_inicio.setDate(null);
+        D_periodo_fin.setDate(null);
+        c_fecha.setSelectedIndex(0);
+        c_filtro.setSelectedIndex(0);
+
+        if (!cambiaEstado) {
+            llenar_tabla();
+        }
     }//GEN-LAST:event_b_actualizarActionPerformed
 
     public void filtrar_pendiente(){
@@ -369,21 +329,86 @@ public class V_trabajos extends javax.swing.JFrame {
 
             case "Todos":
                 llenar_tabla();
+                D_periodo_inicio.setText("");
+                D_periodo_fin.setText("");
+                c_fecha.setSelectedIndex(0);
                 break;
                 
             case "Pendiente":
                 filtrar_pendiente();
+                D_periodo_inicio.setText("");
+                D_periodo_fin.setText("");
+                c_fecha.setSelectedIndex(0);
                 break;
                 
             case "En progreso":
                 filtrar_progreso();
+                D_periodo_inicio.setText("");
+                D_periodo_fin.setText("");
+                c_fecha.setSelectedIndex(0);
                 break;
                 
             case "Completado":
                 filtrar_completados();
+                D_periodo_inicio.setText("");
+                D_periodo_fin.setText("");
+                c_fecha.setSelectedIndex(0);
                 break;
         }
     }//GEN-LAST:event_c_filtroActionPerformed
+
+    /**
+     * Filtra la tabla por el periodo elegido, respetando el estado de c_filtro.
+     * Si no hay coincidencias deja la tabla vacia: recargar todo el historial
+     * taparia el resultado de la busqueda que el usuario acaba de pedir.
+     */
+    private void buscar_por_periodo(LocalDate desde, LocalDate hasta) {
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_trabajos.getModel();
+        modelo.setRowCount(0);
+
+        Object opcion = c_filtro.getSelectedItem();
+        String estado = opcion == null ? "Todos" : opcion.toString();
+        boolean por_fecha_fin = c_fecha.getSelectedIndex() != 0;
+
+        TrabajoDAO dao = new TrabajoDAO();
+        java.util.List<String[]> listaTrabajos = dao.buscarTrabajosPorPeriodo(estado, desde, hasta, por_fecha_fin);
+
+        for (String[] fila : listaTrabajos) {
+            modelo.addRow(fila);
+        }
+
+        if (listaTrabajos.isEmpty()) {
+            String periodo;
+            if (desde != null && hasta != null) {
+                periodo = " desde " + desde + " hasta " + hasta;
+            } else if (desde != null) {
+                periodo = " desde " + desde;
+            } else if (hasta != null) {
+                periodo = " hasta " + hasta;
+            } else {
+                periodo = "";
+            }
+            String conEstado = estado.equals("Todos") ? "" : " con estado " + estado;
+            JOptionPane.showMessageDialog(this, "No se encontraron trabajos" + conEstado + periodo + ".");
+        }
+    }
+
+    private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+        LocalDate desde = D_periodo_inicio.getDate();
+        LocalDate hasta = D_periodo_fin.getDate();
+
+        if (desde == null && hasta == null) {
+            JOptionPane.showMessageDialog(this, "Seleccione al menos una fecha del periodo.");
+            return;
+        }
+
+        if (desde != null && hasta != null && desde.isAfter(hasta)) {
+            JOptionPane.showMessageDialog(this, "La fecha de inicio no puede ser posterior a la fecha de fin.");
+            return;
+        }
+
+        buscar_por_periodo(desde, hasta);
+    }//GEN-LAST:event_b_buscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -421,12 +446,17 @@ public class V_trabajos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.github.lgooddatepicker.components.DatePicker D_periodo_fin;
+    private com.github.lgooddatepicker.components.DatePicker D_periodo_inicio;
     private javax.swing.JTable Tabla_trabajos;
     private javax.swing.JButton b_actualizar;
+    private javax.swing.JButton b_buscar;
     private javax.swing.JButton b_cerrar;
-    private javax.swing.JButton b_dividir_pantalla;
+    private javax.swing.JComboBox<String> c_fecha;
     private javax.swing.JComboBox<String> c_filtro;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

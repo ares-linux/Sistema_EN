@@ -71,7 +71,7 @@ public class GoogleServicesProvider {
     
     public static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
-    public static Credential getCredentials(HttpTransport HTTP_TRANSPORT) throws Exception {
+    public static synchronized com.google.api.client.http.HttpRequestInitializer getCredentials(final HttpTransport HTTP_TRANSPORT) throws Exception {
         java.io.File credentialsFile = UtilidadesRutas.buscarCredenciales();
         if (credentialsFile == null) {
             throw new Exception("No se encontró el archivo '" + CREDENTIALS_FILE_PATH + "' junto al ejecutable. "
@@ -92,7 +92,41 @@ public class GoogleServicesProvider {
                 .build();
 
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(9999).build();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        final Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+
+        return new com.google.api.client.http.HttpRequestInitializer() {
+            @Override
+            public void initialize(com.google.api.client.http.HttpRequest request) throws java.io.IOException {
+                credential.initialize(request);
+
+                final com.google.api.client.http.HttpUnsuccessfulResponseHandler defaultHandler = request.getUnsuccessfulResponseHandler();
+                request.setUnsuccessfulResponseHandler(new com.google.api.client.http.HttpUnsuccessfulResponseHandler() {
+                    @Override
+                    public boolean handleResponse(com.google.api.client.http.HttpRequest req, com.google.api.client.http.HttpResponse response, boolean supportsRetry) throws java.io.IOException {
+                        boolean retry = false;
+                        if (defaultHandler != null) {
+                            try {
+                                retry = defaultHandler.handleResponse(req, response, supportsRetry);
+                            } catch (com.google.api.client.auth.oauth2.TokenResponseException e) {
+                                if (e.getDetails() != null && "invalid_grant".equals(e.getDetails().getError())) {
+                                    System.out.println("Token expirado o revocado. Desconectando para forzar re-autenticación...");
+                                    desconectar();
+                                    try {
+                                        com.google.api.client.http.HttpRequestInitializer newCred = getCredentials(HTTP_TRANSPORT);
+                                        newCred.initialize(req);
+                                        return true; // Reintentar la petición original
+                                    } catch (Exception ex) {
+                                        throw e;
+                                    }
+                                }
+                                throw e;
+                            }
+                        }
+                        return retry;
+                    }
+                });
+            }
+        };
     }
 
     public static Sheets getSheetsService() throws Exception {
@@ -187,6 +221,17 @@ public class GoogleServicesProvider {
     }
 
     public static boolean subirArchivo(String rutaArchivoLocal,String ruta) {
+        if (!estaConectado()) {
+            System.out.println("❌ Error: no hay ninguna cuenta de Google Drive vinculada.");
+            return false;
+        }
+
+        if (ruta == null || ruta.isBlank()) {
+            System.out.println("❌ Error: no se pudo determinar la carpeta de destino en Drive. "
+                    + "Se cancela la subida de: " + rutaArchivoLocal);
+            return false;
+        }
+
         try {
             final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
             Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -217,11 +262,7 @@ public class GoogleServicesProvider {
 
             File fileMetadata = new File();
             fileMetadata.setName(nombreArchivo);
-
-            String idCarpetaDestino = ruta; // O el ID que necesites
-            if (idCarpetaDestino != null) {
-                fileMetadata.setParents(Collections.singletonList(idCarpetaDestino));
-            }
+            fileMetadata.setParents(Collections.singletonList(ruta));
             
             FileContent mediaContent = new FileContent("application/x-sqlite3", fileToUpload);
 
@@ -342,7 +383,12 @@ public class GoogleServicesProvider {
         List<List<Object>> datosMatriz) throws Exception {
 
         List<Request> requests = new java.util.ArrayList<>();
-
+        
+        com.google.api.services.sheets.v4.model.Color bgDarkBlue = new com.google.api.services.sheets.v4.model.Color().setRed(0.12f).setGreen(0.27f).setBlue(0.5f);
+        com.google.api.services.sheets.v4.model.Color bgLightBlue = new com.google.api.services.sheets.v4.model.Color().setRed(0.85f).setGreen(0.9f).setBlue(0.95f);
+        com.google.api.services.sheets.v4.model.Color textWhite = new com.google.api.services.sheets.v4.model.Color().setRed(1.0f).setGreen(1.0f).setBlue(1.0f);
+        
+        // 1. Unir A1:D1 (COTIZACIÓN) y aplicar formato (ajustado hasta la columna D que es índice 3, o E índice 4. Como la tabla máxima tiene 4 columnas A-D, pongamos hasta índice 4)
         requests.add(new Request()
                 .setMergeCells(new com.google.api.services.sheets.v4.model.MergeCellsRequest()
                         .setRange(new GridRange()
@@ -363,19 +409,22 @@ public class GoogleServicesProvider {
                                 .setEndColumnIndex(4))
                         .setCell(new CellData()
                                 .setUserEnteredFormat(new CellFormat()
+                                        .setBackgroundColor(bgDarkBlue)
                                         .setTextFormat(new TextFormat()
+                                                .setForegroundColor(textWhite)
                                                 .setBold(true)
-                                                .setFontSize(18))
+                                                .setFontSize(16))
                                         .setHorizontalAlignment("CENTER")
                                         .setVerticalAlignment("MIDDLE")))
-                        .setFields("userEnteredFormat")));
+                        .setFields("userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment)")));
 
+        // 2. Metadatos (Folio, Fecha, Cliente, Estado) en negritas (A2:D4)
         requests.add(new Request()
                 .setRepeatCell(new RepeatCellRequest()
                         .setRange(new GridRange()
                                 .setSheetId(sheetId)
                                 .setStartRowIndex(1)
-                                .setEndRowIndex(3)
+                                .setEndRowIndex(4)
                                 .setStartColumnIndex(0)
                                 .setEndColumnIndex(4))
                         .setCell(new CellData()
@@ -384,16 +433,80 @@ public class GoogleServicesProvider {
                         .setFields("userEnteredFormat.textFormat.bold")));
 
         int filaMateriales = 6;
-
         for (int i = 0; i < datosMatriz.size(); i++) {
             if (!datosMatriz.get(i).isEmpty()
                     && "Nombre del material".equals(datosMatriz.get(i).get(0))) {
-
                 filaMateriales = i;
                 break;
             }
         }
+        
+        int filaTotales = datosMatriz.size() - 2;
 
+        Border bordeSolido = new Border().setStyle("SOLID").setWidth(1);
+        Borders bordesCompletos = new Borders()
+                .setTop(bordeSolido).setBottom(bordeSolido)
+                .setLeft(bordeSolido).setRight(bordeSolido);
+
+        // 3. Encabezado "CONCEPTOS" (fila 5 -> índice 4)
+        requests.add(new Request()
+                .setMergeCells(new com.google.api.services.sheets.v4.model.MergeCellsRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(4)
+                                .setEndRowIndex(5)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(2))
+                        .setMergeType("MERGE_ALL")));
+                        
+        requests.add(new Request()
+                .setRepeatCell(new RepeatCellRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(4)
+                                .setEndRowIndex(5)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(2))
+                        .setCell(new CellData()
+                                .setUserEnteredFormat(new CellFormat()
+                                        .setBackgroundColor(bgDarkBlue)
+                                        .setTextFormat(new TextFormat().setForegroundColor(textWhite).setBold(true))
+                                        .setHorizontalAlignment("CENTER")))
+                        .setFields("userEnteredFormat(backgroundColor,textFormat,horizontalAlignment)")));
+
+        // 4. Encabezado de la tabla Conceptos (fila 6 -> índice 5)
+        requests.add(new Request()
+                .setRepeatCell(new RepeatCellRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(5)
+                                .setEndRowIndex(6)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(2))
+                        .setCell(new CellData()
+                                .setUserEnteredFormat(new CellFormat()
+                                        .setBackgroundColor(bgLightBlue)
+                                        .setTextFormat(new TextFormat().setBold(true))
+                                        .setHorizontalAlignment("CENTER")
+                                        .setBorders(bordesCompletos)))
+                        .setFields("userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,borders)")));
+
+        // 5. Bordes para datos de Conceptos
+        if (filaMateriales - 1 > 6) {
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(sheetId)
+                                    .setStartRowIndex(6)
+                                    .setEndRowIndex(filaMateriales - 1)
+                                    .setStartColumnIndex(0)
+                                    .setEndColumnIndex(2))
+                            .setCell(new CellData()
+                                    .setUserEnteredFormat(new CellFormat().setBorders(bordesCompletos)))
+                            .setFields("userEnteredFormat.borders")));
+        }
+
+        // 6. Encabezado de la tabla Materiales (filaMateriales)
         requests.add(new Request()
                 .setRepeatCell(new RepeatCellRequest()
                         .setRange(new GridRange()
@@ -401,35 +514,123 @@ public class GoogleServicesProvider {
                                 .setStartRowIndex(filaMateriales)
                                 .setEndRowIndex(filaMateriales + 1)
                                 .setStartColumnIndex(0)
-                                .setEndColumnIndex(3))
+                                .setEndColumnIndex(4))
                         .setCell(new CellData()
                                 .setUserEnteredFormat(new CellFormat()
+                                        .setBackgroundColor(bgLightBlue)
                                         .setTextFormat(new TextFormat().setBold(true))
                                         .setHorizontalAlignment("CENTER")
-                                        .setBorders(new Borders()
-                                                .setTop(new Border().setStyle("SOLID"))
-                                                .setBottom(new Border().setStyle("SOLID"))
-                                                .setLeft(new Border().setStyle("SOLID"))
-                                                .setRight(new Border().setStyle("SOLID")))))
-                        .setFields("userEnteredFormat")));
+                                        .setBorders(bordesCompletos)))
+                        .setFields("userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,borders)")));
 
-        NumberFormat formatoMoneda = new NumberFormat()
-                .setType("NUMBER")
-                .setPattern("$#,##0.00");
+        // 7. Bordes para datos de Materiales
+        if (filaTotales - 1 > filaMateriales + 1) {
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(sheetId)
+                                    .setStartRowIndex(filaMateriales + 1)
+                                    .setEndRowIndex(filaTotales - 1)
+                                    .setStartColumnIndex(0)
+                                    .setEndColumnIndex(4))
+                            .setCell(new CellData()
+                                    .setUserEnteredFormat(new CellFormat().setBorders(bordesCompletos)))
+                            .setFields("userEnteredFormat.borders")));
+        }
 
+        // 8. Encabezados de Totales (filaTotales)
         requests.add(new Request()
                 .setRepeatCell(new RepeatCellRequest()
                         .setRange(new GridRange()
                                 .setSheetId(sheetId)
-                                .setStartRowIndex(5)
-                                .setEndRowIndex(filaMateriales - 1)
-                                .setStartColumnIndex(1)
-                                .setEndColumnIndex(2))
+                                .setStartRowIndex(filaTotales)
+                                .setEndRowIndex(filaTotales + 1)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(3))
                         .setCell(new CellData()
                                 .setUserEnteredFormat(new CellFormat()
-                                        .setNumberFormat(formatoMoneda)))
+                                        .setBackgroundColor(bgDarkBlue)
+                                        .setTextFormat(new TextFormat().setForegroundColor(textWhite).setBold(true))
+                                        .setHorizontalAlignment("CENTER")
+                                        .setBorders(bordesCompletos)))
+                        .setFields("userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,borders)")));
+
+        // 9. Valores de Totales (filaTotales + 1)
+        requests.add(new Request()
+                .setRepeatCell(new RepeatCellRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(filaTotales + 1)
+                                .setEndRowIndex(filaTotales + 2)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(3))
+                        .setCell(new CellData()
+                                .setUserEnteredFormat(new CellFormat()
+                                        .setBorders(bordesCompletos)
+                                        .setTextFormat(new TextFormat().setBold(true))))
+                        .setFields("userEnteredFormat(borders,textFormat)")));
+
+        // 10. Formato de Moneda
+        NumberFormat formatoMoneda = new NumberFormat()
+                .setType("NUMBER")
+                .setPattern("$#,##0.00");
+
+        // Moneda para precios en Conceptos
+        if (filaMateriales - 1 > 6) {
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(sheetId)
+                                    .setStartRowIndex(6)
+                                    .setEndRowIndex(filaMateriales - 1)
+                                    .setStartColumnIndex(1)
+                                    .setEndColumnIndex(2))
+                            .setCell(new CellData()
+                                    .setUserEnteredFormat(new CellFormat().setNumberFormat(formatoMoneda)))
+                            .setFields("userEnteredFormat.numberFormat")));
+        }
+        
+        // Moneda para precio unitario y total en Materiales
+        if (filaTotales - 1 > filaMateriales + 1) {
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(sheetId)
+                                    .setStartRowIndex(filaMateriales + 1)
+                                    .setEndRowIndex(filaTotales - 1)
+                                    .setStartColumnIndex(1)
+                                    .setEndColumnIndex(2))
+                            .setCell(new CellData()
+                                    .setUserEnteredFormat(new CellFormat().setNumberFormat(formatoMoneda)))
+                            .setFields("userEnteredFormat.numberFormat")));
+                            
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(sheetId)
+                                    .setStartRowIndex(filaMateriales + 1)
+                                    .setEndRowIndex(filaTotales - 1)
+                                    .setStartColumnIndex(3)
+                                    .setEndColumnIndex(4))
+                            .setCell(new CellData()
+                                    .setUserEnteredFormat(new CellFormat().setNumberFormat(formatoMoneda)))
+                            .setFields("userEnteredFormat.numberFormat")));
+        }
+
+        // Moneda para Totales (IVA, Subtotal, Total)
+        requests.add(new Request()
+                .setRepeatCell(new RepeatCellRequest()
+                        .setRange(new GridRange()
+                                .setSheetId(sheetId)
+                                .setStartRowIndex(filaTotales + 1)
+                                .setEndRowIndex(filaTotales + 2)
+                                .setStartColumnIndex(0)
+                                .setEndColumnIndex(3))
+                        .setCell(new CellData()
+                                .setUserEnteredFormat(new CellFormat().setNumberFormat(formatoMoneda)))
                         .setFields("userEnteredFormat.numberFormat")));
 
+        // 11. Ajuste del ancho de las columnas
         requests.add(new Request()
                 .setUpdateDimensionProperties(
                         new UpdateDimensionPropertiesRequest()
@@ -439,7 +640,7 @@ public class GoogleServicesProvider {
                                         .setStartIndex(0)
                                         .setEndIndex(1))
                                 .setProperties(new DimensionProperties()
-                                        .setPixelSize(300))
+                                        .setPixelSize(350))
                                 .setFields("pixelSize")));
 
         requests.add(new Request()
@@ -562,80 +763,118 @@ public class GoogleServicesProvider {
         }
     }
     
-    public static void sincronizarTrabajosPendientes() {
-    
-        if (!estaConectado()) {
-            return; 
-        }
-    
-        new javax.swing.SwingWorker<Void, Void>() {
-    
-        @Override
-        protected Void doInBackground() throws Exception {
-            TrabajoDAO dao = new TrabajoDAO();
-            List<Trabajo> listaTrabajos = dao.obtenerTrabajosPendientes();
-
-            for (Trabajo trabajo : listaTrabajos) {
-            
-                int idTrabajo = trabajo.getId_trabajo();
-            
-                String nombreCarpeta = "Trabajo_" + trabajo.getId_trabajo() + "_" + trabajo.getId_cliente() + "_" + trabajo.getFecha_cr();
-                String idCarpetaDrive = sistema_en.GoogleServicesProvider.crearCarpetaTrabajo(nombreCarpeta);
-                System.out.println("✅ ¡Trabajo ID " + trabajo.getId_trabajo() + " creado con su carpeta de Drive sincronizada!");
-            
-                dao.actualizarTrabajoIdCarpeta(trabajo.getId_trabajo(), idCarpetaDrive);
-                
-                String Carpeta = "Creada";
-                dao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
-            }
+    /**
+     * Busca o crea la carpeta "Evidencias" dentro de la carpeta de un trabajo.
+     * Se expone aqui para que la vista de bitacora deje de armar su propio
+     * servicio de Drive duplicado.
+     *
+     * @param idTrabajoCarpeta carpeta del trabajo en Drive
+     * @return id de la carpeta de evidencias, o null si fallo
+     */
+    public static String obtenerIdCarpetaEvidencias(String idTrabajoCarpeta) {
+        if (idTrabajoCarpeta == null || idTrabajoCarpeta.isBlank()) {
             return null;
         }
-
-        @Override
-        protected void done() {
-            javax.swing.JOptionPane.showMessageDialog(null, "¡Sincronización con Drive completada!");
-        }
-        }.execute();
-    
-    }
-    
-    public static void subirCotizacionesPdf(String ruta){
-        if (!estaConectado()) {
-            return; 
-        }
-    
-        new javax.swing.SwingWorker<Void, Void>() {
-    
-        @Override
-        protected Void doInBackground() throws Exception {
-            
+        try {
             final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
             Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(APPLICATION_NAME)
-                .build();
-            String idCotizaciones = buscarOCrearCarpeta(service, "Cotizaciones", null);
-            String idCotizaciones_PDF = buscarOCrearCarpeta(service, "PDF", idCotizaciones);
-            
-            java.io.File carpeta = new java.io.File(ruta);
-            java.io.File[] archivos = carpeta.listFiles();
-            if (archivos != null) {
-                for (java.io.File f : archivos) {
-                System.out.println(f.getName());
-                
-                String ruta2 = ruta + f.getName();
-                
-                GoogleServicesProvider.subirArchivo(ruta2, idCotizaciones_PDF);
-                }
-            }
+                    .setApplicationName(APPLICATION_NAME)
+                    .build();
 
+            return buscarOCrearCarpeta(service, "Evidencias", idTrabajoCarpeta);
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-        
-        @Override
-        protected void done() {
-            javax.swing.JOptionPane.showMessageDialog(null, "¡Sincronización con Drive completada!");
+    }
+
+    /**
+     * Crea en Drive las carpetas de los trabajos que quedaron pendientes.
+     *
+     * Es sincronica a proposito: la ejecuta el hilo de
+     * {@link EjecutorGoogle}, no el hilo de eventos de Swing. Antes estaba
+     * envuelta en un SwingWorker propio, lo que multiplicaba los hilos y
+     * dejaba al usuario esperando sin saber que pasaba. Tampoco muestra
+     * dialogos; el llamador decide que informar.
+     *
+     * @return arreglo de dos posiciones: {sincronizados, fallidos}
+     */
+    public static int[] sincronizarTrabajosPendientes() {
+
+        if (!estaConectado()) {
+            return new int[]{0, 0};
         }
-        }.execute();
+
+        TrabajoDAO dao = new TrabajoDAO();
+        List<Trabajo> listaTrabajos = dao.obtenerTrabajosPendientes();
+        int sincronizados = 0;
+        int fallidos = 0;
+
+        for (Trabajo trabajo : listaTrabajos) {
+
+            int idTrabajo = trabajo.getId_trabajo();
+
+            String nombreCarpeta = "Trabajo_" + trabajo.getId_trabajo() + "_" + trabajo.getId_cliente() + "_" + trabajo.getFecha_cr();
+            String idCarpetaDrive = GoogleServicesProvider.crearCarpetaTrabajo(nombreCarpeta);
+
+            if (idCarpetaDrive != null) {
+                dao.actualizarTrabajoIdCarpeta(trabajo.getId_trabajo(), idCarpetaDrive);
+                dao.actualizarTrabajoCarpeta(idTrabajo, "Creada");
+                sincronizados++;
+                System.out.println("Trabajo ID " + trabajo.getId_trabajo() + " creado con su carpeta de Drive sincronizada.");
+            } else {
+                dao.actualizarTrabajoCarpeta(idTrabajo, "Pendiente");
+                fallidos++;
+                System.out.println("No se pudo crear la carpeta de Drive del trabajo ID "
+                        + trabajo.getId_trabajo() + ". Queda pendiente.");
+            }
+        }
+        return new int[]{sincronizados, fallidos};
+    }
+
+    /**
+     * Sube a Drive los PDF de una carpeta local.
+     *
+     * Es sincronica a proposito, la ejecuta el hilo de
+     * {@link EjecutorGoogle}. Los dialogos los decide el llamador.
+     *
+     * @param ruta carpeta local con los PDF
+     * @return arreglo de dos posiciones: {subidos, fallidos}
+     * @throws Exception si falla la llamada a Drive, para que el ejecutor la
+     *                   reciba y el usuario vea la causa real en vez de un
+     *                   "no se pudo subir" sin detalle
+     */
+    public static int[] subirCotizacionesPdf(String ruta) throws Exception {
+        if (!estaConectado()) {
+            return new int[]{0, 0};
+        }
+
+        final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+        String idCotizaciones = buscarOCrearCarpeta(service, "Cotizaciones", null);
+        String idCotizaciones_PDF = buscarOCrearCarpeta(service, "PDF", idCotizaciones);
+
+        java.io.File carpeta = new java.io.File(ruta);
+        java.io.File[] archivos = carpeta.listFiles();
+        int subidos = 0;
+        int fallidos = 0;
+        if (archivos != null) {
+            for (java.io.File f : archivos) {
+
+                // Se usa la ruta que Java ya compuso al listar la carpeta. Antes
+                // se concatenaba el nombre sobre la ruta cruda, lo que dependia
+                // de que la ruta terminara en separador y hacia fallar la subida.
+                if (GoogleServicesProvider.subirArchivo(f.getPath(), idCotizaciones_PDF)) {
+                    subidos++;
+                } else {
+                    fallidos++;
+                }
+            }
+        }
+
+        return new int[]{subidos, fallidos};
     }
     
     
@@ -712,13 +951,26 @@ public class GoogleServicesProvider {
 }
     
     
-    public static void verificarYDescargarEvidencia(String idDrive, String rutaLocalDestino) {
+    /**
+     * Baja una evidencia desde Drive si todavia no esta en este equipo.
+     *
+     * Devuelve si el archivo quedo disponible, en lugar de nada. La vista de
+     * bitacora la ejecuta desde el hilo de Google y necesita saber si puede
+     * mostrar la imagen o si tiene que avisar que la descarga fallo; antes el
+     * fallo se comia por dentro y la vista intentaba pintar un archivo que no
+     * existia.
+     *
+     * @param idDrive          id del archivo en Drive
+     * @param rutaLocalDestino ruta donde queda la copia local
+     * @return true si el archivo esta disponible en disco
+     */
+    public static boolean verificarYDescargarEvidencia(String idDrive, String rutaLocalDestino) {
     java.io.File archivoLocal = new java.io.File(rutaLocalDestino);
     
     // Si la imagen NO existe localmente en esta nueva PC, pero tenemos su ID de Drive...
     if (!archivoLocal.exists()) {
         try {
-            System.out.println("🔄 Imagen no encontrada localmente. Descargándola desde Google Drive...");
+            System.out.println("Imagen no encontrada localmente. Descargándola desde Google Drive...");
             Drive driveService = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                     .setApplicationName(APPLICATION_NAME)
                     .build();
@@ -730,16 +982,22 @@ public class GoogleServicesProvider {
             try (java.io.FileOutputStream outputStream = new java.io.FileOutputStream(archivoLocal)) {
                 driveService.files().get(idDrive).executeMediaAndDownloadTo(outputStream);
             }
-            System.out.println("✅ Imagen restaurada con éxito desde la nube.");
+            System.out.println("Imagen restaurada con éxito desde la nube.");
             
         } catch (Exception e) {
-            System.out.println("❌ No se pudo descargar la imagen desde Drive.");
+            System.out.println("No se pudo descargar la imagen desde Drive.");
             e.printStackTrace();
+
+            // Una descarga interrumpida deja un archivo de cero bytes. Si se
+            // deja, la proxima visita lo toma por valido y nunca reintenta.
+            archivoLocal.delete();
+            return false;
         }
     } else {
         // Si ya existe localmente, la carga directo de la PC (¡súper rápido!)
-        // System.out.println("📂 Cargando imagen desde el disco local.");
     }
+
+    return archivoLocal.exists() && archivoLocal.length() > 0;
 }
     
     public static void limpiarCarpetaTemporal(String rutaTemporal) {
@@ -837,16 +1095,50 @@ public static void guardarEvidenciaSeleccionada(String rutaTemporalOrigen, Strin
      * @param cuerpo cuerpo del correo en texto/html
      * @return true si se envio correctamente, false en caso contrario
      */
-    public static boolean enviarCorreo(String destinatario, String asunto, String cuerpo) {
+    public static boolean enviarCorreo(String destinatario, String asunto, String cuerpo, String tipo, String prioridad, String adjuntos) {
         try {
             Gmail service = getGmailService();
             
-            String rawMessage = "To: " + destinatario + "\r\n" +
-                                "Subject: " + asunto + "\r\n" +
-                                "Content-Type: text/html; charset=utf-8\r\n\r\n" +
-                                cuerpo;
+            String boundary = "====Boundary====";
+            StringBuilder rawMessage = new StringBuilder();
+
+            rawMessage.append("To: ").append(destinatario).append("\r\n");
+            rawMessage.append("Subject: ").append(asunto).append("\r\n");
+            rawMessage.append("MIME-Version: 1.0\r\n");
+            rawMessage.append("Content-Type: multipart/mixed; boundary=\"").append(boundary).append("\"\r\n\r\n");
+
+            rawMessage.append("--").append(boundary).append("\r\n");
+            rawMessage.append("Content-Type: text/html; charset=utf-8\r\n\r\n");
+            rawMessage.append("<b>Tipo:</b> ").append(tipo).append("<br>");
+            rawMessage.append("<b>Prioridad:</b> ").append(prioridad).append("<br><br>");
+            rawMessage.append(cuerpo).append("\r\n\r\n");
+
+            if (adjuntos != null && !adjuntos.trim().isEmpty()) {
+                String[] archivosPaths = adjuntos.split(";");
+                for (String path : archivosPaths) {
+                    java.io.File file = new java.io.File(path.trim());
+                    if (file.exists()) {
+                        String fileName = file.getName();
+                        String mimeType = java.nio.file.Files.probeContentType(file.toPath());
+                        if (mimeType == null) mimeType = "application/octet-stream";
+                        
+                        byte[] fileBytes = java.nio.file.Files.readAllBytes(file.toPath());
+                        String encodedFile = java.util.Base64.getMimeEncoder().encodeToString(fileBytes);
+                        
+                        rawMessage.append("--").append(boundary).append("\r\n");
+                        rawMessage.append("Content-Type: ").append(mimeType).append("; name=\"").append(fileName).append("\"\r\n");
+                        rawMessage.append("Content-Disposition: attachment; filename=\"").append(fileName).append("\"\r\n");
+                        rawMessage.append("Content-Transfer-Encoding: base64\r\n\r\n");
+                        rawMessage.append(encodedFile).append("\r\n\r\n");
+                    } else {
+                        System.out.println("⚠️ Advertencia: El archivo adjunto no existe: " + path);
+                    }
+                }
+            }
+
+            rawMessage.append("--").append(boundary).append("--");
             
-            String encodedEmail = java.util.Base64.getUrlEncoder().encodeToString(rawMessage.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            String encodedEmail = java.util.Base64.getUrlEncoder().encodeToString(rawMessage.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
             
             Message message = new Message();
             message.setRaw(encodedEmail);

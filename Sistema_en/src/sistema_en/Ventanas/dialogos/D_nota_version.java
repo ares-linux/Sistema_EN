@@ -5,6 +5,7 @@
 package sistema_en.Ventanas.dialogos;
 
 import javax.swing.ListSelectionModel;
+import sistema_en.Version;
 
 /**
  *
@@ -19,6 +20,13 @@ public class D_nota_version extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         tabla();
+    }
+    
+    public void nota(){
+        T_nota.setEditable(false);
+        String contenido = Version.leerTextoRecurso("/archivos/nota.txt");
+        T_nota.setText(contenido);
+        T_nota.setCaretPosition(0);
     }
 
     private final void tabla(){
@@ -49,13 +57,17 @@ public class D_nota_version extends javax.swing.JDialog {
         Tabla_solicitudes = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         T_nota.setEditable(false);
         T_nota.setColumns(20);
         T_nota.setRows(5);
-        T_nota.setText("Versión 1.0.19\n\nNovedades:\n- Exportación del informe mensual a PDF con las estadísticas de las pestañas Trabajos, Clientes, Cotizaciones y Otros.\n- El PDF se guarda en la carpeta de Informes (Documentos) o en la ubicación que elijas.\n- Si activas \"Abrir automaticamente las cotizaciones exportadas a pdf\" en Configuraciones, el informe se abrirá automáticamente al exportarlo.\n- Corrección de columnas de las estadísticas en el PDF generado.\n\nVersión 1.0.18\n\nNovedades:\n- El informe mensual ahora calcula estadísticas reales: trabajos, clientes, cotizaciones y promedios del mes, con datos consultados de la base de datos.\n- Corrección en el estado del periodo: el día 1 ya muestra \"Mes empezado\" y los estados se asignan correctamente.\n- Simplificación del código del informe mensual.\n\nVersión 1.0.17\n\nNovedades:\n- Rediseño del formulario de informes: estadísticas organizadas en pestañas (Trabajos, Clientes, Cotizaciones y Otros) y pestaña de historial.\n\nVersión 1.0.16\n\nNovedades:\n- Soporte técnico: envío de solicitudes de soporte por correo electrónico desde el diálogo \"Soporte tecnico\" en Acerca de.\n- Nota de versión: consulta de las novedades de cada versión y el estado de tus solicitudes de soporte.\n- Integración con la API de Gmail para el envío de correos.\n\nVersión 1.0.15\n- Corrección: se restauró el archivo de credenciales de Google en el instalador, reparando las copias de seguridad y la exportación a Sheets.\n\nVersión 1.0.14\n- Filtro de clientes por nombre.\n- Descarga de documentación técnica y manual de usuario.\n- Pantalla de carga al exportar cotizaciones.\n\nVersión 1.0.13\n- Correcciones de bloqueos de la base de datos (SQLITE_BUSY).");
         jScrollPane1.setViewportView(T_nota);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -119,6 +131,10 @@ public class D_nota_version extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        nota();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments

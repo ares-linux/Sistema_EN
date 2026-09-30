@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import sistema_en.Conexion;
 
 public class InformesDAO {
@@ -136,5 +138,27 @@ public class InformesDAO {
             System.err.println("Error al contar en informe mensual: " + e.getMessage());
         }
         return 0;
+    }
+
+    public List<String> obtenerPeriodosDisponibles() {
+        List<String> periodos = new ArrayList<>();
+        String sql = "SELECT DISTINCT periodo FROM ("
+                + "SELECT strftime('%Y-%m', fecha_cr) AS periodo FROM Trabajo WHERE fecha_cr IS NOT NULL "
+                + "UNION "
+                + "SELECT strftime('%Y-%m', fecha_registro) AS periodo FROM Cliente WHERE fecha_registro IS NOT NULL "
+                + "UNION "
+                + "SELECT strftime('%Y-%m', fecha_creacion) AS periodo FROM Cotizacion WHERE fecha_creacion IS NOT NULL"
+                + ") WHERE periodo IS NOT NULL "
+                + "ORDER BY periodo DESC";
+        try (Connection con = Conexion.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                periodos.add(rs.getString("periodo"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener periodos: " + e.getMessage());
+        }
+        return periodos;
     }
 }

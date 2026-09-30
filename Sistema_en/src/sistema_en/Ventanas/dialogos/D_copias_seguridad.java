@@ -11,8 +11,10 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import sistema_en.GoogleServicesProvider;
 import sistema_en.Conexion;
+import sistema_en.EjecutorGoogle;
+import sistema_en.GoogleServicesProvider;
+import sistema_en.UtilidadesError;
 
 /**
  *
@@ -401,15 +403,25 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     }
     
     public void reconectar(){
-        
+
         GoogleServicesProvider.desconectar();
-    
+
         JOptionPane.showMessageDialog(this, "Se abrirá el navegador para vincular la nueva cuenta.");
-    
-        new Thread(() -> {
+
+        // Sin reintento: el reintento de este flujo puede abrir una segunda
+        // ventana de autorizacion en el navegador, que es peor que mostrar un
+        // error y que el usuario vuelva a intentarlo.
+        EjecutorGoogle.ejecutarSinReintento(() -> {
+
             String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
-            GoogleServicesProvider.subirArchivo("credentials.json",idCarpetaDestino);
-        }).start();
+            return GoogleServicesProvider.subirArchivo("credentials.json", idCarpetaDestino);
+        }, resultado -> {
+        }, error -> {
+
+            if (isDisplayable()) {
+                UtilidadesError.error(this, "Vincular cuenta", EjecutorGoogle.mensajeDeError(error));
+            }
+        });
     }
     
     public void verificar_cambios(){
@@ -523,39 +535,77 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         
     }//GEN-LAST:event_ch_copias_cotizacionesActionPerformed
 
+    /**
+     * Sube la base de datos actual a la carpeta de respaldos de Google Drive.
+     *
+     * La subida ocurre en el hilo de {@link EjecutorGoogle} y no en uno
+     * suelto: asi todas las operaciones de Drive quedan encoladas y no compiten
+     * por el refresco de credenciales. La interfaz se actualiza solo cuando la
+     * subida termino, y la marca de ultima copia se guarda unicamente si la
+     * subida fue efectiva.
+     */
     public void subir(){
-        String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
-        GoogleServicesProvider.subirArchivo(Conexion.getRutaBDActual(),idCarpetaDestino); 
-        java.awt.EventQueue.invokeLater(() -> {
-        
-        JOptionPane.showMessageDialog(this, "Copia de seguridad manual subida con éxito a Google Drive.");
+
+        // Sin reintento: la copia se sube como un archivo nuevo y reintentar
+        // ante un fallo de red podria dejar dos copias del mismo respaldo.
+        EjecutorGoogle.ejecutarSinReintento(() -> {
+
+            String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
+            return GoogleServicesProvider.subirArchivo(Conexion.getRutaBDActual(), idCarpetaDestino);
+        }, copiaSubida -> {
+
+            if (!isDisplayable()) {
+                return;
+            }
+
+            if (!copiaSubida) {
+                UtilidadesError.error(this, "Copia de seguridad",
+                        "No se pudo subir la copia de seguridad a Google Drive.\n"
+                        + "Revisá la conexión a internet o volvé a vincular la cuenta desde este diálogo.\n"
+                        + "La base de datos local no se modificó.");
+                restaurarBotonCopia();
+                return;
+            }
+
+            JOptionPane.showMessageDialog(this, "Copia de seguridad manual subida con éxito a Google Drive.");
+            restaurarBotonCopia();
+
+            ultima_copia = LocalDate.now();
+            this.ultima_copia1 = String.valueOf(ultima_copia);
+
+            String frecuencia = "manual";
+            if (jr_diaria.isSelected()) {
+                frecuencia = "diaria";
+            } else if (jr_semanal.isSelected()) {
+                frecuencia = "semanal";
+            } else if (jr_cada_cierre.isSelected()) {
+                frecuencia = "cada cierre";
+            }
+
+            String preguntar = String.valueOf(ch_preguntar.isSelected());
+            String manual = String.valueOf(ch_manual.isSelected());
+            String cotizaciones = String.valueOf(ch_copias_cotizaciones.isSelected());
+            String base_c = t_base.getText();
+
+            ConfiguracionesDAO dao = new ConfiguracionesDAO();
+            dao.actualizarCopias(frecuencia, preguntar, manual, cotizaciones, this.ultima_copia1, base_c);
+        }, error -> {
+
+            if (!isDisplayable()) {
+                return;
+            }
+            UtilidadesError.error(this, "Copia de seguridad", EjecutorGoogle.mensajeDeError(error));
+            restaurarBotonCopia();
+        });
+    }
+
+    private void restaurarBotonCopia() {
         b_copia.setEnabled(true);
         b_copia.setText("Subir copia de seguridad ahora");
-        
-        ultima_copia = LocalDate.now();
-        this.ultima_copia1 = String.valueOf(ultima_copia);
-        
-        String frecuencia = "manual";
-        if (jr_diaria.isSelected()) {
-            frecuencia = "diaria";
-        } else if (jr_semanal.isSelected()) {
-            frecuencia = "semanal";
-        } else if (jr_cada_cierre.isSelected()) {
-            frecuencia = "cada cierre";
-        }
-        
-        String preguntar = String.valueOf(ch_preguntar.isSelected());
-        String manual = String.valueOf(ch_manual.isSelected());
-        String cotizaciones = String.valueOf(ch_copias_cotizaciones.isSelected());
-        String base_c = t_base.getText();
-        
-        ConfiguracionesDAO dao = new ConfiguracionesDAO();
-        dao.actualizarCopias(frecuencia, preguntar, manual, cotizaciones, this.ultima_copia1, base_c);          
-    });
     }
-    
+
     private void b_copiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_copiaActionPerformed
-        
+
         if (!GoogleServicesProvider.estaConectado()) {
             JOptionPane.showMessageDialog(this, "Primero debes vincular una cuenta de Google Drive para subir respaldos.", "Cuenta no vinculada", JOptionPane.WARNING_MESSAGE);
             return;
@@ -564,11 +614,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         b_copia.setEnabled(false);
         b_copia.setText("Subiendo copia...");
 
-        new Thread(() -> {
-        
-            subir();
-            
-        }).start();
+        subir();
     }//GEN-LAST:event_b_copiaActionPerformed
 
     private void b_baseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_baseActionPerformed

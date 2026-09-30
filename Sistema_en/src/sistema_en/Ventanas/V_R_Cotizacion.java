@@ -22,6 +22,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
+import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Cotizacion;
@@ -159,7 +160,6 @@ boolean subir_pdf;
         jPanel12 = new javax.swing.JPanel();
         P_botones_sistema = new javax.swing.JPanel();
         b_exportar = new javax.swing.JButton();
-        b_convertir = new javax.swing.JButton();
         b_cancelar = new javax.swing.JButton();
         b_guardar = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
@@ -786,16 +786,6 @@ boolean subir_pdf;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_botones_sistema.add(b_exportar, gridBagConstraints);
 
-        b_convertir.setText("Convertir a trabajo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 95;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_botones_sistema.add(b_convertir, gridBagConstraints);
-
         b_cancelar.setText("Cancelar");
         b_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -831,7 +821,7 @@ boolean subir_pdf;
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 95;
@@ -937,13 +927,77 @@ boolean subir_pdf;
         
     public void cotizacion_prueba(){
         t_tipo_c.setText("Prueba");
-        
+        id_trabajo_c = 0;
+        t_id_trabajo.setText("0");
+
         cargarCotizacionPrueba();
     }
-    
+
     private void cargarCotizacionPrueba(){
+        llenar_tabla(0);
+    }
+
+    /**
+     * Carga en el formulario una cotizacion existente por su id, sin importar si
+     * es de prueba o de un trabajo. La usan el doble clic de la tabla de pruebas,
+     * el historial y la propia vista despues de convertir.
+     *
+     * @param id_cotizacion_i cotizacion a cargar
+     * @return true si la cotizacion existe
+     */
+    public boolean abrirCotizacionPorId(int id_cotizacion_i){
         CotizacionDAO dao = new CotizacionDAO();
-        dao.obtenerCotizacionesPrueba();
+        Cotizacion c = dao.obtenerCotizacion(id_cotizacion_i);
+
+        if (c == null) {
+            return false;
+        }
+
+        if (c.getFecha_creacion() != null) {
+            t_fecha_r.setText(c.getFecha_creacion().toString());
+        }
+
+        t_id_cotizacion.setText(String.valueOf(c.getId_cotizacion()));
+        t_tipo_c.setText(c.getTipo());
+        t_subtotal.setText(String.format("%.2f", c.getSubtotal()));
+        t_iva.setText(String.format("%.2f", c.getIva()));
+        t_total.setText(String.format("%.2f", c.getTotal()));
+        c_estado.setSelectedItem(c.getEstado());
+
+        if ("Prueba".equals(c.getTipo())) {
+            t_id_trabajo.setText("0");
+            id_trabajo_c = 0;
+        } else {
+            t_id_trabajo.setText(c.getId_trabajo() != 0 ? String.valueOf(c.getId_trabajo()) : "");
+            id_trabajo_c = c.getId_trabajo();
+        }
+
+        // El nombre que se imprime en PDF y Excel es el del cliente registrado si
+        // la cotizacion ya pertenece a un trabajo; si es de prueba va el prospecto.
+        // En el caso de un trabajo no se toca n_cliente porque lo carga el modulo
+        // de clientes al abrir la cotizacion. Los campos de prospecto y el boton
+        // Convertir ya no estan en esta ventana: solo los maneja la ventana de
+        // cotizaciones independientes.
+        if (id_trabajo_c == 0) {
+            n_cliente = valorSeguro(c.getNombre_cliente());
+        }
+
+        obtener_detalles(c.getId_cotizacion());
+        return true;
+    }
+
+    private static String valorSeguro(String valor){
+        return valor != null ? valor : "";
+    }
+
+    /**
+     * Deja el formulario mostrando la cotización recién guardada o editada, con los
+     * importes y detalles ya cargados y en modo lectura.
+     */
+    private void cargarCotizacionRecienCreada(int id_cotizacion){
+        if (!abrirCotizacionPorId(id_cotizacion)) {
+            t_id_cotizacion.setText(String.valueOf(id_cotizacion));
+        }
     }
     
     private void obtener_configuraciones(){
@@ -1244,12 +1298,10 @@ private void agregarMaterial() {
     public void bloquear_botones_sistema(){
         b_guardar.setEnabled(false);
         b_cancelar.setEnabled(false);
-        b_convertir.setEnabled(false);
         b_exportar.setEnabled(false);
     }
     
     public void desbloquear_botones_sistema(){
-        b_convertir.setEnabled(true);
         b_exportar.setEnabled(true);
     }
     
@@ -1293,6 +1345,56 @@ private void agregarMaterial() {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    /**
+     * Sube a Google Drive los PDF exportados y avisa el resultado al usuario.
+     *
+     * La subida va en el hilo de Google. Antes se pedia desde el hilo de
+     * eventos, dentro del callback que cerraba la exportacion del PDF, y la
+     * ventana quedaba congelada mientras Drive subia los archivos.
+     *
+     * @param rutaCarpetaPdf carpeta local con los PDF
+     */
+    private void subirCotizacionesPdfADrive(String rutaCarpetaPdf) {
+        // Sin reintento: subir de nuevo los mismos PDF puede dejar copias
+        // repetidas en Drive.
+        EjecutorGoogle.ejecutarSinReintento(
+                () -> GoogleServicesProvider.subirCotizacionesPdf(rutaCarpetaPdf),
+                resultado -> {
+
+                    if (!isDisplayable()) {
+                        return;
+                    }
+
+                    int subidos = resultado[0];
+                    int fallidos = resultado[1];
+
+                    if (subidos == 0 && fallidos == 0) {
+                        return;
+                    }
+
+                    if (fallidos == 0) {
+                        JOptionPane.showMessageDialog(this,
+                                "Se subieron " + subidos
+                                + (subidos == 1 ? " cotización a Google Drive." : " cotizaciones a Google Drive."));
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Se subieron " + subidos + " de " + (subidos + fallidos)
+                                + " cotizaciones a Google Drive.\n"
+                                + fallidos + (fallidos == 1 ? " quedó" : " quedaron") + " sin subir.\n"
+                                + "Revisá la conexión a internet.",
+                                "Sincronización con Drive",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                },
+                error -> {
+
+                    if (isDisplayable()) {
+                        JOptionPane.showMessageDialog(this, EjecutorGoogle.mensajeDeError(error),
+                                "Subir cotizaciones", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+    }
+
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         fecha();
         b_añadir_materiales.setText("+");
@@ -1300,15 +1402,54 @@ private void agregarMaterial() {
         bloquear_text();
         bloquear_tablas();
         bloquear_botones_sistema();
-        GoogleServicesProvider.sincronizarTrabajosPendientes();
+        sincronizarTrabajosPendientesEnSegundoPlano();
     }//GEN-LAST:event_formWindowOpened
+
+    /**
+     * Crea en Drive las carpetas de los trabajos pendientes, en segundo plano.
+     *
+     * Va en silencio porque el usuario no la disparo: al abrir la pantalla de
+     * cotizaciones un dialogo de error seria una intrusion. Si algo falla los
+     * trabajos siguen pendientes y se reparan en el proximo arranque.
+     */
+    private void sincronizarTrabajosPendientesEnSegundoPlano() {
+        EjecutorGoogle.ejecutarSilencioso(GoogleServicesProvider::sincronizarTrabajosPendientes, resultado -> {
+
+            if (!isDisplayable()) {
+                return;
+            }
+
+            int sincronizados = resultado[0];
+            int fallidos = resultado[1];
+
+            if (sincronizados == 0 && fallidos == 0) {
+                return;
+            }
+
+            if (fallidos == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Se sincronizaron " + sincronizados
+                        + (sincronizados == 1 ? " trabajo pendiente con Google Drive."
+                                              : " trabajos pendientes con Google Drive."));
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Se sincronizaron " + sincronizados + " de " + (sincronizados + fallidos)
+                        + " trabajos pendientes con Google Drive.\n"
+                        + fallidos + (fallidos == 1 ? " quedó" : " quedaron") + " sin sincronizar.\n"
+                        + "Revisá la conexión a internet o volvé a vincular la cuenta de Google.\n"
+                        + "Se reintentará automáticamente al volver a abrir el programa.",
+                        "Sincronización con Drive",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
+    }
 
     private void t_ocultarFormularioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_ocultarFormularioActionPerformed
         setFormulariosVisibles(!t_ocultarFormulario.isSelected());
     }//GEN-LAST:event_t_ocultarFormularioActionPerformed
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_b_cerrarActionPerformed
 
     private void b_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_guardarActionPerformed
@@ -1336,6 +1477,13 @@ private void agregarMaterial() {
                 cot.setTipo(tipo);
                 cot.setFecha_creacion(java.time.LocalDate.now());
                 cot.setId_trabajo(id_trabajo_c);
+                // Esta ventana ya no edita prospecto: los campos de nombre y
+                // telefono salieron del formulario y solo los maneja la ventana de
+                // cotizaciones independientes. Aca se guarda el cliente conocido
+                // (n_cliente, que en un trabajo carga el modulo de clientes) y
+                // telefono vacio.
+                cot.setNombre_cliente(valorSeguro(n_cliente));
+                cot.setTelefono_cliente("");
 
                 // 3. Recopilar todos los detalles (Conceptos + Materiales)
                 List<Detalles_cotizacion> listaDetalles = new ArrayList<>();
@@ -1364,7 +1512,8 @@ private void agregarMaterial() {
 
                 // 4. Ejecutar la transacción completa
                 CotizacionDAO dao = new CotizacionDAO();
-                boolean exito = dao.insertarCotizacionConDetalles(cot, listaDetalles);
+                int idCotizacionNueva = dao.insertarCotizacionConDetallesDevolviendoId(cot, listaDetalles);
+                boolean exito = idCotizacionNueva != -1;
 
                 if (exito) {
                     Tabla_cotizaciones.setEnabled(true);
@@ -1380,6 +1529,10 @@ private void agregarMaterial() {
 
                     T_pestañas.setSelectedIndex(0);
                     nuevo = false;
+
+                    // Se deja apuntando a la cotización recién creada para que el
+                    // usuario pueda editarla, exportarla o convertirla sin buscarla.
+                    cargarCotizacionRecienCreada(idCotizacionNueva);
                 } else {
                     JOptionPane.showMessageDialog(this, "Ocurrió un error al intentar guardar la cotización. Ningún dato fue modificado.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -1448,6 +1601,11 @@ private void agregarMaterial() {
                 boolean cotizacionActualizado = DAO.actualizarCotizacionConDetalles(
                     subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo, id_cotizacion, listaDetalles);
 
+                // Los datos del prospecto no se tocan acá: la ventana ya no tiene
+                // campos para editarlos (solo los maneja la ventana de cotizaciones
+                // independientes), y actualizarCotizacionConDetalles no los
+                // modifica, así que los existentes se conservan intactos.
+
                 if (cotizacionActualizado) {
                     // 4. Restablecer interfaz
                     Tabla_cotizaciones.setEnabled(true);
@@ -1459,6 +1617,7 @@ private void agregarMaterial() {
                     bloquear_text();
                     b_editar_c.setText("Editar");
                     llenar_tabla(id_trabajo_c);
+                    cargarCotizacionRecienCreada(id_cotizacion);
                     b_editar_c.setEnabled(true);
                     b_guardar.setEnabled(false);
                     bloquear_tablas();
@@ -1481,8 +1640,23 @@ private void agregarMaterial() {
         }
     }//GEN-LAST:event_b_guardarActionPerformed
 
-private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
-
+    private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        // Descarta lo que haya en curso y vuelve a la lista de cotizaciones del
+        // trabajo: el estado de partida de esta ventana, inverso de b_nuevo_c.
+        nuevo = false;
+        editar = false;
+        b_nuevo_c.setText("Nuevo");
+        b_nuevo_c.setEnabled(true);
+        b_guardar.setEnabled(false);
+        b_cancelar.setEnabled(false);
+        limpiar_text();
+        ((DefaultTableModel) Tabla_conceptos.getModel()).setRowCount(0);
+        ((DefaultTableModel) Tabla_materiales.getModel()).setRowCount(0);
+        bloquear_text();
+        bloquear_tablas();
+        llenar_tabla(id_trabajo_c);
+        Tabla_cotizaciones.setEnabled(true);
+        T_pestañas.setSelectedIndex(0);
     }//GEN-LAST:event_b_cancelarActionPerformed
 
     private void mostrarSpinnerCarga() {
@@ -1503,7 +1677,20 @@ private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 
     private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
-        String[] opciones = {"PDF", "EXCEL"};
+        // Una cotización de prueba sin guardar no tiene folio ni cliente, y usarlos
+        // tal cual en el nombre del archivo genera rutas inválidas.
+        if (t_id_cotizacion.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Guarda la cotizacion antes de exportarla.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (n_cliente == null || n_cliente.trim().isEmpty()) {
+            // Sin campos de prospecto que consultar: se usa el cliente que ya
+            // cargo la carga de la cotizacion o la ficha del trabajo.
+            n_cliente = "Prospecto";
+        }
+
+        String[] opciones = {"PDF", "Hoja de calculo de Google"};
         int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "¿En que formato desea exportar la cotizacion?", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
 
         if (respuesta1 == 0) {
@@ -1585,8 +1772,11 @@ private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                                     java.awt.Desktop.getDesktop().open(new java.io.File(rutaDestino));
                                 }
 
-                                if (subir_pdf = Boolean.parseBoolean(cotizaciones1)){
-                                    GoogleServicesProvider.subirCotizacionesPdf(ruta_pdf);
+                                // El "=" original asignaba en vez de comparar, asi que
+                                // esta condicion era siempre verdadera y la subida
+                                // ocurria aunque el usuario no la hubiera pedido.
+                                if (subir_pdf && Boolean.parseBoolean(cotizaciones1)) {
+                                    subirCotizacionesPdfADrive(ruta_pdf);
                                 }
 
                             }
@@ -1649,18 +1839,21 @@ private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
             mostrarSpinnerCarga();
 
-            new SwingWorker<String, Void>() {
-                @Override
-                protected String doInBackground() {
-                    String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
-                    return GoogleServicesProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja,id_trabajo_c);
-                }
+            // El nombre se arma aca y no dentro de la tarea: leer un componente
+            // de Swing desde el hilo de Google no es seguro.
+            final String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
 
-                @Override
-                protected void done() {
-                    b_exportar.setEnabled(true);
-                    try {
-                        String idCreado = get();
+            // Sin reintento: crear la hoja es un efecto que no se puede repetir
+            // sin dejar una hoja duplicada en Drive.
+            EjecutorGoogle.ejecutarSinReintento(
+                    () -> GoogleServicesProvider.crearHojaCotizacion(nombreArchivo, contenidoHoja, id_trabajo_c),
+                    idCreado -> {
+
+                        if (!isDisplayable()) {
+                            return;
+                        }
+                        b_exportar.setEnabled(true);
+
                         if (idCreado != null) {
 
                             spinner.showSuccess();
@@ -1690,15 +1883,20 @@ private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                         } else {
                             spinner.showError();
                             ocultarSpinner();
-                            JOptionPane.showMessageDialog(null, "Error al exportar la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Error al exportar la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
-                    } catch (Exception e) {
+                    },
+                    error -> {
+
+                        if (!isDisplayable()) {
+                            return;
+                        }
+                        b_exportar.setEnabled(true);
                         spinner.showError();
                         ocultarSpinner();
-                        e.printStackTrace();
-                    }
-                }
-            }.execute();
+                        JOptionPane.showMessageDialog(this, EjecutorGoogle.mensajeDeError(error),
+                                "Exportar a Google Sheets", JOptionPane.ERROR_MESSAGE);
+                    });
 
         }
     }//GEN-LAST:event_b_exportarActionPerformed
@@ -1963,7 +2161,7 @@ private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
     }
     
-    private void setFormulariosVisibles(boolean visible) {
+    public void setFormulariosVisibles(boolean visible) {
         formularioVisible = visible;
         t_ocultarFormulario.setSelected(!visible);
         if (visible) {
@@ -2087,14 +2285,13 @@ System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
     }
     
     public void cargar_datos_tabla(int indice){
-        this.t_id_cotizacion.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 0)));
-        obtener_detalles(Integer.parseInt(this.Tabla_cotizaciones.getValueAt(indice, 0).toString()));
-        this.t_tipo_c.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 1)));
-        this.t_fecha_r.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 2)));
-        this.t_subtotal.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 3)));
-        this.t_iva.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 4)));
-        this.t_total.setText(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 5)));
-        this.c_estado.setSelectedItem(String.valueOf(this.Tabla_cotizaciones.getValueAt(indice, 6)));
+        Object idCelda = this.Tabla_cotizaciones.getValueAt(indice, 0);
+        if (idCelda == null) {
+            return;
+        }
+        // Se carga desde la base de datos y no desde la celda para no depender de
+        // que la tabla tenga todas las columnas visibles ni de su formato.
+        abrirCotizacionPorId(Integer.parseInt(idCelda.toString().trim()));
     }
     
     /**
@@ -2157,7 +2354,6 @@ System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
     private javax.swing.JButton b_buscar_c;
     private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_cerrar;
-    private javax.swing.JButton b_convertir;
     private javax.swing.JButton b_editar_c;
     private javax.swing.JButton b_editar_conceptos;
     private javax.swing.JButton b_editar_materiales;

@@ -4,18 +4,40 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Image;
-import javax.swing.ImageIcon;
-
 import java.io.File;
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.time.Duration;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import sistema_en.Conexion;
+import sistema_en.UtilidadesError;
 
 /**
  *
@@ -34,6 +56,12 @@ public class D_acerca_de extends javax.swing.JDialog {
 
     private D_soporte_tecnico soporte = null;
     private D_nota_version nota = null;
+
+    private static final String URL_MANUAL = "https://ejemplo.com/documento.pdf";
+    private static final String URL_DOCUMENTACION_TECNICA = "https://ejemplo.com/documento.pdf";
+    private static final long ESPERA_MAXIMA_SIN_DATOS_MS = 60_000;
+    private static final long INTERVALO_VIGILANCIA_MS = 5_000;
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,16 +73,18 @@ public class D_acerca_de extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         l_foto = new javax.swing.JLabel();
-        b_descargar_manual = new javax.swing.JButton();
-        b_licencias = new javax.swing.JButton();
-        b_soporte = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        l_version = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        P_ayuda = new javax.swing.JPanel();
+        b_soporte = new javax.swing.JButton();
+        P_documentacion = new javax.swing.JPanel();
         b_descargar_documentacion = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        b_nota_version = new javax.swing.JButton();
+        b_licencias = new javax.swing.JButton();
+        b_descargar_manual = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(250, 610));
@@ -74,48 +104,6 @@ public class D_acerca_de extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(11, 15, 10, 16);
         getContentPane().add(l_foto, gridBagConstraints);
 
-        b_descargar_manual.setText("Descargar manual de usuarios");
-        b_descargar_manual.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_descargar_manualActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
-        getContentPane().add(b_descargar_manual, gridBagConstraints);
-
-        b_licencias.setText("Licencias de terceros");
-        b_licencias.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_licenciasActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
-        getContentPane().add(b_licencias, gridBagConstraints);
-
-        b_soporte.setText("Soporte tecnico");
-        b_soporte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_soporteActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
-        getContentPane().add(b_soporte, gridBagConstraints);
-
         b_cerrar.setText("Cerrar");
         b_cerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,19 +112,19 @@ public class D_acerca_de extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
         getContentPane().add(b_cerrar, gridBagConstraints);
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Version 1.0.19");
+        l_version.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_version.setText("Version 1.0.19");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 16, 5, 15);
-        getContentPane().add(jLabel1, gridBagConstraints);
+        getContentPane().add(l_version, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -155,13 +143,23 @@ public class D_acerca_de extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 16, 5, 15);
         getContentPane().add(jLabel5, gridBagConstraints);
 
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Documentación y Ayuda:");
+        P_ayuda.setLayout(new java.awt.GridBagLayout());
+
+        b_soporte.setText("Soporte tecnico");
+        b_soporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_soporteActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(5, 16, 5, 15);
-        getContentPane().add(jLabel6, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_ayuda.add(b_soporte, gridBagConstraints);
+
+        jTabbedPane1.addTab("Ayuda", P_ayuda);
+
+        P_documentacion.setLayout(new java.awt.GridBagLayout());
 
         b_descargar_documentacion.setText("Descargar documentacion tecnica");
         b_descargar_documentacion.addActionListener(new java.awt.event.ActionListener() {
@@ -171,28 +169,73 @@ public class D_acerca_de extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_descargar_documentacion, gridBagConstraints);
+        P_documentacion.add(b_descargar_documentacion, gridBagConstraints);
 
-        jButton1.setText("Nota de version");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        b_nota_version.setText("Nota de version");
+        b_nota_version.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                b_nota_versionActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jButton1, gridBagConstraints);
+        P_documentacion.add(b_nota_version, gridBagConstraints);
+
+        b_licencias.setText("Licencias de terceros");
+        b_licencias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_licenciasActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
+        P_documentacion.add(b_licencias, gridBagConstraints);
+
+        b_descargar_manual.setText("Descargar manual de usuarios");
+        b_descargar_manual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_descargar_manualActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
+        P_documentacion.add(b_descargar_manual, gridBagConstraints);
+
+        jTabbedPane1.addTab("Documentacion", P_documentacion);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jTabbedPane1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void version(){
+        String version = Conexion.VERSION_APP;
+        l_version.setText(version);
+    }
+    
     public void cargar_imagen() {
         //ImageIcon iconoOriginal = new ImageIcon("src/Imagenes/logo 2.0.png");
         ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/Imagenes/logo 2.0.png"));
@@ -211,6 +254,7 @@ public class D_acerca_de extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         cargar_imagen();
+        version();
     }//GEN-LAST:event_formWindowOpened
 
     private void b_licenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_licenciasActionPerformed
@@ -247,123 +291,305 @@ public class D_acerca_de extends javax.swing.JDialog {
     }//GEN-LAST:event_b_soporteActionPerformed
 
     private void b_descargar_manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_manualActionPerformed
-        String url = "https://ejemplo.com/documento.pdf";
-        
-        JFileChooser selector = new JFileChooser();
-        selector.setSelectedFile(new File("Manual de usuario Sistema_EN v1.0.14 .pdf"));
-
-        int resultado = selector.showSaveDialog(this);
-
-        if (resultado != JFileChooser.APPROVE_OPTION) {
-            return;
-        }
-
-        File archivo = selector.getSelectedFile();
-        
-        String destino = String.valueOf(archivo);
-
-    try {
-        HttpClient cliente = HttpClient.newHttpClient();
-
-        HttpRequest solicitud = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        HttpResponse<Path> respuesta = cliente.send(
-                solicitud,
-                HttpResponse.BodyHandlers.ofFile(Path.of(destino))
+        descargarDocumento(
+                b_descargar_manual,
+                URL_MANUAL,
+                "el manual de usuario",
+                "Manual de usuario Sistema_EN v" + Conexion.VERSION_APP + ".pdf"
         );
-
-        if (respuesta.statusCode() == 200) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Manual de usuario descargado correctamente.",
-                    "Descarga completada",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        } else {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "No se pudo descargar el manual de usuario.\nCódigo HTTP: "
-                    + respuesta.statusCode(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Ocurrió un error al descargar el manual de usuario:\n"
-                + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
-
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_b_descargar_manualActionPerformed
 
     private void b_descargar_documentacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_documentacionActionPerformed
-        String url = "https://ejemplo.com/documento.pdf";
-        
+        descargarDocumento(
+                b_descargar_documentacion,
+                URL_DOCUMENTACION_TECNICA,
+                "la documentacion tecnica",
+                "Documentacion tecnica Sistema_EN v" + Conexion.VERSION_APP + ".pdf"
+        );
+    }//GEN-LAST:event_b_descargar_documentacionActionPerformed
+
+    private void descargarDocumento(AbstractButton origen, String url, String etiqueta, String nombreArchivo) {
         JFileChooser selector = new JFileChooser();
-        selector.setSelectedFile(new File("Documentacion tecnica Sistema_EN v1.0.14 .pdf"));
+        selector.setSelectedFile(new File(nombreArchivo));
 
-        int resultado = selector.showSaveDialog(this);
-
-        if (resultado != JFileChooser.APPROVE_OPTION) {
+        if (selector.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
             return;
         }
 
-        File archivo = selector.getSelectedFile();
-        String destino = String.valueOf(archivo);
-
-    try {
-        HttpClient cliente = HttpClient.newHttpClient();
+        File elegido = selector.getSelectedFile();
+        if (!elegido.getName().toLowerCase(Locale.ROOT).endsWith(".pdf")) {
+            elegido = new File(elegido.getParentFile(), elegido.getName() + ".pdf");
+        }
+        final Path destino = elegido.toPath();
 
         HttpRequest solicitud = HttpRequest.newBuilder()
                 .uri(URI.create(url))
+                .timeout(Duration.ofMinutes(10))
                 .GET()
                 .build();
 
-        HttpResponse<Path> respuesta = cliente.send(
-                solicitud,
-                HttpResponse.BodyHandlers.ofFile(Path.of(destino))
-        );
+        origen.setEnabled(false);
 
-        if (respuesta.statusCode() == 200) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Documentacion tecnica descargada correctamente en: " + destino,
-                    "Descarga completada",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        } else {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "No se pudo descargar la documentacion tecnica.\nCódigo HTTP: "
-                    + respuesta.statusCode(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+        HttpClient.newHttpClient()
+                .sendAsync(solicitud, HttpResponse.BodyHandlers.ofInputStream())
+                .whenComplete((respuesta, error) -> {
+                    if (error != null) {
+                        SwingUtilities.invokeLater(() -> {
+                            origen.setEnabled(true);
+                            avisoError("Ocurrió un error al descargar " + etiqueta + ":\n" + UtilidadesError.mensajeDe(error));
+                        });
+                        return;
+                    }
+
+                    int codigo = respuesta.statusCode();
+                    String tipo = respuesta.headers().firstValue("content-type").orElse("");
+
+                    if (codigo != 200) {
+                        cerrarSilencioso(respuesta.body());
+                        SwingUtilities.invokeLater(() -> {
+                            origen.setEnabled(true);
+                            avisoError("No se pudo descargar " + etiqueta + ".\nCódigo HTTP: " + codigo);
+                        });
+                        return;
+                    }
+
+                    if (!tipo.toLowerCase(Locale.ROOT).startsWith("application/pdf")) {
+                        cerrarSilencioso(respuesta.body());
+                        SwingUtilities.invokeLater(() -> {
+                            origen.setEnabled(true);
+                            avisoError("La dirección configurada no devolvió un archivo PDF.\n"
+                                    + "Tipo recibido: " + (tipo.isEmpty() ? "desconocido" : tipo));
+                        });
+                        return;
+                    }
+
+                    long total = respuesta.headers().firstValueAsLong("content-length").orElse(-1L);
+                    InputStream entrada = respuesta.body();
+
+                    SwingUtilities.invokeLater(
+                            () -> copiarConProgreso(origen, entrada, destino, etiqueta, total));
+                });
+    }
+
+    private void copiarConProgreso(AbstractButton origen, InputStream entrada, Path destino, String etiqueta, long total) {
+        JDialog dialogo = new JDialog(this, "Descargando", true);
+        JProgressBar barra = new JProgressBar(0, 100);
+        JLabel detalle = new JLabel("Iniciando descarga...");
+        JButton cancelar = new JButton("Cancelar");
+
+        barra.setStringPainted(true);
+        if (total <= 0) {
+            barra.setIndeterminate(true);
+            barra.setString("Descargando...");
         }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(
-                this,
-                "Ocurrió un error al descargar la documentacion tecnica:\n"
-                + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-        );
+        JPanel sur = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        sur.add(cancelar);
 
-        e.printStackTrace();
+        dialogo.getContentPane().setLayout(new BorderLayout(10, 10));
+        dialogo.getContentPane().add(detalle, BorderLayout.NORTH);
+        dialogo.getContentPane().add(barra, BorderLayout.CENTER);
+        dialogo.getContentPane().add(sur, BorderLayout.SOUTH);
+        dialogo.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        dialogo.setSize(400, 140);
+        dialogo.setLocationRelativeTo(this);
+
+        final Path temporal;
+        try {
+            temporal = Files.createTempFile("sistema_en_", ".descarga");
+        } catch (IOException e) {
+            cerrarSilencioso(entrada);
+            origen.setEnabled(true);
+            avisoError("No se pudo preparar la descarga de " + etiqueta + ":\n" + e.getMessage());
+            return;
+        }
+
+        final long totalFinal = total;
+        final AtomicLong ultimoAvance = new AtomicLong(System.currentTimeMillis());
+        final AtomicReference<Timer> vigilante = new AtomicReference<>();
+        final AtomicBoolean estancada = new AtomicBoolean(false);
+
+        SwingWorker<Boolean, Void> tarea = new SwingWorker<Boolean, Void>() {
+            @Override
+            protected Boolean doInBackground() throws Exception {
+                byte[] buffer = new byte[8192];
+                long recibidos = 0;
+                long proximoAviso = 0;
+                int ultimoPorcentaje = -1;
+
+                try (InputStream in = entrada; OutputStream salida = Files.newOutputStream(temporal)) {
+                    int leidos;
+                    while ((leidos = in.read(buffer)) != -1) {
+                        if (isCancelled()) {
+                            return false;
+                        }
+                        salida.write(buffer, 0, leidos);
+                        recibidos += leidos;
+                        ultimoAvance.set(System.currentTimeMillis());
+
+                        int porcentaje = totalFinal > 0
+                                ? (int) Math.min(100, recibidos * 100 / totalFinal)
+                                : -1;
+
+                        boolean avisar;
+                        if (porcentaje >= 0) {
+                            avisar = porcentaje != ultimoPorcentaje;
+                            if (avisar) {
+                                ultimoPorcentaje = porcentaje;
+                            }
+                        } else {
+                            avisar = recibidos >= proximoAviso;
+                            if (avisar) {
+                                proximoAviso = recibidos + 262144;
+                            }
+                        }
+
+                        if (avisar) {
+                            final int p = porcentaje;
+                            final long r = recibidos;
+                            SwingUtilities.invokeLater(() -> {
+                                if (p >= 0) {
+                                    barra.setValue(p);
+                                }
+                                detalle.setText(p >= 0
+                                        ? formatearBytes(r) + " de " + formatearBytes(totalFinal) + "  (" + p + "%)"
+                                        : formatearBytes(r) + " descargados");
+                            });
+                        }
+                    }
+                }
+
+                return totalFinal <= 0 || recibidos >= totalFinal;
+            }
+
+            @Override
+            protected void done() {
+                dialogo.dispose();
+                origen.setEnabled(true);
+
+                Timer reloj = vigilante.get();
+                if (reloj != null) {
+                    reloj.cancel();
+                }
+
+                if (isCancelled()) {
+                    borrarTemporal(temporal);
+                    if (estancada.get()) {
+                        avisoError("La descarga de " + etiqueta + " se detuvo porque dejaron de llegar datos.");
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                D_acerca_de.this,
+                                "Se canceló la descarga de " + etiqueta + ".",
+                                "Descarga cancelada",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+                    }
+                    return;
+                }
+
+                boolean completa;
+                try {
+                    completa = get();
+                } catch (Exception e) {
+                    borrarTemporal(temporal);
+                    avisoError("Ocurrió un error al descargar " + etiqueta + ":\n" + UtilidadesError.mensajeDe(e));
+                    return;
+                }
+
+                if (!completa) {
+                    borrarTemporal(temporal);
+                    avisoError("La descarga de " + etiqueta + " se interrumpió antes de completarse.\n"
+                            + "El archivo recibido no es válido y fue descartado.");
+                    return;
+                }
+
+                try {
+                    Files.move(temporal, destino, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    Path rescate = Path.of(destino.toString() + ".descarga");
+                    try {
+                        Files.move(temporal, rescate, StandardCopyOption.REPLACE_EXISTING);
+                        JOptionPane.showMessageDialog(
+                                D_acerca_de.this,
+                                "La descarga terminó, pero no se pudo escribir en:\n" + destino
+                                + "\n\nEl archivo quedó guardado como:\n" + rescate,
+                                "Descarga completada con advertencia",
+                                JOptionPane.WARNING_MESSAGE
+                        );
+                    } catch (IOException e2) {
+                        avisoError("No se pudo guardar " + etiqueta + ":\n" + e2.getMessage());
+                    }
+                    return;
+                }
+
+                JOptionPane.showMessageDialog(
+                        D_acerca_de.this,
+                        "Descarga completada.\nArchivo: " + destino,
+                        "Descarga completada",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        };
+
+        cancelar.addActionListener(e -> {
+            cancelar.setEnabled(false);
+            tarea.cancel(true);
+            cerrarSilencioso(entrada);
+        });
+
+        Timer reloj = new Timer("vigilante-descarga", true);
+        reloj.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (System.currentTimeMillis() - ultimoAvance.get() > ESPERA_MAXIMA_SIN_DATOS_MS) {
+                    estancada.set(true);
+                    tarea.cancel(true);
+                    cerrarSilencioso(entrada);
+                }
+            }
+        }, INTERVALO_VIGILANCIA_MS, INTERVALO_VIGILANCIA_MS);
+        vigilante.set(reloj);
+
+        tarea.execute();
+        dialogo.setVisible(true);
     }
-    }//GEN-LAST:event_b_descargar_documentacionActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void avisoError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private static void borrarTemporal(Path temporal) {
+        try {
+            Files.deleteIfExists(temporal);
+        } catch (IOException ignored) {
+        }
+    }
+
+    private static void cerrarSilencioso(InputStream entrada) {
+        if (entrada == null) {
+            return;
+        }
+        try {
+            entrada.close();
+        } catch (IOException ignored) {
+        }
+    }
+
+    private static String formatearBytes(long bytes) {
+        if (bytes < 1024) {
+            return bytes + " B";
+        }
+        String[] unidades = {"KB", "MB", "GB", "TB"};
+        double valor = bytes;
+        int indice = -1;
+        do {
+            valor /= 1024.0;
+            indice++;
+        } while (valor >= 1024 && indice < unidades.length - 1);
+        return String.format(Locale.US, "%.1f %s", valor, unidades[indice]);
+    }
+
+    private void b_nota_versionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nota_versionActionPerformed
         if (nota == null || !nota.isDisplayable()) {
             // Si tu constructor pide (Frame, boolean), pásale el Frame actual o null si no aplica
             nota = new D_nota_version((java.awt.Frame) this.getParent(), true);
@@ -386,7 +612,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         nota.setVisible(true);
         nota.toFront();
         nota.requestFocus();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_b_nota_versionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -431,16 +657,18 @@ public class D_acerca_de extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel P_ayuda;
+    private javax.swing.JPanel P_documentacion;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_descargar_documentacion;
     private javax.swing.JButton b_descargar_manual;
     private javax.swing.JButton b_licencias;
+    private javax.swing.JButton b_nota_version;
     private javax.swing.JButton b_soporte;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel l_foto;
+    private javax.swing.JLabel l_version;
     // End of variables declaration//GEN-END:variables
 }

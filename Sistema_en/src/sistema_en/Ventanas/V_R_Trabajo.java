@@ -15,7 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
+import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
+import sistema_en.UtilidadesError;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Trabajo;
 import sistema_en.Ventanas.dialogos.D_buscar_cliente;
@@ -821,51 +823,48 @@ public class V_R_Trabajo extends javax.swing.JFrame {
                 
                 int idTrabajo = trabajoDao.insertarTrabajo(direccion, descripcion, fecha, hora, estado, idClienteFinal);
 
-                boolean guardado = false;
-                
                 if (idTrabajo != -1) {
                     // ¡Listo! Ya tienes el ID de la base de datos (por ejemplo, el 142)
                     // Ahora armamos tu carpeta con ese mismo ID exacto:
-                    guardado = true;
                     String nombreCarpeta = "Trabajo_" + idTrabajo + "_" + idClienteFinal + "_" + fecha;
-                    // Creamos la carpeta en Google Drive con este nombre
-                    String idCarpetaDrive = sistema_en.GoogleServicesProvider.crearCarpetaTrabajo(nombreCarpeta);
-    
-                    trabajoDao.actualizarTrabajoIdCarpeta(idTrabajo, idCarpetaDrive);
-                    
-                    if (!GoogleServicesProvider.estaConectado()){
-                       String Carpeta = "Pendiente";
-                       trabajoDao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
-                    }
-                    else{
-                        String Carpeta = "Creada";
-                       trabajoDao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
-                    }
-    
-                    System.out.println("✅ ¡Trabajo ID " + idTrabajo + " creado con su carpeta de Drive sincronizada!");
+
+                    // La carpeta de Drive se pide desde el hilo de Google, no desde
+                    // este. Antes la peticion partia del hilo de eventos de Swing
+                    // y la ventana quedaba congelada los segundos que tardaba
+                    // Google en responder, con el usuario mirando un formulario
+                    // que no respondia y sin ninguna pista de que faltara algo.
+                    // Sin reintento: crear una carpeta es un efecto que no se
+                    // puede repetir sin dejar basura en Drive.
+                    EjecutorGoogle.ejecutarSinReintento(() -> {
+
+                        String idCarpetaDrive = GoogleServicesProvider.crearCarpetaTrabajo(nombreCarpeta);
+
+                        trabajoDao.actualizarTrabajoIdCarpeta(idTrabajo, idCarpetaDrive);
+                        boolean carpetaCreadaEnDrive = idCarpetaDrive != null;
+                        trabajoDao.actualizarTrabajoCarpeta(idTrabajo, carpetaCreadaEnDrive ? "Creada" : "Pendiente");
+
+                        return carpetaCreadaEnDrive;
+                    }, carpetaCreadaEnDrive -> {
+
+                        if (carpetaCreadaEnDrive) {
+                            System.out.println("Trabajo ID " + idTrabajo + " creado con su carpeta de Drive sincronizada.");
+                        } else {
+                            System.out.println("Trabajo ID " + idTrabajo + " registrado, pero su carpeta en Drive no pudo crearse. Quedará pendiente de sincronizar.");
+                        }
+
+                        cerrarFormularioTrasRegistro(carpetaCreadaEnDrive);
+                    }, error -> {
+
+                        // El trabajo ya esta en la base, lo que fallo fue Drive.
+                        // Queda pendiente para que la sincronizacion lo repare.
+                        trabajoDao.actualizarTrabajoCarpeta(idTrabajo, "Pendiente");
+                        UtilidadesError.error(this, "Carpetas de Google Drive", error);
+                        cerrarFormularioTrasRegistro(false);
+                    });
                 } else {
-                    System.out.println("❌ No se pudo registrar el trabajo.");
+                    System.out.println("No se pudo registrar el trabajo.");
                     String Carpeta = "Pendiente";
                     trabajoDao.actualizarTrabajoCarpeta(idTrabajo, Carpeta);
-                }
-                
-                if (guardado) {
-                    
-                    JOptionPane.showMessageDialog(this, "¡Trabajo registrado con éxito!");
-                    Tabla_trabajos.setEnabled(true);
-                    b_buscar_cliente.setEnabled(false);
-                    b_nuevo.setBackground(null);
-                    b_cancelar.setBackground(null);
-                    creacion_exitosa();
-                    bloquear_text();
-                    desbloquear_botones();
-                    b_nuevo.setText( "Nuevo") ;
-                    b_cancelar.setEnabled(false);
-                    limpiar_text();
-                    bloquear_text();
-                    llenar_tabla();
-                    idClienteSeleccionado = -1; 
-                } else {
                     JOptionPane.showMessageDialog(this, "Error al guardar el trabajo en la BD.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
@@ -873,6 +872,35 @@ public class V_R_Trabajo extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_b_nuevoActionPerformed
+
+    /**
+     * Cierra el formulario de alta y refresca la tabla una vez que el trabajo
+     * quedo registrado. Se ejecuta en el hilo de eventos, tanto si la carpeta
+     * de Drive se creo como si no, porque en los dos casos el trabajo existe y
+     * debe verse en la tabla.
+     *
+     * @param carpetaCreadaEnDrive si la carpeta de Drive quedo creada
+     */
+    private void cerrarFormularioTrasRegistro(boolean carpetaCreadaEnDrive) {
+
+        JOptionPane.showMessageDialog(this, carpetaCreadaEnDrive
+                ? "¡Trabajo registrado con éxito!"
+                : "¡Trabajo registrado con éxito!\n"
+                  + "No se pudo crear su carpeta en Google Drive, así que quedó pendiente de sincronizar.");
+        Tabla_trabajos.setEnabled(true);
+        b_buscar_cliente.setEnabled(false);
+        b_nuevo.setBackground(null);
+        b_cancelar.setBackground(null);
+        creacion_exitosa();
+        bloquear_text();
+        desbloquear_botones();
+        b_nuevo.setText("Nuevo");
+        b_cancelar.setEnabled(false);
+        limpiar_text();
+        bloquear_text();
+        llenar_tabla();
+        idClienteSeleccionado = -1;
+    }
 
     private void b_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_editarActionPerformed
         if ("Editar".equals(b_editar.getText())) {

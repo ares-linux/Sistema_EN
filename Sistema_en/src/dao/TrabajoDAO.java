@@ -517,4 +517,88 @@ public Trabajo obtenerTrabajoIdCarpeta(int id_trabajo) {
     return null;
 }
 
+
+
+/**
+ * Busca trabajos por un periodo de fechas y, opcionalmente, por estado.
+ * El nombre de la columna de fecha no se puede pasar como parámetro, así que
+ * se elige en Java: fecha de creación (fecha_cr) o fecha de fin oficial (fecha_fin).
+ *
+ * @param estado        estado a filtrar; null o "Todos" significa cualquiera
+ * @param desde         fecha inicial inclusive; null deja el extremo abierto
+ * @param hasta         fecha final inclusive; null deja el extremo abierto
+ * @param por_fecha_fin true para filtrar por fecha_fin, false por fecha_cr
+ * @return lista de filas con las 11 columnas de la tabla; vacía si no hay coincidencias
+ */
+public List<String[]> buscarTrabajosPorPeriodo(String estado, LocalDate desde, LocalDate hasta, boolean por_fecha_fin) {
+    List<String[]> lista = new ArrayList<>();
+    List<Object> parametros = new ArrayList<>();
+
+    String columnaFecha = por_fecha_fin ? "t.fecha_fin" : "t.fecha_cr";
+    StringBuilder where = new StringBuilder(" WHERE 1 = 1");
+
+    // Las fechas se guardan como texto ISO (yyyy-MM-dd), así que el orden
+    // lexicográfico coincide con el cronológico.
+    if (desde != null) {
+        where.append(" AND ").append(columnaFecha).append(" >= ?");
+        parametros.add(desde.toString());
+    }
+    if (hasta != null) {
+        where.append(" AND ").append(columnaFecha).append(" <= ?");
+        parametros.add(hasta.toString());
+    }
+    if (estado != null && !estado.trim().isEmpty() && !estado.equals("Todos")) {
+        where.append(" AND t.estado = ?");
+        parametros.add(estado.trim());
+    }
+
+    String sql = "SELECT t.id_trabajo, t.id_cliente, c.nombre_c, c.telefono, t.direccion, t.descripcion, t.fecha_cr, t.hora_cr, t.estado, t.fecha_inicio, t.fecha_fin " +
+                 "FROM Trabajo t " +
+                 "INNER JOIN Cliente c ON t.id_cliente = c.id_cliente" + where;
+
+    Connection con = Conexion.conectar();
+
+    if (con == null) {
+        System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+        return lista;
+    }
+
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        for (int i = 0; i < parametros.size(); i++) {
+            ps.setObject(i + 1, parametros.get(i));
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String[] fila = new String[11];
+                fila[0] = String.valueOf(rs.getInt("id_trabajo"));
+                fila[1] = rs.getString("id_cliente");
+                fila[2] = rs.getString("nombre_c");
+                fila[3] = rs.getString("telefono");
+                fila[4] = rs.getString("direccion");
+                fila[5] = rs.getString("descripcion");
+                fila[6] = rs.getString("fecha_cr");
+                fila[7] = rs.getString("hora_cr");
+                fila[8] = rs.getString("estado");
+                fila[9] = rs.getString("fecha_inicio");
+                fila[10] = rs.getString("fecha_fin");
+
+                lista.add(fila);
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al buscar los trabajos por periodo: " + e.getMessage());
+    } finally {
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al cerrar la conexión: " + ex.getMessage());
+        }
+    }
+    return lista;
+}
+
+
 }

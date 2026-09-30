@@ -4,8 +4,13 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import java.awt.Color;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.JOptionPane;
+import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
+import sistema_en.UtilidadesError;
 
 /**
  *
@@ -19,6 +24,24 @@ public class D_soporte_tecnico extends javax.swing.JDialog {
     public D_soporte_tecnico(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        b_adjuntos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+                fileChooser.setMultiSelectionEnabled(true);
+                int result = fileChooser.showOpenDialog(D_soporte_tecnico.this);
+                if (result == javax.swing.JFileChooser.APPROVE_OPTION) {
+                    java.io.File[] selectedFiles = fileChooser.getSelectedFiles();
+                    StringBuilder paths = new StringBuilder();
+                    for (java.io.File f : selectedFiles) {
+                        if (paths.length() > 0) paths.append(";");
+                        paths.append(f.getAbsolutePath());
+                    }
+                    t_adjuntos.setText(paths.toString());
+                }
+            }
+        });
+        
+        placeholder();
     }
 
     /**
@@ -36,11 +59,16 @@ public class D_soporte_tecnico extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         T_solicitud = new javax.swing.JTextArea();
         b_enviar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        t_adjuntos = new javax.swing.JTextField();
+        b_adjuntos = new javax.swing.JButton();
+        c_tipo_solicitud = new javax.swing.JComboBox<>();
+        c_prioridad = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(400, 400));
         setMinimumSize(new java.awt.Dimension(400, 400));
-        setPreferredSize(new java.awt.Dimension(400, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -48,14 +76,14 @@ public class D_soporte_tecnico extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("Escriba su solicitud en el cuadro de texto:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel2, gridBagConstraints);
@@ -66,11 +94,11 @@ public class D_soporte_tecnico extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 321;
-        gridBagConstraints.ipady = 114;
+        gridBagConstraints.ipadx = 460;
+        gridBagConstraints.ipady = 201;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -85,33 +113,173 @@ public class D_soporte_tecnico extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_enviar, gridBagConstraints);
+
+        jLabel3.setText("Tipo de solictud");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        jLabel4.setText("Prioridad");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel4, gridBagConstraints);
+
+        jLabel5.setText("Archivos adjuntos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel5, gridBagConstraints);
+
+        t_adjuntos.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 9, 10, 50);
+        getContentPane().add(t_adjuntos, gridBagConstraints);
+
+        b_adjuntos.setText("...");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(b_adjuntos, gridBagConstraints);
+
+        c_tipo_solicitud.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Error", "Mantenimiento", "Mejora" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(c_tipo_solicitud, gridBagConstraints);
+
+        c_prioridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alta", "Media", "Baja" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(c_prioridad, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private static final String TEXTO_PLACEHOLDER = "Escriba su solicitud aqui: ";
+
+    private final void placeholder(){
+        String placeholder = TEXTO_PLACEHOLDER;
+
+            // Configurar el texto inicial y el color gris
+            T_solicitud.setText(placeholder);
+            T_solicitud.setForeground(Color.GRAY);
+
+            // Agregar el listener para controlar el foco
+            T_solicitud.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Si el texto actual es el placeholder y está en gris, lo borramos
+                    if (T_solicitud.getText().equals(placeholder)) {
+                        T_solicitud.setText("");
+                        T_solicitud.setForeground(Color.BLACK); // Color normal al escribir
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Si el usuario deja el campo vacío, volvemos a poner el placeholder
+                    if (T_solicitud.getText().isEmpty()) {
+                        T_solicitud.setText(placeholder);
+                        T_solicitud.setForeground(Color.GRAY);
+                    }
+                }
+            });
+    }
+    
     private void b_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_enviarActionPerformed
-        if(T_solicitud.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this,"No se puede enviar una solicitud vacia.", "Error",JOptionPane.ERROR_MESSAGE);
-            return;
+        try {
+            String cuerpo = T_solicitud.getText().trim();
+
+            if (cuerpo.isEmpty() || cuerpo.equals(TEXTO_PLACEHOLDER.trim())) {
+                JOptionPane.showMessageDialog(this, "No se puede enviar una solicitud vacia.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String tipo = c_tipo_solicitud.getSelectedItem().toString();
+            String prioridad = c_prioridad.getSelectedItem().toString();
+            String adjuntos = t_adjuntos.getText();
+            String destinatario = "aresbrandon@proton.me";
+            String asunto = "Solicitud de soporte tecnico Sistema_EN";
+
+            if (adjuntos.trim().isEmpty()) {
+                int respuesta = JOptionPane.showConfirmDialog(this,
+                        "¿Está seguro de enviar la solicitud sin ningun archivo adjunto",
+                        "Confirmar Envio", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                if (respuesta != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+
+            // El envio se hace en el hilo de Google. Antes corria en el hilo de
+            // eventos y el dialogo quedaba congelado mientras la peticion a
+            // Gmail expiraba, que es el escenario exacto que se vio cuando la
+            // DNS dejo de resolver gmail.googleapis.com.
+            // Sin reintento: si el correo se envio y lo que se perdio fue la
+            // respuesta, reintentar significaria soporte duplicado.
+            b_enviar.setEnabled(false);
+
+            EjecutorGoogle.ejecutarSinReintento(
+                    () -> GoogleServicesProvider.enviarCorreo(destinatario, asunto, cuerpo, tipo, prioridad, adjuntos),
+                    enviado -> {
+
+                        // El usuario pudo cerrar el dialogo mientras se enviaba.
+                        if (!isDisplayable()) {
+                            return;
+                        }
+                        b_enviar.setEnabled(true);
+
+                        if (enviado) {
+                            JOptionPane.showMessageDialog(this, "Su solicitud fue enviada exitosamente al soporte tecnico,\n "
+                                    + "podra consultar el estado de su solicitud en la nota de version \n "
+                                    + "en la proxima actualizacion", "Exito", JOptionPane.PLAIN_MESSAGE);
+                            T_solicitud.setText("");
+                            dispose();
+                        } else {
+                            UtilidadesError.error(this, "No se pudo enviar la solicitud",
+                                    "Ocurrió un error al enviar la solicitud al soporte tecnico.\n"
+                                    + "Revisá la conexión a internet y que la cuenta de Google esté vinculada.\n"
+                                    + "Tu solicitud no se envió; podés intentarlo nuevamente.");
+                        }
+                    },
+                    error -> {
+
+                        if (!isDisplayable()) {
+                            return;
+                        }
+                        b_enviar.setEnabled(true);
+
+                        UtilidadesError.error(this, "No se pudo enviar la solicitud", EjecutorGoogle.mensajeDeError(error));
+                    });
+        } catch (Exception e) {
+            UtilidadesError.error(this, "Error al enviar la solicitud", e);
         }
-        
-        String destinatario = "aresbrandon@proton.me";
-        String asunto = "Solicitud de soporte tecnico Sistema_EN";
-        
-        String cuerpo = T_solicitud.getText();
-        boolean exito = GoogleServicesProvider.enviarCorreo(destinatario, asunto, cuerpo);
-        
-        if(exito == true){
-            JOptionPane.showMessageDialog(this,"Su solicitud fue enviada exitosamente al soporte tecnico,\n "
-                                                         + "podra consultar el estado de su solicitud en la nota de version \n "
-                                                         + "en la proxima actualizacion", "Exito",JOptionPane.PLAIN_MESSAGE);
-            T_solicitud.setText("");
-        }
-        
     }//GEN-LAST:event_b_enviarActionPerformed
 
     /**
@@ -158,9 +326,16 @@ public class D_soporte_tecnico extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea T_solicitud;
+    private javax.swing.JButton b_adjuntos;
     private javax.swing.JButton b_enviar;
+    private javax.swing.JComboBox<String> c_prioridad;
+    private javax.swing.JComboBox<String> c_tipo_solicitud;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField t_adjuntos;
     // End of variables declaration//GEN-END:variables
 }

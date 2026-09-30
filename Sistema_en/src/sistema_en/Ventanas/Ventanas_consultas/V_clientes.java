@@ -12,7 +12,6 @@ import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -55,7 +54,6 @@ public class V_clientes extends javax.swing.JFrame {
         t_buscar = new javax.swing.JTextField();
         b_buscar = new javax.swing.JButton();
         b_reiniciar_filtros = new javax.swing.JButton();
-        b_dividir_pantalla = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         b_actualizar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -97,13 +95,11 @@ public class V_clientes extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 29, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(c_ordenar, gridBagConstraints);
 
         t_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -112,13 +108,13 @@ public class V_clientes extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 135;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 21, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(t_buscar, gridBagConstraints);
 
         b_buscar.setText("Buscar");
@@ -133,13 +129,12 @@ public class V_clientes extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(3, 30, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(b_buscar, gridBagConstraints);
 
         b_reiniciar_filtros.setText("Limpiar busqueda");
@@ -157,34 +152,19 @@ public class V_clientes extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 25, 0, 14);
-        jPanel1.add(b_reiniciar_filtros, gridBagConstraints);
-
-        b_dividir_pantalla.setText("Dividir");
-        b_dividir_pantalla.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_dividir_pantallaActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        jPanel1.add(b_dividir_pantalla, gridBagConstraints);
+        jPanel1.add(b_reiniciar_filtros, gridBagConstraints);
 
         jLabel2.setText("Ordenar por:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(4, 32, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel2, gridBagConstraints);
 
         b_actualizar.setText("Actualizar");
@@ -194,9 +174,9 @@ public class V_clientes extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(b_actualizar, gridBagConstraints);
 
         jScrollPane2.setViewportView(jPanel1);
@@ -459,108 +439,8 @@ public class V_clientes extends javax.swing.JFrame {
         
     }//GEN-LAST:event_b_buscarActionPerformed
 
-    private void b_dividir_pantallaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_dividir_pantallaActionPerformed
-
-        if (!dividida) {
-
-            int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea dividir el formulario?", "Confirmar accion", javax.swing.JOptionPane.YES_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);
-            if (respuesta == javax.swing.JOptionPane.YES_OPTION) {
-                // 1. Definimos los textos personalizados para los botones
-                String[] opciones = {"Izquierda", "Derecha"};
-
-                // 2. Usamos showOptionDialog para personalizar el componente
-                int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "¿En que lado de la pantalla?", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
-                               
-                if (respuesta1 == 0) {
-                    System.out.println("Seleccionaste Izquierda");
-
-                    b_dividir_pantalla.setText("Maximizar");
-                    dividida = true;
-                    
-                    try {
-                        // 1. SI ESTÁ MAXIMIZADA, LA RESTAURAMOS A SU ESTADO NORMAL Primero
-                        if ((this.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH) != 0) {
-                            this.setExtendedState(java.awt.Frame.NORMAL);
-                        }
-
-                        java.awt.GraphicsConfiguration config = this.getGraphicsConfiguration();
-                        java.awt.Rectangle bounds = config.getBounds();
-                        java.awt.Insets insets = java.awt.Toolkit.getDefaultToolkit().getScreenInsets(config);
-
-                        int anchoUtil = bounds.width - insets.left - insets.right;
-                        int altoUtil = bounds.height - insets.top - insets.bottom;
-
-                        int nuevaX = insets.left;
-                        int nuevaY = insets.top;
-                        int nuevoAncho = anchoUtil / 2;
-                        int nuevoAlto = altoUtil;
-
-                        this.setBounds(nuevaX, nuevaY, nuevoAncho, nuevoAlto);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                } else if (respuesta1 == 1) {
-                    System.out.println("Seleccionaste Derecha");
-
-                    b_dividir_pantalla.setText("Maximizar");
-                    dividida = true;
-                                        
-                    try {
-                        if ((this.getExtendedState() & java.awt.Frame.MAXIMIZED_BOTH) != 0) {
-                            this.setExtendedState(java.awt.Frame.NORMAL);
-                        }
-
-                        java.awt.GraphicsConfiguration config = this.getGraphicsConfiguration();
-                        java.awt.Rectangle bounds = config.getBounds();
-                        java.awt.Insets insets = java.awt.Toolkit.getDefaultToolkit().getScreenInsets(config);
-
-                        int anchoUtil = bounds.width - insets.left - insets.right;
-                        int altoUtil = bounds.height - insets.top - insets.bottom;
-
-                        int nuevoAncho = anchoUtil / 2;
-                        int nuevaX = insets.left + nuevoAncho;
-                        int nuevaY = insets.top;
-                        int nuevoAlto = altoUtil;
-
-                        this.setBounds(nuevaX, nuevaY, nuevoAncho, nuevoAlto);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        } else {
-
-            this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-            b_dividir_pantalla.setText("Dividir");
-            dividida = false;
-        }
-    }//GEN-LAST:event_b_dividir_pantallaActionPerformed
-
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        // 1. Obtenemos la configuración de la pantalla actual
-        java.awt.GraphicsConfiguration config = this.getGraphicsConfiguration();
-        if (config != null) {
-            java.awt.Rectangle bounds = config.getBounds();
-            java.awt.Insets insets = java.awt.Toolkit.getDefaultToolkit().getScreenInsets(config);
         
-        // 2. Calculamos el ancho útil de la pantalla (descontando barras de tareas)
-        int anchoUtil = bounds.width - insets.left - insets.right;
-        
-        // 3. Si el ancho de la ventana es menor o igual al 60% de la pantalla, asumimos que está dividida
-        if (this.getWidth() <= (anchoUtil * 0.6)) {
-            b_dividir_pantalla.setText("Maximizar");
-            dividida = true;
-        } else {
-            // Si es más ancha, asumimos que está completa o maximizada
-            b_dividir_pantalla.setText("Dividir");
-            dividida = false;
-        }
-    }
     }//GEN-LAST:event_formComponentResized
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -698,7 +578,6 @@ public class V_clientes extends javax.swing.JFrame {
     public javax.swing.JButton b_actualizar;
     private javax.swing.JButton b_buscar;
     private javax.swing.JButton b_cerrar;
-    private javax.swing.JButton b_dividir_pantalla;
     private javax.swing.JButton b_reiniciar_filtros;
     private javax.swing.JComboBox<String> c_ordenar;
     private javax.swing.JLabel jLabel1;

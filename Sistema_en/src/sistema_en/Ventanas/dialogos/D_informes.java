@@ -26,7 +26,7 @@ public class D_informes extends javax.swing.JDialog {
 
     boolean abrir_automaticamente;
     String ruta_informes;
-
+    
     /**
      * Creates new form D_informe_mensual
      */
@@ -75,6 +75,9 @@ public class D_informes extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         Tabla_informes_historial = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -109,6 +112,11 @@ public class D_informes extends javax.swing.JDialog {
         jPanel5.add(b_exportar, gridBagConstraints);
 
         b_contrastar.setText("Constrastar datos");
+        b_contrastar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_contrastarActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -260,7 +268,29 @@ public class D_informes extends javax.swing.JDialog {
 
         jPanel2.add(jScrollPane5, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Historial", jPanel2);
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jButton1.setText("Revisar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jButton1, gridBagConstraints);
+
+        jButton2.setText("Exportar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jButton2, gridBagConstraints);
+
+        jPanel2.add(jPanel3, java.awt.BorderLayout.PAGE_START);
+
+        jTabbedPane1.addTab("Periodos disponibles", jPanel2);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -287,6 +317,11 @@ public class D_informes extends javax.swing.JDialog {
         Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         Tabla_trabajos.getTableHeader().setReorderingAllowed(false);
         Tabla_trabajos.getTableHeader().setResizingAllowed(false);
+        
+        Tabla_informes_historial.setDefaultEditor(Object.class, null);
+        Tabla_informes_historial.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_informes_historial.getTableHeader().setReorderingAllowed(false);
+        Tabla_informes_historial.getTableHeader().setResizingAllowed(false);
     }
     
     private void cargarInformeMesActual() {
@@ -408,7 +443,7 @@ public class D_informes extends javax.swing.JDialog {
         }
         
         if (respuesta1 == 1){
-            javax.swing.JOptionPane.showMessageDialog(this, "La exportación a Excel aún no está disponible en esta versión. Estará en las próximas actualizaciones.", "Excel no disponible", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "La exportación a Excel aún no está disponible para esta versión. Estará en proximas próximas actualizaciones.", "Excel no disponible", javax.swing.JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_b_exportarActionPerformed
 
@@ -444,10 +479,64 @@ public class D_informes extends javax.swing.JDialog {
         }
     }
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {                                  
         obtener_configuraciones();
         cargarInformeMesActual();
-    }//GEN-LAST:event_formWindowOpened
+        cargarPeriodosDisponibles();
+        
+        jButton1.addActionListener(e -> {
+            int row = Tabla_informes_historial.getSelectedRow();
+            if (row != -1) {
+                String periodo = (String) Tabla_informes_historial.getValueAt(row, 0);
+                verPeriodo(periodo);
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un periodo primero.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        jButton2.addActionListener(e -> {
+            int row = Tabla_informes_historial.getSelectedRow();
+            if (row != -1) {
+                String periodo = (String) Tabla_informes_historial.getValueAt(row, 0);
+                verPeriodo(periodo);
+                b_exportarActionPerformed(null);
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un periodo primero.", "Aviso", javax.swing.JOptionPane.WARNING_MESSAGE);
+            }
+        });
+    }                                 
+
+    private void cargarPeriodosDisponibles() {
+        InformesDAO dao = new InformesDAO();
+        List<String> periodos = dao.obtenerPeriodosDisponibles();
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_informes_historial.getModel();
+        modelo.setRowCount(0);
+        for (String periodo : periodos) {
+            modelo.addRow(new Object[]{periodo, "-", "Disponible", "-"});
+        }
+    }
+
+    private void verPeriodo(String periodo) {
+        String[] partes = periodo.split("-");
+        int year = Integer.parseInt(partes[0]);
+        int month = Integer.parseInt(partes[1]);
+        LocalDate inicio = LocalDate.of(year, month, 1);
+        LocalDate fin = inicio.plusMonths(1).minusDays(1);
+        
+        String l_mes = java.time.Month.of(month).getDisplayName(java.time.format.TextStyle.FULL, new java.util.Locale("es", "ES"));
+        l_mes_año.setText(l_mes + " " + year);
+        l_estado.setText("Datos historicos");
+        l_estado.setForeground(java.awt.Color.BLUE);
+        
+        cargarTablas(inicio, fin);
+        jTabbedPane1.setSelectedIndex(0);
+    }
+
+    private void b_contrastarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_contrastarActionPerformed
+        D_contrastar_datos constrastar = new D_contrastar_datos(this,true);
+        constrastar.setLocationRelativeTo(null);
+        constrastar.setVisible(true);
+    }//GEN-LAST:event_b_contrastarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -501,11 +590,14 @@ public class D_informes extends javax.swing.JDialog {
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_contrastar;
     private javax.swing.JButton b_exportar;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;

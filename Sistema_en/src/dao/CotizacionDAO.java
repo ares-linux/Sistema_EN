@@ -22,136 +22,190 @@ import sistema_en.Objetos.Detalles_cotizacion;
  */
 public class CotizacionDAO {
     
-    public List<Cotizacion> obtenerCotizacionesPrueba() {
-    List<Cotizacion> listaCotizaciones = new ArrayList<>(); 
-    String sql = "SELECT * FROM Cotizacion WHERE tipo = ?";
+    /**
+     * Convierte el texto de una fecha de la BD a LocalDate. Acepta el formato ISO
+     * que escribe la aplicacion y, por tolerancia con registros anteriores, tambien
+     * "d 'de' MMMM 'de' yyyy" en espanol. Devuelve null si no se puede interpretar.
+     */
+    private static LocalDate leerFecha(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(texto.trim());
+        } catch (Exception e) {
+            try {
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new java.util.Locale("es", "ES"));
+                return LocalDate.parse(texto.trim(), formato);
+            } catch (Exception ex) {
+                System.err.println("Error al interpretar la fecha: " + texto);
+                return null;
+            }
+        }
+    }
 
-    try (Connection con = Conexion.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
-        
-        // Asignamos el valor al parámetro '?' para mayor seguridad
+    /**
+     * Construye un Cotizacion a partir de una fila de la tabla. id_trabajo es NULL
+     * cuando la cotizacion es de prueba, por eso se normaliza a 0, que es el valor
+     * que usa la interfaz.
+     */
+    private static Cotizacion mapearCotizacion(ResultSet rs) throws SQLException {
+        Cotizacion c = new Cotizacion();
+        c.setId_cotizacion(rs.getInt("id_cotizacion"));
+        c.setSubtotal(rs.getFloat("subtotal"));
+        c.setIva(rs.getFloat("iva"));
+        c.setTotal(rs.getFloat("total"));
+        c.setEstado(rs.getString("estado"));
+        c.setTipo(rs.getString("tipo"));
+        c.setFecha_creacion(leerFecha(rs.getString("fecha_creacion")));
+        c.setArchivada(rs.getInt("archivada"));
+        c.setFecha_archivado(leerFecha(rs.getString("fecha_archivado")));
+        c.setNombre_cliente(rs.getString("nombre_cliente"));
+        c.setTelefono_cliente(rs.getString("telefono_cliente"));
+        int id_trabajo = rs.getInt("id_trabajo");
+        c.setId_trabajo(rs.wasNull() ? 0 : id_trabajo);
+        return c;
+    }
+
+    public List<Cotizacion> obtenerCotizacionesPrueba() {
+        return obtenerCotizacionesPrueba(false);
+    }
+
+    /**
+     * @param archivadas true devuelve las cotizaciones de prueba archivadas,
+     *                   false devuelve las activas
+     */
+    public List<Cotizacion> obtenerCotizacionesPrueba(boolean archivadas) {
+    List<Cotizacion> listaCotizaciones = new ArrayList<>();
+    String sql = "SELECT * FROM Cotizacion WHERE tipo = ? AND archivada = ? ORDER BY id_cotizacion DESC";
+
+    Connection con = Conexion.conectar();
+    if (con == null) {
+        return listaCotizaciones;
+    }
+
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
         ps.setString(1, "Prueba");
+        ps.setInt(2, archivadas ? 1 : 0);
 
         try (ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Cotizacion c = new Cotizacion();
-
-                c.setId_cotizacion(rs.getInt("id_cotizacion"));
-                c.setTipo(rs.getString("tipo"));
-                c.setSubtotal(rs.getFloat("subtotal"));
-                c.setIva(rs.getFloat("iva"));
-                c.setTotal(rs.getFloat("total"));
-                c.setEstado(rs.getString("estado"));
-                String fecha_creacion = rs.getString("fecha_creacion");                
-
-                if (fecha_creacion != null && !fecha_creacion.trim().isEmpty()) {
-                    try {
-                        try {
-                            c.setFecha_creacion(LocalDate.parse(fecha_creacion));
-                        } catch (Exception e) {
-                            DateTimeFormatter formato = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new java.util.Locale("es", "ES"));
-                            c.setFecha_creacion(LocalDate.parse(fecha_creacion, formato));
-                        }
-                    } catch (Exception ex) {
-                        System.err.println("Error parsing date: " + fecha_creacion);
-                    }
-                }       
-                listaCotizaciones.add(c); 
+                listaCotizaciones.add(mapearCotizacion(rs));
             }
         }
     } catch (SQLException e) {
         System.out.println("Error SQL: " + e.getMessage());
+    } finally {
+        cerrarSeguro(con);
     }
-    
+
     System.out.println("Cotizaciones encontradas: " + listaCotizaciones.size());
-    return listaCotizaciones; 
+    return listaCotizaciones;
 }
     
     public List<Cotizacion> obtenerCotizaciones(int id_trabajo) {
         System.out.println("ID trabajo recibido: " + id_trabajo);
-    List<Cotizacion> listaCotizaciones = new ArrayList<>(); 
-    String sql = (id_trabajo == 0) ? "SELECT * FROM Cotizacion" : "SELECT * FROM Cotizacion WHERE id_trabajo = ? AND tipo = 'Normal'";
+    List<Cotizacion> listaCotizaciones = new ArrayList<>();
+    // Sin trabajo solo tiene sentido mostrar cotizaciones de prueba activas: las
+    // cotizaciones de un trabajo se consultan siempre con su id_trabajo real.
+    String sql = (id_trabajo == 0) ? "SELECT * FROM Cotizacion WHERE tipo = 'Prueba' AND archivada = 0" : "SELECT * FROM Cotizacion WHERE id_trabajo = ? AND tipo = 'Normal'";
 
-    try (Connection con = Conexion.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+    Connection con = Conexion.conectar();
+    if (con == null) {
+        return listaCotizaciones;
+    }
 
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
         System.out.println("Ejecutando consulta para id_trabajo = " + id_trabajo);
         if (id_trabajo != 0) {
             ps.setInt(1, id_trabajo);
         }
         try (ResultSet rs = ps.executeQuery()) {
-            
-            // 2. Usar 'while' para recorrer todas las filas encontradas
             while (rs.next()) {
-                Cotizacion c = new Cotizacion();
-
-                c.setId_cotizacion(rs.getInt("id_cotizacion"));
-                c.setTipo(rs.getString("tipo"));
-                c.setSubtotal(rs.getFloat("subtotal"));
-                c.setIva(rs.getFloat("iva"));
-                c.setTotal(rs.getFloat("total"));
-                c.setEstado(rs.getString("estado"));
-                String fecha_creacion = rs.getString("fecha_creacion");                 
-
-                if (fecha_creacion != null && !fecha_creacion.trim().isEmpty()) {
-                    try {
-                        try {
-                            // Opción 1: Si tu base de datos guarda la fecha en formato estándar (YYYY-MM-DD)
-                            c.setFecha_creacion(LocalDate.parse(fecha_creacion));
-                        } catch (Exception e) {
-                            // Opción 2: Si tu base de datos guarda la fecha con texto en español u otro formato personalizado,
-                            // define el formato exacto aquí. (Ejemplo provisional si viene como 'd de MMMM de yyyy'):
-                            DateTimeFormatter formato = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new java.util.Locale("es", "ES"));
-                            c.setFecha_creacion(LocalDate.parse(fecha_creacion, formato));
-                        }
-                    } catch (Exception ex) {
-                        System.err.println("Error parsing date: " + fecha_creacion);
-                    }
-                }       
-                // 3. Agregar el objeto a la lista en lugar de hacer 'return b;'
-                listaCotizaciones.add(c); 
+                listaCotizaciones.add(mapearCotizacion(rs));
             }
         }
     } catch (SQLException e) {
         System.out.println("Error SQL: " + e.getMessage());
+    } finally {
+        cerrarSeguro(con);
     }
     // 4. Devolver la lista completa (estará vacía si no encontró ninguna)
     System.out.println("Cotizaciones encontradas: " + listaCotizaciones.size());
-    return listaCotizaciones; 
+    return listaCotizaciones;
 }
+
+    /**
+     * Busca cotizaciones de prueba por nombre del prospecto y/o rango de fechas.
+     * Los parametros nulos se omiten, asi que cualquier combinacion es valida.
+     */
+    public List<Cotizacion> buscarCotizacionesPrueba(String nombre, LocalDate desde, LocalDate hasta, boolean archivadas) {
+        List<Cotizacion> listaCotizaciones = new ArrayList<>();
+        List<Object> parametros = new ArrayList<>();
+        StringBuilder where = new StringBuilder(" WHERE tipo = ? AND archivada = ?");
+
+        parametros.add("Prueba");
+        parametros.add(archivadas ? 1 : 0);
+
+        if (nombre != null && !nombre.trim().isEmpty()) {
+            // Escapamos % y _ para que el usuario los busque como texto literal.
+            where.append(" AND nombre_cliente LIKE ? ESCAPE '\\'");
+            parametros.add("%" + nombre.trim().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%");
+        }
+        if (desde != null) {
+            where.append(" AND fecha_creacion >= ?");
+            parametros.add(desde.toString());
+        }
+        if (hasta != null) {
+            where.append(" AND fecha_creacion <= ?");
+            parametros.add(hasta.toString());
+        }
+
+        String sql = "SELECT * FROM Cotizacion" + where + " ORDER BY id_cotizacion DESC";
+
+        Connection con = Conexion.conectar();
+        if (con == null) {
+            return listaCotizaciones;
+        }
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            for (int i = 0; i < parametros.size(); i++) {
+                ps.setObject(i + 1, parametros.get(i));
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    listaCotizaciones.add(mapearCotizacion(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar cotizaciones de prueba: " + e.getMessage());
+        } finally {
+            cerrarSeguro(con);
+        }
+
+        return listaCotizaciones;
+    }
     
     public Cotizacion obtenerUltimaCotizacion(int id_trabajo) {
         String sql = "SELECT * FROM Cotizacion WHERE id_trabajo = ? ORDER BY id_cotizacion DESC LIMIT 1";
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        Connection con = Conexion.conectar();
+        if (con == null) {
+            return null;
+        }
 
-            if (con == null) return null;
-
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id_trabajo);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Cotizacion c = new Cotizacion();
-
-                    c.setId_cotizacion(rs.getInt("id_cotizacion"));
-                    c.setId_trabajo(rs.getInt("id_trabajo"));
-                    c.setSubtotal(rs.getFloat("subtotal"));
-                    c.setIva(rs.getFloat("iva"));
-                    c.setTotal(rs.getFloat("total"));
-                    c.setEstado(rs.getString("estado"));
-                    c.setTipo(rs.getString("tipo"));
-
-                    String fecha_creacion = rs.getString("fecha_creacion");
-                    if (fecha_creacion != null && !fecha_creacion.trim().isEmpty()) {
-                        c.setFecha_creacion(LocalDate.parse(fecha_creacion));
-                    }
-
-                    return c;
+                    return mapearCotizacion(rs);
                 }
             }
         } catch (SQLException e) {
             System.err.println("Error al obtener la ultima cotizacion: " + e.getMessage());
+        } finally {
+            cerrarSeguro(con);
         }
 
         return null;
@@ -160,36 +214,24 @@ public class CotizacionDAO {
     public Cotizacion obtenerCotizacion(int id_cotizacion) {
     String sql = "SELECT * FROM Cotizacion WHERE id_cotizacion = ?";
 
-    try (Connection con = Conexion.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+    Connection con = Conexion.conectar();
+    if (con == null) {
+        return null;
+    }
 
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
         ps.setInt(1, id_cotizacion);
 
         try (ResultSet rs = ps.executeQuery()) {
-
             if (rs.next()) {
-                Cotizacion c = new Cotizacion();
-
-                c.setId_cotizacion(rs.getInt("id_cotizacion"));
-                c.setId_trabajo(rs.getInt("id_trabajo"));
-                c.setSubtotal(rs.getFloat("subtotal"));
-                c.setIva(rs.getFloat("iva"));
-                c.setTotal(rs.getFloat("total"));
-                c.setEstado(rs.getString("estado"));
-                c.setTipo(rs.getString("tipo"));
-
-                String fecha_creacion = rs.getString("fecha_creacion");
-
-                if (fecha_creacion != null && !fecha_creacion.trim().isEmpty()) {
-                    c.setFecha_creacion(LocalDate.parse(fecha_creacion));
-                }
-
-                return c;
+                return mapearCotizacion(rs);
             }
         }
 
     } catch (SQLException e) {
         System.err.println("Error SQL: " + e.getMessage());
+    } finally {
+        cerrarSeguro(con);
     }
 
     return null;
@@ -271,8 +313,26 @@ public class CotizacionDAO {
     }
 }
     
+    /**
+     * Guarda la cotizacion y sus detalles. Se mantiene igual que siempre para no
+     * romper los llamadores que solo necesitan saber si tuvo exito.
+     */
     public boolean insertarCotizacionConDetalles(Cotizacion cotizacion, List<Detalles_cotizacion> listaDetalles) {
-        String sqlCotizacion = "INSERT INTO Cotizacion (subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        return insertarCotizacionConDetallesInterno(cotizacion, listaDetalles) != -1;
+    }
+
+    /**
+     * Igual que {@link #insertarCotizacionConDetalles} pero devuelve el
+     * id_cotizacion generado, o -1 si fallo. Necesario para mostrar el numero de
+     * una cotizacion de prueba recien creada y poder editarla, archivarla o
+     * convertirla sin volver a buscarla en la tabla.
+     */
+    public int insertarCotizacionConDetallesDevolviendoId(Cotizacion cotizacion, List<Detalles_cotizacion> listaDetalles) {
+        return insertarCotizacionConDetallesInterno(cotizacion, listaDetalles);
+    }
+
+    private int insertarCotizacionConDetallesInterno(Cotizacion cotizacion, List<Detalles_cotizacion> listaDetalles) {
+        String sqlCotizacion = "INSERT INTO Cotizacion (subtotal, iva, total, estado, tipo, fecha_creacion, id_trabajo, nombre_cliente, telefono_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlDetalle = "INSERT INTO Detalles_cotizacion (concepto, n_material, cantidad, precio_uni, precio, id_cotizacion) VALUES (?, ?, ?, ?, ?, ?)";
 
         for (int intento = 1; intento <= 3; intento++) {
@@ -281,7 +341,7 @@ public class CotizacionDAO {
                 con = Conexion.conectar();
                 if (con == null) {
                     System.err.println("No se pudo conectar a la base de datos.");
-                    return false;
+                    return -1;
                 }
                 // 1. Desactivamos el autoCommit para iniciar manualmente la transacción
                 con.setAutoCommit(false);
@@ -302,6 +362,9 @@ public class CotizacionDAO {
                     } else {
                         psCotizacion.setNull(7, java.sql.Types.INTEGER);
                     }
+
+                    psCotizacion.setString(8, cotizacion.getNombre_cliente());
+                    psCotizacion.setString(9, cotizacion.getTelefono_cliente());
 
                     psCotizacion.executeUpdate();
 
@@ -335,7 +398,7 @@ public class CotizacionDAO {
 
                 // 4. Si todo salió bien, confirmamos todos los cambios en la BD
                 con.commit();
-                return true;
+                return idCotizacionGenerado;
 
             } catch (SQLException e) {
                 if (esBloqueoBD(e) && intento < 3) {
@@ -352,12 +415,12 @@ public class CotizacionDAO {
                         System.err.println("Error al intentar realizar el rollback: " + ex.getMessage());
                     }
                 }
-                return false;
+                return -1;
             } finally {
                 cerrarSeguro(con);
             }
         }
-        return false;
+        return -1;
     }
     
     public boolean actualizarCotizacionConDetalles(float subtotal, float iva, float total, String estado,
@@ -393,8 +456,10 @@ public class CotizacionDAO {
                         ps.setNull(7, java.sql.Types.INTEGER);
                     }
                     ps.setInt(8, id_cotizacion);
-                    if (ps.executeUpdate() == 0) {
-                        throw new SQLException("La cotización " + id_cotizacion + " no existe o no fue modificada.");
+                    // executeUpdate devuelve 0 tambien cuando la fila existe pero los
+                    // valores son identicos, por eso no basta para considerar un error.
+                    if (ps.executeUpdate() == 0 && !existeCotizacion(con, id_cotizacion)) {
+                        throw new SQLException("La cotización " + id_cotizacion + " no existe.");
                     }
                 }
 
@@ -452,6 +517,93 @@ public class CotizacionDAO {
     private static boolean esBloqueoBD(SQLException e) {
         String msg = e.getMessage();
         return msg != null && (msg.contains("locked") || e.getErrorCode() == 5);
+    }
+
+    /**
+     * Indica si la fila de la cabecera existe, para distinguir "no se modifico nada"
+     * de "la cotizacion no existe".
+     */
+    private static boolean existeCotizacion(Connection con, int id_cotizacion) throws SQLException {
+        String sql = "SELECT 1 FROM Cotizacion WHERE id_cotizacion = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id_cotizacion);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    /**
+     * Archiva una cotizacion de prueba. El estado comercial no se toca: archivar es
+     * unicamente una marca de que el cliente pidio consultarla mas adelante.
+     * Solo aplica a cotizaciones de prueba que todavia no estan Convertidas a un
+     * trabajo, por eso el guard en el WHERE.
+     */
+    public boolean archivarCotizacion(int id_cotizacion, LocalDate fecha_archivado) {
+        String sql = "UPDATE Cotizacion SET archivada = 1, fecha_archivado = ? "
+                + "WHERE id_cotizacion = ? AND tipo = 'Prueba' AND id_trabajo IS NULL";
+
+        Connection con = Conexion.conectar();
+        if (con == null) {
+            return false;
+        }
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, fecha_archivado != null ? fecha_archivado.toString() : null);
+            ps.setInt(2, id_cotizacion);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al archivar la cotizacion: " + e.getMessage());
+            return false;
+        } finally {
+            cerrarSeguro(con);
+        }
+    }
+
+    /**
+     * Devuelve una cotizacion de prueba al historial activo. No restaura el estado
+     * comercial porque nunca se modifico al archivar.
+     */
+    public boolean desarchivarCotizacion(int id_cotizacion) {
+        String sql = "UPDATE Cotizacion SET archivada = 0, fecha_archivado = NULL WHERE id_cotizacion = ?";
+
+        Connection con = Conexion.conectar();
+        if (con == null) {
+            return false;
+        }
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id_cotizacion);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al desarchivar la cotizacion: " + e.getMessage());
+            return false;
+        } finally {
+            cerrarSeguro(con);
+        }
+    }
+
+    /**
+     * Actualiza los datos del prospecto. Va aparte de
+     * actualizarCotizacionConDetalles porque ese metodo ya recibe nueve parametros
+     * y estos dos solo aplican a cotizaciones de prueba.
+     */
+    public boolean actualizarDatosProspecto(int id_cotizacion, String nombre_cliente, String telefono_cliente) {
+        String sql = "UPDATE Cotizacion SET nombre_cliente = ?, telefono_cliente = ? WHERE id_cotizacion = ?";
+
+        Connection con = Conexion.conectar();
+        if (con == null) {
+            return false;
+        }
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nombre_cliente);
+            ps.setString(2, telefono_cliente);
+            ps.setInt(3, id_cotizacion);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar los datos del prospecto: " + e.getMessage());
+            return false;
+        } finally {
+            cerrarSeguro(con);
+        }
     }
 
     private static void esperarReintento() {

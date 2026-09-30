@@ -19,6 +19,10 @@ public class Cotizacion {
     private int id_trabajo;
     private String tipo;
     private LocalDate fecha_creacion;
+    private int archivada;
+    private LocalDate fecha_archivado;
+    private String nombre_cliente;
+    private String telefono_cliente;
     
     
     public Cotizacion(){
@@ -160,6 +164,60 @@ public class Cotizacion {
         this.fecha_creacion = fecha_creacion;
     }
 
+    /**
+     * @return 1 si la cotizacion de prueba esta archivada, 0 si esta activa
+     */
+    public int getArchivada() {
+        return archivada;
+    }
 
-    
+    /**
+     * @param archivada the archivada to set
+     */
+    public void setArchivada(int archivada) {
+        this.archivada = archivada;
+    }
+
+    /**
+     * @return the fecha_archivado
+     */
+    public LocalDate getFecha_archivado() {
+        return fecha_archivado;
+    }
+
+    /**
+     * @param fecha_archivado the fecha_archivado to set
+     */
+    public void setFecha_archivado(LocalDate fecha_archivado) {
+        this.fecha_archivado = fecha_archivado;
+    }
+
+    /**
+     * @return the nombre_cliente
+     */
+    public String getNombre_cliente() {
+        return nombre_cliente;
+    }
+
+    /**
+     * @param nombre_cliente the nombre_cliente to set
+     */
+    public void setNombre_cliente(String nombre_cliente) {
+        this.nombre_cliente = nombre_cliente;
+    }
+
+    /**
+     * @return the telefono_cliente
+     */
+    public String getTelefono_cliente() {
+        return telefono_cliente;
+    }
+
+    /**
+     * @param telefono_cliente the telefono_cliente to set
+     */
+    public void setTelefono_cliente(String telefono_cliente) {
+        this.telefono_cliente = telefono_cliente;
+    }
+
 }

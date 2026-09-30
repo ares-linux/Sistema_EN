@@ -4,13 +4,51 @@
  */
 package sistema_en.Ventanas.Ventanas_consultas;
 
+import dao.CotizacionDAO;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import raven.toast.Notifications;
+import sistema_en.Objetos.Cotizacion;
+import sistema_en.Ventanas.V_R_Cotizacion_independiente;
 
 /**
  *
  * @author ares
  */
 public class V_historial_c extends javax.swing.JFrame {
+
+    /**
+     * Unica instancia viva. Tanto el menu como el boton "Abrir historial" de la
+     * cotizacion la reutilizan: si ya esta abierta solo se recarga y se trae al
+     * frente, asi es imposible apilar copias del historial.
+     */
+    private static V_historial_c instancia = null;
+
+    /**
+     * Abre (o reutiliza) la ventana del historial y la deja al frente.
+     *
+     * @param padre ventana relativa a la que se centra; puede ser null
+     */
+    public static void abrirHistorial(java.awt.Window padre) {
+        V_historial_c historial = instancia;
+        if (historial == null || !historial.isDisplayable()) {
+            historial = new V_historial_c();
+            instancia = historial;
+        } else {
+            historial.llenarHistorial(false);
+            historial.llenarArchivadas();
+        }
+        if (padre != null) {
+            historial.setLocationRelativeTo(padre);
+        }
+        historial.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        historial.setVisible(true);
+        historial.toFront();
+        historial.requestFocus();
+    }
 
     /**
      * Creates new form V_historial_c
@@ -26,6 +64,21 @@ public class V_historial_c extends javax.swing.JFrame {
         Tabla_archivadas_c.getTableHeader().setResizingAllowed(false);
         Tabla_historial_c.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         Tabla_archivadas_c.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+
+        // Boton "Abrir" que funciona en las dos pestanas: la unica forma de abrir
+        // antes era el doble clic, invisible. Va al norte, fuera de GEN, para
+        // manejar la pestana que este activa sin tocar el .form del Designer.
+        javax.swing.JPanel barraAbrir = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 12, 6));
+        javax.swing.JLabel aviso = new javax.swing.JLabel("Selecciona una cotizacion y pulsa Abrir, o hace doble clic sobre la fila.");
+        javax.swing.JButton bAbrir = new javax.swing.JButton("Abrir cotizacion");
+        bAbrir.addActionListener(e -> abrirCotizacionSeleccionada(
+                jTabbedPane1.getSelectedIndex() == 1 ? Tabla_archivadas_c : Tabla_historial_c));
+        barraAbrir.add(aviso);
+        barraAbrir.add(bAbrir);
+        getContentPane().add(barraAbrir, java.awt.BorderLayout.NORTH);
+
+        llenarHistorial(false);
+        llenarArchivadas();
     }
 
     /**
@@ -56,6 +109,10 @@ public class V_historial_c extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         b_restaurar = new javax.swing.JButton();
         b_cerrar_2 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        b_archivar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        t_nombre = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -66,9 +123,14 @@ public class V_historial_c extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id_cotizacion", "subtotal", "iva", "total", "estado", "id_trabajo", "tipo", "fecha_creacion"
+                "id_cotizacion", "Nombre del prospecto", "Telefono", "Fecha de creacion", "Tipo", "Estado", "Subtotal", "IVA", "Total", "Trabajo"
             }
         ));
+        Tabla_historial_c.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_historial_cMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Tabla_historial_c);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -93,7 +155,7 @@ public class V_historial_c extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
@@ -118,6 +180,27 @@ public class V_historial_c extends javax.swing.JFrame {
         jPanel3.add(d_fecha_fin, gridBagConstraints);
 
         b_buscar.setText("Buscar");
+        b_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_buscarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        jPanel3.add(b_buscar, gridBagConstraints);
+
+        jLabel3.setText("Nombre del prospecto");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 11, 13);
+        jPanel3.add(jLabel3, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -125,7 +208,7 @@ public class V_historial_c extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
-        jPanel3.add(b_buscar, gridBagConstraints);
+        jPanel3.add(t_nombre, gridBagConstraints);
 
         jLabel1.setText("Fecha de incio");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -148,7 +231,7 @@ public class V_historial_c extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 10, 10);
         jPanel3.add(b_cerrar, gridBagConstraints);
@@ -168,9 +251,14 @@ public class V_historial_c extends javax.swing.JFrame {
 
             },
             new String [] {
-                "id_cotizacion", "subtotal", "iva", "total", "estado", "id_trabajo", "tipo", "fecha_creacion"
+                "id_cotizacion", "Nombre del prospecto", "Telefono", "Fecha de creacion", "Tipo", "Estado", "Subtotal", "IVA", "Total", "Trabajo"
             }
         ));
+        Tabla_archivadas_c.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Tabla_archivadas_cMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(Tabla_archivadas_c);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -216,19 +304,187 @@ public class V_historial_c extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Cotizaciones archivadas", jPanel2);
 
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        b_archivar.setText("Archivar cotizacion");
+        b_archivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_archivarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10); // NOI18N
+        jPanel5.add(b_archivar, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        jPanel1.add(jPanel5, gridBagConstraints);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+        llenarHistorial(false);
+    }//GEN-LAST:event_b_buscarActionPerformed
+
+    private void b_archivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_archivarActionPerformed
+        int id = idCotizacionSeleccionada(Tabla_historial_c);
+        if (id == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona una cotizacion de la tabla para archivar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "La cotizacion " + id + " dejara de aparecer en el historial activo.\n¿Deseas archivarla?",
+                "Archivar cotizacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        if (new CotizacionDAO().archivarCotizacion(id, LocalDate.now())) {
+            Notification("La cotizacion fue archivada.");
+            llenarHistorial(false);
+            llenarArchivadas();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo archivar la cotizacion.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_b_archivarActionPerformed
+
+    private void Tabla_historial_cMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_historial_cMouseClicked
+        if (evt.getClickCount() == 2) {
+            abrirCotizacionSeleccionada(Tabla_historial_c);
+        }
+    }//GEN-LAST:event_Tabla_historial_cMouseClicked
+
+    private void Tabla_archivadas_cMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_archivadas_cMouseClicked
+        if (evt.getClickCount() == 2) {
+            abrirCotizacionSeleccionada(Tabla_archivadas_c);
+        }
+    }//GEN-LAST:event_Tabla_archivadas_cMouseClicked
+
     private void b_restaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_restaurarActionPerformed
-        // TODO add your handling code here:
+        int id = idCotizacionSeleccionada(Tabla_archivadas_c);
+        if (id == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona una cotizacion de la tabla para restaurar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int respuesta = JOptionPane.showConfirmDialog(this,
+                "La cotizacion " + id + " volvera al historial activo.\n¿Deseas restaurarla?",
+                "Restaurar cotizacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        if (new CotizacionDAO().desarchivarCotizacion(id)) {
+            Notification("La cotizacion fue restaurada.");
+            llenarHistorial(false);
+            llenarArchivadas();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo restaurar la cotizacion.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_b_restaurarActionPerformed
 
     private void b_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_limpiarActionPerformed
         d_fecha_inicio.setDate(null);
         d_fecha_fin.setDate(null);
+        t_nombre.setText("");
+        llenarHistorial(false);
+        llenarArchivadas();
     }//GEN-LAST:event_b_limpiarActionPerformed
+
+    /**
+     * Llena la tabla del historial activo con los criterios de la barra de busqueda.
+     * El historial siempre muestra cotizaciones de prueba: las que ya pertenecen a
+     * un trabajo se ven desde la ficha del trabajo.
+     *
+     * @param archivadas true para traer las archivadas, false para las activas
+     */
+    private void llenarHistorial(boolean archivadas) {
+        String nombre = t_nombre.getText() != null ? t_nombre.getText().trim() : "";
+        LocalDate desde = d_fecha_inicio.getDate();
+        LocalDate hasta = d_fecha_fin.getDate();
+
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_historial_c.getModel();
+        modelo.setRowCount(0);
+
+        for (Cotizacion c : new CotizacionDAO().buscarCotizacionesPrueba(nombre, desde, hasta, archivadas)) {
+            modelo.addRow(filaHistorial(c));
+        }
+        Tabla_historial_c.setModel(modelo);
+    }
+
+    private void llenarArchivadas() {
+        DefaultTableModel modelo = (DefaultTableModel) Tabla_archivadas_c.getModel();
+        modelo.setRowCount(0);
+
+        for (Cotizacion c : new CotizacionDAO().obtenerCotizacionesPrueba(true)) {
+            modelo.addRow(filaHistorial(c));
+        }
+        Tabla_archivadas_c.setModel(modelo);
+    }
+
+    private static Object[] filaHistorial(Cotizacion c) {
+        return new Object[] {
+            c.getId_cotizacion(),
+            c.getNombre_cliente() != null ? c.getNombre_cliente() : "",
+            c.getTelefono_cliente() != null ? c.getTelefono_cliente() : "",
+            c.getFecha_creacion() != null ? c.getFecha_creacion().toString() : "",
+            c.getTipo() != null ? c.getTipo() : "",
+            c.getEstado() != null ? c.getEstado() : "",
+            c.getSubtotal(),
+            c.getIva(),
+            c.getTotal(),
+            c.getId_trabajo() != 0 ? c.getId_trabajo() : "-"
+        };
+    }
+
+    /**
+     * @param tabla tabla de la que se toma la seleccion
+     * @return id_cotizacion de la fila seleccionada, o -1 si no hay ninguna
+     */
+    private static int idCotizacionSeleccionada(JTable tabla) {
+        int fila = tabla.getSelectedRow();
+        if (fila < 0) {
+            return -1;
+        }
+        Object id = tabla.getValueAt(fila, 0);
+        if (id == null) {
+            return -1;
+        }
+        try {
+            return Integer.parseInt(id.toString().trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private void abrirCotizacionSeleccionada(JTable tabla) {
+        int id = idCotizacionSeleccionada(tabla);
+        if (id == -1) {
+            return;
+        }
+
+        // La ventana de cotizaciones se abre como instancia unica: reutiliza la ya
+        // visible, la carga, la maximiza y la trae al frente. No se crean copias
+        // por clic. Los avisos de "no existe" y de "pertenece a un trabajo" los
+        // muestra la propia ventana.
+        V_R_Cotizacion_independiente.abrirCotizacion(id);
+    }
+
+    private void Notification(String mensaje) {
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_LEFT, mensaje);
+    }
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
         this.dispose();
@@ -281,10 +537,14 @@ public class V_historial_c extends javax.swing.JFrame {
     private javax.swing.JButton b_cerrar_2;
     private javax.swing.JButton b_limpiar;
     private javax.swing.JButton b_restaurar;
+    private javax.swing.JButton b_archivar;
+    private javax.swing.JPanel jPanel5;
     private com.github.lgooddatepicker.components.DatePicker d_fecha_fin;
     private com.github.lgooddatepicker.components.DatePicker d_fecha_inicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField t_nombre;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

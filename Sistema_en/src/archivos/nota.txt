@@ -1,0 +1,37 @@
+Versión 1.0.19
+
+Novedades:
+- Exportación del informe mensual a PDF con las estadísticas de las pestañas Trabajos, Clientes, Cotizaciones y Otros.
+- El PDF se guarda en la carpeta de Informes (Documentos) o en la ubicación que elijas.
+- Si activas "Abrir automaticamente las cotizaciones exportadas a pdf" en Configuraciones, el informe se abrirá automáticamente al exportarlo.
+- Corrección de columnas de las estadísticas en el PDF generado.
+
+Versión 1.0.18
+
+Novedades:
+- El informe mensual ahora calcula estadísticas reales: trabajos, clientes, cotizaciones y promedios del mes, con datos consultados de la base de datos.
+- Corrección en el estado del periodo: el día 1 ya muestra "Mes empezado" y los estados se asignan correctamente.
+- Simplificación del código del informe mensual.
+
+Versión 1.0.17
+
+Novedades:
+- Rediseño del formulario de informes: estadísticas organizadas en pestañas (Trabajos, Clientes, Cotizaciones y Otros) y pestaña de historial.
+
+Versión 1.0.16
+
+Novedades:
+- Soporte técnico: envío de solicitudes de soporte por correo electrónico desde el diálogo "Soporte tecnico" en Acerca de.
+- Nota de versión: consulta de las novedades de cada versión y el estado de tus solicitudes de soporte.
+- Integración con la API de Gmail para el envío de correos.
+
+Versión 1.0.15
+- Corrección: se restauró el archivo de credenciales de Google en el instalador, reparando las copias de seguridad y la exportación a Sheets.
+
+Versión 1.0.14
+- Filtro de clientes por nombre.
+- Descarga de documentación técnica y manual de usuario.
+- Pantalla de carga al exportar cotizaciones.
+
+Versión 1.0.13
+- Correcciones de bloqueos de la base de datos (SQLITE_BUSY).

@@ -32,6 +32,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import raven.toast.Notifications;
 import sistema_en.Carpetas;
+import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Evidencia;
 import sistema_en.Objetos.Trabajo;
@@ -799,44 +800,35 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             return;
         }
 
-        new javax.swing.SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                try {
-                    TrabajoDAO trabajoDao = new TrabajoDAO();
-                    Trabajo trabajo = trabajoDao.obtenerTrabajoIdCarpeta(id_trabajo);
-                    if (trabajo == null || trabajo.getId_carpeta() == null) {
-                        return null;
-                    }
+        // Es una lectura, asi que puede reintentarse: si el DNS de la red deja de
+        // responder un instante, la lista se carga igual al segundo intento. La
+        // obtencion de la carpeta de evidencias se resuelve ahora dentro del
+        // proveedor, que antes esta vista armaba su propio servicio de Drive.
+        EjecutorGoogle.ejecutar(() -> {
 
-                    final com.google.api.client.http.javanet.NetHttpTransport HTTP_TRANSPORT =
-                            new com.google.api.client.http.javanet.NetHttpTransport();
-                    DriveServiceHolder holder = new DriveServiceHolder();
-                    holder.service = new com.google.api.services.drive.Drive.Builder(
-                            HTTP_TRANSPORT,
-                            GoogleServicesProvider.JSON_FACTORY,
-                            GoogleServicesProvider.getCredentials(HTTP_TRANSPORT))
-                            .setApplicationName(GoogleServicesProvider.APPLICATION_NAME)
-                            .build();
-
-                    String idEvidencias = GoogleServicesProvider.buscarOCrearCarpeta(
-                            holder.service, "Evidencias", trabajo.getId_carpeta());
-
-                    List<Evidencia> disponibles = GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias);
-                    synchronized (evidenciasDisponiblesDrive) {
-                        evidenciasDisponiblesDrive.clear();
-                        evidenciasDisponiblesDrive.addAll(disponibles);
-                    }
-                } catch (Exception e) {
-                    System.out.println("❌ Error al cargar evidencias desde Drive: " + e.getMessage());
-                }
-                return null;
+            TrabajoDAO trabajoDao = new TrabajoDAO();
+            Trabajo trabajo = trabajoDao.obtenerTrabajoIdCarpeta(id_trabajo);
+            if (trabajo == null || trabajo.getId_carpeta() == null) {
+                return List.<Evidencia>of();
             }
-        }.execute();
-    }
 
-    private static class DriveServiceHolder {
-        com.google.api.services.drive.Drive service;
+            String idEvidencias = GoogleServicesProvider.obtenerIdCarpetaEvidencias(trabajo.getId_carpeta());
+            if (idEvidencias == null) {
+                return List.<Evidencia>of();
+            }
+
+            return GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias);
+        }, disponibles -> {
+
+            synchronized (evidenciasDisponiblesDrive) {
+                evidenciasDisponiblesDrive.clear();
+                evidenciasDisponiblesDrive.addAll(disponibles);
+            }
+        }, error -> {
+
+            System.out.println("No se pudieron cargar las evidencias desde Drive: "
+                    + EjecutorGoogle.mensajeDeError(error));
+        });
     }
 
     // obtenerCarpetaEvidenciasLocal(): Devuelve la carpeta local base donde se
@@ -1057,10 +1049,63 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             String carpeta = obtenerCarpetaEvidenciasLocal();
             String nombre = ev.getNombre_archivo() != null ? ev.getNombre_archivo() : ("evidencia_" + ev.getId_google_drive());
             ruta = carpeta + java.io.File.separator + nombre;
-            GoogleServicesProvider.verificarYDescargarEvidencia(ev.getId_google_drive(), ruta);
-            ev.setRuta_local(ruta);
+            descargarYMostrar(ev, ruta, anchoLabel, altoLabel);
+            return;
         }
         
+        pintarEvidencia(ruta, anchoLabel, altoLabel);
+    }
+
+    /**
+     * Descarga la evidencia desde Drive y recien despues la muestra.
+     *
+     * La descarga no puede quedar en medio de este metodo: secalled desde el
+     * hilo de eventos cada vez que cambia la seleccion de la lista, y bajar un
+     * archivo freezes la ventana sin que el usuario entienda que esta pasando.
+     *
+     * @param ev          evidencia seleccionada
+     * @param ruta        ruta local donde quedara el archivo
+     * @param anchoLabel  ancho del area de imagen
+     * @param altoLabel   alto del area de imagen
+     */
+    private void descargarYMostrar(Evidencia ev, String ruta, int anchoLabel, int altoLabel) {
+        String idDrive = ev.getId_google_drive();
+
+        // Es una lectura, asi que puede reintentarse: si el DNS de la red falla
+        // un instante, la descarga se reintenta sola.
+        EjecutorGoogle.ejecutar(
+                () -> GoogleServicesProvider.verificarYDescargarEvidencia(idDrive, ruta),
+                descargada -> {
+
+                    if (!isDisplayable()) {
+                        return;
+                    }
+
+                    if (!descargada) {
+                        t_evidencia.setText("");
+                        l_evidencia.setIcon(null);
+                        return;
+                    }
+
+                    ev.setRuta_local(ruta);
+                    pintarEvidencia(ruta, anchoLabel, altoLabel);
+                },
+                error -> {
+
+                    if (!isDisplayable()) {
+                        return;
+                    }
+                    t_evidencia.setText("");
+                    l_evidencia.setIcon(null);
+                    System.out.println("No se pudo descargar la evidencia: " + EjecutorGoogle.mensajeDeError(error));
+                });
+    }
+
+    /**
+     * Muestra en el area de imagen la evidencia indicada. Se ejecuta en el hilo
+     * de eventos, tanto si el archivo estaba local como si recien se descargo.
+     */
+    private void pintarEvidencia(String ruta, int anchoLabel, int altoLabel) {
         String pathMostrar = (ruta != null) ? ruta : "";
         t_evidencia.setText(pathMostrar);
         
@@ -1411,7 +1456,6 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             agregarEvidenciaALista(ev);
         }
     }
-
     // subirImagenLocal(): Abre el JFileChooser, sube la imagen a la carpeta
     // "Evidencias" del trabajo en Drive y agrega la Evidencia a la lista temporal.
     private void subirImagenLocal() {
@@ -1425,63 +1469,76 @@ public class V_R_Bitacora extends javax.swing.JFrame {
 
         if (respuesta == JFileChooser.APPROVE_OPTION) {
             String rutaLocal = foto.getSelectedFile().getPath();
-            java.io.File archivo = new java.io.File(rutaLocal);
-            String nombre = archivo.getName();
+            String nombre = new java.io.File(rutaLocal).getName();
 
-            String idDrive = subirImagenAEvidenciasDrive(rutaLocal);
-            if (idDrive == null) {
-                JOptionPane.showMessageDialog(this,
-                        "No se pudo subir la imagen a Google Drive.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            // Sin reintento: subir dos veces la misma imagen dejaria una copia
+            // repetida en la carpeta de evidencias del trabajo.
+            EjecutorGoogle.ejecutarSinReintento(
+                    () -> subirImagenAEvidenciasDrive(rutaLocal),
+                    idDrive -> {
 
-            Evidencia ev = new Evidencia();
-            ev.setId_google_drive(idDrive);
-            ev.setNombre_archivo(nombre);
-            ev.setRuta_local(rutaLocal);
+                        if (!isDisplayable()) {
+                            return;
+                        }
 
-            agregarEvidenciaALista(ev);
+                        if (idDrive == null) {
+                            JOptionPane.showMessageDialog(this,
+                                    "No se pudo subir la imagen a Google Drive.",
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
+                        Evidencia ev = new Evidencia();
+                        ev.setId_google_drive(idDrive);
+                        ev.setNombre_archivo(nombre);
+                        ev.setRuta_local(rutaLocal);
+
+                        agregarEvidenciaALista(ev);
+                    },
+                    error -> {
+
+                        if (!isDisplayable()) {
+                            return;
+                        }
+                        JOptionPane.showMessageDialog(this, EjecutorGoogle.mensajeDeError(error),
+                                "Subir imagen", JOptionPane.ERROR_MESSAGE);
+                    });
         }
     }
 
-    // subirImagenAEvidenciasDrive(): Busca/crea la carpeta "Evidencias" del trabajo
-    // y sube la imagen local, devolviendo el ID del archivo creado en Drive.
+    /**
+     * Busca la carpeta "Evidencias" del trabajo y sube la imagen local.
+     *
+     * Se ejecuta en el hilo de Google, por eso devuelve el id y no manipula la
+     * interfaz. La carpeta se resuelve con el metodo del proveedor, que esta
+     * vista ya no vuelve a armar por su cuenta.
+     *
+     * @param rutaLocalImagen archivo local a subir
+     * @return id del archivo en Drive, o null si no se pudo subir
+     */
     private String subirImagenAEvidenciasDrive(String rutaLocalImagen) {
-        try {
-            final com.google.api.client.http.javanet.NetHttpTransport HTTP_TRANSPORT =
-                    new com.google.api.client.http.javanet.NetHttpTransport();
-            com.google.api.services.drive.Drive service =
-                    new com.google.api.services.drive.Drive.Builder(
-                            HTTP_TRANSPORT,
-                            GoogleServicesProvider.JSON_FACTORY,
-                            GoogleServicesProvider.getCredentials(HTTP_TRANSPORT))
-                            .setApplicationName(GoogleServicesProvider.APPLICATION_NAME)
-                            .build();
-
-            TrabajoDAO trabajoDao = new TrabajoDAO();
-            Trabajo trabajo = trabajoDao.obtenerTrabajoIdCarpeta(id_trabajo);
-            if (trabajo == null || trabajo.getId_carpeta() == null) {
-                return null;
-            }
-
-            String idEvidencias = GoogleServicesProvider.buscarOCrearCarpeta(service, "Evidencias", trabajo.getId_carpeta());
-            String idArchivo = GoogleServicesProvider.subirImagenACarpeta(rutaLocalImagen, idEvidencias);
-
-            // Recargamos las evidencias disponibles de Drive tras subir una nueva.
-            List<Evidencia> disponibles = GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias);
-            synchronized (evidenciasDisponiblesDrive) {
-                evidenciasDisponiblesDrive.clear();
-                evidenciasDisponiblesDrive.addAll(disponibles);
-            }
-
-            return idArchivo;
-        } catch (Exception e) {
-            System.out.println("❌ Error al subir la imagen a la carpeta Evidencias de Drive: " + e.getMessage());
-            e.printStackTrace();
+        TrabajoDAO trabajoDao = new TrabajoDAO();
+        Trabajo trabajo = trabajoDao.obtenerTrabajoIdCarpeta(id_trabajo);
+        if (trabajo == null || trabajo.getId_carpeta() == null) {
             return null;
         }
+
+        String idEvidencias = GoogleServicesProvider.obtenerIdCarpetaEvidencias(trabajo.getId_carpeta());
+        if (idEvidencias == null) {
+            return null;
+        }
+
+        String idArchivo = GoogleServicesProvider.subirImagenACarpeta(rutaLocalImagen, idEvidencias);
+
+        // Recargamos las evidencias disponibles de Drive tras subir una nueva.
+        List<Evidencia> disponibles = GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias);
+        synchronized (evidenciasDisponiblesDrive) {
+            evidenciasDisponiblesDrive.clear();
+            evidenciasDisponiblesDrive.addAll(disponibles);
+        }
+
+        return idArchivo;
     }
 
     // agregarEvidenciaALista(): Agrega una Evidencia a la vista (modeloLista y

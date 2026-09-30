@@ -3,7 +3,10 @@ package dao;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InicializadorBD {
 
@@ -86,6 +89,10 @@ public class InicializadorBD {
         + "\"id_trabajo\" INTEGER,"
         + "\"tipo\" TEXT,"
         + "\"fecha_creacion\" TEXT,"
+        + "\"archivada\" INTEGER DEFAULT 0,"
+        + "\"fecha_archivado\" TEXT,"
+        + "\"nombre_cliente\" TEXT,"
+        + "\"telefono_cliente\" TEXT,"
         + "PRIMARY KEY(\"id_cotizacion\" AUTOINCREMENT),"
         + "CONSTRAINT \"trabajo\" FOREIGN KEY(\"id_trabajo\") REFERENCES \"Trabajo\"(\"id_trabajo\")"
         + ");",
@@ -136,6 +143,18 @@ public class InicializadorBD {
         + ");"
     };
 
+    /**
+     * Columnas agregadas a "Cotizacion" despues de que la base ya existiera.
+     * Todas son nullable o con valor por defecto, para que ALTER TABLE ADD COLUMN
+     * sea valido en SQLite y no requiera rellenar datos previos.
+     */
+    private static final String[][] COLUMNAS_COTIZACION_NUEVAS = {
+        {"archivada", "INTEGER DEFAULT 0"},
+        {"fecha_archivado", "TEXT"},
+        {"nombre_cliente", "TEXT"},
+        {"telefono_cliente", "TEXT"}
+    };
+
     private static final String[][] CONFIGURACIONES_DEFAULT = {
         {"tema", "Claro"},
         {"sonido_error", "false"},
@@ -148,6 +167,37 @@ public class InicializadorBD {
         {"automaticamente_ce_excel", "true"}
     };
 
+    /**
+     * Agrega las columnas faltantes de "Cotizacion" a una base ya existente.
+     * El DDL usa CREATE TABLE IF NOT EXISTS, que no agrega columnas a una tabla
+     * que ya existe, por eso se inspecciona el esquema real con PRAGMA table_info.
+     * Es idempotente: solo altera la tabla en la primera pasada.
+     */
+    private static void asegurarColumnasCotizacion(Connection con) {
+        Set<String> existentes = new HashSet<>();
+        try (Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("PRAGMA table_info(\"Cotizacion\")")) {
+            while (rs.next()) {
+                existentes.add(rs.getString("name"));
+            }
+        } catch (Exception e) {
+            System.err.println("Error al inspeccionar las columnas de Cotizacion: " + e.getMessage());
+            return;
+        }
+
+        for (String[] columna : COLUMNAS_COTIZACION_NUEVAS) {
+            if (existentes.contains(columna[0])) {
+                continue;
+            }
+            try (Statement st = con.createStatement()) {
+                st.executeUpdate("ALTER TABLE \"Cotizacion\" ADD COLUMN \"" + columna[0] + "\" " + columna[1]);
+                System.out.println("Columna agregada a Cotizacion: " + columna[0]);
+            } catch (Exception e) {
+                System.err.println("No se pudo agregar la columna " + columna[0] + " a Cotizacion: " + e.getMessage());
+            }
+        }
+    }
+
     public static boolean asegurarEsquema(String rutaCompleta) {
         if (rutaCompleta == null || rutaCompleta.isBlank()) {
             return false;
@@ -156,10 +206,13 @@ public class InicializadorBD {
         if (con == null) {
             return false;
         }
-        try (Statement st = con.createStatement()) {
-            for (String ddl : DDL) {
-                st.executeUpdate(ddl);
+        try {
+            try (Statement st = con.createStatement()) {
+                for (String ddl : DDL) {
+                    st.executeUpdate(ddl);
+                }
             }
+            asegurarColumnasCotizacion(con);
             return true;
         } catch (Exception e) {
             System.err.println("Error al asegurar el esquema de la base de datos: " + e.getMessage());
@@ -232,6 +285,7 @@ public class InicializadorBD {
                     st.executeUpdate(ddl);
                 }
             }
+            asegurarColumnasCotizacion(con);
             return asegurarConfiguraciones(rutaCompleta);
         } catch (Exception e) {
             System.err.println("Error al crear la base de datos: " + e.getMessage());

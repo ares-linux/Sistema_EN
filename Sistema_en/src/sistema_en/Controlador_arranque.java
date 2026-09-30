@@ -242,7 +242,19 @@ public class Controlador_arranque {
                     JOptionPane.YES_NO_OPTION);
             if (subir == JOptionPane.YES_OPTION) {
                 String idCarpeta = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
-                GoogleServicesProvider.subirArchivo(ruta, idCarpeta);
+                if (GoogleServicesProvider.subirArchivo(ruta, idCarpeta)) {
+                    JOptionPane.showMessageDialog(null,
+                            "La base de datos nueva se subió a Google Drive como respaldo.",
+                            "Respaldo en Drive",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "No se pudo subir la base de datos a Google Drive.\n"
+                            + "La base de datos local se creó correctamente, pero el respaldo en Drive no.\n"
+                            + "Podés reintentarlo desde Configuración > Copias de seguridad.",
+                            "Respaldo en Drive",
+                            JOptionPane.WARNING_MESSAGE);
+                }
             }
         }
 
@@ -289,7 +301,19 @@ public class Controlador_arranque {
                     JOptionPane.YES_NO_OPTION);
             if (subir == JOptionPane.YES_OPTION) {
                 String idCarpeta = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
-                GoogleServicesProvider.subirArchivo(ruta, idCarpeta);
+                if (GoogleServicesProvider.subirArchivo(ruta, idCarpeta)) {
+                    JOptionPane.showMessageDialog(null,
+                            "La base de datos nueva se subió a Google Drive como respaldo.",
+                            "Respaldo en Drive",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "No se pudo subir la base de datos a Google Drive.\n"
+                            + "La base de datos local se creó correctamente, pero el respaldo en Drive no.\n"
+                            + "Podés reintentarlo desde Configuración > Copias de seguridad.",
+                            "Respaldo en Drive",
+                            JOptionPane.WARNING_MESSAGE);
+                }
             }
         }
 
