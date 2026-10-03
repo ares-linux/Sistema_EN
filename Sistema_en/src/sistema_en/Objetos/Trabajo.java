@@ -23,6 +23,7 @@ public class Trabajo {
     private LocalDate fecha_fin;
     private String carpeta;
     private String id_carpeta;
+    private String id_evento;
     
     public Trabajo(){
         
@@ -196,6 +197,20 @@ public class Trabajo {
      */
     public void setId_carpeta(String id_carpeta) {
         this.id_carpeta = id_carpeta;
+    }
+
+    /**
+     * @return the id_evento
+     */
+    public String getId_evento() {
+        return id_evento;
+    }
+
+    /**
+     * @param id_evento the id_evento to set
+     */
+    public void setId_evento(String id_evento) {
+        this.id_evento = id_evento;
     }
     
     

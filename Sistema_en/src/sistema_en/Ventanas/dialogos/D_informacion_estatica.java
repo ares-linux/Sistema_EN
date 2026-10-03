@@ -366,6 +366,10 @@ public class D_informacion_estatica extends javax.swing.JDialog {
             TrabajoDAO dao = new TrabajoDAO();
             boolean actualizadoExitoso = dao.actualizarTrabajoDetalles(id_trabajo,estado,fecha_inicio_g,fecha_fin);
 
+            if (actualizadoExitoso) {
+                Trabajo t = dao.obtenerTrabajo(id_trabajo);
+                sistema_en.GoogleServicesProvider.crearEventoSiConfigurado(t);
+            }
             cargarTrabajo(id_trabajo);
             d_fecha_fin.setEnabled(false);
             d_fecha_fin.setEnabled(false);
@@ -391,6 +395,8 @@ public class D_informacion_estatica extends javax.swing.JDialog {
             boolean actualizadoExitoso = dao.actualizarTrabajoDetalles(id_trabajo,estado,fecha_inicio,fecha_fin_g);
 
             if (actualizadoExitoso) {
+                Trabajo t = dao.obtenerTrabajo(id_trabajo);
+                sistema_en.GoogleServicesProvider.crearEventoSiConfigurado(t);
                 cargarTrabajo(id_trabajo);
                 d_fecha_inicio.setEnabled(false);
                 t_ingresar_manualmente_inicio.setBackground(null);

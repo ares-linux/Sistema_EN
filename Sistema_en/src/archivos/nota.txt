@@ -1,3 +1,12 @@
+Versión 1.0.20
+
+Novedades:
+- Integración con Google Calendar: al fijar la fecha de inicio de un trabajo se crea un evento en tu calendario.
+- El identificador del evento se guarda en el trabajo, así que si vuelves a cambiar las fechas se actualiza el mismo evento en vez de crear uno nuevo.
+- Configuraciones: opción "Crear eventos automáticamente" y hora por defecto para el inicio del trabajo.
+- Verificación de la conexión con Google Calendar.
+- Centralización de imágenes, audios y archivos de texto en clases de utilidades, con la carpeta "Imagenes" renombrada a "imagenes".
+
 Versión 1.0.19
 
 Novedades:

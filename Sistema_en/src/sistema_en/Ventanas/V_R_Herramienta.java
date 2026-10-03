@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
 import sistema_en.Objetos.Herramienta;
 import sistema_en.Ventanas.dialogos.D_buscar_herramienta;
+import utilidades.UtilidadesRecursos;
 
 /**
  *
@@ -364,9 +365,9 @@ public class V_R_Herramienta extends javax.swing.JFrame {
 
     public void actualizar_imagenes_tema() {
         if (com.formdev.flatlaf.FlatLaf.isLafDark()) {
-            ruta_foto_defecto = "/Imagenes/herramientas_claro.png";
+            ruta_foto_defecto = UtilidadesRecursos.FOTO_HERRAMIENTA_CLARO;
         } else {
-            ruta_foto_defecto = "/Imagenes/herramientas_oscuro.png";
+            ruta_foto_defecto = UtilidadesRecursos.FOTO_HERRAMIENTA_OSCURO;
         }
     
     }
@@ -832,7 +833,7 @@ public class V_R_Herramienta extends javax.swing.JFrame {
 
         if (t_foto.getText().equals(ruta_foto_defecto)) {
 
-        URL url = getClass().getResource(ruta_foto_defecto);
+        URL url = UtilidadesRecursos.url(ruta_foto_defecto);
 
         if (url == null) {
             System.out.println("No se encontró la imagen por defecto.");

@@ -1,4 +1,4 @@
-package sistema_en;
+package utilidades;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;

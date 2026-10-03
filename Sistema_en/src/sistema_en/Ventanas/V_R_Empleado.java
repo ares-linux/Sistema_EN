@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
 import sistema_en.Objetos.Trabajador;
 import sistema_en.Ventanas.dialogos.D_buscar_empleado;
+import utilidades.UtilidadesRecursos;
 
 /**
  *
@@ -501,9 +502,9 @@ public class V_R_Empleado extends javax.swing.JFrame {
     
     public void actualizar_imagenes_tema() {
         if (FlatLaf.isLafDark()) {
-            ruta_foto_defecto = "/Imagenes/usuario_claro.png";
+            ruta_foto_defecto = UtilidadesRecursos.FOTO_USUARIO_CLARO;
         } else {
-            ruta_foto_defecto = "/Imagenes/usuario_oscuro.png";
+            ruta_foto_defecto = UtilidadesRecursos.FOTO_USUARIO_OSCURO;
         }
     }
     
@@ -789,7 +790,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
         if (t_foto.getText().equals(ruta_foto_defecto)) {
 
-        URL url = getClass().getResource(ruta_foto_defecto);
+        URL url = UtilidadesRecursos.url(ruta_foto_defecto);
 
         if (url == null) {
             System.out.println("No se encontró la imagen por defecto.");

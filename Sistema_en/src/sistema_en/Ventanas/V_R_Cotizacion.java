@@ -4,7 +4,6 @@
  */
 package sistema_en.Ventanas;
 
-import animaciones.LoadingSpinner;
 import dao.ClienteDAO;
 import dao.ConfiguracionesDAO;
 import dao.CotizacionDAO;
@@ -55,7 +54,6 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     String cotizaciones1;
 boolean subir_pdf;
     private boolean formularioVisible = true;
-    private LoadingSpinner spinner;
     
     /**
      * Creates new form V_registrarco
@@ -64,11 +62,7 @@ boolean subir_pdf;
         initComponents();
                 
         config_tablas();
-        
-        spinner = new LoadingSpinner();
-        spinner.setVisible(false);
-                
-        //llenar_tabla(0);
+
         obtener_configuraciones();
     }
 
@@ -122,10 +116,8 @@ boolean subir_pdf;
         P_datos_estaticos = new javax.swing.JPanel();
         t_id_trabajo = new javax.swing.JTextField();
         t_id_cotizacion = new javax.swing.JTextField();
-        t_tipo_c = new javax.swing.JTextField();
         t_fecha_r = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         c_estado = new javax.swing.JComboBox<>();
@@ -361,15 +353,6 @@ boolean subir_pdf;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos_estaticos.add(t_id_cotizacion, gridBagConstraints);
 
-        t_tipo_c.setEditable(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_datos_estaticos.add(t_tipo_c, gridBagConstraints);
-
         t_fecha_r.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -385,13 +368,6 @@ boolean subir_pdf;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_datos_estaticos.add(jLabel1, gridBagConstraints);
-
-        jLabel12.setText("Tipo de cotizacion");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_datos_estaticos.add(jLabel12, gridBagConstraints);
 
         jLabel3.setText("Numero de trabajo");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -924,23 +900,12 @@ boolean subir_pdf;
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-        
-    public void cotizacion_prueba(){
-        t_tipo_c.setText("Prueba");
-        id_trabajo_c = 0;
-        t_id_trabajo.setText("0");
-
-        cargarCotizacionPrueba();
-    }
-
-    private void cargarCotizacionPrueba(){
-        llenar_tabla(0);
-    }
 
     /**
-     * Carga en el formulario una cotizacion existente por su id, sin importar si
-     * es de prueba o de un trabajo. La usan el doble clic de la tabla de pruebas,
-     * el historial y la propia vista despues de convertir.
+     * Carga en el formulario una cotizacion del trabajo actual por su id. Esta
+     * ventana solo maneja cotizaciones de trabajo (tipo Normal): las de prueba
+     * se crean y se abren desde la ventana de cotizaciones independientes.
+     * La usan el clic en la tabla de cotizaciones y la propia vista tras guardar.
      *
      * @param id_cotizacion_i cotizacion a cargar
      * @return true si la cotizacion existe
@@ -958,30 +923,18 @@ boolean subir_pdf;
         }
 
         t_id_cotizacion.setText(String.valueOf(c.getId_cotizacion()));
-        t_tipo_c.setText(c.getTipo());
         t_subtotal.setText(String.format("%.2f", c.getSubtotal()));
         t_iva.setText(String.format("%.2f", c.getIva()));
         t_total.setText(String.format("%.2f", c.getTotal()));
         c_estado.setSelectedItem(c.getEstado());
 
-        if ("Prueba".equals(c.getTipo())) {
-            t_id_trabajo.setText("0");
-            id_trabajo_c = 0;
-        } else {
-            t_id_trabajo.setText(c.getId_trabajo() != 0 ? String.valueOf(c.getId_trabajo()) : "");
-            id_trabajo_c = c.getId_trabajo();
-        }
+        t_id_trabajo.setText(c.getId_trabajo() != 0 ? String.valueOf(c.getId_trabajo()) : "");
+        id_trabajo_c = c.getId_trabajo();
 
-        // El nombre que se imprime en PDF y Excel es el del cliente registrado si
-        // la cotizacion ya pertenece a un trabajo; si es de prueba va el prospecto.
-        // En el caso de un trabajo no se toca n_cliente porque lo carga el modulo
-        // de clientes al abrir la cotizacion. Los campos de prospecto y el boton
-        // Convertir ya no estan en esta ventana: solo los maneja la ventana de
-        // cotizaciones independientes.
-        if (id_trabajo_c == 0) {
-            n_cliente = valorSeguro(c.getNombre_cliente());
-        }
-
+        // El nombre que se imprime en PDF y Excel es el del cliente registrado: esta
+        // ventana solo maneja cotizaciones de un trabajo, y n_cliente lo carga el
+        // modulo de clientes al abrir la cotizacion. Esta ventana ya no edita
+        // prospecto: eso solo lo hace la ventana de cotizaciones independientes.
         obtener_detalles(c.getId_cotizacion());
         return true;
     }
@@ -1063,15 +1016,6 @@ boolean subir_pdf;
         
         t_id_trabajo.setText(String.valueOf(trabajo.getId_trabajo()));
         id_trabajo_c = id_trabajo_i;
-        System.out.println("El id del trabajo es: " + id_trabajo_i);
-        
-        
-        if (id_trabajo_i == 0){
-            t_tipo_c.setText("Prueba");
-        }
-        else{
-            t_tipo_c.setText("Normal");
-        }
     }
     
     
@@ -1092,7 +1036,6 @@ boolean subir_pdf;
         }
         
         t_id_cotizacion.setText(String.valueOf(c.getId_cotizacion()));
-        t_tipo_c.setText(c.getTipo());
         
         if (c.getFecha_creacion() != null) {
             t_fecha_r.setText(c.getFecha_creacion().toString());
@@ -1398,7 +1341,6 @@ private void agregarMaterial() {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         fecha();
         b_añadir_materiales.setText("+");
-        //llenar_tabla();
         bloquear_text();
         bloquear_tablas();
         bloquear_botones_sistema();
@@ -1466,7 +1408,9 @@ private void agregarMaterial() {
                 float total = Float.parseFloat(t_total.getText().replace(",", "."));
 
                 String estado = (c_estado.getSelectedItem() != null) ? c_estado.getSelectedItem().toString() : "Borrador";
-                String tipo = t_tipo_c.getText();
+                // Esta ventana solo crea cotizaciones de trabajo: el tipo siempre es
+                // "Normal". Las de prueba se crean en la ventana independiente.
+                String tipo = "Normal";
 
                 // 2. Crear el objeto principal Cotización
                 Cotizacion cot = new Cotizacion();
@@ -1558,7 +1502,7 @@ private void agregarMaterial() {
                 float total = Float.parseFloat(t_total.getText().replace(",", ".").trim());
 
                 String estado = (c_estado.getSelectedItem() != null) ? c_estado.getSelectedItem().toString() : "Borrador";
-                String tipo = t_tipo_c.getText().trim();
+                String tipo = "Normal";
                 String fecha_creacion = t_fecha_r.getText().trim();
                 int id_trabajo = id_trabajo_c;
 
@@ -1658,23 +1602,6 @@ private void agregarMaterial() {
         Tabla_cotizaciones.setEnabled(true);
         T_pestañas.setSelectedIndex(0);
     }//GEN-LAST:event_b_cancelarActionPerformed
-
-    private void mostrarSpinnerCarga() {
-        java.awt.Rectangle r = jInternalFrame1.getBounds();
-        spinner.setBounds(r.x + (r.width - 100) / 2, r.y + (r.height - 100) / 2, 100, 100);
-        if (spinner.getParent() == null || spinner.getParent() != jDesktopPane1) {
-            jDesktopPane1.add(spinner, Integer.valueOf(300));
-        }
-        spinner.startLoading();
-        spinner.setVisible(true);
-        jDesktopPane1.moveToFront(spinner);
-    }
-
-    private void ocultarSpinner() {
-        javax.swing.Timer t = new javax.swing.Timer(1200, e -> spinner.setVisible(false));
-        t.setRepeats(false);
-        t.start();
-    }
 
     private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
         // Una cotización de prueba sin guardar no tiene folio ni cliente, y usarlos
@@ -1837,8 +1764,6 @@ private void agregarMaterial() {
 
             b_exportar.setEnabled(false);
 
-            mostrarSpinnerCarga();
-
             // El nombre se arma aca y no dentro de la tarea: leer un componente
             // de Swing desde el hilo de Google no es seguro.
             final String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
@@ -1855,9 +1780,6 @@ private void agregarMaterial() {
                         b_exportar.setEnabled(true);
 
                         if (idCreado != null) {
-
-                            spinner.showSuccess();
-                            ocultarSpinner();
 
                             if (abrir_automaticamente_excel){
 
@@ -1881,8 +1803,6 @@ private void agregarMaterial() {
 
                             //JOptionPane.showMessageDialog(null, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            spinner.showError();
-                            ocultarSpinner();
                             JOptionPane.showMessageDialog(this, "Error al exportar la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     },
@@ -1892,8 +1812,6 @@ private void agregarMaterial() {
                             return;
                         }
                         b_exportar.setEnabled(true);
-                        spinner.showError();
-                        ocultarSpinner();
                         JOptionPane.showMessageDialog(this, EjecutorGoogle.mensajeDeError(error),
                                 "Exportar a Google Sheets", JOptionPane.ERROR_MESSAGE);
                     });
@@ -2177,10 +2095,6 @@ private void agregarMaterial() {
     }
 
     public void limpiar_text(){
-        //t_id_trabajo.setText("");
-        //t_id_cotizacion.setText("");
-        //t_fecha_r.setText("");
-        //t_tipo_c.setText("");
         t_subtotal.setText("");
         t_iva.setText("");
         t_total.setText("");
@@ -2371,7 +2285,6 @@ System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -2405,7 +2318,6 @@ System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
     private javax.swing.JTextField t_precio;
     private javax.swing.JTextField t_precio_uni;
     private javax.swing.JTextField t_subtotal;
-    private javax.swing.JTextField t_tipo_c;
     private javax.swing.JTextField t_total;
     // End of variables declaration//GEN-END:variables
 }

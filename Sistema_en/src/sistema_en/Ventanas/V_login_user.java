@@ -6,7 +6,6 @@ package sistema_en.Ventanas;
 
 import dao.ConfiguracionesDAO;
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
@@ -18,6 +17,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.sql.Connection;
 import java.util.List;
 import raven.toast.Notifications;
+import utilidades.UtilidadesRecursos;
 
 /**
  *
@@ -274,14 +274,14 @@ public class V_login_user extends javax.swing.JFrame {
         if (usuarioIngresado.isEmpty()) {
             l_aviso_user.setVisible(true);
             if (sonido == true){
-                    r_sonido.reproducir("/audios/error.wav");
+                    r_sonido.reproducir(UtilidadesRecursos.AUDIO_ERROR);
                 }
             return;
         }
         if (passwordIngresada.isEmpty()) {
             l_aviso_contra.setVisible(true);
             if (sonido == true){
-                    r_sonido.reproducir("/audios/error.wav");
+                    r_sonido.reproducir(UtilidadesRecursos.AUDIO_ERROR);
                 }
             return;
         }
@@ -335,7 +335,7 @@ public class V_login_user extends javax.swing.JFrame {
             intentos++; 
             if (intentos < 5) {
                 if (sonido == true){
-                    r_sonido.reproducir("/audios/error.wav");
+                    r_sonido.reproducir(UtilidadesRecursos.AUDIO_ERROR);
                 }
             } else {
                 System.out.println("Límite alcanzado. Próximos intentos erróneos no sonarán.");
@@ -415,17 +415,16 @@ public class V_login_user extends javax.swing.JFrame {
         verificar_contra();
     }//GEN-LAST:event_b_ingresarActionPerformed
 
-    public void cargar_foto(){
-        
-        ImageIcon iconoOriginal = new ImageIcon( getClass().getResource("/Imagenes/logo.png"));
 
-    Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-    l_foto.setIcon(new ImageIcon(imagenEscalada));
-    
-    if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-    System.out.println("¡Error! No se pudo encontrar o cargar la imagen en el login de usuario.");
-    
-    }
+    public void cargar_foto(){
+        ImageIcon iconoEscalado = UtilidadesRecursos.iconoEscalado(UtilidadesRecursos.LOGO, 200, 200);
+        
+        if (iconoEscalado == null) {
+            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en el login de usuario.");
+            return;
+        }
+        
+        l_foto.setIcon(iconoEscalado);
     }
     
     /**

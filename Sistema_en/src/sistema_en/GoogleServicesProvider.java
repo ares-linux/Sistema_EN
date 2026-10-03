@@ -1,5 +1,6 @@
 package sistema_en;
 
+import utilidades.UtilidadesRutas;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -9,6 +10,8 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.FileContent;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 // IMPORTES NUEVOS PARA GOOGLE SHEETS
@@ -43,12 +46,15 @@ import sistema_en.Objetos.Evidencia;
 import sistema_en.Objetos.Trabajo;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
+import dao.ConfiguracionesDAO;
+import java.time.LocalTime;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-
 
 /**
  *
@@ -66,7 +72,8 @@ public class GoogleServicesProvider {
     private static final List<String> SCOPES = Arrays.asList(
             DriveScopes.DRIVE,
             SheetsScopes.SPREADSHEETS,
-            GmailScopes.GMAIL_SEND
+            GmailScopes.GMAIL_SEND,
+            CalendarScopes.CALENDAR_EVENTS
     );
     
     public static final String CREDENTIALS_FILE_PATH = "credentials.json";
@@ -141,6 +148,248 @@ public class GoogleServicesProvider {
         return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
+    }
+    
+    public static Calendar getCalendarService() throws Exception {
+        final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
+        return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+    }
+
+    public static boolean verificarConexionCalendar() {
+        if (!estaConectado()) return false;
+        try {
+            Calendar service = getCalendarService();
+            // Llamada ligera a la API para verificar si el token tiene permisos y es válido
+            service.calendarList().list().setMaxResults(1).execute();
+            return true;
+        } catch (Exception e) {
+            System.out.println("❌ Error al verificar la conexión de Google Calendar:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Calcula el intervalo del evento a partir de las fechas del trabajo.
+     *
+     * @return un array con inicio y fin, o null si el trabajo no tiene fecha de inicio
+     */
+    private static EventDateTime[] calcularIntervalo(Trabajo trabajo, LocalTime horaDefecto) {
+        java.time.LocalDate fechaInicio = trabajo.getFecha_inicio();
+        if (fechaInicio == null) {
+            return null;
+        }
+
+        if (horaDefecto == null) {
+            horaDefecto = LocalTime.of(9, 0); // 9:00 AM por defecto
+        }
+
+        java.time.LocalDateTime inicioDateTime = fechaInicio.atTime(horaDefecto);
+        java.time.ZonedDateTime zdtInicio = inicioDateTime.atZone(java.time.ZoneId.systemDefault());
+        com.google.api.client.util.DateTime startDateTime = new com.google.api.client.util.DateTime(zdtInicio.toInstant().toEpochMilli());
+        EventDateTime inicio = new EventDateTime().setDateTime(startDateTime)
+                .setTimeZone(java.time.ZoneId.systemDefault().getId());
+
+        // Fecha de fin (si es null, asignamos 1 hora después del inicio)
+        java.time.LocalDate fechaFin = trabajo.getFecha_fin();
+        java.time.LocalDateTime finDateTime = (fechaFin != null) ? fechaFin.atTime(horaDefecto).plusHours(1) : inicioDateTime.plusHours(1);
+
+        if (!finDateTime.isAfter(inicioDateTime)) {
+            finDateTime = inicioDateTime.plusHours(1); // Forzar que al menos dure 1 hora
+        }
+        java.time.ZonedDateTime zdtFin = finDateTime.atZone(java.time.ZoneId.systemDefault());
+        com.google.api.client.util.DateTime endDateTime = new com.google.api.client.util.DateTime(zdtFin.toInstant().toEpochMilli());
+        EventDateTime fin = new EventDateTime().setDateTime(endDateTime)
+                .setTimeZone(java.time.ZoneId.systemDefault().getId());
+
+        return new EventDateTime[]{inicio, fin};
+    }
+
+    /**
+     * Arma el evento con los datos que la aplicacion administra. Lo comparten la
+     * creacion y la actualizacion, para que las dos rutas no diverjan.
+     *
+     * @return el evento, o null si el trabajo no tiene fecha de inicio
+     */
+    private static Event construirEvento(Trabajo trabajo, LocalTime horaDefecto) {
+        EventDateTime[] intervalo = calcularIntervalo(trabajo, horaDefecto);
+        if (intervalo == null) {
+            System.out.println("⚠️ El trabajo no tiene fecha de inicio, no se puede crear el evento.");
+            return null;
+        }
+
+        return new Event()
+                .setSummary("Trabajo: " + trabajo.getDescripcion())
+                .setDescription("Dirección: " + trabajo.getDireccion() + "\nEstado: " + trabajo.getEstado())
+                .setStart(intervalo[0])
+                .setEnd(intervalo[1]);
+    }
+
+    public static String crearEventoTrabajo(Trabajo trabajo, LocalTime horaDefecto) {
+        try {
+            Event evento = construirEvento(trabajo, horaDefecto);
+            if (evento == null) {
+                return null;
+            }
+
+            Calendar service = getCalendarService();
+
+            // Insertar el evento en el calendario principal
+            evento = service.events().insert("primary", evento).execute();
+            System.out.println("✅ Evento creado en Google Calendar. Enlace: " + evento.getHtmlLink());
+
+            return evento.getId();
+        } catch (Exception e) {
+            System.out.println("❌ Error al crear el evento en Google Calendar:");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Actualiza el evento que ya existe en el calendario del trabajo.
+     *
+     * Se hace get, se pisan solo los campos que administra la aplicacion y se
+     * manda update. Actualizar a ciegas borraria asistentes, recordatorios y
+     * demas campos que la app nunca toco.
+     *
+     * @return el id del evento actualizado, o null si ya no existe en Google
+     *         (por ejemplo si se borro desde el calendario a mano) y hay que crearlo
+     */
+    public static String actualizarEventoTrabajo(Trabajo trabajo, LocalTime horaDefecto, String idEvento) {
+        if (idEvento == null || idEvento.isBlank()) {
+            return null;
+        }
+        try {
+            Event evento = construirEvento(trabajo, horaDefecto);
+            if (evento == null) {
+                return null;
+            }
+
+            Calendar service = getCalendarService();
+
+            Event existente = service.events().get("primary", idEvento).execute();
+            existente.setSummary(evento.getSummary())
+                    .setDescription(evento.getDescription())
+                    .setStart(evento.getStart())
+                    .setEnd(evento.getEnd());
+
+            existente = service.events().update("primary", idEvento, existente).execute();
+            System.out.println("✅ Evento actualizado en Google Calendar. Enlace: " + existente.getHtmlLink());
+
+            return existente.getId();
+        } catch (Exception e) {
+            System.out.println("❌ Error al actualizar el evento en Google Calendar:");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Borra el evento del calendario del trabajo.
+     *
+     * No hay disparador automatico porque el trabajo no tiene estado de
+     * cancelacion: nace en la cotizacion y su fecha de inicio se fija despues,
+     * asi que no existe un momento del flujo en el que el evento sobre.
+     *
+     * @return true si Google confirmo el borrado
+     */
+    public static boolean eliminarEventoTrabajo(String idEvento) {
+        if (idEvento == null || idEvento.isBlank()) {
+            return false;
+        }
+        try {
+            getCalendarService().events().delete("primary", idEvento).execute();
+            System.out.println("✅ Evento eliminado de Google Calendar.");
+            return true;
+        } catch (Exception e) {
+            System.out.println("❌ Error al eliminar el evento en Google Calendar:");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Devuelve el enlace web del evento de un trabajo, para abrirlo en el
+     * navegador, o null si el trabajo todavia no tiene evento.
+     */
+    public static String obtenerEnlaceEvento(Trabajo trabajo) {
+        if (trabajo == null || trabajo.getId_evento() == null || trabajo.getId_evento().isBlank()) {
+            return null;
+        }
+        try {
+            Event evento = getCalendarService().events().get("primary", trabajo.getId_evento()).execute();
+            return evento.getHtmlLink();
+        } catch (Exception e) {
+            System.out.println("❌ Error al obtener el enlace del evento:");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Crea el evento del trabajo si la configuracion lo pide, o lo actualiza si
+     * ya existe. El id devuelto por Google se guarda en Trabajo.id_evento, que
+     * es lo que permite que la proxima vez se actualice en vez de duplicarse.
+     *
+     * La tarea no deja propagar ninguna excepcion a proposito: si algo escapara,
+     * EjecutorGoogle lo reintentaria por ser un fallo de red y podria crear un
+     * segundo evento, que es justo lo que este metodo evita.
+     */
+    public static void crearEventoSiConfigurado(Trabajo trabajo) {
+        EjecutorGoogle.ejecutarSilencioso(() -> {
+            try {
+                ConfiguracionesDAO dao = new ConfiguracionesDAO();
+                List<String[]> configs = dao.obtenerConfiguraciones();
+
+                boolean crearEventosAutomaticamente = false;
+                LocalTime horaDefectoCalendar = LocalTime.of(9, 0);
+
+                for (String[] config : configs) {
+                    String clave = config[1];
+                    String valor = config[2];
+                    if ("automaticamente_eventos".equals(clave)) {
+                        crearEventosAutomaticamente = Boolean.parseBoolean(valor);
+                    } else if ("hora_defecto_calendar".equals(clave)) {
+                        if (valor != null && !valor.isBlank()) {
+                            horaDefectoCalendar = LocalTime.parse(valor);
+                        }
+                    }
+                }
+                if (crearEventosAutomaticamente && trabajo.getFecha_inicio() != null) {
+                    sincronizarEventoTrabajo(trabajo, horaDefectoCalendar);
+                }
+            } catch (Exception e) {
+                System.err.println("[GoogleServicesProvider] " + e);
+                e.printStackTrace();
+            }
+            return true;
+        }, resultado -> {});
+    }
+
+    /**
+     * Guarda el id del evento, creandolo primero si el trabajo aun no tiene uno.
+     * Se ejecuta desde el hilo de Google; la escritura en la base usa su propia
+     * conexion, igual que sincronizarTrabajosPendientes con las carpetas de Drive.
+     */
+    private static void sincronizarEventoTrabajo(Trabajo trabajo, LocalTime horaDefecto) {
+        TrabajoDAO dao = new TrabajoDAO();
+        String id = trabajo.getId_evento();
+
+        if (id != null && !id.isBlank()) {
+            // Si el update devuelve null, el evento ya no estaba en Google y solo
+            // queda recrearlo. El id viejo se sobreescribe con el nuevo.
+            if (actualizarEventoTrabajo(trabajo, horaDefecto, id) != null) {
+                return;
+            }
+        }
+
+        String idNuevo = crearEventoTrabajo(trabajo, horaDefecto);
+        if (idNuevo != null) {
+            dao.actualizarTrabajoIdEvento(trabajo.getId_trabajo(), idNuevo);
+        }
     }
 
     public static List<Evidencia> listarArchivosDeCarpeta(String idCarpetaDrive) {

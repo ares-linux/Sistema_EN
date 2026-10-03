@@ -65,18 +65,6 @@ public class V_historial_c extends javax.swing.JFrame {
         Tabla_historial_c.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         Tabla_archivadas_c.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
 
-        // Boton "Abrir" que funciona en las dos pestanas: la unica forma de abrir
-        // antes era el doble clic, invisible. Va al norte, fuera de GEN, para
-        // manejar la pestana que este activa sin tocar el .form del Designer.
-        javax.swing.JPanel barraAbrir = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 12, 6));
-        javax.swing.JLabel aviso = new javax.swing.JLabel("Selecciona una cotizacion y pulsa Abrir, o hace doble clic sobre la fila.");
-        javax.swing.JButton bAbrir = new javax.swing.JButton("Abrir cotizacion");
-        bAbrir.addActionListener(e -> abrirCotizacionSeleccionada(
-                jTabbedPane1.getSelectedIndex() == 1 ? Tabla_archivadas_c : Tabla_historial_c));
-        barraAbrir.add(aviso);
-        barraAbrir.add(bAbrir);
-        getContentPane().add(barraAbrir, java.awt.BorderLayout.NORTH);
-
         llenarHistorial(false);
         llenarArchivadas();
     }
@@ -100,19 +88,21 @@ public class V_historial_c extends javax.swing.JFrame {
         d_fecha_inicio = new com.github.lgooddatepicker.components.DatePicker();
         d_fecha_fin = new com.github.lgooddatepicker.components.DatePicker();
         b_buscar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        t_nombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         b_cerrar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla_archivadas_c = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        b_archivar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         b_restaurar = new javax.swing.JButton();
         b_cerrar_2 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        b_archivar = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        t_nombre = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -125,7 +115,15 @@ public class V_historial_c extends javax.swing.JFrame {
             new String [] {
                 "id_cotizacion", "Nombre del prospecto", "Telefono", "Fecha de creacion", "Tipo", "Estado", "Subtotal", "IVA", "Total", "Trabajo"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         Tabla_historial_c.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_historial_cMouseClicked(evt);
@@ -156,15 +154,14 @@ public class V_historial_c extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
         jPanel3.add(b_limpiar, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -172,7 +169,7 @@ public class V_historial_c extends javax.swing.JFrame {
         jPanel3.add(d_fecha_inicio, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
@@ -187,40 +184,37 @@ public class V_historial_c extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel3.add(b_buscar, gridBagConstraints);
 
         jLabel3.setText("Nombre del prospecto");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 11, 11, 13);
-        jPanel3.add(jLabel3, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jLabel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
         jPanel3.add(t_nombre, gridBagConstraints);
 
         jLabel1.setText("Fecha de incio");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 11, 11, 13);
         jPanel3.add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("Fecha de fin");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 11, 11, 13);
         jPanel3.add(jLabel2, gridBagConstraints);
 
@@ -232,9 +226,18 @@ public class V_historial_c extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 10, 10);
         jPanel3.add(b_cerrar, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel5.setText("Historial de cotizaciones independientes");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jLabel5, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -253,7 +256,15 @@ public class V_historial_c extends javax.swing.JFrame {
             new String [] {
                 "id_cotizacion", "Nombre del prospecto", "Telefono", "Fecha de creacion", "Tipo", "Estado", "Subtotal", "IVA", "Total", "Trabajo"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         Tabla_archivadas_c.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla_archivadas_cMouseClicked(evt);
@@ -264,7 +275,6 @@ public class V_historial_c extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 656;
         gridBagConstraints.ipady = 181;
@@ -272,6 +282,28 @@ public class V_historial_c extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 10, 10);
         jPanel2.add(jScrollPane2, gridBagConstraints);
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        b_archivar.setText("Archivar cotizacion");
+        b_archivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_archivarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10);
+        jPanel5.add(b_archivar, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        jPanel2.add(jPanel5, gridBagConstraints);
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
@@ -297,34 +329,19 @@ public class V_historial_c extends javax.swing.JFrame {
         jPanel4.add(b_cerrar_2, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         jPanel2.add(jPanel4, gridBagConstraints);
 
-        jTabbedPane1.addTab("Cotizaciones archivadas", jPanel2);
-
-        jPanel5.setLayout(new java.awt.GridBagLayout());
-
-        b_archivar.setText("Archivar cotizacion");
-        b_archivar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_archivarActionPerformed(evt);
-            }
-        });
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel4.setText("Cotizaciones archivadas");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10); // NOI18N
-        jPanel5.add(b_archivar, gridBagConstraints);
+        jPanel2.add(jLabel4, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        jPanel1.add(jPanel5, gridBagConstraints);
+        jTabbedPane1.addTab("Cotizaciones archivadas", jPanel2);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -532,25 +549,27 @@ public class V_historial_c extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla_archivadas_c;
     private javax.swing.JTable Tabla_historial_c;
+    private javax.swing.JButton b_archivar;
     private javax.swing.JButton b_buscar;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_cerrar_2;
     private javax.swing.JButton b_limpiar;
     private javax.swing.JButton b_restaurar;
-    private javax.swing.JButton b_archivar;
-    private javax.swing.JPanel jPanel5;
     private com.github.lgooddatepicker.components.DatePicker d_fecha_fin;
     private com.github.lgooddatepicker.components.DatePicker d_fecha_inicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField t_nombre;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField t_nombre;
     // End of variables declaration//GEN-END:variables
 }

@@ -7,6 +7,7 @@ package sistema_en;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import sistema_en.Ventanas.V_login_user;
+import animaciones.V_splash;
 import com.jthemedetecor.OsThemeDetector;
 import dao.ConfiguracionesDAO;
 import java.util.List;

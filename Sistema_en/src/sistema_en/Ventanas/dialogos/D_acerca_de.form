@@ -63,7 +63,7 @@
     <Component class="javax.swing.JLabel" name="l_version">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Version 1.0.19"/>
+        <Property name="text" type="java.lang.String" value="Versión"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

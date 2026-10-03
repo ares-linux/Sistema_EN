@@ -5,7 +5,8 @@
 package sistema_en.Ventanas.dialogos;
 
 import javax.swing.ListSelectionModel;
-import sistema_en.Version;
+import utilidades.UtilidadesTexto;
+import utilidades.UtilidadesRecursos;
 
 /**
  *
@@ -24,7 +25,7 @@ public class D_nota_version extends javax.swing.JDialog {
     
     public void nota(){
         T_nota.setEditable(false);
-        String contenido = Version.leerTextoRecurso("/archivos/nota.txt");
+        String contenido = UtilidadesTexto.leerTextoRecurso(UtilidadesRecursos.NOTA_VERSION);
         T_nota.setText(contenido);
         T_nota.setCaretPosition(0);
     }

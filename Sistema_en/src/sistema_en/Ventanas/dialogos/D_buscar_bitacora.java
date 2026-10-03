@@ -37,7 +37,6 @@ public class D_buscar_bitacora extends javax.swing.JDialog {
     public int recibirTrabajo(int id_trabajo_i){
         
         id_trabajo = id_trabajo_i;
-        System.out.println(id_trabajo);
         return id_trabajo_i;
     }
 

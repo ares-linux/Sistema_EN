@@ -64,6 +64,7 @@ public class InicializadorBD {
         + "\"fecha_fin\" TEXT,"
         + "\"carpeta\" TEXT,"
         + "\"id_carpeta\" TEXT,"
+        + "\"id_evento\" TEXT,"
         + "PRIMARY KEY(\"id_trabajo\" AUTOINCREMENT),"
         + "CONSTRAINT \"cliente\" FOREIGN KEY(\"id_cliente\") REFERENCES \"Cliente\"(\"id_cliente\")"
         + ");",
@@ -155,6 +156,17 @@ public class InicializadorBD {
         {"telefono_cliente", "TEXT"}
     };
 
+    /**
+     * Columnas agregadas a "Trabajo" despues de que la base ya existiera.
+     * Mismo criterio que COLUMNAS_COTIZACION_NUEVAS: nullable o con valor por
+     * defecto, para que ALTER TABLE ADD COLUMN sea valido en SQLite. Los
+     * trabajos anteriores quedan con id_evento nulo, que es exactamente el
+     * estado de "este trabajo todavia no tiene evento en Google Calendar".
+     */
+    private static final String[][] COLUMNAS_TRABAJO_NUEVAS = {
+        {"id_evento", "TEXT"}
+    };
+
     private static final String[][] CONFIGURACIONES_DEFAULT = {
         {"tema", "Claro"},
         {"sonido_error", "false"},
@@ -164,7 +176,10 @@ public class InicializadorBD {
         {"cotizaciones", "true"},
         {"ultima_copia", ""},
         {"automaticamente_ce", "true"},
-        {"automaticamente_ce_excel", "true"}
+        {"automaticamente_ce_excel", "true"},
+        {"automaticamente_eventos", "false"},
+        {"hora_defecto_calendar", "09:00"},
+        {"recordatorio_informe", "false"}
     };
 
     /**
@@ -174,26 +189,43 @@ public class InicializadorBD {
      * Es idempotente: solo altera la tabla en la primera pasada.
      */
     private static void asegurarColumnasCotizacion(Connection con) {
+        asegurarColumnas(con, "Cotizacion", COLUMNAS_COTIZACION_NUEVAS);
+    }
+
+    /**
+     * Agrega las columnas faltantes de "Trabajo" a una base ya existente.
+     * Mismo motivo y mismo criterio que Cotizacion.
+     */
+    private static void asegurarColumnasTrabajo(Connection con) {
+        asegurarColumnas(con, "Trabajo", COLUMNAS_TRABAJO_NUEVAS);
+    }
+
+    /**
+     * Suma a una tabla las columnas de {@code nuevas} que todavia no existan,
+     * segun lo que diga PRAGMA table_info. El nombre de la tabla va entre
+     * comillas dobles porque asi lo escribe el resto del DDL de este archivo.
+     */
+    private static void asegurarColumnas(Connection con, String tabla, String[][] nuevas) {
         Set<String> existentes = new HashSet<>();
         try (Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("PRAGMA table_info(\"Cotizacion\")")) {
+                ResultSet rs = st.executeQuery("PRAGMA table_info(\"" + tabla + "\")")) {
             while (rs.next()) {
                 existentes.add(rs.getString("name"));
             }
         } catch (Exception e) {
-            System.err.println("Error al inspeccionar las columnas de Cotizacion: " + e.getMessage());
+            System.err.println("Error al inspeccionar las columnas de " + tabla + ": " + e.getMessage());
             return;
         }
 
-        for (String[] columna : COLUMNAS_COTIZACION_NUEVAS) {
+        for (String[] columna : nuevas) {
             if (existentes.contains(columna[0])) {
                 continue;
             }
             try (Statement st = con.createStatement()) {
-                st.executeUpdate("ALTER TABLE \"Cotizacion\" ADD COLUMN \"" + columna[0] + "\" " + columna[1]);
-                System.out.println("Columna agregada a Cotizacion: " + columna[0]);
+                st.executeUpdate("ALTER TABLE \"" + tabla + "\" ADD COLUMN \"" + columna[0] + "\" " + columna[1]);
+                System.out.println("Columna agregada a " + tabla + ": " + columna[0]);
             } catch (Exception e) {
-                System.err.println("No se pudo agregar la columna " + columna[0] + " a Cotizacion: " + e.getMessage());
+                System.err.println("No se pudo agregar la columna " + columna[0] + " a " + tabla + ": " + e.getMessage());
             }
         }
     }
@@ -213,6 +245,7 @@ public class InicializadorBD {
                 }
             }
             asegurarColumnasCotizacion(con);
+            asegurarColumnasTrabajo(con);
             return true;
         } catch (Exception e) {
             System.err.println("Error al asegurar el esquema de la base de datos: " + e.getMessage());

@@ -4,7 +4,6 @@
  */
 package sistema_en.Ventanas;
 
-import animaciones.LoadingSpinner;
 import dao.ConfiguracionesDAO;
 import dao.CotizacionDAO;
 import dao.Detalles_cotizacionDAO;
@@ -53,7 +52,6 @@ public class V_R_Cotizacion_independiente extends javax.swing.JFrame {
     String cotizaciones1;
 boolean subir_pdf;
     private boolean formularioVisible = true;
-    private LoadingSpinner spinner;
 
     /**
      * Esta ventana solo maneja cotizaciones independientes: las que no pertenecen
@@ -80,10 +78,7 @@ boolean subir_pdf;
         initComponents();
                 
         config_tablas();
-        
-        spinner = new LoadingSpinner();
-        spinner.setVisible(false);
-                
+
         obtener_configuraciones();
     }
 
@@ -1591,23 +1586,6 @@ private void agregarMaterial() {
         cotizacion_prueba();
     }//GEN-LAST:event_b_cancelarActionPerformed
 
-    private void mostrarSpinnerCarga() {
-        java.awt.Rectangle r = jInternalFrame1.getBounds();
-        spinner.setBounds(r.x + (r.width - 100) / 2, r.y + (r.height - 100) / 2, 100, 100);
-        if (spinner.getParent() == null || spinner.getParent() != jDesktopPane1) {
-            jDesktopPane1.add(spinner, Integer.valueOf(300));
-        }
-        spinner.startLoading();
-        spinner.setVisible(true);
-        jDesktopPane1.moveToFront(spinner);
-    }
-
-    private void ocultarSpinner() {
-        javax.swing.Timer t = new javax.swing.Timer(1200, e -> spinner.setVisible(false));
-        t.setRepeats(false);
-        t.start();
-    }
-
     private void b_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_exportarActionPerformed
         // Una cotización de prueba sin guardar no tiene folio ni cliente, y usarlos
         // tal cual en el nombre del archivo genera rutas inválidas.
@@ -1770,8 +1748,6 @@ private void agregarMaterial() {
 
             b_exportar.setEnabled(false);
 
-            mostrarSpinnerCarga();
-
             // El nombre se arma aca y no dentro de la tarea: leer un componente
             // de Swing desde el hilo de Google no es seguro.
             final String nombreArchivo = "Cotizacion_" + t_id_cotizacion.getText() + "_" + n_cliente;
@@ -1788,9 +1764,6 @@ private void agregarMaterial() {
                         b_exportar.setEnabled(true);
 
                         if (idCreado != null) {
-
-                            spinner.showSuccess();
-                            ocultarSpinner();
 
                             if (abrir_automaticamente_excel){
 
@@ -1814,8 +1787,6 @@ private void agregarMaterial() {
 
                             //JOptionPane.showMessageDialog(null, "¡Cotización exportada con éxito a Google Sheets!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            spinner.showError();
-                            ocultarSpinner();
                             JOptionPane.showMessageDialog(this, "Error al exportar la cotización.", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     },
@@ -1825,8 +1796,6 @@ private void agregarMaterial() {
                             return;
                         }
                         b_exportar.setEnabled(true);
-                        spinner.showError();
-                        ocultarSpinner();
                         JOptionPane.showMessageDialog(this, EjecutorGoogle.mensajeDeError(error),
                                 "Exportar a Google Sheets", JOptionPane.ERROR_MESSAGE);
                     });

@@ -102,9 +102,26 @@ public class D_configuraciones extends javax.swing.JDialog {
                 ch_automaticamente_pdf.setSelected(Boolean.parseBoolean(valor));
                 break;
                 
-                
             case "automaticamente_ce_excel":
                 ch_automaticamente_excel.setSelected(Boolean.parseBoolean(valor));
+                break;
+                
+            case "automaticamente_eventos":
+                ch_automaticamente_eventos.setSelected(Boolean.parseBoolean(valor));
+                break;
+                
+            case "recordatorio_informe":
+                ch_recordatorio_informe.setSelected(Boolean.parseBoolean(valor));
+                break;
+                
+            case "hora_defecto_calendar":
+                if (valor != null && !valor.isBlank()) {
+                    try {
+                        d_hora_defecto.setTime(java.time.LocalTime.parse(valor));
+                    } catch (Exception e) {
+                        System.err.println("Error parseando la hora defecto de calendar: " + e.getMessage());
+                    }
+                }
                 break;
         }
     }
@@ -147,7 +164,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_automaticamente_excel = new javax.swing.JCheckBox();
         jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        tp_hora_defecto = new com.github.lgooddatepicker.components.TimePicker();
+        d_hora_defecto = new com.github.lgooddatepicker.components.TimePicker();
         jLabel11 = new javax.swing.JLabel();
         ch_automaticamente_eventos = new javax.swing.JCheckBox();
         ch_recordatorio_informe = new javax.swing.JCheckBox();
@@ -371,7 +388,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(tp_hora_defecto, gridBagConstraints);
+        getContentPane().add(d_hora_defecto, gridBagConstraints);
 
         jLabel11.setText("Hora por defecto para evento de inicio de trabajo");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -446,6 +463,9 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_automaticamente_pdf.setEnabled(false);
         ch_automaticamente_excel.setEnabled(false);
         //Sl_volumen.setEnabled(false);
+        d_hora_defecto.setEnabled(false);
+        ch_automaticamente_eventos.setEnabled(false);
+        ch_recordatorio_informe.setEnabled(false);
     }
     
     public void desbloquear_text(){
@@ -458,6 +478,9 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_automaticamente_pdf.setEnabled(true);
         ch_automaticamente_excel.setEnabled(true);
         //Sl_volumen.setEnabled(true);
+        d_hora_defecto.setEnabled(true);
+        ch_automaticamente_eventos.setEnabled(true);
+        ch_recordatorio_informe.setEnabled(true);
     }
     
     public void bloquear_botones(){
@@ -505,6 +528,10 @@ public class D_configuraciones extends javax.swing.JDialog {
             String automaticamente_ce = String.valueOf(ch_automaticamente_pdf.isSelected());
             String automaticamente_ce_excel = String.valueOf(ch_automaticamente_excel.isSelected());
             
+            String automaticamente_eventos = String.valueOf(ch_automaticamente_eventos.isSelected());
+            String recordatorio_informe = String.valueOf(ch_recordatorio_informe.isSelected());
+            String hora_defecto = (d_hora_defecto.getTime() != null) ? d_hora_defecto.getTime().toString() : "09:00";
+            
             if (Carpetas.Carpetas_cambio_cotizaciones() == true){
                 carpeta_ce = t_carpeta_c.getText();
                 cambio_carpeta_cotizaciones = true;
@@ -515,8 +542,9 @@ public class D_configuraciones extends javax.swing.JDialog {
             
             ConfiguracionesDAO dao = new ConfiguracionesDAO();
             boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, carpeta_ce, automaticamente_ce, automaticamente_ce_excel);
+            boolean guardadoCalendar = dao.actualizarConfiguracionesCalendar(automaticamente_eventos, recordatorio_informe, hora_defecto);
         
-        if (guardadoExitoso) {
+        if (guardadoExitoso && guardadoCalendar) {
             bloquear_text();
             bloquear_botones();
             b_guardar_preferencias.setText("Editar configuraciones");
@@ -629,6 +657,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.JCheckBox ch_automaticamente_pdf;
     private javax.swing.JCheckBox ch_error;
     private javax.swing.JCheckBox ch_recordatorio_informe;
+    private com.github.lgooddatepicker.components.TimePicker d_hora_defecto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -641,6 +670,5 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField t_carpeta_c;
-    private com.github.lgooddatepicker.components.TimePicker tp_hora_defecto;
     // End of variables declaration//GEN-END:variables
 }

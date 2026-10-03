@@ -24,3 +24,13 @@ Sistema_en/icon.png
 
 # Artefacto jDeploy generado por accidente en nbproject
 Sistema_en/nbproject/package.json
+
+# Respaldos que dejan las herramientas de parcheo (patch/mergediff)
+*.orig
+*.rej
+
+# Directorio de trabajo personal para parches y pruebas sueltas
+scratch/
+
+# Salida generada de tree: se regenera con "tree -I 'build|dist|.git'"
+estructura.txt

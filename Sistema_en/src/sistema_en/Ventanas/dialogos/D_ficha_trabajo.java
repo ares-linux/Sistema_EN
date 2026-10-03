@@ -316,12 +316,11 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
         ClienteDAO dao = new ClienteDAO();
         Cliente cliente = dao.obtenerCliente(id_cliente);       
         if (cliente == null) {
-            System.out.println("Cliente no encontrado: " + id_cliente);
+            System.err.println("Cliente no encontrado: " + id_cliente);
             id_cliente_i = -1;
             return;
         }
         id_cliente = Integer.valueOf(cliente.getId_cliente());
-        System.out.println("id del cliente" + id_cliente);
         
         id_cliente_i = id_cliente;
     }
@@ -505,6 +504,8 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
             boolean actualizadoExitoso = dao.actualizarTrabajoDetalles(id_trabajo,estado,fecha_inicio,fecha_fin);
             
             if (actualizadoExitoso) {
+                Trabajo t = dao.obtenerTrabajo(id_trabajo);
+                sistema_en.GoogleServicesProvider.crearEventoSiConfigurado(t);
                 desbloquear_botones();
                 t_actualizar_estado.setText("Actualizar estado");
                 t_actualizar_estado.setBackground(null);
@@ -520,10 +521,6 @@ public class D_ficha_trabajo extends javax.swing.JDialog {
     }//GEN-LAST:event_t_actualizar_estadoActionPerformed
 
     private void b_informacion_estaticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_informacion_estaticaActionPerformed
-        //D_informacion_estatica informacion_static = new D_informacion_estatica((java.awt.Frame) this.getParent(), true);
-        //informacion_static.setVisible(true);
-                
-        System.out.println("id_cliente_i :" + id_cliente_i);
         if (estatica == null || !estatica.isDisplayable()) {
             // Si tu constructor pide (Frame, boolean), pásale el Frame actual o null si no aplica
             estatica = new D_informacion_estatica((java.awt.Frame) this.getParent(), true);

@@ -104,10 +104,12 @@ public class CotizacionDAO {
 }
     
     public List<Cotizacion> obtenerCotizaciones(int id_trabajo) {
-        System.out.println("ID trabajo recibido: " + id_trabajo);
     List<Cotizacion> listaCotizaciones = new ArrayList<>();
     // Sin trabajo solo tiene sentido mostrar cotizaciones de prueba activas: las
     // cotizaciones de un trabajo se consultan siempre con su id_trabajo real.
+    // Nota: la rama id_trabajo == 0 (lista de prueba) hoy no la usa ninguna
+    // ventana: la ventana de cotizaciones de trabajo siempre pasa el id real y
+    // la de cotizaciones independientes consulta con sus propios metodos.
     String sql = (id_trabajo == 0) ? "SELECT * FROM Cotizacion WHERE tipo = 'Prueba' AND archivada = 0" : "SELECT * FROM Cotizacion WHERE id_trabajo = ? AND tipo = 'Normal'";
 
     Connection con = Conexion.conectar();
@@ -116,7 +118,6 @@ public class CotizacionDAO {
     }
 
     try (PreparedStatement ps = con.prepareStatement(sql)) {
-        System.out.println("Ejecutando consulta para id_trabajo = " + id_trabajo);
         if (id_trabajo != 0) {
             ps.setInt(1, id_trabajo);
         }

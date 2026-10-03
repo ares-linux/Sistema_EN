@@ -1,4 +1,4 @@
-package sistema_en;
+package animaciones;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,6 +10,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import sistema_en.Conexion;
 
 public class V_splash extends JWindow {
 

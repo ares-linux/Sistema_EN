@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
+import utilidades.UtilidadesRecursos;
 
 public class Exportar_PDF {
     
@@ -37,7 +38,7 @@ public class Exportar_PDF {
 
             
             // Usa el nombre de la clase seguidos de .class en lugar de getClass()
-            java.net.URL urlImagen = Exportar_PDF.class.getResource("/Imagenes/logo.png");
+            java.net.URL urlImagen = UtilidadesRecursos.url(UtilidadesRecursos.LOGO);
             Image imagen;
             
             if (urlImagen != null) {
@@ -126,7 +127,7 @@ public class Exportar_PDF {
 
             
             // Usa el nombre de la clase seguidos de .class en lugar de getClass()
-            java.net.URL urlImagen = Exportar_PDF.class.getResource("/Imagenes/logo.png");
+            java.net.URL urlImagen = UtilidadesRecursos.url(UtilidadesRecursos.LOGO);
             Image imagen;
             
             if (urlImagen != null) {

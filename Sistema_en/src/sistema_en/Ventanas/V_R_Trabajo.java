@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import raven.toast.Notifications;
 import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
-import sistema_en.UtilidadesError;
+import utilidades.UtilidadesError;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Trabajo;
 import sistema_en.Ventanas.dialogos.D_buscar_cliente;
@@ -87,13 +87,11 @@ public class V_R_Trabajo extends javax.swing.JFrame {
     
     public int recibirCliente(int id_cliente_i) {
         cargarCliente(id_cliente_i);     
-        System.out.println("id del cliente: " + id_cliente_i);
         return id_cliente_i;
     }
     
     public int recibirTrabajo(int id_trabajo_i){
         cargarTrabajo(id_trabajo_i); 
-        System.out.println("id del trabajo: " + id_trabajo_i);
         return id_trabajo_i;
     }
     

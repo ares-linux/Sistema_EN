@@ -8,7 +8,6 @@ package sistema_en.Ventanas;
 import dao.ConfiguracionesDAO;
 import sistema_en.Ventanas.Ventanas_consultas.V_clientes;
 import sistema_en.Ventanas.Ventanas_consultas.V_trabajos;
-import java.awt.Image;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
@@ -26,7 +25,7 @@ import javax.swing.JOptionPane;
 import raven.toast.Notifications;
 import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
-
+import utilidades.UtilidadesRecursos;
 
 /**
  *
@@ -168,7 +167,6 @@ public class V_menu extends javax.swing.JFrame {
             
         case "base_c":
             base_c1 = valor;
-            System.out.println(base_c1);
             break;
                     
         case "ultima_copia":
@@ -183,14 +181,10 @@ public class V_menu extends javax.swing.JFrame {
                         // 4. Comparamos para tomar decisiones
                         if (diasTranscurridos == 0) {
                             System.out.println("La copia está al día (se hizo hoy).");
-                            System.out.println(diasTranscurridos);
                         } else if (diasTranscurridos > 0) {
-                            System.out.println("Han pasado " + diasTranscurridos + " días desde la última copia.");
-                            
-                            // Ejemplo: Si pasaron más de 7 días, podrías mostrar una alerta
-                            if (diasTranscurridos >= 7) {
-                                // javax.swing.JOptionPane.showMessageDialog(null, "¡Hace más de una semana que no haces copia!");
-                            }
+                            System.out.println(diasTranscurridos == 1
+                                    ? "Han pasado 1 día desde la última copia."
+                                    : "Han pasado " + diasTranscurridos + " días desde la última copia.");
                         }
                     } catch (DateTimeParseException e) {
                         // En caso de que la fecha guardada tenga un formato extraño o incorrecto
@@ -558,14 +552,14 @@ public class V_menu extends javax.swing.JFrame {
         if (alto <= 0) alto = 400;
 
         try {
-            ImageIcon iconoOriginal = new ImageIcon( getClass().getResource("/Imagenes/logo.png"));
-
-            Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
-            l_foto.setIcon(new ImageIcon(imagenEscalada));
-
-        if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-            System.out.println("¡Error! No se pudo encontrar o cargar la imagen del menu");
+            ImageIcon iconoEscalado = UtilidadesRecursos.iconoEscalado(UtilidadesRecursos.LOGO, ancho, alto);
+            
+            if (iconoEscalado == null) {
+                System.out.println("¡Error! No se pudo encontrar o cargar la imagen del menu");
+                return;
             }
+            
+            l_foto.setIcon(iconoEscalado);
         } catch (Exception e) {
             System.out.println("Error al procesar la imagen: " + e.getMessage());
         }
@@ -621,7 +615,7 @@ public class V_menu extends javax.swing.JFrame {
     private void M_cerrar_programaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_M_cerrar_programaActionPerformed
         revisar_sonido();
         if(sonido == true){
-            V_menu.r_sonido.reproducir("/audios/error.wav");
+            V_menu.r_sonido.reproducir(UtilidadesRecursos.AUDIO_ERROR);
         }
  
         int respuesta = javax.swing.JOptionPane.showConfirmDialog(this, "¿Desea cerrar el programa?", "Confirmar salir", javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE);

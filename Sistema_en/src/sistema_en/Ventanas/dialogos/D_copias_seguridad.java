@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import sistema_en.Conexion;
 import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
-import sistema_en.UtilidadesError;
+import utilidades.UtilidadesError;
 
 /**
  *

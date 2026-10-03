@@ -6,7 +6,6 @@ package sistema_en.Ventanas.dialogos;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +36,8 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import sistema_en.Conexion;
-import sistema_en.UtilidadesError;
+import utilidades.UtilidadesError;
+import utilidades.UtilidadesRecursos;
 
 /**
  *
@@ -119,7 +119,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         getContentPane().add(b_cerrar, gridBagConstraints);
 
         l_version.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        l_version.setText("Version 1.0.19");
+        l_version.setText("Versión");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -233,19 +233,18 @@ public class D_acerca_de extends javax.swing.JDialog {
 
     public void version(){
         String version = Conexion.VERSION_APP;
-        l_version.setText(version);
+        l_version.setText("Versión " + version);
     }
     
     public void cargar_imagen() {
-        //ImageIcon iconoOriginal = new ImageIcon("src/Imagenes/logo 2.0.png");
-        ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/Imagenes/logo 2.0.png"));
-
-        Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-        l_foto.setIcon(new ImageIcon(imagenEscalada));
-
-        if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+        ImageIcon iconoEscalado = UtilidadesRecursos.iconoEscalado(UtilidadesRecursos.LOGO_GRANDE, 200, 200);
+        
+        if (iconoEscalado == null) {
             System.out.println("¡Error! No se pudo encontrar o cargar la imagen en el formulario acerca de.");
+            return;
         }
+        
+        l_foto.setIcon(iconoEscalado);
     }
 
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed

@@ -37,6 +37,7 @@ import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Evidencia;
 import sistema_en.Objetos.Trabajo;
 import sistema_en.Ventanas.dialogos.D_buscar_bitacora;
+import utilidades.UtilidadesRecursos;
 
 /**
  *
@@ -47,7 +48,6 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     Bitacora bitacora = new Bitacora();
     int fila;
     int id_trabajo;
-    String ruta_foto_defecto;
     List<Evidencia> listaTemporalFotos = new ArrayList<>();
     List<Evidencia> listaFotosNuevas = new ArrayList<>();
     List<Integer> listaIdsFotosEliminadas = new ArrayList<>();
@@ -268,7 +268,6 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     }
         public int recibirTrabajo(int id_trabajo_i){
         cargarTrabajo(id_trabajo_i); 
-        System.out.println("id del trabajo: " + id_trabajo_i);
         return id_trabajo_i;
         
     }
@@ -755,14 +754,6 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         Tabla_bitacoras.getTableHeader().setResizingAllowed(false);
     }
     
-    public void actualizar_imagenes_tema() {
-        if (FlatLaf.isLafDark()) {
-            ruta_foto_defecto = "/Imagenes/camara_claro.png";
-        } else {
-            ruta_foto_defecto = "/Imagenes/camara_oscuro.png";
-        }        
-    }
-    
     private void cargarTrabajo(int id_trabajo_i){
         
         id_trabajo = id_trabajo_i;
@@ -1035,7 +1026,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             if (texto != null && !texto.trim().isEmpty()) {
                 mostrarImagenRuta(texto, anchoLabel, altoLabel);
             } else {
-                l_evidencia.setIcon(null);
+                mostrarEvidenciaPorDefecto(anchoLabel, altoLabel);
             }
             return;
         }
@@ -1110,7 +1101,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         t_evidencia.setText(pathMostrar);
         
         if (pathMostrar.trim().isEmpty()) {
-            l_evidencia.setIcon(null);
+            mostrarEvidenciaPorDefecto(anchoLabel, altoLabel);
             return;
         }
         
@@ -1119,13 +1110,52 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     
     private void mostrarImagenRuta(String ruta, int anchoLabel, int altoLabel) {
         ImageIcon iconoOriginal = new ImageIcon(ruta);
-        int anchoImagen = iconoOriginal.getIconWidth();
-        int altoImagen = iconoOriginal.getIconHeight();
 
-        if (anchoImagen <= 0 || altoImagen <= 0) {
+        if (iconoOriginal.getIconWidth() <= 0 || iconoOriginal.getIconHeight() <= 0) {
             l_evidencia.setIcon(null);
             return;
         }
+
+        l_evidencia.setIcon(escalarEnLabel(iconoOriginal, anchoLabel, altoLabel));
+
+        if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
+        }
+    }
+
+    /**
+     * Cuando no hay evidencia cargada se muestra la camara del tema, para que el
+     * area de la imagen no quede como un recuadro vacio.
+     *
+     * @param anchoLabel ancho del area de imagen
+     * @param altoLabel  alto del area de imagen
+     */
+    private void mostrarEvidenciaPorDefecto(int anchoLabel, int altoLabel) {
+        String ruta = FlatLaf.isLafDark()
+                ? UtilidadesRecursos.FOTO_CAMARA_CLARO
+                : UtilidadesRecursos.FOTO_CAMARA_OSCURO;
+
+        ImageIcon iconoOriginal = UtilidadesRecursos.icono(ruta);
+
+        if (iconoOriginal == null) {
+            l_evidencia.setIcon(null);
+            return;
+        }
+
+        l_evidencia.setIcon(escalarEnLabel(iconoOriginal, anchoLabel, altoLabel));
+    }
+
+    /**
+     * Escala una imagen para que entre completa en el area del label sin deformarla.
+     *
+     * @param original   imagen a escalar
+     * @param anchoLabel ancho del area de imagen
+     * @param altoLabel  alto del area de imagen
+     * @return la imagen escalada
+     */
+    private ImageIcon escalarEnLabel(ImageIcon original, int anchoLabel, int altoLabel) {
+        int anchoImagen = original.getIconWidth();
+        int altoImagen = original.getIconHeight();
 
         double proporcionAncho = (double) anchoLabel / anchoImagen;
         double proporcionAlto = (double) altoLabel / altoImagen;
@@ -1134,12 +1164,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         int nuevoAncho = (int) (anchoImagen * proporcionFinal);
         int nuevoAlto = (int) (altoImagen * proporcionFinal);
 
-        Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH);
-        l_evidencia.setIcon(new ImageIcon(imagenEscalada));
-        
-        if (iconoOriginal.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
-            System.out.println("¡Error! No se pudo encontrar o cargar la imagen en la ruta especificada.");
-        }
+        return new ImageIcon(original.getImage().getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH));
     }
     
     public void aviso_labels(){

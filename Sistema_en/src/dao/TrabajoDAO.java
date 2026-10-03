@@ -21,6 +21,23 @@ import sistema_en.Objetos.Trabajo;
  */
 public class TrabajoDAO {
     
+    /**
+     * Lee una columna que puede no existir todavia en la base, por ejemplo
+     * "id_evento" en una base creada antes de la migracion que la agrega.
+     *
+     * Sin esta tolerancia, un getString sobre una columna ausente lanza
+     * SQLException, el obtenerTrabajo entero cae en su catch y devuelve null,
+     * y los tres llamadores que usan ese Trabajo se rompen. Aqui la columna
+     * ausente vale null, que es su valor legitimo: el trabajo no tiene evento.
+     */
+    private static String leerColumnaOpcional(ResultSet rs, String nombre) {
+        try {
+            return rs.getString(nombre);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
     public Trabajo obtenerTrabajo(int id_trabajo) {
     String sql = "SELECT * FROM Trabajo WHERE id_trabajo = ?";
 
@@ -56,6 +73,7 @@ public class TrabajoDAO {
                 }
 
                 t.setEstado(rs.getString("estado"));
+                t.setId_evento(leerColumnaOpcional(rs, "id_evento"));
 
                 return t;
             }
@@ -492,6 +510,29 @@ public boolean actualizarTrabajoIdCarpeta(int id_trabajo, String id_carpeta) {
     }
     return false;
 }
+
+/**
+     * Guarda el id del evento de Google Calendar asociado al trabajo.
+     *
+     * @param id_evento id del evento, o null para dejarlo sin evento
+     * @return true si se actualizo una fila
+     */
+    public boolean actualizarTrabajoIdEvento(int id_trabajo, String id_evento) {
+        String sql = "UPDATE Trabajo SET id_evento = ? WHERE id_trabajo = ?;";
+        try (Connection con = Conexion.conectar()) {
+            if (con != null) {
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setString(1, id_evento);
+                    ps.setInt(2, id_trabajo);
+
+                    return ps.executeUpdate() > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al guardar el id de evento del trabajo: " + e.getMessage());
+        }
+        return false;
+    }
 
 public Trabajo obtenerTrabajoIdCarpeta(int id_trabajo) {
     String sql = "SELECT id_trabajo, id_carpeta FROM Trabajo WHERE id_trabajo = ?";

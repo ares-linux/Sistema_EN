@@ -122,6 +122,39 @@ public class ConfiguracionesDAO {
     }
     
     
+    public boolean actualizarConfiguracionesCalendar(String automaticamenteEventos, String recordatorioInforme, String horaDefectoCalendar) {
+        String sql = "UPDATE Configuraciones SET valor = ? WHERE clave = ?";
+        Connection con = Conexion.conectar();
+        
+        if (con == null) return false;
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            con.setAutoCommit(false);
+            
+            ps.setString(1, automaticamenteEventos);
+            ps.setString(2, "automaticamente_eventos");
+            ps.addBatch();
+
+            ps.setString(1, recordatorioInforme);
+            ps.setString(2, "recordatorio_informe");
+            ps.addBatch();
+
+            ps.setString(1, horaDefectoCalendar);
+            ps.setString(2, "hora_defecto_calendar");
+            ps.addBatch();
+            
+            int[] resultados = ps.executeBatch();
+            con.commit();
+            return resultados.length > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar configuraciones de calendar: " + e.getMessage());
+            try { con.rollback(); } catch (SQLException ex) { }
+        } finally {
+            try { con.close(); } catch (SQLException e) { }
+        }
+        return false;
+    }
+    
     public List<String[]> obtenerConfiguraciones() {
     List<String[]> lista = new ArrayList<>();
     
