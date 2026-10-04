@@ -5,6 +5,7 @@
 package sistema_en.Ventanas.dialogos;
 
 import dao.HerramientaDAO;
+import dao.Tipos_herramientaDAO;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,7 +15,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class D_buscar_herramienta extends javax.swing.JDialog {
 
-    int fila_j;
+    int fila_j = -1;
+    private int id_herramienta = -1;
     
     /**
      * Creates new form D_buscar_herramienta
@@ -31,6 +33,14 @@ public class D_buscar_herramienta extends javax.swing.JDialog {
 
     public int getFila() {
         return this.fila_j;
+    }
+
+    /**
+     * Devuelve el id_herramienta de la fila elegida, o -1 si el usuario canceló
+     * o no llegó a seleccionar nada.
+     */
+    public int getIdHerramienta() {
+        return this.id_herramienta;
     }
     
     /**
@@ -85,7 +95,7 @@ public class D_buscar_herramienta extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel2, gridBagConstraints);
 
-        jLabel3.setText("TIpo");
+        jLabel3.setText("Tipo");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -199,46 +209,120 @@ public class D_buscar_herramienta extends javax.swing.JDialog {
 
     public void limpiar_text(){
         t_n_serie.setText("");
-        c_tipo.setSelectedItem(null);
+        // El combo arranca vacío hasta que llenar_tipos() lo carga, así que
+        // no se puede asumir que tenga elementos.
+        if (c_tipo.getItemCount() > 0) {
+            c_tipo.setSelectedIndex(0);
+        }
     }
-    
+
+    private void b_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_limpiarActionPerformed
+        limpiar_text();
+        llenar_tabla();
+    }//GEN-LAST:event_b_limpiarActionPerformed
+
     private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
-        fila_j = Tabla_herramientas.getSelectedRow();
-                if (fila_j == -1) 
-                {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una herramienta de la tabla.");
-                    return;
-                }
-                this.dispose();
+        int seleccionada = Tabla_herramientas.getSelectedRow();
+
+        if (seleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una herramienta de la tabla.");
+            return;
+        }
+
+        Object valorCelda = Tabla_herramientas.getValueAt(seleccionada, 0);
+
+        if (valorCelda == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La fila seleccionada no tiene un Id válido.");
+            return;
+        }
+
+        try {
+            id_herramienta = Integer.parseInt(valorCelda.toString().trim());
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La fila seleccionada no tiene un Id válido.");
+            return;
+        }
+
+        fila_j = seleccionada;
+        this.dispose();
     }//GEN-LAST:event_b_seleccionarActionPerformed
 
     private void Tabla_herramientasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla_herramientasMouseClicked
-        fila_j = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
+        int fila = this.Tabla_herramientas.rowAtPoint(evt.getPoint());
+
+        if (fila != -1) {
+            fila_j = fila;
+        }
     }//GEN-LAST:event_Tabla_herramientasMouseClicked
 
     private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
-        
+        filtrar_tabla();
     }//GEN-LAST:event_b_buscarActionPerformed
 
+    /**
+     * Carga todas las herramientas, sin ningún filtro aplicado.
+     */
     public void llenar_tabla(){
- 
+
         DefaultTableModel modelo = (DefaultTableModel) this.Tabla_herramientas.getModel();
-        modelo.setRowCount(0); 
+        modelo.setRowCount(0);
 
         HerramientaDAO dao = new HerramientaDAO();
         java.util.List<String[]> lista_herramientas = dao.obtenerHerramienta();
 
-        for (String[] fila_j : lista_herramientas) {
-            modelo.addRow(fila_j);
+        for (String[] fila : lista_herramientas) {
+            modelo.addRow(fila);
         }
     }
-    
+
+    /**
+     * Llena el combo de tipos con los que existen en la base, más "Todos".
+     * "Todos" es el centinela que usa el DAO para no filtrar por tipo.
+     */
+    private void llenar_tipos() {
+        c_tipo.removeAllItems();
+        c_tipo.addItem("Todos");
+
+        Tipos_herramientaDAO dao = new Tipos_herramientaDAO();
+
+        // Cada fila es String[2]: { id, nombre }
+        for (String[] tipo : dao.obtenerHerramientas()) {
+            if (tipo.length > 1 && tipo[1] != null && !tipo[1].isEmpty()) {
+                c_tipo.addItem(tipo[1]);
+            }
+        }
+
+        c_tipo.setSelectedIndex(0);
+    }
+
+    /**
+     * Aplica los filtros de la pantalla y recarga la tabla con el resultado.
+     * El DAO trata vacío y null como "sin filtro", igual que "Todos".
+     */
+    private void filtrar_tabla() {
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_herramientas.getModel();
+        modelo.setRowCount(0);
+
+        Object seleccion = c_tipo.getSelectedItem();
+        String tipo = (seleccion == null) ? "Todos" : seleccion.toString();
+
+        HerramientaDAO dao = new HerramientaDAO();
+        java.util.List<String[]> lista_herramientas = dao.buscarHerramienta(t_n_serie.getText(), tipo);
+
+        for (String[] fila : lista_herramientas) {
+            modelo.addRow(fila);
+        }
+    }
+
     private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        this.fila_j = -1;
+        this.id_herramienta = -1;
         this.dispose();
     }//GEN-LAST:event_b_cancelarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         limpiar_text();
+        llenar_tipos();
         llenar_tabla();
     }//GEN-LAST:event_formWindowOpened
 

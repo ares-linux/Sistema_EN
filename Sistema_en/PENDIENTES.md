@@ -7,74 +7,89 @@ Leyenda: `[ ]` pendiente · `[~]` a medias · `[x]` verificado como ya resuelto
 
 ---
 
-## A. Búsqueda de trabajos por estado (formulario de registro)
+## A. Búsqueda de trabajos por estado (formulario de registro) — RESUELTO
 
-La búsqueda se programa en `D_buscar_trabajo`, el diálogo "Buscar trabajo" que abre el
-botón `b_buscar` de `V_R_Trabajo`. Los controles ya están maquetados en el `.form`
-(`jLabel2` "Fecha de registro" + `d_fecha_registro`, `jLabel3` "Estado" + `c_estado`,
-`jLabel4` "Resultados" + tabla, y los botones `b_buscar` / `b_limpiar` /
-`b_seleccionar` / `b_cancelar`), pero la lógica nunca se escribió.
+Implementada en `D_buscar_trabajo`, el diálogo "Buscar trabajo" que abre el botón
+`b_buscar` de `V_R_Trabajo`. Es un flujo alterno para llevar un trabajo al formulario de
+registro sin salir de la ventana.
 
-- [ ] `D_buscar_trabajo.java:156` — `c_estado` conserva el modelo de fábrica
-      `{"Item 1","Item 2","Item 3","Item 4"}`; nunca se cargaron los estados reales.
-- [ ] `D_buscar_trabajo.java:98-104` — el botón "Buscar" no tiene `ActionListener`:
-      solo `setText` + `add`. Pulsarlo no hace nada.
-- [ ] `D_buscar_trabajo.java:215-225` — `llenar_tabla()` siempre llama
-      `obtenerTrabajosConClientes()` e ignora `c_estado` y `d_fecha_registro`.
-- [ ] `D_buscar_trabajo.java:118-125` — la tabla declara 5 columnas
-      (`Id, Descripcion, Fecha, Hora, Estado`) pero el DAO devuelve 11. Hoy la columna
-      "Estado" muestra `direccion` y "Descripcion" muestra `id_cliente`.
-- [ ] `D_buscar_trabajo.java:205-213` — `limpiar_text()` y el botón "Limpiar" hacen
-      `setSelectedItem(null)` (dejarían el combo vacío) y no recargan la tabla.
-- [ ] `D_buscar_trabajo.java:227-246` — "Seleccionar" hace `dispose()` incluso sin
-      selección, el mensaje dice "cliente" en vez de "trabajo", y el `id_trabajo` real
-      (campo `id`, línea 32) no tiene getter: `getFila()` devuelve el índice de fila.
-- [ ] `D_buscar_trabajo.java:248-250` — el clic en la tabla no marca la fila, así que
-      "Seleccionar" falla si el usuario solo hizo clic.
-- [ ] `V_R_Trabajo.java:1109-1117` — el resultado del diálogo se guarda en
-      `int id_cliente = buscar.getFila();` y nunca se usa. El comentario
-      "Usamos la variable global de la línea 386" está obsoleto (esa variable ya no
-      existe). Debería llamar a `abrirParaEdicionDesdeFicha(id_cliente, id_trabajo)`
-      (línea 74), que ya deja el formulario en modo edición.
-- [~] `D_buscar_trabajo.form:107-113` y `:132-137` — el modelo de la tabla y el del
-      combo están en el `.form`; hay que mantenerlos sincronizados con el código.
+- [x] `c_estado` se llena con los estados reales `{"Todos","Pendiente","En progreso",
+      "Completado"}`, en el `.java` y en el `.form`.
+- [x] El botón "Buscar" tiene `ActionListener` en el `.form` y llama a `filtrar_tabla()`.
+- [x] `filtrar_tabla()` usa `TrabajoDAO.buscarTrabajosPorPeriodo(estado, fecha, fecha,
+      false)`: con `desde == hasta` da coincidencia exacta sobre `fecha_cr`, que es lo
+      que corresponde a la etiqueta "Fecha de registro". Sin fecha trae todo.
+- [x] La tabla declara las 11 columnas, en el mismo orden que el DAO y que la tabla de
+      `V_R_Trabajo`. Ya no se mezclan `direccion` con "Estado".
+- [x] `limpiar_text()` y "Limpiar" dejan el combo en "Todos", vacían la fecha y recargan.
+- [x] "Seleccionar" solo hace `dispose()` si hubo selección, avisa si no la hubo, y el
+      mensaje dice "trabajo". El `id_trabajo` real sale de `getIdTrabajo()`.
+- [x] `fila` e `id` arrancan en `-1`. "Cancelar" y cerrar con la `X` devuelven `-1`, así
+      que el consumidor no toca el formulario.
+- [x] El clic en la tabla sí marca la fila: el constructor ya fija
+      `SINGLE_SELECTION` (línea 25). La nota anterior sobre esto estaba desactualizada.
+- [x] `V_R_Trabajo.b_buscarActionPerformed` ya no guarda el resultado en una variable
+      muerta. Localiza el trabajo por `id` en la columna 0 de su propia tabla, marca la
+      fila y llama a `cargar_datos_tabla(i)`.
+- [x] `D_buscar_trabajo.form` y `.java` quedaron sincronizados: bloque `<Events>` de
+      `b_buscar` y modelo de 11 columnas en ambos.
 
-Decisiones ya tomadas: solo el diálogo; "Seleccionar" carga el trabajo en el
-formulario para editar; coincidencia exacta de `fecha_cr`; 11 columnas como en
-`V_trabajos`.
+**No hizo falta tocar `dao/TrabajoDAO.java`**: `buscarTrabajosPorPeriodo` ya estaba bien
+escrito. Se verificó contra la base que con `desde == hasta` filtra por día exacto, que
+acepta `null` en estado y fechas, y que devuelve siempre 11 columnas.
 
-**No hace falta tocar `dao/TrabajoDAO.java`**: `buscarTrabajosPorPeriodo(estado, desde,
-hasta, por_fecha_fin)` con `desde == hasta` y `por_fecha_fin = false` ya produce
-coincidencia exacta sobre `fecha_cr` y devuelve las 11 columnas.
+Nota de diseño: el formulario padre avisa y no carga si está en modo Guardar, replicando
+la guarda de `Tabla_trabajosMouseClicked`, porque cargar otro trabajo mientras se guarda
+uno pisaría los datos pendientes.
 
 ---
 
-## B. Búsqueda de herramientas (formulario de registro)
+## B. Búsqueda de herramientas (formulario de registro) — RESUELTO
 
-`D_buscar_herramienta` no tiene lógica implementada. Los controles están maquetados
-en el `.form`, pero el botón "Buscar" está vacío y la tabla siempre se llena con
-todas las herramientas.
+- [x] `b_buscarActionPerformed` llama a `filtrar_tabla()`.
+- [x] `llenar_tipos()` carga el combo con los tipos reales de
+      `Tipos_herramientaDAO.obtenerHerramientas()`, con "Todos" de primero. Ojo con la
+      nomenclatura: `Tipos_herramientaDAO.obtenerHerramientas()` (plural) devuelve
+      **tipos**; `HerramientaDAO.obtenerHerramienta()` (singular) devuelve
+      **herramientas**.
+- [x] `filtrar_tabla()` usa `HerramientaDAO.buscarHerramienta(n_serie, tipo)`.
+- [x] "Limpiar" vacía los filtros y recarga la tabla.
+- [x] `fila_j` e `id_herramienta` arrancan en `-1`; `getIdHerramienta()` expone el id
+      real. "Cancelar" y cerrar con la `X` devuelven `-1`.
+- [x] `V_R_Herramienta.b_buscarActionPerformed` localiza la herramienta por `id` en su
+      propia tabla. Antes tomaba el índice y llamaba a `cargar_datos_tabla(fila)` sin
+      condición, así que al cancelar cargaba la fila 0 en silencio.
+- [x] Corregido el typo `"TIpo"` de `jLabel3`.
+- [x] Añadido el bloque `<Events>` de `b_limpiar` en el `.form`; antes el botón no
+      tenía handler.
 
-- [ ] `D_buscar_herramienta.java` — `b_buscarActionPerformed` está vacío: el botón
-      no tiene comportamiento.
-- [ ] `D_buscar_herramienta.java` — el combo `c_tipo` conserva el modelo de fábrica
-      vacío: nunca se cargan los tipos de herramienta.
-- [ ] `D_buscar_herramienta.java` — `llenar_tabla()` siempre llama
-      `obtenerHerramienta()`; ignora el texto y el tipo seleccionados.
-- [ ] `D_buscar_herramienta.java` — limpiar los filtros deja `c_tipo` en `null` y no
-      recarga la tabla.
+Sí hubo que tocar la capa de datos, al contrario de lo que decía la nota anterior:
 
-**No hace falta tocar la capa de datos.** Ya existe lo necesario:
-`HerramientaDAO.buscarHerramienta(String n_serie, String nombre_tipo)` y
-`Tipos_herramientaDAO.obtenerHerramientas()`.
+- [x] `HerramientaDAO.obtenerHerramienta()` y `buscarHerramienta()`, y también
+      `Tipos_herramientaDAO.obtenerHerramientas()`, tenían el `if (con == null)` **dentro**
+      del `try (Connection con = Conexion.conectar(); ...)`. Como la cabecera del
+      `try-with-resources` se evalúa antes del cuerpo, `con.prepareStatement(...)` ya
+      lanzaba `NullPointerException` y la guarda era código muerto. Ahora `con` se
+      declara aparte, se comprueba y se cierra en el `finally`, igual que en
+      `TrabajoDAO`. Es un NPE real: `Conexion.conectar()` devuelve `null` si no encuentra
+      el archivo de la base (`Conexion.java:115`).
+- [x] `buscarHerramienta` normaliza los criterios: `n_serie` `null` pasa a `""` y un tipo
+      `null`, vacío o distinto de "Todos" se trata como "traer todo". Antes un tipo `null`
+      caía en la rama `else` y generaba `WHERE t.nombre = null`, que no trae ninguna fila.
 
-- [ ] Confirmar la semántica de la coincidencia de texto: hoy
-      `buscarHerramienta` compara por número de serie y nombre de tipo; falta ver si
-      además debe filtrar por nombre de herramienta y decidir si es coincidencia
-      parcial (like) o exacta.
-- [ ] Revisar el consumidor en `V_R_Herramienta.java` (línea ~704): comprobar que
-      recoge el `id_herramienta` real de la fila elegida y no el índice de fila, para
-      que "seleccionar" recargue la herramienta correcta.
+Pendiente de decidir (no bloquea la entrega):
+
+- [ ] Confirmar si el buscador debe filtrar además por nombre de herramienta. Hoy solo
+      compara número de serie y tipo, con coincidencia parcial (`LIKE '%texto%'`).
+
+### Trampas del DAO para no repetirlas
+
+| Valor enviado | Qué debe ocurrir |
+|---|---|
+| tipo o estado `null` | se trata como "Todos", nunca como `= null` |
+| texto `null` | se convierte en `""`, nunca en el literal `"%null%"` |
+| texto `""` | `LIKE '%%'`, que es "traer todo" |
+| `fecha_cr` / `fecha_inicio` | texto ISO `YYYY-MM-DD`, así que el orden lexicográfico coincide con el cronológico |
 
 ---
 
@@ -206,6 +221,64 @@ pendientes.
 - [x] Reautenticación OAuth fuera del EDT: ya no existe ningún diálogo de
       reautenticación en `GoogleServicesProvider`. Sin pendiente.
 - [x] Placeholders en `D_acerca_de`: los textos ya son reales. Sin pendiente.
+
+---
+
+## K. Esquema de la base de datos — VERIFICADO Y ALINEADO
+
+Se verificó que la base que crea el asistente ("base de datos nueva") produce el mismo
+esquema que la base real. El método es crear una base temporal con
+`InicializadorBD.crearBaseDatos()` y comparar su `PRAGMA table_info` y
+`PRAGMA foreign_key_list` contra los de la base real, tabla por tabla.
+
+Resultado: **0 diferencias en las 12 tablas**, columnas, tipos y claves foráneas.
+
+- [x] `Trabajo.id_evento` está en el DDL (`InicializadorBD.java:67`) y en la base real,
+      en la misma posición. Las bases viejas la reciben por la migración
+      `COLUMNAS_TRABAJO_NUEVAS` (`:166-168`), que usa `ALTER TABLE ADD COLUMN` sobre lo
+      que reporte `PRAGMA table_info` y por eso es idempotente.
+- [x] Las migraciones se aplicaban desde dos lugares distintos: `asegurarEsquema`
+      (:261) llamaba a `Cotizacion` y a `Trabajo`, pero `crearBaseDatos` (:334) solo
+      llamaba a `Cotizacion`. No rompía nada porque el DDL ya trae `id_evento`, pero una
+      base nueva se habría quedado sin esa columna sin ningún error visible si alguna
+      vez se sacara del DDL. Ahora ambos pasan por `asegurarMigraciones(con)` (:212),
+      que es el único punto donde se listan, así que agregar una migración no puede
+      olvidarse en uno de los dos caminos.
+- [x] `Tipos_herramienta.nombre` estaba declarado `INTEGER` en la base real y `TEXT` en
+      el DDL. La base real era la rara. Riesgo que tenía: la afinidad INTEGER de SQLite
+      convierte texto numérico, así que un tipo llamado `"007"` se habría guardado como
+      `7`. Se recreó la tabla copiando las filas; los 6 tipos quedaron intactos y el
+      autoincremento sigue en 7.
+- [x] La FK de `Evidencia` estaba rota en la base real: `REFERENCES ""`, con el nombre
+      de la tabla referenciada vacío, cuando el DDL dice
+      `REFERENCES "Bitacora"("id_bitacora")` (:141). Se recreó la tabla y las 3 evidencias
+      quedaron con la FK correcta.
+
+### Datos huérfanos preexistentes (no tocados)
+
+`PRAGMA foreign_key_check` reporta 17 referencias rotas que ya estaban antes de estos
+cambios (se comprobó contra el respaldo previo a cualquier modificación). No las
+arregló la reparación de la FK de `Evidencia`, que bajó el total de 20 a 17:
+
+| Tabla | Filas | Referencia a |
+|---|---|---|
+| `Detalles_cotizacion` | 11 | `Cotizacion` 0 |
+| `Bitacora` | 4 | `Trabajador` 1 |
+| `Pago` | 2 | `Trabajo` 0 |
+
+Solo son visibles si algún día se activa `PRAGMA foreign_keys`, que la aplicación nunca
+establece. Decidir si se limpian con `DELETE` o se dejan como están.
+
+### Migraciones que faltan
+
+Estas columnas están en el DDL pero no aparecen en ninguna lista `COLUMNAS_*_NUEVAS`,
+así que una base vieja que no las tuviera no las recuperaría nunca:
+
+- [ ] `Cliente.u_modificacion` y `Cliente.fecha_registro`
+- [ ] `Trabajo.direccion`, `Trabajo.carpeta` y `Trabajo.id_carpeta`
+
+La base real sí las tiene, así que no afecta al uso diario. Solo importa para una base
+muy antigua.
 
 ---
 

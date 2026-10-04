@@ -1109,9 +1109,37 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         buscar.setLocationRelativeTo(V_R_Trabajo.this);
         buscar.setVisible(true);
 
-        // ¡CORRECCIÓN AQUÍ! Usamos la variable global de la línea 386
-        int id_cliente = buscar.getFila();
+        int id_trabajo = buscar.getIdTrabajo();
 
+        // El usuario canceló o no eligió nada: no se toca el formulario.
+        if (id_trabajo <= 0) {
+            return;
+        }
+
+        // Cargar otro trabajo mientras se guarda uno pisaría los datos pendientes.
+        if ("Guardar".equals(b_nuevo.getText()) || "Guardar".equals(b_editar.getText())) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Terminá de guardar o de cancelar el trabajo actual antes de buscar otro.");
+            return;
+        }
+
+        // Se localiza por id y no por posición, así el filtro del diálogo
+        // no puede desalinear la fila elegida.
+        for (int i = 0; i < Tabla_trabajos.getRowCount(); i++) {
+            Object valor = Tabla_trabajos.getValueAt(i, 0);
+
+            if (valor == null || !String.valueOf(id_trabajo).equals(valor.toString().trim())) {
+                continue;
+            }
+
+            Tabla_trabajos.setRowSelectionInterval(i, i);
+            fila = i;
+            cargar_datos_tabla(i);
+            return;
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "El trabajo seleccionado ya no está en la lista. Actualizá la tabla para verlo.");
     }//GEN-LAST:event_b_buscarActionPerformed
 
     private void t_nombreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_t_nombreMouseClicked

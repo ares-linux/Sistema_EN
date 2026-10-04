@@ -5,6 +5,7 @@
 package sistema_en.Ventanas.dialogos;
 
 import dao.TrabajoDAO;
+import java.time.LocalDate;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,10 +29,14 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
     }
 
     
-    int fila;
-    int id;
-    
-    public int getFila() {
+    int fila = -1;
+    int id = -1;
+
+    /**
+     * Devuelve el id_trabajo de la fila elegida, o -1 si el usuario canceló
+     * o no llegó a seleccionar nada.
+     */
+    public int getIdTrabajo() {
         return this.id;
     }
     
@@ -120,7 +125,7 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Id", "Descripcion", "Fecha", "Hora", "Estado"
+                "Id", "Id_cliente", "Nombre", "Telefono", "Direccion", "Descripcion", "Fecha", "Hora", "Estado", "Fecha de inicio", "Fecha de fin"
             }
         ));
         Tabla_trabajos.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -153,7 +158,7 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(d_fecha_registro, gridBagConstraints);
 
-        c_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        c_estado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Pendiente", "En progreso", "Completado" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -204,17 +209,20 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
 
     public void limpiar_text(){
         d_fecha_registro.setDate(null);
-        c_estado.setSelectedItem(null);
+        c_estado.setSelectedIndex(0);
     }
-    
+
     private void b_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_limpiarActionPerformed
-        d_fecha_registro.setText("");
-        c_estado.setSelectedItem(null);
+        limpiar_text();
+        llenar_tabla();
     }//GEN-LAST:event_b_limpiarActionPerformed
 
+    /**
+     * Carga todos los trabajos, sin ningún filtro aplicado.
+     */
     public void llenar_tabla(){
-    DefaultTableModel modelo = (DefaultTableModel) this.Tabla_trabajos.getModel();
-        modelo.setRowCount(0); 
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_trabajos.getModel();
+        modelo.setRowCount(0);
 
         TrabajoDAO trabajoDao = new TrabajoDAO();
         java.util.List<String[]> lista = trabajoDao.obtenerTrabajosConClientes();
@@ -222,26 +230,57 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
         for (String[] fila : lista) {
             modelo.addRow(fila);
         }
-    }   
-    
-    private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
-        fila = Tabla_trabajos.getSelectedRow();
+    }
 
-        int columna = 0;
-        if (fila != -1) {
-                        
-            try {
-                
-                String valorCelda = Tabla_trabajos.getValueAt(fila, columna).toString();
-                id = Integer.parseInt(valorCelda);
-                
-            } catch (NumberFormatException e) {
-                System.out.println("Error: El dato en esa celda no es un número.");
-            }
-            
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un cliente de la tabla primero.");
+    /**
+     * Aplica los filtros de la pantalla y recarga la tabla con el resultado.
+     * Sin fecha y con el estado en "Todos" el resultado es la lista completa.
+     */
+    private void filtrar_tabla() {
+        DefaultTableModel modelo = (DefaultTableModel) this.Tabla_trabajos.getModel();
+        modelo.setRowCount(0);
+
+        Object seleccion = c_estado.getSelectedItem();
+        String estado = (seleccion == null) ? "Todos" : seleccion.toString();
+
+        // "Fecha de registro" corresponde a fecha_cr, no a fecha_fin.
+        LocalDate fecha = d_fecha_registro.getDate();
+
+        TrabajoDAO trabajoDao = new TrabajoDAO();
+        java.util.List<String[]> lista =
+                trabajoDao.buscarTrabajosPorPeriodo(estado, fecha, fecha, false);
+
+        for (String[] fila : lista) {
+            modelo.addRow(fila);
         }
+    }
+
+    private void b_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_buscarActionPerformed
+        filtrar_tabla();
+    }//GEN-LAST:event_b_buscarActionPerformed
+
+    private void b_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_seleccionarActionPerformed
+        int seleccionada = Tabla_trabajos.getSelectedRow();
+
+        if (seleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un trabajo de la tabla primero.");
+            return;
+        }
+
+        Object valorCelda = Tabla_trabajos.getValueAt(seleccionada, 0);
+
+        if (valorCelda == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La fila seleccionada no tiene un Id válido.");
+            return;
+        }
+
+        try {
+            id = Integer.parseInt(valorCelda.toString().trim());
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La fila seleccionada no tiene un Id válido.");
+            return;
+        }
+
         this.dispose();
     }//GEN-LAST:event_b_seleccionarActionPerformed
 
@@ -250,6 +289,7 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
     }//GEN-LAST:event_Tabla_trabajosMouseClicked
 
     private void b_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cancelarActionPerformed
+        this.id = -1;
         this.dispose();
     }//GEN-LAST:event_b_cancelarActionPerformed
 

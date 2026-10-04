@@ -50,14 +50,15 @@ public class HerramientaDAO {
                    + "FROM Herramienta h "
                    + "LEFT JOIN Tipos_herramienta t ON h.t_herramienta = t.id_tipo_herramienta";
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        Connection con = Conexion.conectar();
 
-            if (con == null) {
-                System.err.println("No se pudo realizar la consulta porque la conexión es null.");
-                return lista;
-            }
+        if (con == null) {
+            System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+            return lista;
+        }
+
+        try (PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 String[] fila = new String[4];
@@ -70,6 +71,14 @@ public class HerramientaDAO {
 
         } catch (SQLException e) {
             System.err.println("Error al obtener las herramientas de la BD: " + e.getMessage());
+        } finally {
+            try {
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                // no se hace nada al cerrar
+            }
         }
         return lista;
     }
@@ -77,29 +86,39 @@ public class HerramientaDAO {
     /**
      * Busca herramientas por número de serie y/o tipo.
      *
-     * @param n_serie       Texto a buscar en n_serie (puede ser vacío).
-     * @param nombre_tipo   Nombre del tipo o "Todos".
+     * Acepta valores nulos o vacíos con seguridad: se interpretan como "sin filtro",
+     * igual que el centinela "Todos" para el tipo.
+     *
+     * @param n_serie       Texto a buscar en n_serie (puede ser vacío o null).
+     * @param nombre_tipo   Nombre del tipo, "Todos", vacío o null.
      */
     public List<String[]> buscarHerramienta(String n_serie, String nombre_tipo) {
         List<String[]> lista = new ArrayList<>();
 
-        String sql = "Todos".equals(nombre_tipo)
-            ? "SELECT h.id_herramienta, t.nombre AS tipo, h.n_serie, h.foto "
-            + "FROM Herramienta h LEFT JOIN Tipos_herramienta t ON h.t_herramienta = t.id_tipo_herramienta "
-            + "WHERE h.n_serie LIKE ?"
-            : "SELECT h.id_herramienta, t.nombre AS tipo, h.n_serie, h.foto "
-            + "FROM Herramienta h LEFT JOIN Tipos_herramienta t ON h.t_herramienta = t.id_tipo_herramienta "
-            + "WHERE h.n_serie LIKE ? AND t.nombre = ?";
+        // Un null en cualquiera de los dos criterios significa "traer todo".
+        String serie = (n_serie == null) ? "" : n_serie.trim();
+        boolean filtrarPorTipo = nombre_tipo != null
+                && !nombre_tipo.trim().isEmpty()
+                && !"Todos".equals(nombre_tipo);
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        String sql = "SELECT h.id_herramienta, t.nombre AS tipo, h.n_serie, h.foto "
+                   + "FROM Herramienta h LEFT JOIN Tipos_herramienta t ON h.t_herramienta = t.id_tipo_herramienta "
+                   + "WHERE h.n_serie LIKE ?"
+                   + (filtrarPorTipo ? " AND t.nombre = ?" : "");
 
-            if (con == null) return lista;
+        Connection con = Conexion.conectar();
 
-            ps.setString(1, "%" + n_serie + "%");
+        if (con == null) {
+            System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+            return lista;
+        }
 
-            if (!"Todos".equals(nombre_tipo)) {
-                ps.setString(2, nombre_tipo);
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + serie + "%");
+
+            if (filtrarPorTipo) {
+                ps.setString(2, nombre_tipo.trim());
             }
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -114,6 +133,14 @@ public class HerramientaDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error en la BD al buscar: " + e.getMessage());
+        } finally {
+            try {
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                // no se hace nada al cerrar
+            }
         }
         return lista;
     }

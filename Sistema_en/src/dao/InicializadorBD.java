@@ -201,7 +201,21 @@ public class InicializadorBD {
     }
 
     /**
-     * Suma a una tabla las columnas de {@code nuevas} que todavia no existan,
+     * Aplica todas las migraciones de columnas faltantes.
+     *
+     * Hay un unico punto de entrada a proposito: las bases nuevas (crearBaseDatos)
+     * y las ya existentes (asegurarEsquema) tienen que recibir exactamente las
+     * mismas migraciones. Si cada una las listara por su cuenta, agregar una
+     * columna nueva seria facil hacerlo solo en una de las dos, y una base recien
+     * creada quedaria sin ella sin ningun error visible.
+     */
+    private static void asegurarMigraciones(Connection con) {
+        asegurarColumnasCotizacion(con);
+        asegurarColumnasTrabajo(con);
+    }
+
+    /**
+     * Agrega a una tabla las columnas de {@code nuevas} que todavia no existan,
      * segun lo que diga PRAGMA table_info. El nombre de la tabla va entre
      * comillas dobles porque asi lo escribe el resto del DDL de este archivo.
      */
@@ -244,8 +258,7 @@ public class InicializadorBD {
                     st.executeUpdate(ddl);
                 }
             }
-            asegurarColumnasCotizacion(con);
-            asegurarColumnasTrabajo(con);
+            asegurarMigraciones(con);
             return true;
         } catch (Exception e) {
             System.err.println("Error al asegurar el esquema de la base de datos: " + e.getMessage());
@@ -318,7 +331,7 @@ public class InicializadorBD {
                     st.executeUpdate(ddl);
                 }
             }
-            asegurarColumnasCotizacion(con);
+            asegurarMigraciones(con);
             return asegurarConfiguraciones(rutaCompleta);
         } catch (Exception e) {
             System.err.println("Error al crear la base de datos: " + e.getMessage());

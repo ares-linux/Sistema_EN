@@ -50,14 +50,15 @@ public class Tipos_herramientaDAO {
         List<String[]> lista = new ArrayList<>();
         String sql = "SELECT id_tipo_herramienta, nombre FROM Tipos_herramienta ORDER BY nombre";
 
-        try (Connection con = Conexion.conectar();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        Connection con = Conexion.conectar();
 
-            if (con == null) {
-                System.err.println("No se pudo realizar la consulta porque la conexión es null.");
-                return lista;
-            }
+        if (con == null) {
+            System.err.println("No se pudo realizar la consulta porque la conexión es null.");
+            return lista;
+        }
+
+        try (PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 String[] fila = new String[2];
@@ -68,6 +69,14 @@ public class Tipos_herramientaDAO {
 
         } catch (SQLException e) {
             System.err.println("Error al obtener los tipos de herramienta de la BD: " + e.getMessage());
+        } finally {
+            try {
+                if (con != null && !con.isClosed()) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                // no se hace nada al cerrar
+            }
         }
         return lista;
     }

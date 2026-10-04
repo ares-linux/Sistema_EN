@@ -705,12 +705,38 @@ public class V_R_Herramienta extends javax.swing.JFrame {
         D_buscar_herramienta herramienta = new D_buscar_herramienta(this,true);
         herramienta.setLocationRelativeTo(V_R_Herramienta.this);
         herramienta.setVisible(true);
-        
-        fila = herramienta.getFila();
-        if (fila >= 0 && fila < Tabla_herramientas.getRowCount()) {
-            Tabla_herramientas.setRowSelectionInterval(fila, fila);
+
+        int id_herramienta = herramienta.getIdHerramienta();
+
+        // El usuario canceló o no eligió nada: no se toca el formulario.
+        if (id_herramienta <= 0) {
+            return;
         }
-        cargar_datos_tabla(fila);
+
+        // Cargar otra herramienta mientras se guarda una pisaría los datos pendientes.
+        if ("Guardar".equals(b_nuevo.getText()) || "Guardar".equals(b_editar.getText())) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Terminá de guardar o de cancelar la herramienta actual antes de buscar otra.");
+            return;
+        }
+
+        // Se localiza por id y no por posición, así el filtro del diálogo
+        // no puede desalinear la fila elegida.
+        for (int i = 0; i < Tabla_herramientas.getRowCount(); i++) {
+            Object valor = Tabla_herramientas.getValueAt(i, 0);
+
+            if (valor == null || !String.valueOf(id_herramienta).equals(valor.toString().trim())) {
+                continue;
+            }
+
+            Tabla_herramientas.setRowSelectionInterval(i, i);
+            fila = i;
+            cargar_datos_tabla(i);
+            return;
+        }
+
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "La herramienta seleccionada ya no está en la lista. Actualizá la tabla para verla.");
     }//GEN-LAST:event_b_buscarActionPerformed
 
     private void t_fotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_t_fotoActionPerformed

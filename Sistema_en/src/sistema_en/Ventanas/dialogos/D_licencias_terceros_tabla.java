@@ -134,6 +134,12 @@ public class D_licencias_terceros_tabla extends javax.swing.JDialog {
 
             Object[] fila36  = {"org-netbeans-modules-java-j2seproject-copylibstask", "Sin versión especificada", "CDDL / GPL (Plataforma NetBeans)"};
             modelo.addRow(fila36);
+
+            Object[] fila37  = {"google-api-services-calendar-v3-rev20240705", "2.0.0", "Apache 2.0"};
+            modelo.addRow(fila37);
+
+            Object[] fila38  = {"google-api-services-gmail-v1-rev20260727", "2.0.0", "Apache 2.0"};
+            modelo.addRow(fila38);
             
         Tabla_licencias.setDefaultEditor(Object.class, null);
         Tabla_licencias.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
