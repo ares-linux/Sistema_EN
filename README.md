@@ -93,16 +93,23 @@ Sistema_en/
 
 ## 📦 Publicación (solo mantenedores)
 
+La publicación en npm es **manual** (así lo hace el mantenedor desde su máquina). El
+workflow de GitHub en tags (`v*`) **solo compila y valida el empaquetado**; **no publica**.
+
 Para generar una nueva versión instalable con jDeploy:
 
 1. Compila y genera el JAR en NetBeans (target `dist/`).
-2. Copia `credentials.json` a `dist/` (es necesario para que el login de Google Drive funcione).
+2. Verifica que `credentials.json` esté en `Sistema_en/` (lo toma `package.json` con `files` → `dir: "."`). Es necesario para que el login de Google Drive funcione.
 3. Actualiza la versión en `Sistema_en/package.json` y crea el tag en git.
-4. Publica:
+4. Publica **manualmente**:
    ```bash
    cd Sistema_en && jdeploy publish
    ```
 5. **Verifica** que el bundle generado incluya `credentials.json` y que **NO** incluya `base_de_datos.properties` ni `tokens/` (estos se generan por-usuario en `~/.Sistema_EN`).
+
+> ⚠️ No publiques (ni dejes que el CI publique) una versión que ya exista en npm: devuelve
+> `403 You cannot publish over the previously published versions`. Por eso el workflow solo
+> valida y el publish lo hace el mantenedor una única vez por versión.
 
 ## Documentos
 
