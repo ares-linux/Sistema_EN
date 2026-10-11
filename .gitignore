@@ -4,6 +4,7 @@
 # Ignorar archivos de bases de datos y respaldos
 database/*.db
 backups/*
+Sistema_en/*.db
 
 # Ignorar carpetas de compilación (build y dist) en cualquier parte del proyecto
 build/

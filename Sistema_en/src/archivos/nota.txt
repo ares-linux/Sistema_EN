@@ -5,6 +5,9 @@ Novedades:
 - El identificador del evento se guarda en el trabajo, así que si vuelves a cambiar las fechas se actualiza el mismo evento en vez de crear uno nuevo.
 - Configuraciones: opción "Crear eventos automáticamente" y hora por defecto para el inicio del trabajo.
 - Verificación de la conexión con Google Calendar.
+- Cotizaciones: ventana independiente como instancia única, con historial reutilizable, contraste de datos y conversión de una cotización a trabajo.
+- Búsqueda de trabajos y herramientas: nuevos diálogos que devuelven el registro seleccionado y lo llevan directo al formulario.
+- Reautenticación con Google más ágil y respaldo de datos más seguro (migraciones centralizadas y correcciones en el manejo de la base de datos).
 - Centralización de imágenes, audios y archivos de texto en clases de utilidades, con la carpeta "Imagenes" renombrada a "imagenes".
 
 Versión 1.0.19
