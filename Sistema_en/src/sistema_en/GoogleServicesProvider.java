@@ -393,6 +393,10 @@ public class GoogleServicesProvider {
     }
 
     public static List<Evidencia> listarArchivosDeCarpeta(String idCarpetaDrive) {
+        return listarArchivosDeCarpeta(idCarpetaDrive, false);
+    }
+
+    public static List<Evidencia> listarArchivosDeCarpeta(String idCarpetaDrive, boolean soloImagenes) {
         List<Evidencia> lista = new java.util.ArrayList<>();
         if (!estaConectado() || idCarpetaDrive == null) {
             return lista;
@@ -417,6 +421,9 @@ public class GoogleServicesProvider {
                             && archivo.getMimeType().startsWith("application/vnd.google-apps.")) {
                         continue;
                     }
+                    if (soloImagenes && !esImagen(archivo)) {
+                        continue;
+                    }
                     Evidencia e = new Evidencia();
                     e.setId_google_drive(archivo.getId());
                     e.setNombre_archivo(archivo.getName());
@@ -431,6 +438,16 @@ public class GoogleServicesProvider {
             e.printStackTrace();
         }
         return lista;
+    }
+
+    private static boolean esImagen(com.google.api.services.drive.model.File archivo) {
+        String mime = archivo.getMimeType();
+        if (mime != null && mime.startsWith("image/")) {
+            return true;
+        }
+        String nombre = archivo.getName() != null ? archivo.getName().toLowerCase() : "";
+        return nombre.endsWith(".jpg") || nombre.endsWith(".jpeg") || nombre.endsWith(".png")
+                || nombre.endsWith(".gif") || nombre.endsWith(".webp") || nombre.endsWith(".bmp");
     }
 
     public static String subirImagenACarpeta(String rutaLocalImagen, String idCarpetaDrive) {
@@ -937,7 +954,7 @@ public class GoogleServicesProvider {
                 .execute();
     }
     
-    public static String buscarOCrearCarpeta(Drive driveService, String nombreCarpeta, String parentId) throws IOException {
+    public static String buscarCarpeta(Drive driveService, String nombreCarpeta, String parentId) throws IOException {
         String query = "mimeType = 'application/vnd.google-apps.folder' and name = '" + nombreCarpeta + "' and trashed = false";
         
         if (parentId != null) {
@@ -954,21 +971,29 @@ public class GoogleServicesProvider {
 
         if (resultado.getFiles() != null && !resultado.getFiles().isEmpty()) {
             return resultado.getFiles().get(0).getId();
-        } else {
-            File fileMetadata = new File();
-            fileMetadata.setName(nombreCarpeta);
-            fileMetadata.setMimeType("application/vnd.google-apps.folder");
-
-            if (parentId != null) {
-                fileMetadata.setParents(Collections.singletonList(parentId));
-            }
-
-            File carpetaCreada = driveService.files().create(fileMetadata)
-                    .setFields("id")
-                    .execute();
-
-            return carpetaCreada.getId();
         }
+        return null;
+    }
+
+    public static String buscarOCrearCarpeta(Drive driveService, String nombreCarpeta, String parentId) throws IOException {
+        String existente = buscarCarpeta(driveService, nombreCarpeta, parentId);
+        if (existente != null) {
+            return existente;
+        }
+
+        File fileMetadata = new File();
+        fileMetadata.setName(nombreCarpeta);
+        fileMetadata.setMimeType("application/vnd.google-apps.folder");
+
+        if (parentId != null) {
+            fileMetadata.setParents(Collections.singletonList(parentId));
+        }
+
+        File carpetaCreada = driveService.files().create(fileMetadata)
+                .setFields("id")
+                .execute();
+
+        return carpetaCreada.getId();
     }
 
     public static String crearCarpetaTrabajo(String nombreTrabajo) {
@@ -1021,6 +1046,10 @@ public class GoogleServicesProvider {
      * @return id de la carpeta de evidencias, o null si fallo
      */
     public static String obtenerIdCarpetaEvidencias(String idTrabajoCarpeta) {
+        return obtenerIdCarpetaEvidencias(idTrabajoCarpeta, true);
+    }
+
+    public static String obtenerIdCarpetaEvidencias(String idTrabajoCarpeta, boolean crearSiNoExiste) {
         if (idTrabajoCarpeta == null || idTrabajoCarpeta.isBlank()) {
             return null;
         }
@@ -1030,7 +1059,9 @@ public class GoogleServicesProvider {
                     .setApplicationName(APPLICATION_NAME)
                     .build();
 
-            return buscarOCrearCarpeta(service, "Evidencias", idTrabajoCarpeta);
+            return crearSiNoExiste
+                    ? buscarOCrearCarpeta(service, "Evidencias", idTrabajoCarpeta)
+                    : buscarCarpeta(service, "Evidencias", idTrabajoCarpeta);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

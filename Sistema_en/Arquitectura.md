@@ -361,7 +361,7 @@ flowchart LR
 |---|---|
 | `getCredentials` / `vincularNuevaCuenta` | OAuth 2.0 y vinculación de cuenta. |
 | `subirArchivo` / `descargarRespaldoBaseDatos` | Respaldo y restauración de la BD en Drive. |
-| `subirImagenACarpeta` / `listarArchivosDeCarpeta` | Evidencias de bitácora. |
+| `subirImagenACarpeta` / `listarArchivosDeCarpeta` / `obtenerIdCarpetaEvidencias` / `buscarCarpeta` | Evidencias de bitácora. |
 | `getGmailService` | Envío de correos (soporte). |
 | `getSheetsService` | Acceso a hojas de cálculo. |
 

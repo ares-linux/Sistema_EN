@@ -178,7 +178,9 @@ pendientes.
 - [~] `sincronizarTrabajosPendientes` se encola con `ejecutarSilencioso`, que sí
       reintenta, aunque crea carpetas en Drive → riesgo de carpetas duplicadas.
 - [~] `obtenerIdCarpetaEvidencias` captura la excepción y devuelve `null`, lo que
-      impide que un fallo de red transitorio se clasifique como reintentable.
+      impide que un fallo de red transitorio se clasifique como reintentable. Ahora
+      recibe `crearSiNoExiste`: el listado de evidencias lo pasa en `false` para no
+      crear la carpeta `Evidencias` como efecto secundario de una lectura.
 - [~] `V_menu.java:607` y `V_R_Cotizacion.java:1486` disparan sincronización al
       abrir; vigilar si se muestran diálogos duplicados. (La ventana independiente ya
       no la dispara: quedó en `V_menu` y en la ventana normal, que son las que

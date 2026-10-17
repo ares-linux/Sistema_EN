@@ -786,8 +786,16 @@ public class V_R_Bitacora extends javax.swing.JFrame {
     // cargarEvidenciasDeDrive(): Obtiene las imágenes disponibles de la carpeta
     // "Evidencias" del trabajo en Google Drive (si está conectado) y las cachea.
     private void cargarEvidenciasDeDrive() {
-        evidenciasDisponiblesDrive.clear();
+        cargarEvidenciasDeDrive(() -> {}, () -> {});
+    }
+
+    private void cargarEvidenciasDeDrive(Runnable alListar, Runnable alSiempre) {
+        synchronized (evidenciasDisponiblesDrive) {
+            evidenciasDisponiblesDrive.clear();
+        }
         if (!GoogleServicesProvider.estaConectado()) {
+            alSiempre.run();
+            alListar.run();
             return;
         }
 
@@ -803,22 +811,37 @@ public class V_R_Bitacora extends javax.swing.JFrame {
                 return List.<Evidencia>of();
             }
 
-            String idEvidencias = GoogleServicesProvider.obtenerIdCarpetaEvidencias(trabajo.getId_carpeta());
+            String idEvidencias = GoogleServicesProvider.obtenerIdCarpetaEvidencias(trabajo.getId_carpeta(), false);
             if (idEvidencias == null) {
                 return List.<Evidencia>of();
             }
 
-            return GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias);
+            return GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias, true);
         }, disponibles -> {
 
             synchronized (evidenciasDisponiblesDrive) {
                 evidenciasDisponiblesDrive.clear();
                 evidenciasDisponiblesDrive.addAll(disponibles);
             }
+
+            if (!isDisplayable()) {
+                return;
+            }
+
+            alSiempre.run();
+            alListar.run();
         }, error -> {
 
             System.out.println("No se pudieron cargar las evidencias desde Drive: "
                     + EjecutorGoogle.mensajeDeError(error));
+
+            if (!isDisplayable()) {
+                return;
+            }
+
+            alSiempre.run();
+            JOptionPane.showMessageDialog(this, EjecutorGoogle.mensajeDeError(error),
+                    "Evidencias en Drive", JOptionPane.ERROR_MESSAGE);
         });
     }
 
@@ -1424,8 +1447,15 @@ public class V_R_Bitacora extends javax.swing.JFrame {
                 opciones[0]);
 
         if (eleccion == 0) {
-            cargarEvidenciasDeDrive();
-            seleccionarDeDrive();
+            boolean fotoHabilitada = b_foto.isEnabled();
+            b_foto.setEnabled(false);
+            setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+            cargarEvidenciasDeDrive(
+                    this::seleccionarDeDrive,
+                    () -> {
+                        setCursor(null);
+                        b_foto.setEnabled(fotoHabilitada);
+                    });
         } else if (eleccion == 1) {
             subirImagenLocal();
         }
@@ -1549,7 +1579,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
             return null;
         }
 
-        String idEvidencias = GoogleServicesProvider.obtenerIdCarpetaEvidencias(trabajo.getId_carpeta());
+        String idEvidencias = GoogleServicesProvider.obtenerIdCarpetaEvidencias(trabajo.getId_carpeta(), true);
         if (idEvidencias == null) {
             return null;
         }
@@ -1557,7 +1587,7 @@ public class V_R_Bitacora extends javax.swing.JFrame {
         String idArchivo = GoogleServicesProvider.subirImagenACarpeta(rutaLocalImagen, idEvidencias);
 
         // Recargamos las evidencias disponibles de Drive tras subir una nueva.
-        List<Evidencia> disponibles = GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias);
+        List<Evidencia> disponibles = GoogleServicesProvider.listarArchivosDeCarpeta(idEvidencias, true);
         synchronized (evidenciasDisponiblesDrive) {
             evidenciasDisponiblesDrive.clear();
             evidenciasDisponiblesDrive.addAll(disponibles);

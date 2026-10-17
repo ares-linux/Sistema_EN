@@ -263,7 +263,7 @@ Registro de jornadas de los trabajadores con evidencias fotográficas almacenada
 
 **Capacidades:**
 - Navegación por `JTree`: raíz → todos, nodo fecha → filtrado, hoja → formulario.
-- Dos orígenes de evidencia: *seleccionar de Drive* (lista la carpeta `Evidencias`) y *subir imagen local* (`JFileChooser` → `subirImagenACarpeta`).
+- Dos orígenes de evidencia: *seleccionar de Drive* (lista la carpeta `Evidencias` en un hilo aparte, solo archivos de imagen) y *subir imagen local* (`JFileChooser` → `subirImagenACarpeta`).
 - **Estrategia cache-first**: `verificarYDescargarEvidencia(idDrive, ruta)` no descarga si la imagen ya existe en disco → permite trabajo offline.
 - `BitacoraDAO` compone `EvidenciaDAO` para la carga en cascada (campo inyectado).
 
