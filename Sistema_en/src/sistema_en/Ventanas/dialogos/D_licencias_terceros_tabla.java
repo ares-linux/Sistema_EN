@@ -171,6 +171,7 @@ public class D_licencias_terceros_tabla extends javax.swing.JDialog {
         });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        T_declaracion.setEditable(false);
         T_declaracion.setColumns(20);
         T_declaracion.setRows(5);
         T_declaracion.setText("Sistema EN incorpora bibliotecas y componentes de software desarrollados por terceros. Todos los derechos sobre dichos componentes \npertenecen a sus respectivos autores y se distribuyen bajo sus correspondientes licencias de uso.\n\nSoftium S.A. no reclama propiedad sobre dichos componentes y reconoce expresamente las licencias establecidas por sus autores.");

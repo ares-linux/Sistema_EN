@@ -32,6 +32,7 @@ public class D_licencias_terceros extends javax.swing.JDialog {
         jt_licencias = new javax.swing.JTextArea();
         b_cerrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -46,7 +47,7 @@ public class D_licencias_terceros extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 464;
         gridBagConstraints.ipady = 425;
@@ -63,7 +64,7 @@ public class D_licencias_terceros extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(9, 9, 9, 10);
         getContentPane().add(b_cerrar, gridBagConstraints);
@@ -75,6 +76,13 @@ public class D_licencias_terceros extends javax.swing.JDialog {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(9, 9, 9, 10);
         getContentPane().add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("*Las licencias aqui presentadas comprenden las licencias de las librerias de terceros utilizadas previamente mostradas.* ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jLabel2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -128,6 +136,7 @@ public class D_licencias_terceros extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_cerrar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jt_licencias;
     // End of variables declaration//GEN-END:variables

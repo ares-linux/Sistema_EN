@@ -40,6 +40,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="T_declaracion">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
             <Property name="text" type="java.lang.String" value="Sistema EN incorpora bibliotecas y componentes de software desarrollados por terceros. Todos los derechos sobre dichos componentes &#xa;pertenecen a sus respectivos autores y se distribuyen bajo sus correspondientes licencias de uso.&#xa;&#xa;Softium S.A. no reclama propiedad sobre dichos componentes y reconoce expresamente las licencias establecidas por sus autores."/>
