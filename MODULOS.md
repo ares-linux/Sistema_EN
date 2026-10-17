@@ -1,7 +1,7 @@
 # Módulos — Sistema EN
 
 > **Proyecto:** Sistema EN — Sistema de gestión para *ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARIAS*
-> **Versión:** 1.0.19 · **Lenguaje:** Java 17 · **IDE:** NetBeans 17 · **UI:** Swing (GUI Builder)
+> **Versión:** 1.0.20 · **Lenguaje:** Java 17 · **IDE:** NetBeans 17 · **UI:** Swing (GUI Builder)
 > **Fuente del análisis:** 70 archivos `.java` + 33 `.form` en `Sistema_en/src/` (27 031 líneas de Java)
 > **Alcance:** inventario completo de los módulos que componen el sistema, con sus clases, dependencias y responsabilidades.
 
@@ -42,7 +42,7 @@ flowchart TB
         M9["Configuración y respaldos"]
     end
 
-    subgraph DOM["Capa de Dominio — Objetos / Relaciones"]
+    subgraph DOM["Capa de Dominio — Objetos"]
         POJO["11 POJOs de entidad"]
         PDF["Exportar_PDF (OpenPDF)"]
     end
@@ -179,7 +179,7 @@ Catálogo de clientes con búsqueda, ordenamiento, ficha detallada y association
 | `D_buscar_cliente` | `Ventanas/dialogos/` | 422 | Buscador por nombre y teléfono. Devuelve el `id` de la fila seleccionada. |
 | `D_ficha_cliente` | `Ventanas/dialogos/` | 681 | Ficha con pestañas *Ficha* y *Trabajos*; edición in-place, resumen y navegación a la ficha del trabajo. |
 | `ClienteDAO` | `dao/` | 427 | CRUD + *get-or-create* por identidad natural. |
-| `Cliente` | `Objetos/` | 111 | POJO: `id_cliente`, `nombre_c`, `telefono`, `u_modificacion`, `fecha_registro`. |
+| `Cliente` | `Objetos/` | 93 | POJO: `id_cliente`, `nombre_c`, `telefono`, `u_modificacion`, `fecha_registro`. |
 
 **Capacidades:**
 - `ClienteDAO.obtenerOCrearCliente(nombre, telefono, fecha_registro)` — busca por terna; si no existe inserta y devuelve el id generado. Usado por `V_R_Trabajo` para clientes nuevos en línea.
@@ -203,7 +203,7 @@ Entidad central del sistema. De ella cuelgan cotizaciones, pagos y bitácoras. I
 | `D_ficha_trabajo` | `Ventanas/dialogos/` | 642 | Ficha del trabajo; abre los módulos asociados (Cotización, Bitácora, Pagos, Información estática). |
 | `D_informacion_estatica` | `Ventanas/dialogos/` | 476 | Datos derivados del trabajo: cliente, nº de bitácoras, nº de pagos, fechas oficiales inicio/fin. |
 | `TrabajoDAO` | `dao/` | 520 | CRUD + filtros por estado + sincronización de carpeta. |
-| `Trabajo` | `Objetos/` | 202 | POJO: id, descripción, dirección, `fecha_cr`/`hora_cr`, `estado`, `id_cliente`, `fecha_inicio`/`fecha_fin`, `carpeta`, `id_carpeta`. |
+| `Trabajo` | `Objetos/` | 201 | POJO: id, descripción, dirección, `fecha_cr`/`hora_cr`, `estado`, `id_cliente`, `fecha_inicio`/`fecha_fin`, `carpeta`, `id_carpeta`. |
 
 **Estados:** `Pendiente` · `En progreso` · `Completado` (definidos en `JComboBox` de la UI y replicados en literales SQL).
 
@@ -222,9 +222,9 @@ Emisión de cotizaciones con cálculo de IVA, exportación a PDF y a Google Shee
 | `V_R_Cotizacion` | `Ventanas/` | 2 214 | Editor de cotizaciones: listas de conceptos y materiales, cálculos, guardado transaccional, exportación. |
 | `CotizacionDAO` | `dao/` | 498 | Cabecera de cotizaciones con transacciones ACID y reintentos ante bloqueo de SQLite. |
 | `Detalles_cotizacionDAO` | `dao/` | 129 | CRUD de las partidas (concepto / material) de una cotización. |
-| `Exportar_PDF` | `Objetos/` | 222 | Generación de PDF con OpenPDF (cotizaciones e informes). |
-| `Cotizacion` | `Objetos/` | 165 | POJO: subtotal, iva, total, estado, `id_trabajo`, tipo, `fecha_creacion`. |
-| `Detalles_cotizacion` | `Objetos/` | 141 | POJO de partida; polimórfico: concepto **o** material según el campo poblado. |
+| `Exportar_PDF` | `Objetos/` | 223 | Generación de PDF con OpenPDF (cotizaciones e informes). |
+| `Cotizacion` | `Objetos/` | 207 | POJO: subtotal, iva, total, estado, `id_trabajo`, tipo, `fecha_creacion`. |
+| `Detalles_cotizacion` | `Objetos/` | 125 | POJO de partida; polimórfico: concepto **o** material según el campo poblado. |
 | `V_historial_c` | `Ventanas/Ventanas_consultas/` | 296 | Historial de cotizaciones y archivadas. *(ver §10 — no operativa)* |
 
 **Cálculo de totales** (en `V_R_Cotizacion.calcular_total()`):
@@ -257,9 +257,8 @@ Registro de jornadas de los trabajadores con evidencias fotográficas almacenada
 | `D_buscar_bitacora` | `Ventanas/dialogos/` | 290 | Búsqueda por fecha dentro de un trabajo. |
 | `BitacoraDAO` | `dao/` | 150 | CRUD de bitácoras con carga en cascada de evidencias. |
 | `EvidenciaDAO` | `dao/` | 147 | CRUD de evidencias (almacenamiento dual: Drive + local). |
-| `Bitacora` | `Objetos/` | 156 | POJO: fecha, hora llegada/salida, notas, `id_trabajador`, `id_trabajo`, `evidencias`. |
-| `Evidencia` | `Objetos/` | 109 | POJO: `id_bitacora`, `id_google_drive`, `nombre_archivo`, `ruta_local`. |
-| `Bitacora_Trabajador` | `Relaciones/` | 13 | *Placeholder vacío* — sin uso (la relación es FK directa). |
+| `Bitacora` | `Objetos/` | 140 | POJO: fecha, hora llegada/salida, notas, `id_trabajador`, `id_trabajo`, `evidencias`. |
+| `Evidencia` | `Objetos/` | 93 | POJO: `id_bitacora`, `id_google_drive`, `nombre_archivo`, `ruta_local`. |
 | `LoadingSpinner` | `animaciones/` | 156 | Spinner de carga dibujado con `Graphics2D` (usado por `V_R_Cotizacion`). |
 
 **Capacidades:**
@@ -280,7 +279,7 @@ Registro de abonos y pagos contra un trabajo, con cálculo de saldo pendiente.
 |---|---|---:|---|
 | `D_registrar_pagos` | `Ventanas/dialogos/` | 797 | Total presupuestado, total abonado, saldo pendiente, tabla de pagos, alta/edición. |
 | `PagoDAO` | `dao/` | 147 | CRUD de pagos + agregados (`sumarPagosPorTrabajo`, `contarPagosPorTrabajo`). |
-| `Pago` | `Objetos/` | 102 | POJO: `id_pago`, `id_trabajo`, `monto`, `concepto`, `fecha_pago`. |
+| `Pago` | `Objetos/` | 94 | POJO: `id_pago`, `id_trabajo`, `monto`, `concepto`, `fecha_pago`. |
 
 **Lógica de saldo** (en `D_registrar_pagos.cargarTrabajo()`):
 ```
@@ -305,7 +304,7 @@ CRUD de empleados/técnicos con datos oficiales mexicanos (CURP, RFC) y control 
 | `V_R_Empleado` | `Ventanas/` | 1 447 | Alta/edición/borrado de trabajadores: puesto, RFC, CURP, fecha de nacimiento, foto. |
 | `D_buscar_empleado` | `Ventanas/dialogos/` | 513 | Buscador por nombre y puesto (con filtrado en vivo por `KeyListener`). |
 | `TrabajadorDAO` | `dao/` | 201 | CRUD de trabajadores + búsqueda por puesto. |
-| `Trabajador` | `Objetos/` | 153 | POJO: nombre, sexo, puesto, RFC, CURP, `f_nac`, foto. |
+| `Trabajador` | `Objetos/` | 137 | POJO: nombre, sexo, puesto, RFC, CURP, `f_nac`, foto. |
 
 **Puestos:** `Ayudante` · `Oficial` · `Medio oficial` · `Cabo`.
 
@@ -325,8 +324,8 @@ CRUD del inventario de herramientas y su catálogo de tipos.
 | `D_buscar_herramienta` | `Ventanas/dialogos/` | 301 | Búsqueda por número de serie y tipo. |
 | `HerramientaDAO` | `dao/` | 168 | CRUD con `LEFT JOIN` a `Tipos_herramienta`. |
 | `Tipos_herramientaDAO` | `dao/` | 100 | Catálogo de tipos: inserción y lectura (sin update/delete). |
-| `Herramienta` | `Objetos/` | 92 | POJO: `id_herramienta`, `t_herramienta` (FK), `n_serie`, `foto`. |
-| `Tipos_herramienta` | `Objetos/` | 65 | POJO del catálogo. |
+| `Herramienta` | `Objetos/` | 80 | POJO: `id_herramienta`, `t_herramienta` (FK), `n_serie`, `foto`. |
+| `Tipos_herramienta` | `Objetos/` | 49 | POJO del catálogo. |
 
 **Característica:** el inventario está **desconectado** del flujo operativo (trabajos, cotizaciones, pagos, bitácoras no lo referencian en el modelo).
 
@@ -370,7 +369,7 @@ Configuración de la aplicación (tema, sonido, carpetas, copias de seguridad) y
 | `D_configuraciones` | `Ventanas/dialogos/` | 646 | Preferencias: tema, sonido, carpeta de cotizaciones, apertura automática, cambio de contraseña. |
 | `D_copias_seguridad` | `Ventanas/dialogos/` | 662 | Estado de Google Drive, vincular/desconectar, frecuencia de copia, ubicación de la BD, subida manual. |
 | `ConfiguracionesDAO` | `dao/` | 166 | Persistencia clave/valor (batch transaccional). |
-| `Configuraciones` | `Objetos/` | 77 | POJO: `id_configuracion`, `clave`, `valor`. |
+| `Configuraciones` | `Objetos/` | 61 | POJO: `id_configuracion`, `clave`, `valor`. |
 | `Conexion` | `sistema_en/` | 127 | Fachada de BD: resuelve la ruta del SQLite, la persiste en `base_de_datos.properties` y fabrica `Connection`. |
 | `Carpetas` | `sistema_en/` | 109 | Utilidades de sistema de archivos: crear, verificar y **mover** carpetas de cotizaciones/evidencias. |
 | `UtilidadesRutas` | `sistema_en/` | 71 | Resuelve rutas: JAR, config de usuario (`~/.Sistema_EN`), tokens y `credentials.json`. |
@@ -497,29 +496,27 @@ Diálogos informativos y de comunicación con el proveedor del software.
 
 ---
 
-### 3.2 Capa de Dominio — `sistema_en.Objetos` / `sistema_en.Relaciones`
+### 3.2 Capa de Dominio — `sistema_en.Objetos`
 
-**11 POJOs de entidad + 1 clase de servicio + 1 placeholder.**
+**11 POJOs de entidad + 1 clase de servicio.**
 
 | Clase | LOC | Campos principales | Relaciones (FK) |
 |---|---:|---|---|
-| `Cotizacion` | 165 | subtotal, iva, total, estado, tipo, `fecha_creacion` | → `Trabajo` |
-| `Trabajo` | 202 | descripción, dirección, `fecha_cr`/`hora_cr`, estado, `fecha_inicio`/`fecha_fin`, `carpeta`, `id_carpeta` | → `Cliente` |
-| `Bitacora` | 156 | fecha, `hora_llegada`/`hora_salida`, notas, **`evidencias: List<Evidencia>`** | → `Trabajador`, `Trabajo`, `Evidencia` |
-| `Trabajador` | 153 | nombre, sexo, puesto, RFC, CURP, `f_nac`, foto | — |
-| `Detalles_cotizacion` | 141 | concepto / `n_material`, cantidad, `precio_uni`, precio | → `Cotizacion` |
-| `Cliente` | 111 | `nombre_c`, telefono, `u_modificacion`, `fecha_registro` | — |
-| `Evidencia` | 109 | `id_google_drive`, `nombre_archivo`, `ruta_local` | → `Bitacora` |
-| `Pago` | 102 | monto, concepto, `fecha_pago` | → `Trabajo` |
-| `Herramienta` | 92 | `t_herramienta`, `n_serie`, foto | → `Tipos_herramienta` |
-| `Configuraciones` | 77 | clave, valor | — |
-| `Tipos_herramienta` | 65 | nombre | — |
-| `Bitacora_Trabajador` | 13 | *(placeholder vacío)* | — |
-| `Exportar_PDF` | 222 | *(servicio, sin estado)* | — |
+| `Cotizacion` | 207 | subtotal, iva, total, estado, tipo, `fecha_creacion` | → `Trabajo` |
+| `Trabajo` | 201 | descripción, dirección, `fecha_cr`/`hora_cr`, estado, `fecha_inicio`/`fecha_fin`, `carpeta`, `id_carpeta` | → `Cliente` |
+| `Bitacora` | 140 | fecha, `hora_llegada`/`hora_salida`, notas, **`evidencias: List<Evidencia>`** | → `Trabajador`, `Trabajo`, `Evidencia` |
+| `Trabajador` | 137 | nombre, sexo, puesto, RFC, CURP, `f_nac`, foto | — |
+| `Detalles_cotizacion` | 125 | concepto / `n_material`, cantidad, `precio_uni`, precio | → `Cotizacion` |
+| `Pago` | 94 | monto, concepto, `fecha_pago` | → `Trabajo` |
+| `Cliente` | 93 | `nombre_c`, telefono, `u_modificacion`, `fecha_registro` | — |
+| `Evidencia` | 93 | `id_google_drive`, `nombre_archivo`, `ruta_local` | → `Bitacora` |
+| `Herramienta` | 80 | `t_herramienta`, `n_serie`, foto | → `Tipos_herramienta` |
+| `Configuraciones` | 61 | clave, valor | — |
+| `Tipos_herramienta` | 49 | nombre | — |
+| `Exportar_PDF` | 223 | *(servicio, sin estado)* | — |
 
 **Características del modelo:**
 - POJOs planos (JavaBeans): constructores vacíos, getters/setters.
-- Métodos stub vacíos (`Editar()`, `Eliminar()`, `Agregar()`, `Buscar()`) en 9 de 12 clases — andamiaje de NetBeans nunca implementado.
 - **Relaciones por clave primaria foránea (`int`)**, no por referencia a objeto. Única excepción: `Bitacora.evidencias: List<Evidencia>`.
 - Sin `equals`/`hashCode`/`toString`.
 - Importes monetarios en `float` (no `BigDecimal`).
@@ -578,7 +575,7 @@ Diálogos informativos y de comunicación con el proveedor del software.
 | Clase | LOC | Responsabilidad |
 |---|---:|---|
 | `Sistema_en` | 132 | `main`: splash → arranque → tema → login |
-| `Conexion` | 127 | Fachada de BD: ruta configurable + fábrica de `Connection`; `VERSION_APP = "1.0.19"` |
+| `Conexion` | 127 | Fachada de BD: ruta configurable + fábrica de `Connection`; `VERSION_APP = "1.0.20"` |
 | `Controlador_arranque` | 319 | Asistente de arranque y recuperación de BD |
 | `GoogleServicesProvider` | 1 091 | Drive / Sheets / Gmail |
 | `Carpetas` | 109 | Utilidades de sistema de archivos + clase interna `ObtenerImagenes` |
@@ -593,7 +590,7 @@ Diálogos informativos y de comunicación con el proveedor del software.
 
 | Clase | Ubicación | LOC | Responsabilidad |
 |---|---|---:|---|
-| `Exportar_PDF` | `sistema_en/Objetos/` | 222 | `exportarCotizacionPDF()` y `exportarInformePDF()` con OpenPDF 1.3.39 (`com.lowagie.text`). |
+| `Exportar_PDF` | `sistema_en/Objetos/` | 223 | `exportarCotizacionPDF()` y `exportarInformePDF()` con OpenPDF 1.3.39 (`com.lowagie.text`). |
 | `LoadingSpinner` | `animaciones/` | 156 | Spinner dibujado con `Graphics2D`/`Arc2D`/`Path2D`; 3 estados: `LOADING`, `SUCCESS`, `ERROR`. |
 
 ---
@@ -619,7 +616,7 @@ flowchart LR
         E["audios/ · 2 recursos"]
         F["archivos/ · nota.txt"]
         B2["Ventanas/ · dialogos/ · Ventanas_consultas/ · No_utilizadas/"]
-        B3["Objetos/ · 13 clases · Relaciones/ · 1 clase"]
+        B3["Objetos/ · 12 clases"]
     end
 ```
 
@@ -627,8 +624,7 @@ flowchart LR
 |---|---|
 | `Sistema_en/src/dao/` | 14 clases — capa de persistencia |
 | `Sistema_en/src/sistema_en/` | 8 clases — infraestructura, arranque y servicios |
-| `Sistema_en/src/sistema_en/Objetos/` | 13 clases — dominio (12 POJOs + `Exportar_PDF`) |
-| `Sistema_en/src/sistema_en/Relaciones/` | 1 clase — `Bitacora_Trabajador` (vacía) |
+| `Sistema_en/src/sistema_en/Objetos/` | 12 clases — dominio (11 POJOs + `Exportar_PDF`) |
 | `Sistema_en/src/sistema_en/Ventanas/` | 7 clases `.java` + 7 `.form` — ventanas principales |
 | `Sistema_en/src/sistema_en/Ventanas/dialogos/` | 23 clases `.java` + 21 `.form` — diálogos |
 | `Sistema_en/src/sistema_en/Ventanas/Ventanas_consultas/` | 3 clases `.java` + 3 `.form` — ventanas de consulta |
@@ -905,7 +901,7 @@ erDiagram
 | Librerías de terceros | 41 JARs |
 | Servicios Google | 3 (Drive, Sheets, Gmail) |
 | Pruebas unitarias | 0 (`test/` vacío) |
-| Versión | 1.0.19 |
+| Versión | 1.0.20 |
 
 **Top 10 de clases más grandes:**
 
@@ -960,12 +956,11 @@ erDiagram
 | 10 | `V_R_Cotizacion.calcular_total()` (línea 1087) | IVA `0.16f` **hardcodeado**. | No configurable pese a existir la tabla `Configuraciones`. |
 | 11 | Modelo de dominio | Importes en `float`, formateados con `%.2f` y re-parseados con `Float.parseFloat`. | Acumulación de error de redondeo binario. `BigDecimal` sería lo correcto. |
 | 12 | Estados de negocio | `Cotizacion.estado` (6 valores), `Trabajo.estado` (3 valores) y `Trabajador.sexo` son `String` libre, definidos en `JComboBox` y **replicados en literales SQL** (`TrabajoDAO:152/205/258`, `CotizacionDAO:477`). | Un refactor de nombres rompe consultas silenciosamente. |
-| 13 | POJOs | 9 de 12 clases tienen stubs vacíos `Editar()/Eliminar()/Agregar()/Buscar()`. | Andamiaje de NetBeans nunca implementado. |
-| 14 | `GoogleServicesProvider.estaConectado()` | Heurística basada en el sistema de archivos, sin validar el token. | Puede reportar "conectado" con un token expirado. |
-| 15 | `ConfiguracionesDAO` | Contiene `System.out.println` de depuración. | Ruido en consola. |
-| 16 | `Tipos_herramientaDAO.obtenerHerramientas()` | El nombre del método es engañoso: devuelve **tipos**, no herramientas. | Confusión en el código. |
-| 17 | `jcalendar-1.4.jar` | Declarada en `lib/` y listada en licencias, pero **sin uso** en el código (los selectores reales son LGoodDatePicker). | Dependencia innecesaria. |
-| 18 | `test/` | Directorio vacío, sin pruebas unitarias. | Sin cobertura automatizada. |
+| 13 | `GoogleServicesProvider.estaConectado()` | Heurística basada en el sistema de archivos, sin validar el token. | Puede reportar "conectado" con un token expirado. |
+| 14 | `ConfiguracionesDAO` | Contiene `System.out.println` de depuración. | Ruido en consola. |
+| 15 | `Tipos_herramientaDAO.obtenerHerramientas()` | El nombre del método es engañoso: devuelve **tipos**, no herramientas. | Confusión en el código. |
+| 16 | `jcalendar-1.4.jar` | Declarada en `lib/` y listada en licencias, pero **sin uso** en el código (los selectores reales son LGoodDatePicker). | Dependencia innecesaria. |
+| 17 | `test/` | Directorio vacío, sin pruebas unitarias. | Sin cobertura automatizada. |
 
 ### 10.3 Buenas prácticas ya aplicadas
 

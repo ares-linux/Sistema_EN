@@ -1,7 +1,7 @@
 # Arquitectura de Sistema_EN
 
-> **Versión:** 1.0.19
-> **Fuente:** generado a partir del código en `src/` (68 archivos `.java`)
+> **Versión:** 1.0.20
+> **Fuente:** generado a partir del código en `src/` (73 archivos `.java`)
 > **Formato:** diagramas [Mermaid](https://mermaid.js.org/) — se renderizan en GitHub, GitLab y VS Code (extensión Markdown Preview Mermaid).
 
 Sistema de gestión de trabajos, clientes, cotizaciones, herramientas y personal, con
@@ -44,9 +44,8 @@ flowchart TB
         VER["Version"]
     end
 
-    subgraph DOM["Dominio — sistema_en.Objetos / sistema_en.Relaciones"]
+    subgraph DOM["Dominio — sistema_en.Objetos"]
         POJO["POJOs: Cliente, Trabajo, Cotizacion, Pago, Herramienta, Trabajador, Evidencia, Bitacora, ..."]
-        REL["Bitacora_Trabajador"]
         PDF["Exportar_PDF (OpenPDF)"]
     end
 
@@ -92,7 +91,6 @@ flowchart TB
 | `sistema_en` | Punto de entrada, splash, arranque, conexión, rutas, versión y servicios Google. |
 | `dao` | Acceso a datos JDBC/SQLite y creación del esquema. |
 | `sistema_en.Objetos` | Modelo de dominio (POJOs) y exportación a PDF. |
-| `sistema_en.Relaciones` | Entidades de relación muchos-a-muchos. |
 | `sistema_en.Ventanas` | Ventanas principales (`JFrame`). |
 | `sistema_en.Ventanas.dialogos` | Diálogos modales (`JDialog`). |
 | `sistema_en.Ventanas.Ventanas_consultas` | Listados y consultas. |
@@ -333,7 +331,7 @@ flowchart LR
 
     subgraph DEPLOY["Empaquetado jdeploy"]
         JAR --> BUNDLE["jdeploy-bundle/"]
-        BUNDLE --> NPM["npm: sistema-en@1.0.19"]
+        BUNDLE --> NPM["npm: sistema-en@1.0.20"]
         NPM --> INSTALL["Instaladores Windows / macOS / Linux"]
         CRED["credentials.json"] --> BUNDLE
     end
@@ -712,8 +710,7 @@ classDiagram
 - **Configuración del usuario:** `base_de_datos.properties` y el token OAuth se resuelven con `UtilidadesRutas` (`directorioConfigUsuario`, `directorioTokens`).
 - **Exportación:** `Exportar_PDF` usa OpenPDF para cotizaciones e informes; la salida se guarda en la carpeta configurada (`carpeta_ce/Informes/`).
 - **Código obsoleto:** el paquete `sistema_en.Ventanas.No_utilizadas` (`V_ficha_trabajo`, `V_pago_recibido`) no participa en el flujo actual.
-- **Relación N:M:** `sistema_en.Relaciones.Bitacora_Trabajador` modela la relación entre bitácoras y trabajadores.
-- **Empaquetado:** `jdeploy` genera instaladores nativos a partir de `dist/Sistema_en.jar`; el `MANIFEST` declara las 37 dependencias de `lib/`.
+- **Empaquetado:** `jdeploy` genera instaladores nativos a partir de `dist/Sistema_en.jar`; el `MANIFEST` declara las 38 dependencias de `lib/`.
 
 ### Cómo mantener este documento
 
