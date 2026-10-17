@@ -20,14 +20,6 @@ public class Pago {
     public Pago(){
         
     }
-    
-    public void Editar(){
-        
-    }
-        
-    public void Agregar(){
-        
-    }
 
     /**
      * @return the id_pago

@@ -28,22 +28,6 @@ public class Cotizacion {
     public Cotizacion(){
         
     }
-    
-    public void Editar(){
-        
-    }
-    
-    public void Eliminar(){
-        
-    }
-    
-    public void Agregar(){
-        
-    }
-    
-    public void Buscar(){
-        
-    }
 
     /**
      * @return the id_cotizacion

@@ -17,18 +17,6 @@ public class Herramienta {
     public Herramienta(){
         
     }
-    public void Editar(){
-        
-    }
-    public void Agregar(){
-        
-    }
-    public void Buscar(){
-        
-    }
-    public void Eliminar(){
-        
-    }
 
     /**
      * @return the id_herramienta

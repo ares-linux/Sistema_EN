@@ -20,22 +20,6 @@ public class Detalles_cotizacion {
     public Detalles_cotizacion(){
         
     }
-    
-    public void Editar(){
-        
-    }
-    
-    public void Eliminar(){
-        
-    }
-    
-    public void Agregar(){
-        
-    }
-    
-    public void Buscar(){
-        
-    }
 
     /**
      * @return the id_detalle

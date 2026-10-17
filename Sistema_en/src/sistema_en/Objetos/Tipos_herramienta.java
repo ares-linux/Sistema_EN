@@ -15,22 +15,6 @@ public class Tipos_herramienta {
     public Tipos_herramienta(){
         
     }
-    
-    public void Editar(){
-        
-    }
-    
-    public void Eliminar(){
-        
-    }
-    
-    public void Agregar(){
-        
-    }
-    
-    public void Buscar(){
-        
-    }
 
     /**
      * @return the nombre

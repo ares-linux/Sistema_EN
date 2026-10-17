@@ -24,22 +24,6 @@ public class Bitacora {
     public Bitacora(){
         
     }
-    
-    public void Editar(){
-        
-    }
-    
-    public void Eliminar(){
-        
-    }
-    
-    public void Agregar(){
-        
-    }
-    
-    public void Buscar(){
-        
-    }
 
     /**
      * @return the hora_llegada

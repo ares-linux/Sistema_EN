@@ -16,22 +16,6 @@ public class Configuraciones {
     public Configuraciones(){
         
     }
-    
-    public void Editar(){
-        
-    }
-    
-    public void Eliminar(){
-        
-    }
-    
-    public void Agregar(){
-        
-    }
-    
-    public void Buscar(){
-        
-    }
 
     /**
      * @return the id_configuracion

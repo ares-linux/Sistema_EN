@@ -28,22 +28,6 @@ public class Trabajo {
     public Trabajo(){
         
     }
-    
-    public void Editar(){
-        
-    }
-    
-    public void Eliminar(){
-        
-    }
-    
-    public void Buscar(){
-        
-    }
-    
-    public void Agregar(){
-        
-    }
 
     /**
      * @return the id_trabajo
