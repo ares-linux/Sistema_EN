@@ -24,6 +24,10 @@ public class D_buscar_empleado extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
+        this.setSize(740, 480); 
+        this.setResizable(false);
+        this.setLocationRelativeTo(parent);
+        
         Tabla_empleados.setDefaultEditor(Object.class, null);
         Tabla_empleados.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         Tabla_empleados.getTableHeader().setReorderingAllowed(false);

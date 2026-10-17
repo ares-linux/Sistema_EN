@@ -22,6 +22,10 @@ public class D_buscar_trabajo extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
+        this.setSize(740, 480); 
+        this.setResizable(false);
+        this.setLocationRelativeTo(parent);
+        
         Tabla_trabajos.setDefaultEditor(Object.class, null);
         Tabla_trabajos.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         Tabla_trabajos.getTableHeader().setReorderingAllowed(false);

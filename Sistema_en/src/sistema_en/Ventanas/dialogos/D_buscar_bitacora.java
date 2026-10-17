@@ -28,6 +28,10 @@ public class D_buscar_bitacora extends javax.swing.JDialog {
         
         String fecha = d_fecha.getDateStringOrSuppliedString("");
         
+        this.setSize(740, 480); 
+        this.setResizable(false);
+        this.setLocationRelativeTo(parent);
+        
     }
     
     public int getFila() {
