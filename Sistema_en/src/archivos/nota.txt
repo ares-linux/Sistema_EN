@@ -1,3 +1,11 @@
+Versión 1.1.0
+
+Novedades:
+- Bitácora: ya funciona "Seleccionar de Drive" para las evidencias (antes la lista se consultaba antes de terminar de cargarse y salía vacía). Ahora espera a que cargue, con cursor de reloj, y solo muestra imágenes.
+- Ya no se crea la carpeta "Evidencias" en Drive solo por abrir la bitácora.
+- Acerca de: nota aclaratoria sobre las licencias de terceros; la declaración ahora es de solo lectura.
+- Diálogos de búsqueda (bitácora, cliente, empleado, herramienta, trabajo): tamaño uniforme y centrado sobre la ventana.
+
 Versión 1.0.20
 
 Novedades:

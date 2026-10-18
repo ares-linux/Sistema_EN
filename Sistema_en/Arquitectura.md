@@ -1,6 +1,6 @@
 # Arquitectura de Sistema_EN
 
-> **Versión:** 1.0.20
+> **Versión:** 1.1.0
 > **Fuente:** generado a partir del código en `src/` (73 archivos `.java`)
 > **Formato:** diagramas [Mermaid](https://mermaid.js.org/) — se renderizan en GitHub, GitLab y VS Code (extensión Markdown Preview Mermaid).
 
@@ -331,7 +331,7 @@ flowchart LR
 
     subgraph DEPLOY["Empaquetado jdeploy"]
         JAR --> BUNDLE["jdeploy-bundle/"]
-        BUNDLE --> NPM["npm: sistema-en@1.0.20"]
+        BUNDLE --> NPM["npm: sistema-en@1.1.0"]
         NPM --> INSTALL["Instaladores Windows / macOS / Linux"]
         CRED["credentials.json"] --> BUNDLE
     end

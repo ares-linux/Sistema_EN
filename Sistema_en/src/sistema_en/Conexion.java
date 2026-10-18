@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class Conexion {
 
-    public static final String VERSION_APP = "1.0.20";
+    public static final String VERSION_APP = "1.1.0";
     private static final String ARCHIVO_CONFIG = "base_de_datos.properties";
     private static final String CLAVE_RUTA = "ruta";
     private static final String NOMBRE_ARCHIVO_BD = "sistema_EN";
