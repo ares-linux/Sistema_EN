@@ -15,18 +15,18 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
 
 **Sistema EN** es una aplicación de escritorio para administrar el trabajo de la empresa: permite registrar clientes, trabajadores y trabajos, generar cotizaciones con formato automático en Google Sheets, llevar la bitácora de actividades con evidencias en la nube, controlar pagos y herramientas, y mantener respaldos sincronizados en Google Drive.
 
-## ✨ Características
+## Características
 
-- ✅ Gestión de **clientes**, **trabajadores** y **trabajos**.
-- ✅ **Cotizaciones** con formato automático exportadas a Google Sheets (incluso PDF).
-- ✅ **Bitácora** de trabajos con **evidencias** (fotos) subidas a Google Drive.
-- ✅ **Respaldo y restauración** de la base de datos desde Google Drive.
-- ✅ Control de **pagos**, **herramientas** y **tipos de herramienta**.
-- ✅ Usuarios con contraseña cifrada (bcrypt).
-- ✅ Interfaz con temas **claro/oscuro** (FlatLaf).
-- ✅ Sincronización de carpetas por trabajo en Google Drive.
+-  Gestión de **clientes**, **trabajadores** y **trabajos**.
+-  **Cotizaciones** con formato automático exportadas a Google Sheets (incluso PDF).
+-  **Bitácora** de trabajos con **evidencias** (fotos) subidas a Google Drive.
+-  **Respaldo y restauración** de la base de datos desde Google Drive.
+-  Control de **pagos**, **herramientas** y **tipos de herramienta**.
+-  Usuarios con contraseña cifrada (bcrypt).
+-  Interfaz con temas **claro/oscuro** (FlatLaf).
+-  Sincronización de carpetas por trabajo en Google Drive.
 
-## 🛠️ Tecnologías
+##  Tecnologías
 
 | Tecnología | Descripción |
 |---|---|
@@ -42,7 +42,7 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
 
 Programas adicionales usados: **DB Browser for SQLite**, **Overleaf**, **GitHub Desktop**.
 
-## 🚀 Instalación
+## Instalación
 
 Descarga e instala la aplicación desde el instalador:
 
@@ -50,7 +50,7 @@ Descarga e instala la aplicación desde el instalador:
 
 > El instalador incluye el JRE necesario (Java 17), por lo que no hace falta instalar Java por separado.
 
-## ▶️ Primer uso
+## Primer uso
 
 Al abrir el programa por primera vez, si no se encuentra una base de datos, aparece un asistente que te permite:
 
@@ -59,7 +59,7 @@ Al abrir el programa por primera vez, si no se encuentra una base de datos, apar
 3. **Crear la base de datos en la ubicación por defecto**.
 4. **Buscar la base de datos manualmente** (si ya tienes una copia en otro lugar).
 
-### 📁 Ubicación de los datos
+### Ubicación de los datos
 
 | Dato | Ubicación |
 |---|---|
@@ -70,7 +70,7 @@ Al abrir el programa por primera vez, si no se encuentra una base de datos, apar
 
 > La carpeta **"Base de datos"** se crea automáticamente en Google Drive la primera vez que se sube un respaldo.
 
-## 💻 Desarrollo
+## Desarrollo
 
 Para trabajar en el código:
 
@@ -91,7 +91,7 @@ Sistema_en/
 └── src/sistema_en/Ventanas/ → Interfaz gráfica (ventanas y diálogos)
 ```
 
-## 📦 Publicación (solo mantenedores)
+## Publicación (solo mantenedores)
 
 La publicación en npm es **manual** (así lo hace el mantenedor desde su máquina). El
 workflow de GitHub en tags (`v*`) **solo compila y valida el empaquetado**; **no publica**.
@@ -117,10 +117,10 @@ Para generar una nueva versión instalable con jDeploy:
 - **Documentación técnica**: https://es.overleaf.com/project/6a9937acb90d921dc8580ec1
 - **Manual de usuario**: https://es.overleaf.com/project/6a9937cf2fe2a1465509d3bb
 
-## 🤝 Colaborar
+## Colaborar
 
 Consulta la guía de trabajo en equipo: [docs/GUIA-TRABAJO.md](docs/GUIA-TRABAJO.md)
 
 ---
 
-📣 **jDeploy**: https://www.jdeploy.com/~sistema-en?all=1
+ **jDeploy**: https://www.jdeploy.com/~sistema-en?all=1
