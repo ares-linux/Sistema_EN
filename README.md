@@ -40,7 +40,7 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
 | JCalendar / AbsoluteLayout / LGoodDatePicker | Componentes de interfaz |
 | jDeploy | Generación de instaladores y actualizaciones |
 
-Programas adicionales usados: **DB Browser for SQLite**, **Overleaf**, **GitHub Desktop**.
+Programas adicionales usados: **DB Browser for SQLite**, **GitHub Desktop**.
 
 ## Instalación
 
