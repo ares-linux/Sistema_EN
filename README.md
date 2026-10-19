@@ -7,11 +7,11 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
 <p align="left">
 <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green">
 <img src="https://img.shields.io/badge/Sistema%20Estiben%20Navarro%20-%20grey">
-<img src="https://img.shields.io/badge/Versi%C3%B3n-v1.1.0-blue">
+<img src="https://img.shields.io/badge/Versi%C3%B3n-v1.0.21-blue">
 <img src="https://img.shields.io/badge/Java-17-orange">
 </p>
 
-## 📖 Descripción
+## Descripción
 
 **Sistema EN** es una aplicación de escritorio para administrar el trabajo de la empresa: permite registrar clientes, trabajadores y trabajos, generar cotizaciones con formato automático en Google Sheets, llevar la bitácora de actividades con evidencias en la nube, controlar pagos y herramientas, y mantener respaldos sincronizados en Google Drive.
 
