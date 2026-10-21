@@ -602,7 +602,7 @@ flowchart LR
     subgraph ROOT["Sistema_en/ (proyecto NetBeans)"]
         direction TB
         SRC["src/"]
-        LIB["lib/ · 24 JARs"]
+        LIB["lib/ · 21 JARs"]
         DIST["dist/ · jdeploy-bundle/"]
         CONF["base_de_datos.properties · credentials.json · package.json · build.xml"]
         TEST["test/ (vacío)"]
@@ -633,7 +633,7 @@ flowchart LR
 | `Sistema_en/src/Imagenes/` | 10 recursos (logos, iconos claro/oscuro) |
 | `Sistema_en/src/audios/` | 2 recursos (`error.wav`, `inicio.wav`) |
 | `Sistema_en/src/archivos/` | 1 recurso — `nota.txt` (notas de versión) |
-| `Sistema_en/lib/` | 24 JARs + `librerias-google/` (17 JARs) |
+| `Sistema_en/lib/` | 21 JARs + `librerias-google/` (17 JARs) |
 | `Sistema_en/herramientas/` | `proguard.jar`, `proguard-ant.jar` (ofuscación) |
 | `Sistema_en/test/` | Vacío — sin pruebas unitarias |
 | `Sistema_en/credentials.json` | Credenciales OAuth de Google (tipo `installed`) |
@@ -837,7 +837,7 @@ erDiagram
 
 ## 8. Dependencias y librerías
 
-### 8.1 `lib/` — 24 JARs de terceros
+### 8.1 `lib/` — 21 JARs de terceros
 
 | Librería | Versión | Licencia | Uso en el proyecto |
 |---|---|---|---|
@@ -845,10 +845,11 @@ erDiagram
 | `jbcrypt` | 0.4 | MIT/ISC | `UsuariosDAO`, `V_login_user`, `D_cambiar_contraseña` |
 | `flatlaf` | 3.7.1 | Apache 2.0 | Temas claro/oscuro |
 | `flatlaf-extras` | 3.7.1 | Apache 2.0 | Extensiones FlatLaf |
+| `flatlaf-javadoc` | 3.7.1 | Apache 2.0 | Javadoc de FlatLaf (incluido en `lib/`) |
 | `jSystemThemeDetector` | 3.9 | MIT | Tema automático del SO |
 | `LGoodDatePicker` | 11.2.1 | MIT | `DatePicker` y `TimePicker` |
 | `openpdf` | 1.3.39 | LGPL/MPL | `Exportar_PDF` (com.lowagie.text) |
-| `swing-toast-notifications` | 1.0.4 | MIT | Notificaciones de éxito/error |
+| `swing-toast-notifications` | 1.0.4 | Apache 2.0 | Notificaciones de éxito/error |
 | `jna` | 5.19.1 | Apache 2.0 / LGPL 2.1 | Transitivo (jSystemThemeDetector) |
 | `jna-platform` | 5.19.1 | Apache 2.0 / LGPL 2.1 | Transitivo |
 | `oshi-core` | 6.4.0 | MIT | Transitivo |
@@ -869,9 +870,11 @@ erDiagram
 | `google-api-services-drive-v3` | rev20230822-2.0.0 | Apache 2.0 |
 | `google-api-services-sheets-v4` | rev20220927-2.0.0 | Apache 2.0 |
 | `google-api-services-gmail-v1` | rev20260727-2.0.0 | Apache 2.0 |
+| `google-api-services-calendar-v3` | rev20240705-2.0.0 | Apache 2.0 |
 | `google-api-client` | 2.2.0 | Apache 2.0 |
-| `google-oauth-client-java6` | 1.34.1 | BSD 3-Clause |
-| `google-oauth-client-jetty` | 1.34.1 | BSD 3-Clause |
+| `google-oauth-client` | 1.34.1 | Apache 2.0 |
+| `google-oauth-client-java6` | 1.34.1 | Apache 2.0 |
+| `google-oauth-client-jetty` | 1.34.1 | Apache 2.0 |
 | `google-http-client` | 1.43.3 | Apache 2.0 |
 | `google-http-client-gson` | 1.42.3 | Apache 2.0 |
 | `google-http-client-jackson2` | 1.43.3 | Apache 2.0 |
@@ -882,7 +885,7 @@ erDiagram
 | `opencensus-api` | 0.28.0 | Apache 2.0 |
 | `opencensus-contrib-http-util` | 0.28.0 | Apache 2.0 |
 
-> **Total: 41 JARs de terceros**, con 36 declaradas en `D_licencias_terceros_tabla`.
+> **Total: 38 JARs de terceros**, todos (38) declarados en `D_licencias_terceros_tabla`.
 
 ---
 
@@ -890,15 +893,15 @@ erDiagram
 
 | Métrica | Valor |
 |---|---|
-| Archivos `.java` | 70 |
+| Archivos `.java` | 73 |
 | Archivos `.form` (NetBeans GUI Builder) | 33 |
 | Líneas de Java | 27 031 |
 | Clases de dominio (POJOs) | 12 (11 efectivas + 1 vacía) |
-| Clases DAO | 13 (+ `InicializadorBD`) |
+| Clases DAO | 14 (+ `InicializadorBD`) |
 | Ventanas (`V_`) | 8 principales + 3 de consulta + 2 sin usar = 13 |
 | Diálogos (`D_`) | 23 |
 | Tablas de BD | 12 (+ 1 efímera) |
-| Librerías de terceros | 41 JARs |
+| Librerías de terceros | 38 JARs |
 | Servicios Google | 3 (Drive, Sheets, Gmail) |
 | Pruebas unitarias | 0 (`test/` vacío) |
 | Versión | 1.1.0 |

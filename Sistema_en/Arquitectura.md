@@ -324,9 +324,9 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph BUILD["Construcción"]
-        NB["NetBeans / nbproject"] --> SRC["src (68 .java)"]
+        NB["NetBeans / nbproject"] --> SRC["src (73 .java)"]
         SRC --> JAR["dist/Sistema_en.jar"]
-        JAR --> MF["MANIFEST Class-Path (37 jars)"]
+        JAR --> MF["MANIFEST Class-Path (38 jars)"]
     end
 
     subgraph DEPLOY["Empaquetado jdeploy"]
