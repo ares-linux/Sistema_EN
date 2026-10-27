@@ -24,10 +24,7 @@ public class Sistema_en {
     /**
      * @param args the command line arguments
      */
-public static void main(String[] args) {  
-    //System.out.println("🚀 Iniciando prueba de respaldo en Google Drive...");
-    //sistema_en.Objetos.GoogleDriveProvider.subirArchivo("credentials.json");
-    
+public static void main(String[] args) {      
     //V_login_user login = new V_login_user();
 
     V_splash splash = new V_splash();
