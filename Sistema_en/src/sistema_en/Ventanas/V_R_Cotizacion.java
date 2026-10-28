@@ -26,7 +26,7 @@ import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Cotizacion;
 import sistema_en.Objetos.Detalles_cotizacion;
-import sistema_en.Objetos.Exportar_PDF;
+import utilidades.Exportar_PDF;
 import sistema_en.Objetos.Trabajo;
 
 /**

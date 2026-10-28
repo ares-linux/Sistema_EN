@@ -23,7 +23,7 @@ import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Cotizacion;
 import sistema_en.Objetos.Detalles_cotizacion;
-import sistema_en.Objetos.Exportar_PDF;
+import utilidades.Exportar_PDF;
 import sistema_en.Ventanas.Ventanas_consultas.V_historial_c;
 import sistema_en.Ventanas.dialogos.D_convertir_trabajo;
 

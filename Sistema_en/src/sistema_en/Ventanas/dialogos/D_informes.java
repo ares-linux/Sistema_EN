@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import sistema_en.Objetos.Exportar_PDF;
+import utilidades.Exportar_PDF;
 
 /**
  *
