@@ -405,6 +405,9 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     public void reconectar(){
 
         GoogleServicesProvider.desconectar();
+        l_estado.setForeground(Color.decode("#CE1126"));
+        l_estado.setText("🔴 Desconectado");
+        b_cuenta.setText("Vincular cuenta");
 
         JOptionPane.showMessageDialog(this, "Se abrirá el navegador para vincular la nueva cuenta.");
 
@@ -414,8 +417,21 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         EjecutorGoogle.ejecutarSinReintento(() -> {
 
             String idCarpetaDestino = GoogleServicesProvider.obtenerIdCarpetaBaseDatos();
-            return GoogleServicesProvider.subirArchivo("credentials.json", idCarpetaDestino);
-        }, resultado -> {
+            if (idCarpetaDestino == null || idCarpetaDestino.isBlank()) {
+                throw new IllegalStateException("No se pudo obtener la carpeta de respaldos en Google Drive.");
+            }
+            return idCarpetaDestino;
+        }, idCarpetaDestino -> {
+
+            if (!isDisplayable()) {
+                return;
+            }
+
+            l_estado.setForeground(Color.decode("#008000"));
+            l_estado.setText("🟢 Conectado a Google Drive");
+            b_cuenta.setText("Cambiar Cuenta / Desconectar");
+            JOptionPane.showMessageDialog(this, "Cuenta de Google vinculada correctamente.");
+            dispose();
         }, error -> {
 
             if (isDisplayable()) {
@@ -507,7 +523,6 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         }
         else{
             reconectar();
-            this.dispose();
         }
     }//GEN-LAST:event_b_cuentaActionPerformed
 
