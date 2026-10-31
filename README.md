@@ -40,7 +40,7 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
 | JCalendar / AbsoluteLayout / LGoodDatePicker | Componentes de interfaz |
 | jDeploy | Generación de instaladores y actualizaciones |
 
-Programas adicionales usados: **DB Browser for SQLite**, **GitHub Desktop**.
+Programas adicionales usados: **DB Browser for SQLite**, **GitHub Desktop**, **Google docs**, **Drawio**, **Padlet**.
 
 ## Instalación
 
@@ -90,6 +90,7 @@ Sistema_en/
 ├── src/sistema_en/   → Lógica del sistema y servicios (Conexion, GoogleServicesProvider, Controlador_arranque)
 └── src/sistema_en/Ventanas/ → Interfaz gráfica (ventanas y diálogos)
 ```
+- **Nota importante:** aunque el mantenedor posea java 26 o java 21 el proyecto igualmente se compilara en java 17 porque asi se encuentra configurado su compilacion con **jdeploy**.
 
 ## Publicación (solo mantenedores)
 
@@ -113,9 +114,24 @@ Para generar una nueva versión instalable con jDeploy:
 
 ## Documentos
 
+### Externos
+
+Estos documento se encuentran en **Google Docs** como documentos disponibles.
+
 - **Página web del proyecto**: https://ares-linux.github.io/herramientas-equipo/
 - **Documentación técnica**: https://docs.google.com/document/d/1TYEXRZGXCl3ruwjMTYfG_SvQgS-VEWO2Oza72f1Hsjs/edit?usp=sharing
 - **Manual de usuario**: https://docs.google.com/document/d/1Kb0tr2GmgPkf74LLtteJbe_nPPIJ-wf6lnWWvwtwUh8/edit?usp=sharing
+
+### Internos
+
+Estos documentos se encuentran dentro de proyecto en la carpeta **docs** del repositorio.
+
+- **Arquitectura.md**: [docs/Arquitectura.md](docs/Arquitectura.md)
+- **D_informes_contenido.md**: [docs/D_informes_contenido.md](docs/D_informes_contenido.md)
+- **GUIATRABAJO.Md**:[docs/GUIATRABAJO.md](docs/GUIA-TRABAJO.md)
+- **PANTALLAS.md**: [docs/PANTALLAS.md](docs/PANTALLAS.md)
+- **PENDIENTES.md**: [docs/PENDIENTES.md](docs/PENDIENTES.md)
+- **REGISTRO-PUBLICACION.md**: [docs/REGISTRO-PUBLICACION.md](docs/REGISTRO-PUBLICACION.md)
 
 ## Colaborar
 
