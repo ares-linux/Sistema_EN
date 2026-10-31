@@ -1,0 +1,821 @@
+<mxfile host="Electron" agent="opencode" pages="4">
+  <diagram id="1_Dominio" name="1. Dominio">
+    <mxGraphModel dx="0" dy="0" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2180" pageHeight="1636" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1_Dominio_Bitacora" value="&lt;b&gt;Bitacora&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="470" y="762" width="340" height="447" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Bitacora-a" value="- id_bitacora: int&lt;br&gt;- fecha: LocalDate&lt;br&gt;- hora_llegada: LocalTime&lt;br&gt;- hora_salida: LocalTime&lt;br&gt;- evidencias: List&amp;lt;Evidencia&amp;gt;&lt;br&gt;- notas: String&lt;br&gt;- id_trabajador: int&lt;br&gt;- id_trabajo: int" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Bitacora">
+          <mxGeometry y="44" width="340" height="128" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Bitacora-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Bitacora">
+          <mxGeometry y="172" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Bitacora-m" value="+ Bitacora()&lt;br&gt;+ getId_bitacora(): int&lt;br&gt;+ setId_bitacora(int id_bitacora): void&lt;br&gt;+ getFecha(): LocalDate&lt;br&gt;+ setFecha(LocalDate fecha): void&lt;br&gt;+ getHora_llegada(): LocalTime&lt;br&gt;+ setHora_llegada(LocalTime hora_llegada): void&lt;br&gt;+ getHora_salida(): LocalTime&lt;br&gt;+ setHora_salida(LocalTime hora_salida): void&lt;br&gt;+ getNotas(): String&lt;br&gt;+ setNotas(String notas): void&lt;br&gt;+ getId_trabajador(): int&lt;br&gt;+ setId_trabajador(int id_trabajador): void&lt;br&gt;+ getId_trabajo(): int&lt;br&gt;+ setId_trabajo(int id_trabajo): void&lt;br&gt;+ getEvidencias(): List&amp;lt;Evidencia&amp;gt;&lt;br&gt;+ setEvidencias(List&amp;lt;Evidencia&amp;gt; evidencias): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Bitacora">
+          <mxGeometry y="180" width="340" height="263" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Cliente" value="&lt;b&gt;Cliente&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="470" y="40" width="340" height="312" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Cliente-a" value="- id_cliente: int&lt;br&gt;- nombre_c: String&lt;br&gt;- telefono: String&lt;br&gt;- u_modificacion: String&lt;br&gt;- fecha_registro: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Cliente">
+          <mxGeometry y="44" width="340" height="83" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Cliente-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Cliente">
+          <mxGeometry y="127" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Cliente-m" value="+ Cliente()&lt;br&gt;+ getId_cliente(): int&lt;br&gt;+ setId_cliente(int id_cliente): void&lt;br&gt;+ getNombre_c(): String&lt;br&gt;+ setNombre_c(String nombre_c): void&lt;br&gt;+ getTelefono(): String&lt;br&gt;+ setTelefono(String telefono): void&lt;br&gt;+ getU_modificacion(): String&lt;br&gt;+ setU_modificacion(String u_modificacion): void&lt;br&gt;+ getFecha_registro(): String&lt;br&gt;+ setFecha_registro(String fecha_registro): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Cliente">
+          <mxGeometry y="135" width="340" height="173" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Configuraciones" value="&lt;b&gt;Configuraciones&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1289" width="340" height="222" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Configuraciones-a" value="- id_configuracion: int&lt;br&gt;- clave: String&lt;br&gt;- valor: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Configuraciones">
+          <mxGeometry y="44" width="340" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Configuraciones-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Configuraciones">
+          <mxGeometry y="97" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Configuraciones-m" value="+ Configuraciones()&lt;br&gt;+ getId_configuracion(): int&lt;br&gt;+ setId_configuracion(int id_configuracion): void&lt;br&gt;+ getClave(): String&lt;br&gt;+ setClave(String clave): void&lt;br&gt;+ getValor(): String&lt;br&gt;+ setValor(String valor): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Configuraciones">
+          <mxGeometry y="105" width="340" height="113" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Cotizacion" value="&lt;b&gt;Cotizacion&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="40" width="340" height="642" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Cotizacion-a" value="- id_cotizacion: int&lt;br&gt;- subtotal: float&lt;br&gt;- iva: float&lt;br&gt;- total: float&lt;br&gt;- estado: String&lt;br&gt;- id_trabajo: int&lt;br&gt;- tipo: String&lt;br&gt;- fecha_creacion: LocalDate&lt;br&gt;- archivada: int&lt;br&gt;- fecha_archivado: LocalDate&lt;br&gt;- nombre_cliente: String&lt;br&gt;- telefono_cliente: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Cotizacion">
+          <mxGeometry y="44" width="340" height="188" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Cotizacion-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Cotizacion">
+          <mxGeometry y="232" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Cotizacion-m" value="+ Cotizacion()&lt;br&gt;+ getId_cotizacion(): int&lt;br&gt;+ setId_cotizacion(int id_cotizacion): void&lt;br&gt;+ getEstado(): String&lt;br&gt;+ setEstado(String estado): void&lt;br&gt;+ getIva(): float&lt;br&gt;+ setIva(float iva): void&lt;br&gt;+ getSubtotal(): float&lt;br&gt;+ setSubtotal(float subtotal): void&lt;br&gt;+ getTotal(): float&lt;br&gt;+ setTotal(float total): void&lt;br&gt;+ getId_trabajo(): int&lt;br&gt;+ setId_trabajo(int id_trabajo): void&lt;br&gt;+ getTipo(): String&lt;br&gt;+ setTipo(String tipo): void&lt;br&gt;+ getFecha_creacion(): LocalDate&lt;br&gt;+ setFecha_creacion(LocalDate fecha_creacion): void&lt;br&gt;+ getArchivada(): int&lt;br&gt;+ setArchivada(int archivada): void&lt;br&gt;+ getFecha_archivado(): LocalDate&lt;br&gt;+ setFecha_archivado(LocalDate fecha_archivado):&lt;br&gt;void&lt;br&gt;+ getNombre_cliente(): String&lt;br&gt;+ setNombre_cliente(String nombre_cliente): void&lt;br&gt;+ getTelefono_cliente(): String&lt;br&gt;+ setTelefono_cliente(String telefono_cliente): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Cotizacion">
+          <mxGeometry y="240" width="340" height="398" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Detalles_cotizacion" value="&lt;b&gt;Detalles_cotizacion&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="1760" y="40" width="340" height="402" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Detalles_cotizacion-a" value="- id_detalle: int&lt;br&gt;- id_cotizacion: int&lt;br&gt;- concepto: String&lt;br&gt;- n_material: String&lt;br&gt;- cantidad: float&lt;br&gt;- precio_uni: float&lt;br&gt;- precio: float" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Detalles_cotizacion">
+          <mxGeometry y="44" width="340" height="113" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Detalles_cotizacion-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Detalles_cotizacion">
+          <mxGeometry y="157" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Detalles_cotizacion-m" value="+ Detalles_cotizacion()&lt;br&gt;+ getId_detalle(): int&lt;br&gt;+ setId_detalle(int id_detalle): void&lt;br&gt;+ getId_cotizacion(): int&lt;br&gt;+ setId_cotizacion(int id_cotizacion): void&lt;br&gt;+ getConcepto(): String&lt;br&gt;+ setConcepto(String concepto): void&lt;br&gt;+ getN_material(): String&lt;br&gt;+ setN_material(String n_material): void&lt;br&gt;+ getCantidad(): float&lt;br&gt;+ setCantidad(float cantidad): void&lt;br&gt;+ getPrecio_uni(): float&lt;br&gt;+ setPrecio_uni(float precio_uni): void&lt;br&gt;+ getPrecio(): float&lt;br&gt;+ setPrecio(float precio): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Detalles_cotizacion">
+          <mxGeometry y="165" width="340" height="233" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Evidencia" value="&lt;b&gt;Evidencia&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="900" y="762" width="340" height="312" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Evidencia-a" value="- id_evidencia: int&lt;br&gt;- id_bitacora: int&lt;br&gt;- id_google_drive: String&lt;br&gt;- nombre_archivo: String&lt;br&gt;- ruta_local: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Evidencia">
+          <mxGeometry y="44" width="340" height="83" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Evidencia-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Evidencia">
+          <mxGeometry y="127" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Evidencia-m" value="+ Evidencia()&lt;br&gt;+ getId_evidencia(): int&lt;br&gt;+ setId_evidencia(int id_evidencia): void&lt;br&gt;+ getId_bitacora(): int&lt;br&gt;+ setId_bitacora(int id_bitacora): void&lt;br&gt;+ getId_google_drive(): String&lt;br&gt;+ setId_google_drive(String id_google_drive): void&lt;br&gt;+ getNombre_archivo(): String&lt;br&gt;+ setNombre_archivo(String nombre_archivo): void&lt;br&gt;+ getRuta_local(): String&lt;br&gt;+ setRuta_local(String ruta_local): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Evidencia">
+          <mxGeometry y="135" width="340" height="173" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Herramienta" value="&lt;b&gt;Herramienta&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="900" y="1289" width="340" height="267" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Herramienta-a" value="- id_herramienta: int&lt;br&gt;- t_herramienta: int&lt;br&gt;- n_serie: String&lt;br&gt;- foto: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Herramienta">
+          <mxGeometry y="44" width="340" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Herramienta-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Herramienta">
+          <mxGeometry y="112" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Herramienta-m" value="+ Herramienta()&lt;br&gt;+ getId_herramienta(): int&lt;br&gt;+ setId_herramienta(int id_herramienta): void&lt;br&gt;+ getT_herramienta(): int&lt;br&gt;+ setT_herramienta(int t_herramienta): void&lt;br&gt;+ getN_serie(): String&lt;br&gt;+ setN_serie(String n_serie): void&lt;br&gt;+ getFoto(): String&lt;br&gt;+ setFoto(String foto): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Herramienta">
+          <mxGeometry y="120" width="340" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Pago" value="&lt;b&gt;Pago&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="762" width="340" height="312" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Pago-a" value="- id_pago: int&lt;br&gt;- id_trabajo: int&lt;br&gt;- monto: float&lt;br&gt;- concepto: String&lt;br&gt;- fecha_pago: LocalDate" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Pago">
+          <mxGeometry y="44" width="340" height="83" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Pago-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Pago">
+          <mxGeometry y="127" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Pago-m" value="+ Pago()&lt;br&gt;+ getId_pago(): int&lt;br&gt;+ setId_pago(int id_pago): void&lt;br&gt;+ getId_trabajo(): int&lt;br&gt;+ setId_trabajo(int id_trabajo): void&lt;br&gt;+ getMonto(): float&lt;br&gt;+ setMonto(float monto): void&lt;br&gt;+ getConcepto(): String&lt;br&gt;+ setConcepto(String concepto): void&lt;br&gt;+ getFecha_pago(): LocalDate&lt;br&gt;+ setFecha_pago(LocalDate fecha_pago): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Pago">
+          <mxGeometry y="135" width="340" height="173" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Tipos_herramienta" value="&lt;b&gt;Tipos_herramienta&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="470" y="1289" width="340" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Tipos_herramienta-a" value="- id_tipo_herramienta: int&lt;br&gt;- nombre: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Tipos_herramienta">
+          <mxGeometry y="44" width="340" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Tipos_herramienta-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Tipos_herramienta">
+          <mxGeometry y="82" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Tipos_herramienta-m" value="+ Tipos_herramienta()&lt;br&gt;+ getId_tipo_herramienta(): int&lt;br&gt;+ setId_tipo_herramienta(int id_tipo_herramienta):&lt;br&gt;void&lt;br&gt;+ getNombre(): String&lt;br&gt;+ setNombre(String nombre): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Tipos_herramienta">
+          <mxGeometry y="90" width="340" height="98" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Trabajador" value="&lt;b&gt;Trabajador&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="40" y="762" width="340" height="447" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Trabajador-a" value="- id_trabajador: int&lt;br&gt;- nombre: String&lt;br&gt;- sexo: String&lt;br&gt;- foto: String&lt;br&gt;- puesto: String&lt;br&gt;- f_nac: String&lt;br&gt;- curp: String&lt;br&gt;- rfc: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Trabajador">
+          <mxGeometry y="44" width="340" height="128" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Trabajador-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Trabajador">
+          <mxGeometry y="172" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Trabajador-m" value="+ Trabajador()&lt;br&gt;+ getId_trabajador(): int&lt;br&gt;+ setId_trabajador(int id_trabajador): void&lt;br&gt;+ getNombre(): String&lt;br&gt;+ setNombre(String nombre): void&lt;br&gt;+ getSexo(): String&lt;br&gt;+ setSexo(String sexo): void&lt;br&gt;+ getFoto(): String&lt;br&gt;+ setFoto(String foto): void&lt;br&gt;+ getPuesto(): String&lt;br&gt;+ setPuesto(String puesto): void&lt;br&gt;+ getF_nac(): String&lt;br&gt;+ setF_nac(String f_nac): void&lt;br&gt;+ getCurp(): String&lt;br&gt;+ setCurp(String curp): void&lt;br&gt;+ getRfc(): String&lt;br&gt;+ setRfc(String rfc): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Trabajador">
+          <mxGeometry y="180" width="340" height="263" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Trabajo" value="&lt;b&gt;Trabajo&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entity»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#dae8fc;" vertex="1" parent="1">
+          <mxGeometry x="900" y="40" width="340" height="627" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Trabajo-a" value="- id_trabajo: int&lt;br&gt;- descripcion: String&lt;br&gt;- direccion: String&lt;br&gt;- fecha_cr: LocalDate&lt;br&gt;- hora_cr: LocalTime&lt;br&gt;- estado: String&lt;br&gt;- id_cliente: int&lt;br&gt;- fecha_inicio: LocalDate&lt;br&gt;- fecha_fin: LocalDate&lt;br&gt;- carpeta: String&lt;br&gt;- id_carpeta: String&lt;br&gt;- id_evento: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Trabajo">
+          <mxGeometry y="44" width="340" height="188" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Trabajo-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#6c8ebf;" vertex="1" parent="1_Dominio_Trabajo">
+          <mxGeometry y="232" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_Trabajo-m" value="+ Trabajo()&lt;br&gt;+ getId_trabajo(): int&lt;br&gt;+ setId_trabajo(int id_trabajo): void&lt;br&gt;+ getDescripcion(): String&lt;br&gt;+ setDescripcion(String descripcion): void&lt;br&gt;+ getDireccion(): String&lt;br&gt;+ setDireccion(String direccion): void&lt;br&gt;+ getFecha_cr(): LocalDate&lt;br&gt;+ setFecha_cr(LocalDate fecha_cr): void&lt;br&gt;+ getHora_cr(): LocalTime&lt;br&gt;+ setHora_cr(LocalTime hora_cr): void&lt;br&gt;+ getEstado(): String&lt;br&gt;+ setEstado(String estado): void&lt;br&gt;+ getId_cliente(): int&lt;br&gt;+ setId_cliente(int id_cliente): void&lt;br&gt;+ getFecha_inicio(): LocalDate&lt;br&gt;+ setFecha_inicio(LocalDate fecha_inicio): void&lt;br&gt;+ getFecha_fin(): LocalDate&lt;br&gt;+ setFecha_fin(LocalDate fecha_fin): void&lt;br&gt;+ getCarpeta(): String&lt;br&gt;+ setCarpeta(String carpeta): void&lt;br&gt;+ getId_carpeta(): String&lt;br&gt;+ setId_carpeta(String id_carpeta): void&lt;br&gt;+ getId_evento(): String&lt;br&gt;+ setId_evento(String id_evento): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="1_Dominio_Trabajo">
+          <mxGeometry y="240" width="340" height="383" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="1_Dominio_Cliente" target="1_Dominio_Trabajo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e0-l0" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e0">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e0-l1" value="id_cliente" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e0">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e0-l2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e0">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="1_Dominio_Trabajo" target="1_Dominio_Cotizacion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e1-l0" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e1">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e1-l1" value="id_trabajo" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e1">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e1-l2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e1">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="1_Dominio_Trabajo" target="1_Dominio_Pago">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e2-l0" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e2">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e2-l1" value="id_trabajo" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e2">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e2-l2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e2">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="1_Dominio_Trabajo" target="1_Dominio_Bitacora">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e3-l0" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e3">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e3-l1" value="id_trabajo" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e3">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e3-l2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e3">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="1_Dominio_Trabajador" target="1_Dominio_Bitacora">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e4-l0" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e4">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e4-l1" value="id_trabajador" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e4">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e4-l2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e4">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamondThin;startFill=1;startSize=12;endArrow=none;strokeColor=#666666;strokeWidth=1.2;" edge="1" parent="1" source="1_Dominio_Cotizacion" target="1_Dominio_Detalles_cotizacion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e5-l0" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e5">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e5-l1" value="id_cotizacion" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e5">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e5-l2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e5">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamondThin;startFill=1;startSize=12;endArrow=none;strokeColor=#666666;strokeWidth=1.2;" edge="1" parent="1" source="1_Dominio_Bitacora" target="1_Dominio_Evidencia">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e6-l0" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e6">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e6-l1" value="evidencias" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e6">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e6-l2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e6">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="1_Dominio_Tipos_herramienta" target="1_Dominio_Herramienta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1_Dominio_e7-l0" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e7">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e7-l1" value="t_herramienta" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e7">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_e7-l2" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="1_Dominio_e7">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1_Dominio_note" value="Las asociaciones del dominio son FK int&lt;br&gt;(relación lógica en la BD), salvo Bitacora&lt;br&gt;*-- Evidencia, que sí es una referencia de&lt;br&gt;objeto." style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1586" width="300" height="78" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="2_Persistencia_I" name="2. Persistencia I">
+    <mxGraphModel dx="1720" dy="1052" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="890" pageHeight="2951" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2_Persistencia_I_Conexion" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" value="&lt;b&gt;Conexion&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="237" width="340" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Conexion-a" parent="2_Persistencia_I_Conexion" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ VERSION_APP: String  {static}" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Conexion-s" parent="2_Persistencia_I_Conexion" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Conexion-m" parent="2_Persistencia_I_Conexion" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ conectar(): Connection&lt;br&gt;+ existeBaseDatos(): boolean&lt;br&gt;+ leerArchivoConfig(): Properties&lt;br&gt;+ rutaArchivoBD(): String&lt;br&gt;+ rutaDefectoBD(): String&lt;br&gt;+ rutaCarpetaDocumentosPorDefecto(): String&lt;br&gt;+ obtenerRutaBD(): String&lt;br&gt;+ guardarRutaBD(String rutaCompleta): void&lt;br&gt;+ actualizarRutaPorBaseC(String baseC): void&lt;br&gt;+ getNombreArchivoBD(): String" vertex="1">
+          <mxGeometry height="158" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_InicializadorBD" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" value="&lt;b&gt;InicializadorBD&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="252" width="340" x="470" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_InicializadorBD-a" parent="2_Persistencia_I_InicializadorBD" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_InicializadorBD-s" parent="2_Persistencia_I_InicializadorBD" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_InicializadorBD-m" parent="2_Persistencia_I_InicializadorBD" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ asegurarEsquema(String rutaCompleta): boolean&lt;br&gt;+ asegurarConfiguraciones(String rutaCompleta):&lt;br&gt;boolean&lt;br&gt;+ crearBaseDatos(String rutaCompleta): boolean&lt;br&gt;+ DriverManagerSqliteConectar(String rutaCompleta):&lt;br&gt;Connection&lt;br&gt;+ asegurarColumnasCotizacion(Connection con): void&lt;br&gt;+ asegurarColumnasTrabajo(Connection con): void&lt;br&gt;+ asegurarMigraciones(Connection con): void&lt;br&gt;+ asegurarColumnas(Connection con, String tabla,&lt;br&gt;String[][] nuevas): void" vertex="1">
+          <mxGeometry height="173" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_BitacoraDAO" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" value="&lt;b&gt;BitacoraDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="237" width="340" x="40" y="372" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_BitacoraDAO-a" parent="2_Persistencia_I_BitacoraDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_BitacoraDAO-s" parent="2_Persistencia_I_BitacoraDAO" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_BitacoraDAO-m" parent="2_Persistencia_I_BitacoraDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ contarBitacoraPorTrabajo(id_trabajo): int&lt;br&gt;+ obtenerBitacoras(id_trabajo): List&amp;lt;Bitacora&amp;gt;&lt;br&gt;+ insertarBitacora(fecha, hora_llegada, hora_salida,&lt;br&gt;notas, id_trabajador, id_trabajo): int&lt;br&gt;+ actualizarBitacora(fecha, hora_llegada,&lt;br&gt;hora_salida, notas, id_trabajador, id_bitacora):&lt;br&gt;boolean&lt;br&gt;+ buscarBitacoras(id_trabajo, fecha_buscar):&lt;br&gt;List&amp;lt;Bitacora&amp;gt;&lt;br&gt;+ mapResultSetToBitacora(rs): Bitacora" vertex="1">
+          <mxGeometry height="158" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ClienteDAO" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" value="&lt;b&gt;ClienteDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="282" width="340" x="40" y="689" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ClienteDAO-a" parent="2_Persistencia_I_ClienteDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ClienteDAO-s" parent="2_Persistencia_I_ClienteDAO" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ClienteDAO-m" parent="2_Persistencia_I_ClienteDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ obtenerOCrearCliente(nombre, telefono,&lt;br&gt;fecha_registro): int&lt;br&gt;+ obtenerCliente(id_cliente): Cliente&lt;br&gt;+ obtenerClientesNumerosTrabajoFla(): List&lt;br&gt;+ obtenerClientesNumerosTrabajoAlf(): List&lt;br&gt;+ obtenerClientesNumerosTrabajoAsc(): List&lt;br&gt;+ obtenerClientesNumerosTrabajoDesc(): List&lt;br&gt;+ obtenerClientes(): List&lt;br&gt;+ insertarClienteYObtenerID(nombreC, telefono,&lt;br&gt;fecha_registro): int&lt;br&gt;+ actualizarCliente(id_cliente, nombre_c, telefono,&lt;br&gt;u_modificacion): boolean&lt;br&gt;+ filtrarClientesNombre(nombre): List" vertex="1">
+          <mxGeometry height="203" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ConfiguracionesDAO" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" value="&lt;b&gt;ConfiguracionesDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="237" width="340" x="40" y="1051" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ConfiguracionesDAO-a" parent="2_Persistencia_I_ConfiguracionesDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ConfiguracionesDAO-s" parent="2_Persistencia_I_ConfiguracionesDAO" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ConfiguracionesDAO-m" parent="2_Persistencia_I_ConfiguracionesDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ actualizarConfiguraciones(tema, sonido_error,&lt;br&gt;carpeta_ce, automaticamente_ce,&lt;br&gt;automaticamente_ce_excel): boolean&lt;br&gt;+ actualizarCopias(frecuencia, preguntar, manual,&lt;br&gt;cotizaciones, ultima_copia, base_c): boolean&lt;br&gt;+&lt;br&gt;actualizarConfiguracionesCalendar(automaticamenteEve&lt;br&gt;ntos, recordatorioInforme, horaDefectoCalendar):&lt;br&gt;boolean&lt;br&gt;+ obtenerConfiguraciones(): List" vertex="1">
+          <mxGeometry height="158" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ConversionCotizacionDAO" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" value="&lt;b&gt;ConversionCotizacionDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="192" width="340" x="40" y="1368" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ConversionCotizacionDAO-a" parent="2_Persistencia_I_ConversionCotizacionDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ConversionCotizacionDAO-s" parent="2_Persistencia_I_ConversionCotizacionDAO" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_ConversionCotizacionDAO-m" parent="2_Persistencia_I_ConversionCotizacionDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ convertirCotizacionEnTrabajo(id_cotizacion,&lt;br&gt;nombre, telefono, direccion, descripcion, fecha_cr,&lt;br&gt;hora_cr, estado_cotizacion): int&lt;br&gt;+ clienteExiste(nombre, telefono): boolean&lt;br&gt;+ esBloqueoBD(e): boolean&lt;br&gt;+ esperarReintento(): void&lt;br&gt;+ cerrarSeguro(con): void" vertex="1">
+          <mxGeometry height="113" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_CotizacionDAO" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" value="&lt;b&gt;CotizacionDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="627" width="340" x="40" y="1640" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_CotizacionDAO-a" parent="2_Persistencia_I_CotizacionDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_CotizacionDAO-s" parent="2_Persistencia_I_CotizacionDAO" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_CotizacionDAO-m" parent="2_Persistencia_I_CotizacionDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ leerFecha(texto): LocalDate&lt;br&gt;+ mapearCotizacion(rs): Cotizacion&lt;br&gt;+ obtenerCotizacionesPrueba(): List&amp;lt;Cotizacion&amp;gt;&lt;br&gt;+ obtenerCotizacionesPrueba(archivadas):&lt;br&gt;List&amp;lt;Cotizacion&amp;gt;&lt;br&gt;+ obtenerCotizaciones(id_trabajo): List&amp;lt;Cotizacion&amp;gt;&lt;br&gt;+ buscarCotizacionesPrueba(nombre, desde, hasta,&lt;br&gt;archivadas): List&amp;lt;Cotizacion&amp;gt;&lt;br&gt;+ obtenerUltimaCotizacion(id_trabajo): Cotizacion&lt;br&gt;+ obtenerCotizacion(id_cotizacion): Cotizacion&lt;br&gt;+ insertarCotizacion(subtotal, iva, total, estado,&lt;br&gt;tipo, fecha_creacion, id_trabajo): int&lt;br&gt;+ actualizarCotizacion(subtotal, iva, total, estado,&lt;br&gt;tipo, fecha_creacion, id_trabajo, id_cotizacion):&lt;br&gt;boolean&lt;br&gt;+ eliminarCotizacion(id_cotizacion): boolean&lt;br&gt;+ insertarCotizacionConDetalles(cotizacion,&lt;br&gt;listaDetalles): boolean&lt;br&gt;+&lt;br&gt;insertarCotizacionConDetallesDevolviendoId(cotizacio&lt;br&gt;n, listaDetalles): int&lt;br&gt;+ insertarCotizacionConDetallesInterno(cotizacion,&lt;br&gt;listaDetalles): int&lt;br&gt;+ actualizarCotizacionConDetalles(subtotal, iva,&lt;br&gt;total, estado, tipo, fecha_creacion, id_trabajo,&lt;br&gt;id_cotizacion, listaDetalles): boolean&lt;br&gt;+ esBloqueoBD(e): boolean&lt;br&gt;+ existeCotizacion(con, id_cotizacion): boolean&lt;br&gt;+ archivarCotizacion(id_cotizacion,&lt;br&gt;fecha_archivado): boolean&lt;br&gt;+ desarchivarCotizacion(id_cotizacion): boolean&lt;br&gt;+ actualizarDatosProspecto(id_cotizacion,&lt;br&gt;nombre_cliente, telefono_cliente): boolean&lt;br&gt;+ esperarReintento(): void&lt;br&gt;+ cerrarSeguro(con): void&lt;br&gt;+ obtenerTotal(id_trabajo): String" vertex="1">
+          <mxGeometry height="548" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Detalles_cotizacionDAO" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" value="&lt;b&gt;Detalles_cotizacionDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="222" width="340" x="40" y="2347" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Detalles_cotizacionDAO-a" parent="2_Persistencia_I_Detalles_cotizacionDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Detalles_cotizacionDAO-s" parent="2_Persistencia_I_Detalles_cotizacionDAO" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Detalles_cotizacionDAO-m" parent="2_Persistencia_I_Detalles_cotizacionDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ obtenerDetalles_cotizacion(id_cotizacion):&lt;br&gt;List&amp;lt;Detalles_cotizacion&amp;gt;&lt;br&gt;+ insertarDetalles_cotizacion(concepto, n_material,&lt;br&gt;cantidad, precio_uni, precio, id_cotizacion):&lt;br&gt;boolean&lt;br&gt;+ actualizarDetalles_cotizacion(concepto,&lt;br&gt;n_material, cantidad, precio_uni, precio,&lt;br&gt;id_cotizacion, id_detalle): boolean&lt;br&gt;+ eliminarDetalles_cotizacion(id_detalle): boolean" vertex="1">
+          <mxGeometry height="143" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_EvidenciaDAO" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" value="&lt;b&gt;EvidenciaDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" vertex="1">
+          <mxGeometry height="222" width="340" x="40" y="2649" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_EvidenciaDAO-a" parent="2_Persistencia_I_EvidenciaDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="" vertex="1">
+          <mxGeometry height="23" width="340" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_EvidenciaDAO-s" parent="2_Persistencia_I_EvidenciaDAO" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="8" width="340" y="67" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_EvidenciaDAO-m" parent="2_Persistencia_I_EvidenciaDAO" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" value="+ insertarEvidencia(id_bitacora, id_google_drive,&lt;br&gt;nombre_archivo, ruta_local): boolean&lt;br&gt;+ obtenerEvidencia(id_bitacora): List&amp;lt;Evidencia&amp;gt;&lt;br&gt;+ eliminarEvidencia(id_evidencia): boolean&lt;br&gt;+ eliminarEvidenciasPorBitacora(id_bitacora):&lt;br&gt;boolean&lt;br&gt;+ actualizarEvidencia(id_evidencia, id_bitacora,&lt;br&gt;id_google_drive, nombre_archivo, ruta_local):&lt;br&gt;boolean" vertex="1">
+          <mxGeometry height="143" width="340" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Bitacora" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" value="Bitacora" vertex="1">
+          <mxGeometry height="54" width="200" x="470" y="372" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Cliente" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" value="Cliente" vertex="1">
+          <mxGeometry height="54" width="200" x="470" y="689" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Cotizacion" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" value="Cotizacion" vertex="1">
+          <mxGeometry height="54" width="200" x="470" y="1640" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Detalles_cotizacion" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" value="Detalles_cotizacion" vertex="1">
+          <mxGeometry height="54" width="200" x="470" y="2347" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_Evidencia" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" value="Evidencia" vertex="1">
+          <mxGeometry height="54" width="200" x="470" y="2649" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e0" edge="1" parent="1" source="2_Persistencia_I_InicializadorBD" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Conexion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e1" edge="1" parent="1" source="2_Persistencia_I_BitacoraDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Conexion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e2" edge="1" parent="1" source="2_Persistencia_I_ClienteDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Conexion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e3" edge="1" parent="1" source="2_Persistencia_I_ConfiguracionesDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Conexion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e4" edge="1" parent="1" source="2_Persistencia_I_ConversionCotizacionDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Conexion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e5" edge="1" parent="1" source="2_Persistencia_I_CotizacionDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Conexion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e6" edge="1" parent="1" source="2_Persistencia_I_Detalles_cotizacionDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Conexion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e7" edge="1" parent="1" source="2_Persistencia_I_EvidenciaDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Conexion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e8" edge="1" parent="1" source="2_Persistencia_I_BitacoraDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Bitacora" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e9" edge="1" parent="1" source="2_Persistencia_I_BitacoraDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_EvidenciaDAO" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e10" edge="1" parent="1" source="2_Persistencia_I_ClienteDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Cliente" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e11" edge="1" parent="1" source="2_Persistencia_I_CotizacionDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Cotizacion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e12" edge="1" parent="1" source="2_Persistencia_I_CotizacionDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Detalles_cotizacion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e13" edge="1" parent="1" source="2_Persistencia_I_Detalles_cotizacionDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Detalles_cotizacion" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_e14" edge="1" parent="1" source="2_Persistencia_I_EvidenciaDAO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" target="2_Persistencia_I_Evidencia" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2_Persistencia_I_note" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;fontSize=10;" value="Los stubs grises representan los POJOs&lt;br&gt;usados por cada DAO. Seis DAOs devuelven&lt;br&gt;List&amp;lt;String[]&amp;gt; en lugar de POJOs." vertex="1">
+          <mxGeometry height="63" width="300" x="40" y="2901" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="3_Persistencia_II" name="3. Persistencia II">
+    <mxGraphModel dx="0" dy="0" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="750" pageHeight="2546" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3_Persistencia_II_Conexion" value="&lt;b&gt;Conexion&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="340" height="237" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Conexion-a" value="+ VERSION_APP: String  {static}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_Conexion">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Conexion-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="3_Persistencia_II_Conexion">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Conexion-m" value="+ conectar(): Connection&lt;br&gt;+ existeBaseDatos(): boolean&lt;br&gt;+ leerArchivoConfig(): Properties&lt;br&gt;+ rutaArchivoBD(): String&lt;br&gt;+ rutaDefectoBD(): String&lt;br&gt;+ rutaCarpetaDocumentosPorDefecto(): String&lt;br&gt;+ obtenerRutaBD(): String&lt;br&gt;+ guardarRutaBD(String rutaCompleta): void&lt;br&gt;+ actualizarRutaPorBaseC(String baseC): void&lt;br&gt;+ getNombreArchivoBD(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_Conexion">
+          <mxGeometry y="75" width="340" height="158" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_HerramientaDAO" value="&lt;b&gt;HerramientaDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="357" width="340" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_HerramientaDAO-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_HerramientaDAO">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_HerramientaDAO-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" vertex="1" parent="3_Persistencia_II_HerramientaDAO">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_HerramientaDAO-m" value="+ insertarHerramienta(id_tipo, n_serie, foto):&lt;br&gt;boolean&lt;br&gt;+ obtenerHerramienta(): List&lt;br&gt;+ buscarHerramienta(n_serie, nombre_tipo): List&lt;br&gt;+ eliminarHerramienta(id_herramienta): boolean&lt;br&gt;+ actualizarHerramienta(id_herramienta, id_tipo,&lt;br&gt;n_serie, foto): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_HerramientaDAO">
+          <mxGeometry y="75" width="340" height="113" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_InformesDAO" value="&lt;b&gt;InformesDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="629" width="340" height="267" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_InformesDAO-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_InformesDAO">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_InformesDAO-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" vertex="1" parent="3_Persistencia_II_InformesDAO">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_InformesDAO-m" value="+ contarTrabajosRegistrados(inicio, fin): int&lt;br&gt;+ contarTrabajosIniciados(inicio, fin): int&lt;br&gt;+ contarTrabajosFinalizados(inicio, fin): int&lt;br&gt;+ contarClientesNuevos(inicio, fin): int&lt;br&gt;+ clienteConMasTrabajos(inicio, fin): String&lt;br&gt;+ contarClientesSoloUnTrabajo(inicio, fin): int&lt;br&gt;+ contarCotizacionesRegistradas(inicio, fin): int&lt;br&gt;+ contarCotizacionesConvertidas(inicio, fin): int&lt;br&gt;+ promedioTrabajosPorCliente(inicio, fin): double&lt;br&gt;+ promedioDuracionTrabajo(inicio, fin): double&lt;br&gt;+ contar(sql, inicio, fin): int&lt;br&gt;+ obtenerPeriodosDisponibles(): List&amp;lt;String&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_InformesDAO">
+          <mxGeometry y="75" width="340" height="188" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_PagoDAO" value="&lt;b&gt;PagoDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="976" width="340" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_PagoDAO-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_PagoDAO">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_PagoDAO-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" vertex="1" parent="3_Persistencia_II_PagoDAO">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_PagoDAO-m" value="+ sumarPagosPorTrabajo(id_trabajo): int&lt;br&gt;+ contarPagosPorTrabajo(id_trabajo): int&lt;br&gt;+ obtenerPagos(id_trabajo): List&amp;lt;Pago&amp;gt;&lt;br&gt;+ insertarPago(monto, concepto, fecha_pago,&lt;br&gt;id_trabajo): boolean&lt;br&gt;+ actualizarPago(monto, concepto, fecha_pago,&lt;br&gt;id_trabajo, id_pago): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_PagoDAO">
+          <mxGeometry y="75" width="340" height="113" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Tipos_herramientaDAO" value="&lt;b&gt;Tipos_herramientaDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1248" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Tipos_herramientaDAO-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_Tipos_herramientaDAO">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Tipos_herramientaDAO-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" vertex="1" parent="3_Persistencia_II_Tipos_herramientaDAO">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Tipos_herramientaDAO-m" value="+ insertarTipo(nombre): boolean&lt;br&gt;+ obtenerHerramientas(): List&lt;br&gt;+ existeTipo(nombre): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_Tipos_herramientaDAO">
+          <mxGeometry y="75" width="340" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_TrabajadorDAO" value="&lt;b&gt;TrabajadorDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1460" width="340" height="207" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_TrabajadorDAO-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_TrabajadorDAO">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_TrabajadorDAO-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" vertex="1" parent="3_Persistencia_II_TrabajadorDAO">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_TrabajadorDAO-m" value="+ insertarTrabajador(nombre, sexo, puesto, rfc,&lt;br&gt;curp, f_nac, foto): boolean&lt;br&gt;+ obtenerTrabajadores(): List&lt;br&gt;+ buscarTrabajadores(nombre, puesto): List&lt;br&gt;+ eliminarTrabajador(id_trabajador): boolean&lt;br&gt;+ actualizarTrabajador(id_trabajador, nombre, sexo,&lt;br&gt;puesto, rfc, curp, f_nac, foto): boolean&lt;br&gt;+ obtenerTrabajadoresj(): List" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_TrabajadorDAO">
+          <mxGeometry y="75" width="340" height="128" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_TrabajoDAO" value="&lt;b&gt;TrabajoDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1747" width="340" height="477" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_TrabajoDAO-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_TrabajoDAO">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_TrabajoDAO-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" vertex="1" parent="3_Persistencia_II_TrabajoDAO">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_TrabajoDAO-m" value="+ leerColumnaOpcional(rs, nombre): String&lt;br&gt;+ obtenerTrabajo(id_trabajo): Trabajo&lt;br&gt;+ insertarTrabajo(direccion, descripcion, fecha_cr,&lt;br&gt;hora_cr, estado, idCliente): int&lt;br&gt;+ obtenerTrabajosCliente(id_cliente): List&lt;br&gt;+ obtenerTrabajosConClientesCompletado(): List&lt;br&gt;+ obtenerTrabajosConClientesProgreso(): List&lt;br&gt;+ obtenerTrabajosConClientesPendiente(): List&lt;br&gt;+ obtenerTrabajosConClientes(): List&lt;br&gt;+ eliminarTrabajo(idTrabajo): boolean&lt;br&gt;+ actualizarTrabajoDetalles(id_trabajo, estado,&lt;br&gt;fecha_inicio, fecha_fin): boolean&lt;br&gt;+ actualizarTrabajoCarpeta(id_trabajo, carpeta):&lt;br&gt;boolean&lt;br&gt;+ actualizarTrabajo(id_trabajo, direccion,&lt;br&gt;descripcion): boolean&lt;br&gt;+ obtener_fecha_ultimo_trabajo_estado(estado):&lt;br&gt;String&lt;br&gt;+ obtenerTrabajosPendientes(): List&amp;lt;Trabajo&amp;gt;&lt;br&gt;+ actualizarTrabajoIdCarpeta(id_trabajo,&lt;br&gt;id_carpeta): boolean&lt;br&gt;+ actualizarTrabajoIdEvento(id_trabajo, id_evento):&lt;br&gt;boolean&lt;br&gt;+ obtenerTrabajoIdCarpeta(id_trabajo): Trabajo&lt;br&gt;+ buscarTrabajosPorPeriodo(estado, desde, hasta,&lt;br&gt;por_fecha_fin): List" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_TrabajoDAO">
+          <mxGeometry y="75" width="340" height="398" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_UsuariosDAO" value="&lt;b&gt;UsuariosDAO&lt;/b&gt;&lt;br&gt;&lt;i&gt;«DAO»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="2304" width="340" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_UsuariosDAO-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_UsuariosDAO">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_UsuariosDAO-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#82b366;" vertex="1" parent="3_Persistencia_II_UsuariosDAO">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_UsuariosDAO-m" value="+ actualizarContraseña(id, contraseña): boolean&lt;br&gt;+ obtenerHashPorId(id): String&lt;br&gt;+ actualizarUsuario(id, usuario): boolean&lt;br&gt;+ insertarUsuario(usuario, contraseña): boolean&lt;br&gt;+ existeAdministrador(): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="3_Persistencia_II_UsuariosDAO">
+          <mxGeometry y="75" width="340" height="83" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Pago" value="Pago" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="470" y="976" width="200" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_Trabajo" value="Trabajo" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="470" y="1747" width="200" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_HerramientaDAO" target="3_Persistencia_II_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_InformesDAO" target="3_Persistencia_II_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_PagoDAO" target="3_Persistencia_II_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_Tipos_herramientaDAO" target="3_Persistencia_II_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_TrabajadorDAO" target="3_Persistencia_II_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_TrabajoDAO" target="3_Persistencia_II_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_UsuariosDAO" target="3_Persistencia_II_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_PagoDAO" target="3_Persistencia_II_Pago">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="3_Persistencia_II_TrabajoDAO" target="3_Persistencia_II_Trabajo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3_Persistencia_II_note" value="Conexion se repite para no cruzar aristas&lt;br&gt;entre páginas. Todos los DAOs abren su&lt;br&gt;conexión con Conexion.conectar()." style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="2496" width="300" height="63" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="4_Infraestructura" name="4. Infraestructura">
+    <mxGraphModel dx="0" dy="0" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1135" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="4_Infraestructura_Sistema_en" value="&lt;b&gt;Sistema_en&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Entry»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#e1d5e7;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="340" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Sistema_en-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Sistema_en">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Sistema_en-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#9673a6;" vertex="1" parent="4_Infraestructura_Sistema_en">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Sistema_en-m" value="+ main(String[] args): void  {static}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Sistema_en">
+          <mxGeometry y="75" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Controlador_arranque" value="&lt;b&gt;Controlador_arranque&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="40" y="222" width="340" height="222" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Controlador_arranque-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Controlador_arranque">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Controlador_arranque-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_Controlador_arranque">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Controlador_arranque-m" value="+ iniciar(): boolean&lt;br&gt;+ verificarSondaEscritura(String ruta): void&lt;br&gt;+ recuperarYResolver(): boolean&lt;br&gt;+ intentarRestaurarDesdeDrive(): boolean&lt;br&gt;+ vincularCuentaGoogle(): void&lt;br&gt;+ buscarManual(): boolean&lt;br&gt;+ crearBaseDatosNueva(): boolean&lt;br&gt;+ crearEnUbicacionPorDefecto(): boolean&lt;br&gt;+ registrarUsuarioObligatorio(): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Controlador_arranque">
+          <mxGeometry y="75" width="340" height="143" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Conexion" value="&lt;b&gt;Conexion&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="520" y="637" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Conexion-a" value="+ VERSION_APP  {static}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Conexion">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Conexion-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_Conexion">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Conexion-m" value="+ conectar(): Connection&lt;br&gt;+ existeBaseDatos(): boolean&lt;br&gt;+ obtenerRutaBD(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Conexion">
+          <mxGeometry y="75" width="340" height="53" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_GoogleServicesProvider" value="&lt;b&gt;GoogleServicesProvider&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="520" y="40" width="340" height="507" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_GoogleServicesProvider-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_GoogleServicesProvider">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_GoogleServicesProvider-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_GoogleServicesProvider">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_GoogleServicesProvider-m" value="+ getSheetsService(): Sheets&lt;br&gt;+ getGmailService(): Gmail&lt;br&gt;+ getCalendarService(): Calendar&lt;br&gt;+ verificarConexionCalendar(): boolean&lt;br&gt;+ calcularIntervalo(trabajo, horaDefecto):&lt;br&gt;EventDateTime&lt;br&gt;+ construirEvento(trabajo, horaDefecto): Event&lt;br&gt;+ crearEventoTrabajo(trabajo, horaDefecto): String&lt;br&gt;+ actualizarEventoTrabajo(trabajo, horaDefecto,&lt;br&gt;idEvento): String&lt;br&gt;+ eliminarEventoTrabajo(idEvento): boolean&lt;br&gt;+ obtenerEnlaceEvento(trabajo): String&lt;br&gt;+ crearEventoSiConfigurado(trabajo): void&lt;br&gt;+ sincronizarEventoTrabajo(trabajo, horaDefecto):&lt;br&gt;void&lt;br&gt;+ listarArchivosDeCarpeta(idCarpetaDrive):&lt;br&gt;List&amp;lt;Evidencia&amp;gt;&lt;br&gt;+ listarArchivosDeCarpeta(idCarpetaDrive,&lt;br&gt;soloImagenes): List&amp;lt;Evidencia&amp;gt;&lt;br&gt;+ esImagen(archivo): boolean&lt;br&gt;+ subirImagenACarpeta(rutaLocalImagen,&lt;br&gt;idCarpetaDrive): String&lt;br&gt;+ subirArchivo(rutaArchivoLocal, ruta): boolean&lt;br&gt;+ estaConectado(): boolean&lt;br&gt;+ desconectar(): boolean&lt;br&gt;+ vincularNuevaCuenta(): boolean&lt;br&gt;+ crearHojaCotizacion(tituloArchivo, datosMatriz,&lt;br&gt;id_trabajo): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_GoogleServicesProvider">
+          <mxGeometry y="75" width="340" height="428" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_EjecutorGoogle" value="&lt;b&gt;EjecutorGoogle&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="520" y="859" width="340" height="177" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_EjecutorGoogle-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_EjecutorGoogle">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_EjecutorGoogle-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_EjecutorGoogle">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_EjecutorGoogle-m" value="+ ejecutarAccion(tarea, alFallar): void&lt;br&gt;+ ejecutarAccionSilencioso(tarea): void&lt;br&gt;+ mensajeDeError(error): String&lt;br&gt;+ verificarAcceso(): void&lt;br&gt;+ esperar(milisegundos): void&lt;br&gt;+ registrar(error): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_EjecutorGoogle">
+          <mxGeometry y="75" width="340" height="98" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Internet" value="&lt;b&gt;Internet&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="40" width="340" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Internet-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Internet">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Internet-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_Internet">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Internet-m" value="+ Prueba_internet(): boolean  {static}&lt;br&gt;+ hayConexion(): boolean  {static}&lt;br&gt;+ hayConexionSinCache(): boolean  {static}&lt;br&gt;+ esFalloDeRedTransitorio(error): boolean  {static}&lt;br&gt;+ mensajeDeFallo(error): String  {static}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Internet">
+          <mxGeometry y="75" width="340" height="83" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Carpetas" value="&lt;b&gt;Carpetas&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="272" width="340" height="147" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Carpetas-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Carpetas">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Carpetas-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_Carpetas">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Carpetas-m" value="+ verificarCarpetaExiste(rutaCarpeta): boolean&lt;br&gt;+ actualizarRutaCotizaciones(rutaAntigua, rutaNueva,&lt;br&gt;nombreCarpetaCotizaciones): void&lt;br&gt;+ Carpetas_cambio_cotizaciones(): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Carpetas">
+          <mxGeometry y="75" width="340" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesRutas" value="&lt;b&gt;UtilidadesRutas&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="489" width="340" height="177" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesRutas-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_UtilidadesRutas">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesRutas-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_UtilidadesRutas">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesRutas-m" value="+ directorioBaseConfig(): File  {static}&lt;br&gt;+ archivoConfig(nombre): File  {static}&lt;br&gt;+ directorioConfigUsuario(): File  {static}&lt;br&gt;+ archivoConfigUsuario(nombre): File  {static}&lt;br&gt;+ directorioTokens(): File  {static}&lt;br&gt;+ buscarCredenciales(): File  {static}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_UtilidadesRutas">
+          <mxGeometry y="75" width="340" height="98" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesRecursos" value="&lt;b&gt;UtilidadesRecursos&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="736" width="340" height="147" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesRecursos-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_UtilidadesRecursos">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesRecursos-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_UtilidadesRecursos">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesRecursos-m" value="+ url(ruta): URL  {static}&lt;br&gt;+ icono(ruta): ImageIcon  {static}&lt;br&gt;+ iconoEscalado(ruta, ancho, alto): ImageIcon &lt;br&gt;{static}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_UtilidadesRecursos">
+          <mxGeometry y="75" width="340" height="68" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesTexto" value="&lt;b&gt;UtilidadesTexto&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="953" width="340" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesTexto-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_UtilidadesTexto">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesTexto-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_UtilidadesTexto">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesTexto-m" value="+ leerTextoRecurso(ruta): String  {static}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_UtilidadesTexto">
+          <mxGeometry y="75" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesError" value="&lt;b&gt;UtilidadesError&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="40" width="340" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesError-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_UtilidadesError">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesError-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_UtilidadesError">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UtilidadesError-m" value="+ mensajeDe(error): String&lt;br&gt;+ error(padre, titulo, causa): void&lt;br&gt;+ error(padre, titulo, mensaje): void&lt;br&gt;+ aviso(padre, titulo, mensaje): void&lt;br&gt;+ exito(padre, titulo, mensaje): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_UtilidadesError">
+          <mxGeometry y="75" width="340" height="83" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Exportar_PDF" value="&lt;b&gt;Exportar_PDF&lt;/b&gt;&lt;br&gt;&lt;i&gt;«Infra»&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=44;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;fontSize=12;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="272" width="340" height="177" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Exportar_PDF-a" value="" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Exportar_PDF">
+          <mxGeometry y="44" width="340" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Exportar_PDF-s" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=#d6b656;" vertex="1" parent="4_Infraestructura_Exportar_PDF">
+          <mxGeometry y="67" width="340" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_Exportar_PDF-m" value="+ exportarCotizacionPDF(rutaArchivo, cliente, folio,&lt;br&gt;fecha, estado, subtotal, iva, total, filasConceptos,&lt;br&gt;filasMateriales): boolean&lt;br&gt;+ exportarInformePDF(rutaArchivo, periodo, estado,&lt;br&gt;filasTrabajos, filasClientes, filasCotizaciones,&lt;br&gt;filasOtros): boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;fontSize=10;" vertex="1" parent="4_Infraestructura_Exportar_PDF">
+          <mxGeometry y="75" width="340" height="98" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_InicializadorBD" value="InicializadorBD" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="524" width="200" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_UsuariosDAO" value="UsuariosDAO" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="658" width="200" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_ConfiguracionesDAO" value="ConfiguracionesDAO" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="519" width="200" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_TrabajoDAO" value="TrabajoDAO" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;dashed=1;align=center;verticalAlign=middle;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="643" width="200" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_Sistema_en" target="4_Infraestructura_Controlador_arranque">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e0-l0" value="inicia" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="4_Infraestructura_e0">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4_Infraestructura_e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_Controlador_arranque" target="4_Infraestructura_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_Controlador_arranque" target="4_Infraestructura_InicializadorBD">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_Controlador_arranque" target="4_Infraestructura_UsuariosDAO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_Controlador_arranque" target="4_Infraestructura_GoogleServicesProvider">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_GoogleServicesProvider" target="4_Infraestructura_Conexion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_GoogleServicesProvider" target="4_Infraestructura_ConfiguracionesDAO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_GoogleServicesProvider" target="4_Infraestructura_TrabajoDAO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_EjecutorGoogle" target="4_Infraestructura_Internet">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_Conexion" target="4_Infraestructura_UtilidadesRutas">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_Exportar_PDF" target="4_Infraestructura_UtilidadesRutas">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#666666;strokeWidth=1.2;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" source="4_Infraestructura_UtilidadesRutas" target="4_Infraestructura_GoogleServicesProvider">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4_Infraestructura_e11-l0" value="constantes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;labelBackgroundColor=#ffffff;" vertex="1" connectable="0" parent="4_Infraestructura_e11">
+          <mxGeometry x="0" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4_Infraestructura_note" value="UtilidadesRutas importa&lt;br&gt;GoogleServicesProvider solo por sus&lt;br&gt;constantes: inversión de la capa de&lt;br&gt;utilidades hacia sistema_en." style="shape=note;whiteSpace=wrap;html=1;size=14;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=6;spacingRight=6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1085" width="300" height="78" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
