@@ -143,31 +143,37 @@ public class D_configuraciones extends javax.swing.JDialog {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        jPanel2 = new javax.swing.JPanel();
+        b_guardar_preferencias = new javax.swing.JButton();
         b_cerrar = new javax.swing.JButton();
+        b_acerca_de = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         c_tema = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        b_guardar_preferencias = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         t_carpeta_c = new javax.swing.JTextField();
         b_carpeta_c = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        b_acerca_de = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         ch_error = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
         b_copias_seguridad = new javax.swing.JButton();
-        b_cambiar_contraseña = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         ch_automaticamente_pdf = new javax.swing.JCheckBox();
         ch_automaticamente_excel = new javax.swing.JCheckBox();
         jLabel7 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         d_hora_defecto = new com.github.lgooddatepicker.components.TimePicker();
         jLabel11 = new javax.swing.JLabel();
         ch_automaticamente_eventos = new javax.swing.JCheckBox();
         ch_recordatorio_informe = new javax.swing.JCheckBox();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        b_cambiar_contraseña = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(740, 410));
@@ -176,44 +182,8 @@ public class D_configuraciones extends javax.swing.JDialog {
                 formWindowOpened(evt);
             }
         });
-        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        b_cerrar.setText("Cerrar");
-        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_cerrarActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_cerrar, gridBagConstraints);
-
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel1.setText("Configuraciones");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel1, gridBagConstraints);
-
-        c_tema.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Claro", "Oscuro", "Automatico" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 32, 10, 10);
-        getContentPane().add(c_tema, gridBagConstraints);
-
-        jLabel2.setText("Tema de la interfaz");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10);
-        getContentPane().add(jLabel2, gridBagConstraints);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
 
         b_guardar_preferencias.setText("Editar configuraciones");
         b_guardar_preferencias.addActionListener(new java.awt.event.ActionListener() {
@@ -222,36 +192,87 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_guardar_preferencias, gridBagConstraints);
+        jPanel2.add(b_guardar_preferencias, gridBagConstraints);
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        b_cerrar.setText("Cerrar");
+        b_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_cerrarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(b_cerrar, gridBagConstraints);
+
+        b_acerca_de.setText("Acerca de");
+        b_acerca_de.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_acerca_deActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel2.add(b_acerca_de, gridBagConstraints);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
+
+        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setText("Configuraciones");
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel1, gridBagConstraints);
+
+        c_tema.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Claro", "Oscuro", "Automatico" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 32, 10, 10);
+        jPanel1.add(c_tema, gridBagConstraints);
+
+        jLabel2.setText("Tema de la interfaz");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10);
+        jPanel1.add(jLabel2, gridBagConstraints);
+
         jLabel3.setText("Apariencia");
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel3, gridBagConstraints);
+        jPanel1.add(jLabel3, gridBagConstraints);
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel5.setText("Impresión");
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel5, gridBagConstraints);
-
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel6.setText("Seguridad");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel6, gridBagConstraints);
+        jPanel1.add(jLabel5, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -260,7 +281,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 50);
-        getContentPane().add(t_carpeta_c, gridBagConstraints);
+        jPanel1.add(t_carpeta_c, gridBagConstraints);
 
         b_carpeta_c.setText("...");
         b_carpeta_c.addActionListener(new java.awt.event.ActionListener() {
@@ -273,35 +294,22 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_carpeta_c, gridBagConstraints);
+        jPanel1.add(b_carpeta_c, gridBagConstraints);
 
         jLabel9.setText("Carpeta de guardado de cotizaciones exportadas a pdf");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel9, gridBagConstraints);
+        jPanel1.add(jLabel9, gridBagConstraints);
 
-        b_acerca_de.setText("Acerca de");
-        b_acerca_de.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_acerca_deActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_acerca_de, gridBagConstraints);
-
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel4.setText("Sonido");
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel4, gridBagConstraints);
+        jPanel1.add(jLabel4, gridBagConstraints);
 
         ch_error.setSelected(true);
         ch_error.setText("Error");
@@ -309,16 +317,16 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(ch_error, gridBagConstraints);
+        jPanel1.add(ch_error, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         jLabel8.setText("Copias de seguridad");
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel8, gridBagConstraints);
+        jPanel1.add(jLabel8, gridBagConstraints);
 
         b_copias_seguridad.setText("Copias de seguridad");
         b_copias_seguridad.addActionListener(new java.awt.event.ActionListener() {
@@ -332,7 +340,96 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_copias_seguridad, gridBagConstraints);
+        jPanel1.add(b_copias_seguridad, gridBagConstraints);
+
+        jTabbedPane1.addTab("General", jPanel1);
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        ch_automaticamente_pdf.setText("Abrir automaticamente las cotizaciones exportadas a pdf");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(ch_automaticamente_pdf, gridBagConstraints);
+
+        ch_automaticamente_excel.setText("Abrir automaticamente las cotizaciones exportadas a hojas de calculo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(ch_automaticamente_excel, gridBagConstraints);
+
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Cotizaciones");
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel3.add(jLabel7, gridBagConstraints);
+
+        jTabbedPane1.addTab("Cotizaciones", jPanel3);
+
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        jLabel10.setText("Configuración de Calendar");
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(jLabel10, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(d_hora_defecto, gridBagConstraints);
+
+        jLabel11.setText("Hora por defecto para evento de inicio de trabajo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(jLabel11, gridBagConstraints);
+
+        ch_automaticamente_eventos.setText("Crear eventos automáticamente");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(ch_automaticamente_eventos, gridBagConstraints);
+
+        ch_recordatorio_informe.setText("Crear recordatorio cuando un informe esté disponible");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel4.add(ch_recordatorio_informe, gridBagConstraints);
+
+        jTabbedPane1.addTab("Calendario", jPanel4);
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        jLabel6.setText("Seguridad");
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel5.add(jLabel6, gridBagConstraints);
 
         b_cambiar_contraseña.setText("Cambiar contraseña");
         b_cambiar_contraseña.addActionListener(new java.awt.event.ActionListener() {
@@ -344,76 +441,11 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(10, 11, 10, 10);
-        getContentPane().add(b_cambiar_contraseña, gridBagConstraints);
+        jPanel5.add(b_cambiar_contraseña, gridBagConstraints);
 
-        ch_automaticamente_pdf.setText("Abrir automaticamente las cotizaciones exportadas a pdf");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(ch_automaticamente_pdf, gridBagConstraints);
+        jTabbedPane1.addTab("Seguridad", jPanel5);
 
-        ch_automaticamente_excel.setText("Abrir automaticamente las cotizaciones exportadas a hojas de calculo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(ch_automaticamente_excel, gridBagConstraints);
-
-        jLabel7.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Cotizaciones");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel7, gridBagConstraints);
-
-        jLabel10.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel10.setText("Configuración de Calendar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel10, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(d_hora_defecto, gridBagConstraints);
-
-        jLabel11.setText("Hora por defecto para evento de inicio de trabajo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jLabel11, gridBagConstraints);
-
-        ch_automaticamente_eventos.setText("Crear eventos automáticamente");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(ch_automaticamente_eventos, gridBagConstraints);
-
-        ch_recordatorio_informe.setText("Crear recordatorio cuando un informe esté disponible");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(ch_recordatorio_informe, gridBagConstraints);
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -669,6 +701,12 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField t_carpeta_c;
     // End of variables declaration//GEN-END:variables
 }
