@@ -7,7 +7,7 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
 <p align="left">
 <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green">
 <img src="https://img.shields.io/badge/Sistema%20Estiben%20Navarro%20-%20grey">
-<img src="https://img.shields.io/badge/Versi%C3%B3n-v1.0.21-blue">
+<img src="https://img.shields.io/badge/Versi%C3%B3n-v1.2.1-blue">
 <img src="https://img.shields.io/badge/Java-17-orange">
 </p>
 

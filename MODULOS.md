@@ -1,7 +1,7 @@
 # Módulos — Sistema EN
 
 > **Proyecto:** Sistema EN — Sistema de gestión para *ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARIAS*
-> **Versión:** 1.1.0 · **Lenguaje:** Java 17 · **IDE:** NetBeans 17 · **UI:** Swing (GUI Builder)
+> **Versión:** 1.2.1 · **Lenguaje:** Java 17 · **IDE:** NetBeans 17 · **UI:** Swing (GUI Builder)
 > **Fuente del análisis:** 70 archivos `.java` + 33 `.form` en `Sistema_en/src/` (27 031 líneas de Java)
 > **Alcance:** inventario completo de los módulos que componen el sistema, con sus clases, dependencias y responsabilidades.
 
@@ -575,7 +575,7 @@ Diálogos informativos y de comunicación con el proveedor del software.
 | Clase | LOC | Responsabilidad |
 |---|---:|---|
 | `Sistema_en` | 132 | `main`: splash → arranque → tema → login |
-| `Conexion` | 127 | Fachada de BD: ruta configurable + fábrica de `Connection`; `VERSION_APP = "1.1.0"` |
+| `Conexion` | 127 | Fachada de BD: ruta configurable + fábrica de `Connection`; `VERSION_APP = "1.2.1"` |
 | `Controlador_arranque` | 319 | Asistente de arranque y recuperación de BD |
 | `GoogleServicesProvider` | 1 091 | Drive / Sheets / Gmail |
 | `Carpetas` | 109 | Utilidades de sistema de archivos + clase interna `ObtenerImagenes` |
@@ -904,7 +904,7 @@ erDiagram
 | Librerías de terceros | 38 JARs |
 | Servicios Google | 3 (Drive, Sheets, Gmail) |
 | Pruebas unitarias | 0 (`test/` vacío) |
-| Versión | 1.1.0 |
+| Versión | 1.2.1 |
 
 **Top 10 de clases más grandes:**
 

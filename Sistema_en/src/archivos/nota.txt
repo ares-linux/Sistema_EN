@@ -1,3 +1,13 @@
+Versión 1.2.1
+
+Novedades:
+- Se lanzó únicamente para intentar resolver el problema del icono del programa (fallo en el upload del icono a jdeploy.com durante la publicación de la versión 1.2.0).
+
+Versión 1.2.0
+
+Novedades:
+- Nuevo diseño del formulario de configuraciones.
+
 Versión 1.1.0
 
 Novedades:

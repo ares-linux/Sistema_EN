@@ -166,7 +166,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         b_base = new javax.swing.JButton();
         t_base = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        b_importar_copia_seguridad = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(550, 475));
@@ -179,7 +179,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel1.setText("Copias de seguridad de base de datos");
+        jLabel1.setText("Copias de seguridad");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -187,7 +187,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("Frecuencia de la copia de seguridad automatica:");
+        jLabel2.setText("Frecuencia de la copia de seguridad");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -198,7 +198,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         ch_preguntar.setText("Preguntar antes de realizar la copia al cerrar.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(ch_preguntar, gridBagConstraints);
@@ -216,7 +216,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(ch_manual, gridBagConstraints);
@@ -256,7 +256,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_aceptar, gridBagConstraints);
@@ -269,7 +269,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridy = 17;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_cancelar, gridBagConstraints);
@@ -282,7 +282,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -291,14 +291,14 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         l_estado_de_conexion.setText("Estado de la conexion:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(l_estado_de_conexion, gridBagConstraints);
 
         l_estado.setText("estado");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(l_estado, gridBagConstraints);
 
@@ -315,20 +315,20 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(11, 11, 10, 10);
         getContentPane().add(ch_copias_cotizaciones, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         getContentPane().add(jSeparator2, gridBagConstraints);
@@ -341,7 +341,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridy = 15;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
@@ -355,7 +355,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(b_base, gridBagConstraints);
@@ -363,7 +363,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         t_base.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridy = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(t_base, gridBagConstraints);
@@ -372,25 +372,18 @@ public class D_copias_seguridad extends javax.swing.JDialog {
         jLabel3.setText("Ubicación de la base de datos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(jLabel3, gridBagConstraints);
 
-        b_importar_copia_seguridad.setText("Importar de copia de seguridad");
-        b_importar_copia_seguridad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_importar_copia_seguridadActionPerformed(evt);
-            }
-        });
+        jLabel4.setText("Opciones adicionales");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(b_importar_copia_seguridad, gridBagConstraints);
+        getContentPane().add(jLabel4, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -643,17 +636,6 @@ public class D_copias_seguridad extends javax.swing.JDialog {
             t_base.setText(carpeta.getAbsolutePath());
         }
     }//GEN-LAST:event_b_baseActionPerformed
-
-    private void b_importar_copia_seguridadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_importar_copia_seguridadActionPerformed
-        
-        if(!GoogleServicesProvider.estaConectado()){
-            JOptionPane.showMessageDialog(this, "Primero debes vincular una cuenta de Google Drive para importar la copia de seguridad.", "Cuenta no vinculada", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        
-        
-    }//GEN-LAST:event_b_importar_copia_seguridadActionPerformed
     
     /**
      * @param args the command line arguments
@@ -703,7 +685,6 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     private javax.swing.JButton b_cancelar;
     private javax.swing.JButton b_copia;
     private javax.swing.JButton b_cuenta;
-    private javax.swing.JButton b_importar_copia_seguridad;
     private javax.swing.JCheckBox ch_copias_cotizaciones;
     private javax.swing.JCheckBox ch_manual;
     private javax.swing.JCheckBox ch_preguntar;
@@ -711,6 +692,7 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JRadioButton jr_cada_cierre;

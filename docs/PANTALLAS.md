@@ -425,7 +425,7 @@ los mismos rótulos «Buscar», «Cancelar» y «Cerrar». El único elemento qu
 | **Utilidad** | Genera el informe mensual de un periodo, permite exportarlo y abrir el contraste contra otro periodo. |
 | **Uso** | Menú *Catálogo ▾ → Informes*. |
 
-#### `D_acerca_de` — «Acerca de» (muestra «Version 1.1.0»)
+#### `D_acerca_de` — «Acerca de» (muestra «Version 1.2.1»)
 
 | | |
 |---|---|
