@@ -30,8 +30,8 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
 
 | Tecnología | Descripción |
 |---|---|
-| Java 17 | Lenguaje de programación |
-| NetBeans 17 | IDE usado |
+| Java 26 | Lenguaje de programación |
+| NetBeans 30 | IDE usado |
 | SQLite (sqlite-jdbc) | Base de datos local |
 | FlatLaf | Look and feel moderno |
 | Google API Client | Integración con Drive y Sheets |
@@ -78,7 +78,7 @@ Para trabajar en el código:
    ```bash
    git clone https://github.com/ares-linux/Sistema_EN.git
    ```
-2. Abre el proyecto `Sistema_en` en **NetBeans 17**.
+2. Abre el proyecto `Sistema_en` en **NetBeans 30**.
 3. Las librerías están en la carpeta `lib/` del proyecto.
 4. Ejecuta el proyecto (la lógica de arranque está en la clase `Controlador_arranque`).
 
@@ -114,8 +114,8 @@ Para generar una nueva versión instalable con jDeploy:
 ## Documentos
 
 - **Página web del proyecto**: https://ares-linux.github.io/herramientas-equipo/
-- **Documentación técnica**: https://es.overleaf.com/project/6a9937acb90d921dc8580ec1
-- **Manual de usuario**: https://es.overleaf.com/project/6a9937cf2fe2a1465509d3bb
+- **Documentación técnica**: https://docs.google.com/document/d/1TYEXRZGXCl3ruwjMTYfG_SvQgS-VEWO2Oza72f1Hsjs/edit?usp=sharing
+- **Manual de usuario**: https://docs.google.com/document/d/1Kb0tr2GmgPkf74LLtteJbe_nPPIJ-wf6lnWWvwtwUh8/edit?usp=sharing
 
 ## Colaborar
 
