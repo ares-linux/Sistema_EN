@@ -5,7 +5,6 @@
 package sistema_en.Ventanas.dialogos;
 
 import dao.InformesDAO;
-import java.awt.GridLayout;
 import java.time.LocalDate;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -34,21 +33,22 @@ public class D_resultados_contraste2 extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setTitle("Resultados del Contraste (" + p1 + " vs " + p2 + ")");
-        setLocationRelativeTo(parent);
+        configurarTabla();
         cargarDatos(p1, p2, numerico, textual, mixto);
-        Tabla();
+        pack();
+        setLocationRelativeTo(parent);
     }
 
     /**
-     * Carga los datos desde la BD y ajusta la visibilidad de los paneles.
+     * Configura la tabla para que no sea editable y no se reordenen columnas.
      */
-    private final void Tabla(){
+    private void configurarTabla() {
         Tabla_resultados.setDefaultEditor(Object.class, null);
-        Tabla_resultados.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        Tabla_resultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         Tabla_resultados.getTableHeader().setReorderingAllowed(false);
         Tabla_resultados.getTableHeader().setResizingAllowed(false);
     }
-    
+
     private void cargarDatos(String p1, String p2,
             boolean numerico, boolean textual, boolean mixto) {
 
@@ -113,9 +113,9 @@ public class D_resultados_contraste2 extends javax.swing.JDialog {
             Area_texto.setCaretPosition(0);
         }
 
-        // Ajustar filas del grid según paneles visibles
-        int filas = (mostrarTabla ? 1 : 0) + (mostrarTexto ? 1 : 0);
-        Panel_central.setLayout(new GridLayout(Math.max(1, filas), 1));
+        // Forzar revalidación del layout después de cambiar visibilidad
+        Panel_central.revalidate();
+        Panel_central.repaint();
     }
 
     private String generarTexto(String metrica, int val1, int val2, String p1, String p2) {
@@ -151,34 +151,20 @@ public class D_resultados_contraste2 extends javax.swing.JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         Panel_central = new javax.swing.JPanel();
-        Scroll_texto = new javax.swing.JScrollPane();
-        Area_texto = new javax.swing.JTextArea();
         Scroll_tabla = new javax.swing.JScrollPane();
         Tabla_resultados = new javax.swing.JTable();
+        Scroll_texto = new javax.swing.JScrollPane();
+        Area_texto = new javax.swing.JTextArea();
         B_cerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
+        Panel_central.setPreferredSize(new java.awt.Dimension(550, 500));
         Panel_central.setLayout(new java.awt.GridBagLayout());
 
-        Scroll_texto.setMaximumSize(new java.awt.Dimension(800, 600));
-        Scroll_texto.setMinimumSize(new java.awt.Dimension(100, 100));
-
-        Area_texto.setColumns(20);
-        Area_texto.setRows(5);
-        Scroll_texto.setViewportView(Area_texto);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        Panel_central.add(Scroll_texto, gridBagConstraints);
-
-        Scroll_tabla.setMaximumSize(new java.awt.Dimension(800, 600));
-        Scroll_tabla.setMinimumSize(new java.awt.Dimension(100, 100));
+        Scroll_tabla.setMinimumSize(new java.awt.Dimension(200, 150));
+        Scroll_tabla.setPreferredSize(new java.awt.Dimension(500, 200));
 
         Tabla_resultados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -191,31 +177,48 @@ public class D_resultados_contraste2 extends javax.swing.JDialog {
         Scroll_tabla.setViewportView(Tabla_resultados);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
         Panel_central.add(Scroll_tabla, gridBagConstraints);
 
+        Scroll_texto.setMinimumSize(new java.awt.Dimension(200, 150));
+        Scroll_texto.setPreferredSize(new java.awt.Dimension(500, 200));
+
+        Area_texto.setEditable(false);
+        Area_texto.setColumns(20);
+        Area_texto.setLineWrap(true);
+        Area_texto.setRows(5);
+        Area_texto.setWrapStyleWord(true);
+        Scroll_texto.setViewportView(Area_texto);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 10);
+        Panel_central.add(Scroll_texto, gridBagConstraints);
+
         B_cerrar.setText("Cerrar");
+        B_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                B_cerrarActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 10, 10);
         Panel_central.add(B_cerrar, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Panel_central, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Panel_central, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        getContentPane().add(Panel_central, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
