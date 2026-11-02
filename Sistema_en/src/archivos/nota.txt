@@ -1,3 +1,8 @@
+Version 1.2.2
+Novedades:
+- Se añadio un boton para acceder a las politicas de privacidad del programa directamente en la pagina de privacidad.
+- Se arreglo el problema de que se deformaba la Pantalla de resultados de constraste de informes.
+
 Versión 1.2.1
 
 Novedades:
