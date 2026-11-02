@@ -46,8 +46,7 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
   <img src="./.assets/Paso%2027.png" alt="Paso 27" width="100%">
   <img src="./.assets/Paso%2028.png" alt="Paso 28" width="100%">
   <img src="./.assets/Paso%2029.png" alt="Paso 29" width="100%">
-  <img src="./.assets/Paso%2030.png" alt="Paso 30" width="100%">
-</details>
+  </details>
 ## Características
 
 -  Gestión de **clientes**, **trabajadores** y **trabajos**.
