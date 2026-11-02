@@ -172,3 +172,4 @@ Consulta la guía de trabajo en equipo: [docs/GUIA-TRABAJO.md](docs/GUIA-TRABAJO
 ---
 
  **jDeploy**: https://www.jdeploy.com/~sistema-en?all=1
+**Politacas de privacidad:** https://www.termsfeed.com/live/e30a35c8-86df-4de3-bd74-10506552a720
