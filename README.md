@@ -14,43 +14,39 @@ Sistema de gestión para la empresa: **ESTIBEN NAVARRO SOLUCIONES HIDRO-SANITARI
 ## Descripción
 
 **Sistema EN** es una aplicación de escritorio para administrar el trabajo de la empresa: permite registrar clientes, trabajadores y trabajos, generar cotizaciones con formato automático en Google Sheets, llevar la bitácora de actividades con evidencias en la nube, controlar pagos y herramientas, y mantener respaldos sincronizados en Google Drive.
-
 <details>
   <summary>📸 Haz clic aquí para ver las capturas de pantalla</summary>
   <br>
-  <img src="./assets/Paso 1.png" alt="Paso 1" width="100%">
-  <img src="./assets/Paso 2.png" alt="Paso 2" width="100%">
-   <img src="./assets/Paso 3.png" alt="Paso 3" width="100%">
-  <img src="./assets/Paso 4.png" alt="Paso 4" width="100%">
-   <img src="./assets/Paso 5.png" alt="Paso 5" width="100%">
-  <img src="./assets/Paso 6.png" alt="Paso 6" width="100%">
-   <img src="./assets/Paso 7.png" alt="Paso 7" width="100%">
-  <img src="./assets/Paso 8.png" alt="Paso 8" width="100%">
-   <img src="./assets/Paso 9.png" alt="Paso 9" width="100%">
-  <img src="./assets/Paso 10.png" alt="Paso 10" width="100%">
-   <img src="./assets/Paso 11.png" alt="Paso 11" width="100%">
-  <img src="./assets/Paso 12.png" alt="Paso 12" width="100%">
-   <img src="./assets/Paso 13.png" alt="Paso 13" width="100%">
-  <img src="./assets/Paso 14.png" alt="Paso 14" width="100%">
-   <img src="./assets/Paso 15.png" alt="Paso 15" width="100%">
-  <img src="./assets/Paso 16.png" alt="Paso 16" width="100%">
-   <img src="./assets/Paso 17.png" alt="Paso 17" width="100%">
-  <img src="./assets/Paso 18.png" alt="Paso 18" width="100%">
-   <img src="./assets/Paso 19.png" alt="Paso 19" width="100%">
-  <img src="./assets/Paso 20.png" alt="Paso 20" width="100%">
-   <img src="./assets/Paso 21.png" alt="Paso 21" width="100%">
-  <img src="./assets/ Paso 22.png" alt="Paso 22" width="100%">
-   <img src="./assets/Paso 23.png" alt="Paso 23" width="100%">
-  <img src="./assets/Paso 24.png" alt="Paso 24" width="100%">
-   <img src="./assets/Paso 25.png" alt="Paso 25" width="100%">
-  <img src="./assets/Paso 26.png" alt="Paso 26" width="100%">
-   <img src="./assets/Paso 27.png" alt="Paso 27" width="100%">
-  <img src="./assets/Paso 28.png" alt="Paso 28" width="100%">
-   <img src="./assets/Paso 29.png" alt="Paso 29" width="100%">
-  <img src="./assets/Paso 30.png" alt="Paso 30" width="100%">
-</details>
-
-
+  <img src="./.assets/Paso%201.png" alt="Paso 1" width="100%">
+  <img src="./.assets/Paso%202.png" alt="Paso 2" width="100%">
+  <img src="./.assets/Paso%203.png" alt="Paso 3" width="100%">
+  <img src="./.assets/Paso%204.png" alt="Paso 4" width="100%">
+  <img src="./.assets/Paso%205.png" alt="Paso 5" width="100%">
+  <img src="./.assets/Paso%206.png" alt="Paso 6" width="100%">
+  <img src="./.assets/Paso%207.png" alt="Paso 7" width="100%">
+  <img src="./.assets/Paso%208.png" alt="Paso 8" width="100%">
+  <img src="./.assets/Paso%209.png" alt="Paso 9" width="100%">
+  <img src="./.assets/Paso%2010.png" alt="Paso 10" width="100%">
+  <img src="./.assets/Paso%2011.png" alt="Paso 11" width="100%">
+  <img src="./.assets/Paso%2012.png" alt="Paso 12" width="100%">
+  <img src="./.assets/Paso%2013.png" alt="Paso 13" width="100%">
+  <img src="./.assets/Paso%2014.png" alt="Paso 14" width="100%">
+  <img src="./.assets/Paso%2015.png" alt="Paso 15" width="100%">
+  <img src="./.assets/Paso%2016.png" alt="Paso 16" width="100%">
+  <img src="./.assets/Paso%2017.png" alt="Paso 17" width="100%">
+  <img src="./.assets/Paso%2018.png" alt="Paso 18" width="100%">
+  <img src="./.assets/Paso%2019.png" alt="Paso 19" width="100%">
+  <img src="./.assets/Paso%2020.png" alt="Paso 20" width="100%">
+  <img src="./.assets/Paso%2021.png" alt="Paso 21" width="100%">
+  <img src="./.assets/Paso%2022.png" alt="Paso 22" width="100%">
+  <img src="./.assets/Paso%2023.png" alt="Paso 23" width="100%">
+  <img src="./.assets/Paso%2024.png" alt="Paso 24" width="100%">
+  <img src="./.assets/Paso%2025.png" alt="Paso 25" width="100%">
+  <img src="./.assets/Paso%2026.png" alt="Paso 26" width="100%">
+  <img src="./.assets/Paso%2027.png" alt="Paso 27" width="100%">
+  <img src="./.assets/Paso%2028.png" alt="Paso 28" width="100%">
+  <img src="./.assets/Paso%2029.png" alt="Paso 29" width="100%">
+  </details>
 ## Características
 
 -  Gestión de **clientes**, **trabajadores** y **trabajos**.
