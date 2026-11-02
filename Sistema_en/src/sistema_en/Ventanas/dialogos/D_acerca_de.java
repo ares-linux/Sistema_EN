@@ -5,12 +5,14 @@
 package sistema_en.Ventanas.dialogos;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -80,6 +82,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         P_ayuda = new javax.swing.JPanel();
         b_soporte = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         P_documentacion = new javax.swing.JPanel();
         b_descargar_documentacion = new javax.swing.JButton();
         b_nota_version = new javax.swing.JButton();
@@ -156,6 +159,19 @@ public class D_acerca_de extends javax.swing.JDialog {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         P_ayuda.add(b_soporte, gridBagConstraints);
+
+        jButton1.setText("Politicas de privacidad");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        P_ayuda.add(jButton1, gridBagConstraints);
 
         jTabbedPane1.addTab("Ayuda", P_ayuda);
 
@@ -613,6 +629,21 @@ public class D_acerca_de extends javax.swing.JDialog {
         nota.requestFocus();
     }//GEN-LAST:event_b_nota_versionActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         try {
+                    // Verificar si Desktop es compatible con el sistema
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop desktop = Desktop.getDesktop();
+                        URI uri = new URI("https://www.termsfeed.com/live/e30a35c8-86df-4de3-bd74-10506552a720");
+                        desktop.browse(uri);
+                    }
+                } catch (IOException | URISyntaxException ex) {
+                    ex.printStackTrace();
+                    //JOptionPane.showMessageDialog(frame, "No se pudo abrir el enlace.", "Error", JOptionPane.ERROR_MESSAGE);
+                    avisoError("No se pudo cargar la página de privacidad. Inténtelo de nuevo en unos segundos o escriba a soporte técnico si el problema continúa.");
+                }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -664,6 +695,7 @@ public class D_acerca_de extends javax.swing.JDialog {
     private javax.swing.JButton b_licencias;
     private javax.swing.JButton b_nota_version;
     private javax.swing.JButton b_soporte;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JTabbedPane jTabbedPane1;
