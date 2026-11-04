@@ -1,0 +1,35 @@
+name: Deploy Javadocs to GitHub Pages (Ant)
+
+on:
+  push:
+    branches: [ "main" ] # O "master" si tu rama principal se llama así
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17' # Cambia la versión de Java según tu proyecto (ej. 11, 17, 21)
+
+      - name: Setup Ant
+        uses: MadaraUchiha/setup-ant@v2 # Acción comunitaria para instalar Ant en GitHub Actions
+        with:
+          ant-version: '1.10.14'
+
+      - name: Generate Javadoc with Ant
+        run: ant javadoc # Asegúrate de que coincida con el nombre del target en tu build.xml
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist/docs/api # Debe coincidir con el 'destdir' que pusiste en tu build.xml
