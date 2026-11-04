@@ -64,13 +64,4 @@
         <echo message="¡ProGuard ha protegido tu archivo ejecutable con éxito!" />
     </target>-->
 
-    <target name="javadoc" description="Generar documentación Javadoc">
-        <javadoc sourcepath="src"
-                 destdir="dist/docs/api"
-                 packagenames="*"
-                 encoding="UTF-8"
-                 charset="UTF-8"
-                 docencoding="UTF-8" />
-        </target>
-
 </project>
