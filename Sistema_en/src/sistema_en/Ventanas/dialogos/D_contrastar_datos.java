@@ -64,7 +64,7 @@ public class D_contrastar_datos extends javax.swing.JDialog {
             return;
         }
 
-        D_resultados_contraste2 dialog = new D_resultados_contraste2(this, true, p1, p2, numerico, textual, mixto);
+        D_resultados_contraste dialog = new D_resultados_contraste(this, true, p1, p2, numerico, textual, mixto);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }

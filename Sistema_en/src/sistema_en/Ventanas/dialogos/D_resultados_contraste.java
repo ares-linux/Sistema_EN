@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author ares
  */
-public class D_resultados_contraste2 extends javax.swing.JDialog {
+public class D_resultados_contraste extends javax.swing.JDialog {
 
     /**
      * @param parent    ventana padre
@@ -27,7 +27,7 @@ public class D_resultados_contraste2 extends javax.swing.JDialog {
      * @param textual   mostrar resumen de texto
      * @param mixto     mostrar ambos paneles
      */
-    public D_resultados_contraste2(java.awt.Dialog parent, boolean modal,
+    public D_resultados_contraste(java.awt.Dialog parent, boolean modal,
             String p1, String p2,
             boolean numerico, boolean textual, boolean mixto) {
         super(parent, modal);
@@ -158,7 +158,6 @@ public class D_resultados_contraste2 extends javax.swing.JDialog {
         B_cerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.BorderLayout());
 
         Panel_central.setPreferredSize(new java.awt.Dimension(550, 500));
         Panel_central.setLayout(new java.awt.GridBagLayout());
@@ -244,20 +243,21 @@ public class D_resultados_contraste2 extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(D_resultados_contraste2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(D_resultados_contraste.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(D_resultados_contraste2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(D_resultados_contraste.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(D_resultados_contraste2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(D_resultados_contraste.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(D_resultados_contraste2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(D_resultados_contraste.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                D_resultados_contraste2 dialog = new D_resultados_contraste2(new javax.swing.JDialog(), true, "2025-01", "2025-02", true, true, false);
+                D_resultados_contraste dialog = new D_resultados_contraste(new javax.swing.JDialog(), true, "2025-01", "2025-02", true, true, false);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
