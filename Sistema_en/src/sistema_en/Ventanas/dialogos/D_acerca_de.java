@@ -84,10 +84,10 @@ public class D_acerca_de extends javax.swing.JDialog {
         b_soporte = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         P_documentacion = new javax.swing.JPanel();
-        b_descargar_documentacion = new javax.swing.JButton();
+        b_documentacion = new javax.swing.JButton();
         b_nota_version = new javax.swing.JButton();
         b_licencias = new javax.swing.JButton();
-        b_descargar_manual = new javax.swing.JButton();
+        b_manual_usuario = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(250, 610));
@@ -177,10 +177,10 @@ public class D_acerca_de extends javax.swing.JDialog {
 
         P_documentacion.setLayout(new java.awt.GridBagLayout());
 
-        b_descargar_documentacion.setText("Documentacion tecnica");
-        b_descargar_documentacion.addActionListener(new java.awt.event.ActionListener() {
+        b_documentacion.setText("Documentacion tecnica");
+        b_documentacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_descargar_documentacionActionPerformed(evt);
+                b_documentacionActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -189,7 +189,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        P_documentacion.add(b_descargar_documentacion, gridBagConstraints);
+        P_documentacion.add(b_documentacion, gridBagConstraints);
 
         b_nota_version.setText("Nota de version");
         b_nota_version.addActionListener(new java.awt.event.ActionListener() {
@@ -218,10 +218,10 @@ public class D_acerca_de extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
         P_documentacion.add(b_licencias, gridBagConstraints);
 
-        b_descargar_manual.setText("Descargar manual de usuarios");
-        b_descargar_manual.addActionListener(new java.awt.event.ActionListener() {
+        b_manual_usuario.setText("Descargar manual de usuarios");
+        b_manual_usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_descargar_manualActionPerformed(evt);
+                b_manual_usuarioActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -230,7 +230,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(10, 16, 10, 15);
-        P_documentacion.add(b_descargar_manual, gridBagConstraints);
+        P_documentacion.add(b_manual_usuario, gridBagConstraints);
 
         jTabbedPane1.addTab("Documentacion", P_documentacion);
 
@@ -305,22 +305,26 @@ public class D_acerca_de extends javax.swing.JDialog {
         soporte.requestFocus();
     }//GEN-LAST:event_b_soporteActionPerformed
 
-    private void b_descargar_manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_manualActionPerformed
-        descargarDocumento(
-                b_descargar_manual,
+    private void b_manual_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_manual_usuarioActionPerformed
+        descargarDocumento(b_manual_usuario,
                 URL_MANUAL,
                 "el manual de usuario",
                 "Manual de usuario Sistema_EN v" + Conexion.VERSION_APP + ".pdf"
         );
-    }//GEN-LAST:event_b_descargar_manualActionPerformed
+    }//GEN-LAST:event_b_manual_usuarioActionPerformed
 
-    private void b_descargar_documentacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_documentacionActionPerformed
+    /**
+ * b_documentacion es el boton para descargar la documentacion
+ * 
+ * @param respuesta1 es la seleccion que hace el usuario en showOptionDialog ya sea la pagina web o el pdf
+ */
+    
+    private void b_documentacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_documentacionActionPerformed
         String[] opciones = {"PDF", "Pagina web"};
         int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "De que forma desea consultar la documentacion tecnica", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
         
         if(respuesta1 == 0){
-            descargarDocumento(
-                b_descargar_documentacion,
+            descargarDocumento(b_documentacion,
                 URL_DOCUMENTACION_TECNICA,
                 "la documentacion tecnica",
                 "Documentacion tecnica Sistema_EN v" + Conexion.VERSION_APP + ".pdf"
@@ -343,7 +347,7 @@ public class D_acerca_de extends javax.swing.JDialog {
         }
         
         
-    }//GEN-LAST:event_b_descargar_documentacionActionPerformed
+    }//GEN-LAST:event_b_documentacionActionPerformed
 
     private void descargarDocumento(AbstractButton origen, String url, String etiqueta, String nombreArchivo) {
         JFileChooser selector = new JFileChooser();
@@ -712,9 +716,9 @@ public class D_acerca_de extends javax.swing.JDialog {
     private javax.swing.JPanel P_ayuda;
     private javax.swing.JPanel P_documentacion;
     private javax.swing.JButton b_cerrar;
-    private javax.swing.JButton b_descargar_documentacion;
-    private javax.swing.JButton b_descargar_manual;
+    private javax.swing.JButton b_documentacion;
     private javax.swing.JButton b_licencias;
+    private javax.swing.JButton b_manual_usuario;
     private javax.swing.JButton b_nota_version;
     private javax.swing.JButton b_soporte;
     private javax.swing.JButton jButton1;
