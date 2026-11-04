@@ -280,6 +280,12 @@ public class D_acerca_de extends javax.swing.JDialog {
         licencias.setVisible(true);
     }//GEN-LAST:event_b_licenciasActionPerformed
 
+    /**
+     * b_soporte es el boton para abrir el formulario de soporte tecnico.
+     * 
+     * @param soporte es la ventana de soporte tecnico.
+     */
+    
     private void b_soporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_soporteActionPerformed
         if (soporte == null || !soporte.isDisplayable()) {
             // Si tu constructor pide (Frame, boolean), pásale el Frame actual o null si no aplica

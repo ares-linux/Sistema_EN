@@ -1622,8 +1622,6 @@ private void agregarMaterial() {
 
         if (respuesta1 == 0) {
 
-            
-
             // Extraer datos de la interfaz igual que lo hacías para Sheets
             String numero_cotizacion = t_id_cotizacion.getText();
             String fecha = java.time.LocalDate.now().toString();
