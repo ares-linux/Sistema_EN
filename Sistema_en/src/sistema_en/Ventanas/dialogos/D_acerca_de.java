@@ -177,7 +177,7 @@ public class D_acerca_de extends javax.swing.JDialog {
 
         P_documentacion.setLayout(new java.awt.GridBagLayout());
 
-        b_descargar_documentacion.setText("Descargar documentacion tecnica");
+        b_descargar_documentacion.setText("Documentacion tecnica");
         b_descargar_documentacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_descargar_documentacionActionPerformed(evt);
@@ -315,12 +315,34 @@ public class D_acerca_de extends javax.swing.JDialog {
     }//GEN-LAST:event_b_descargar_manualActionPerformed
 
     private void b_descargar_documentacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_descargar_documentacionActionPerformed
-        descargarDocumento(
+        String[] opciones = {"PDF", "Pagina web"};
+        int respuesta1 = javax.swing.JOptionPane.showOptionDialog(this, "De que forma desea consultar la documentacion tecnica", "Seleccione una opción", javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[1]);
+        
+        if(respuesta1 == 0){
+            descargarDocumento(
                 b_descargar_documentacion,
                 URL_DOCUMENTACION_TECNICA,
                 "la documentacion tecnica",
                 "Documentacion tecnica Sistema_EN v" + Conexion.VERSION_APP + ".pdf"
         );
+        }
+        
+        if(respuesta1 == 1){
+            try {
+                    // Verificar si Desktop es compatible con el sistema
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop desktop = Desktop.getDesktop();
+                        URI uri = new URI("https://ares-linux.github.io/Sistema_EN/");
+                        desktop.browse(uri);
+                    }
+                } catch (IOException | URISyntaxException ex) {
+                    ex.printStackTrace();
+                    //JOptionPane.showMessageDialog(frame, "No se pudo abrir el enlace.", "Error", JOptionPane.ERROR_MESSAGE);
+                    avisoError("No se pudo cargar la página de la documentacion tecnica. Inténtelo de nuevo en unos segundos o escriba a soporte técnico si el problema continúa.");
+                }
+        }
+        
+        
     }//GEN-LAST:event_b_descargar_documentacionActionPerformed
 
     private void descargarDocumento(AbstractButton origen, String url, String etiqueta, String nombreArchivo) {
