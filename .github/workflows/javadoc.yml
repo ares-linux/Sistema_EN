@@ -18,18 +18,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17' # Cambia la versión de Java según tu proyecto (ej. 11, 17, 21)
-
-      - name: Setup Ant
-        uses: MadaraUchiha/setup-ant@v2 # Acción comunitaria para instalar Ant en GitHub Actions
-        with:
-          ant-version: '1.10.14'
+          java-version: '17' # Cambia la versión de Java según tu proyecto
 
       - name: Generate Javadoc with Ant
-        run: ant javadoc # Asegúrate de que coincida con el nombre del target en tu build.xml
+        run: ant javadoc # Llama directamente al target de tu build.xml
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/docs/api # Debe coincidir con el 'destdir' que pusiste en tu build.xml
+          publish_dir: Sistema_EN/Sistema_en # Debe coincidir con el 'destdir' de tu build.xml
