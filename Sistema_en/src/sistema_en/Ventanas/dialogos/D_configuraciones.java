@@ -161,6 +161,8 @@ public class D_configuraciones extends javax.swing.JDialog {
         ch_error = new javax.swing.JCheckBox();
         jLabel8 = new javax.swing.JLabel();
         b_copias_seguridad = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        b_datos_variables = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         ch_automaticamente_pdf = new javax.swing.JCheckBox();
         ch_automaticamente_excel = new javax.swing.JCheckBox();
@@ -238,7 +240,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel1, gridBagConstraints);
 
@@ -323,8 +325,8 @@ public class D_configuraciones extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jLabel8, gridBagConstraints);
 
@@ -336,11 +338,34 @@ public class D_configuraciones extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(b_copias_seguridad, gridBagConstraints);
+
+        jLabel12.setText("Datos variables");
+        jLabel12.setFont(new java.awt.Font("Inter", 1, 13)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(jLabel12, gridBagConstraints);
+
+        b_datos_variables.setText("Datos Variables");
+        b_datos_variables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_datos_variablesActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(b_datos_variables, gridBagConstraints);
 
         jTabbedPane1.addTab("General", jPanel1);
 
@@ -521,6 +546,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         //b_vista_previa.setEnabled(false);
         b_copias_seguridad.setEnabled(false);
         b_cambiar_contraseña.setEnabled(false);
+        b_datos_variables.setEnabled(false);
     }
     
     public void desbloquear_botones(){
@@ -529,6 +555,7 @@ public class D_configuraciones extends javax.swing.JDialog {
         //b_vista_previa.setEnabled(true);
         b_copias_seguridad.setEnabled(true);
         b_cambiar_contraseña.setEnabled(true);
+        b_datos_variables.setEnabled(true);
     }
        
     private void b_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_cerrarActionPerformed
@@ -632,6 +659,12 @@ public class D_configuraciones extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_b_carpeta_cActionPerformed
 
+    private void b_datos_variablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_datos_variablesActionPerformed
+        D_datos_variables variables = new D_datos_variables((java.awt.Frame) this.getParent(), true);
+        variables.setLocationRelativeTo(D_configuraciones.this);
+        variables.setVisible(true);
+    }//GEN-LAST:event_b_datos_variablesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -680,6 +713,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.JButton b_carpeta_c;
     private javax.swing.JButton b_cerrar;
     private javax.swing.JButton b_copias_seguridad;
+    private javax.swing.JButton b_datos_variables;
     private javax.swing.JButton b_guardar_preferencias;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
@@ -693,6 +727,7 @@ public class D_configuraciones extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

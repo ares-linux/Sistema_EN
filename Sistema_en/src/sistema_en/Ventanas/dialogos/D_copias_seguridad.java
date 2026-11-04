@@ -33,6 +33,8 @@ public class D_copias_seguridad extends javax.swing.JDialog {
     
     /**
      * Creates new form D_copias_seguridad
+     * @param parent
+     * @param modal
      */
     public D_copias_seguridad(java.awt.Frame parent, boolean modal) {
         super(parent, modal);

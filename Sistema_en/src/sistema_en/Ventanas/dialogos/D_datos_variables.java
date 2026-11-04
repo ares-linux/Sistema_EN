@@ -4,21 +4,28 @@
  */
 package sistema_en.Ventanas.dialogos;
 
+import java.awt.Frame;
+
 /** 
  * Este dialogo sirve para editar los datos que pueden ser 
  * variables con el tiempo o por situaciones distintas
  * @author ares
  */
-public class D_datos_variables extends javax.swing.JFrame {
+public class D_datos_variables extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(D_datos_variables.class.getName());
 
     /**
      * Creates new form D_datos_variables
+     * @param parent
+     * @param modal
      */
-    public D_datos_variables() {
+    public D_datos_variables(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,9 +40,9 @@ public class D_datos_variables extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         t_iva = new javax.swing.JTextField();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        b_editar_datos = new javax.swing.JToggleButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Inter", 1, 13)); // NOI18N
@@ -61,12 +68,12 @@ public class D_datos_variables extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(t_iva, gridBagConstraints);
 
-        jToggleButton1.setText("Editar datos");
+        b_editar_datos.setText("Editar datos");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        getContentPane().add(jToggleButton1, gridBagConstraints);
+        getContentPane().add(b_editar_datos, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -93,13 +100,26 @@ public class D_datos_variables extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new D_datos_variables().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new D_datos_variables().setVisible(true));
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                D_cambiar_contraseña dialog = new D_cambiar_contraseña(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton b_editar_datos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTextField t_iva;
     // End of variables declaration//GEN-END:variables
 }
