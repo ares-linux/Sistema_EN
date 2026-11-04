@@ -18,13 +18,14 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17' # Cambia la versión de Java según tu proyecto
+          java-version: '17' # Cambia la versión de Java si usas otra (ej. 11, 21)
 
       - name: Generate Javadoc with Ant
-        run: ant javadoc # Llama directamente al target de tu build.xml
+        run: ant javadoc
+        working-directory: Sistema_en # <--- ¡Esto es clave! Entra a la carpeta de tu proyecto
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/docs/api # Debe coincidir con el 'destdir' de tu build.xml
+          publish_dir: Sistema_en/dist/javadoc # <--- Apunta a la ruta real dentro de Sistema_en
