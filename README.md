@@ -159,6 +159,7 @@ Estos documento se encuentran en **Google Docs** como documentos disponibles.
 Estos documentos se encuentran dentro de proyecto en la carpeta **docs** del repositorio.
 
 - **Arquitectura.md**: [docs/Arquitectura.md](docs/Arquitectura.md)
+- **COLORES.md**: [docs/COLORES.md](docs/COLORES.md)
 - **D_informes_contenido.md**: [docs/D_informes_contenido.md](docs/D_informes_contenido.md)
 - **GUIATRABAJO.Md**:[docs/GUIATRABAJO.md](docs/GUIA-TRABAJO.md)
 - **PANTALLAS.md**: [docs/PANTALLAS.md](docs/PANTALLAS.md)
