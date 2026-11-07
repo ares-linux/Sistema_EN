@@ -419,7 +419,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(jScrollPane2, gridBagConstraints);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(453, 250));
 
@@ -439,7 +439,7 @@ public class V_R_Trabajo extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(Tabla_trabajos);
 
-        getContentPane().add(jScrollPane1, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

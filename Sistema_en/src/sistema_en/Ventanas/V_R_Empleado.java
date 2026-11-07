@@ -463,7 +463,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
 
         t_nombre.getAccessibleContext().setAccessibleName("");
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
 
         J_tabla.setAutoscrolls(true);
         J_tabla.setPreferredSize(new java.awt.Dimension(453, 240));
@@ -483,7 +483,7 @@ public class V_R_Empleado extends javax.swing.JFrame {
         });
         J_tabla.setViewportView(Tabla_empleados);
 
-        getContentPane().add(J_tabla, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(J_tabla, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
