@@ -13,8 +13,29 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import sistema_en.Ventanas.dialogos.D_registro_usuario;
 
+/**
+ * Orquesta el arranque de la aplicacion: localiza la base de datos, valida su
+ * esquema y, si no existe, guia al usuario para restaurarla desde Google
+ * Drive, buscarla manualmente o crear una nueva.
+ *
+ * @author ares
+ */
 public class Controlador_arranque {
 
+    /**
+     * Clase de utilidad: no se instancia.
+     */
+    private Controlador_arranque() {
+    }
+
+    /**
+     * Ejecuta la secuencia de arranque. Si la base de datos existe comprueba
+     * que sea escribible y que tenga un administrador registrado; si no existe
+     * abre el asistente de recuperacion o creacion.
+     *
+     * @return {@code true} si la aplicacion puede continuar, {@code false} si
+     *         el usuario decidio salir o el arranque fallo
+     */
     public static boolean iniciar() {
         String ruta = Conexion.rutaArchivoBD();
         System.out.println("[arranque] version=" + Conexion.VERSION_APP + " bd=" + ruta);
@@ -48,6 +69,13 @@ public class Controlador_arranque {
         return resultado[0];
     }
 
+    /**
+     * Comprueba que la base de datos admita escritura ejecutando una tabla
+     * temporal de sonda. Si el archivo esta bloqueado por otro proceso avisa
+     * al usuario de las posibles causas.
+     *
+     * @param ruta ruta del archivo de base de datos
+     */
     private static void verificarSondaEscritura(String ruta) {
         try (Connection con = Conexion.conectar()) {
             if (con == null) {
@@ -74,6 +102,13 @@ public class Controlador_arranque {
         }
     }
 
+    /**
+     * Bucle interactivo que permite recuperar la base de datos desde Drive,
+     * buscarla manualmente o crear una nueva hasta que el arranque se resuelve
+     * o el usuario elige salir.
+     *
+     * @return {@code true} si quedo disponible una base de datos valida
+     */
     private static boolean recuperarYResolver() {
         while (true) {
             if (Conexion.existeBaseDatos()) {
@@ -148,6 +183,12 @@ public class Controlador_arranque {
         }
     }
 
+    /**
+     * Intenta descargar el respaldo de la base de datos desde la carpeta
+     * "Base de datos" de Google Drive.
+     *
+     * @return {@code true} si el respaldo se restauro correctamente
+     */
     private static boolean intentarRestaurarDesdeDrive() {
         String ruta = Conexion.rutaArchivoBD();
         JOptionPane.showMessageDialog(null,
@@ -165,6 +206,10 @@ public class Controlador_arranque {
         return false;
     }
 
+    /**
+     * Guia al usuario para vincular una cuenta de Google Drive desde el
+     * asistente de arranque.
+     */
     private static void vincularCuentaGoogle() {
         JOptionPane.showMessageDialog(null,
                 "Se abrira el navegador para vincular otra cuenta de Google Drive.\n"
@@ -181,6 +226,12 @@ public class Controlador_arranque {
         }
     }
 
+    /**
+     * Abre un selector de archivos para que el usuario ubique manualmente la
+     * base de datos y guarda la ruta elegida si es valida.
+     *
+     * @return {@code true} si se selecciono una base de datos valida
+     */
     private static boolean buscarManual() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Seleccione la base de datos (sistema_EN)");
@@ -202,6 +253,13 @@ public class Controlador_arranque {
         return false;
     }
 
+    /**
+     * Crea una base de datos nueva y vacia en la ubicacion prevista, con
+     * confirmacion del usuario, y ofrece subirla a Drive como respaldo.
+     *
+     * @return {@code true} si la base de datos quedo creada y con usuario
+     *         registrado
+     */
     private static boolean crearBaseDatosNueva() {
         int confirmar = JOptionPane.showConfirmDialog(null,
                 "Se creara una base de datos NUEVA y VACIA en la ubicacion prevista.\n\n"
@@ -261,6 +319,13 @@ public class Controlador_arranque {
         return registrarUsuarioObligatorio();
     }
 
+    /**
+     * Crea la base de datos en la ubicacion por defecto o reutiliza la que ya
+     * exista alli, y ofrece subirla a Drive como respaldo.
+     *
+     * @return {@code true} si la base de datos quedo lista y con usuario
+     *         registrado
+     */
     private static boolean crearEnUbicacionPorDefecto() {
         String ruta = Conexion.rutaDefectoBD();
         File archivoBD = new File(ruta);
@@ -320,6 +385,12 @@ public class Controlador_arranque {
         return registrarUsuarioObligatorio();
     }
 
+    /**
+     * Insiste con el registro obligatorio de un usuario hasta que se registra
+     * uno o el usuario decide no continuar.
+     *
+     * @return {@code true} si se registro un usuario
+     */
     private static boolean registrarUsuarioObligatorio() {
         while (true) {
             D_registro_usuario dlg = new D_registro_usuario(null, true);

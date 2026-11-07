@@ -11,6 +11,8 @@ import java.net.UnknownHostException;
 
 /**
  * Utilidad global para comprobar si hay salida a internet.
+ *
+ * @author ares
  */
 public class Internet {
 
@@ -42,6 +44,11 @@ public class Internet {
     private Internet() {
     }
 
+    /**
+     * Realiza un sondeo directo a internet, sin cache.
+     *
+     * @return {@code true} si el servidor respondio correctamente
+     */
     public static boolean Prueba_internet() {
         try {
             URL url = new URL(URL_SONDEO);

@@ -16,13 +16,28 @@ import javax.swing.*;
 
 
 /**
+ * Punto de entrada de la aplicacion Sistema EN.
+ *
+ * <p>Muestra la pantalla de bienvenida ({@link animaciones.V_splash}), ejecuta
+ * el arranque de la base de datos mediante {@link Controlador_arranque} y, si
+ * todo esta listo, abre la ventana de inicio de sesion aplicando el tema
+ * configurado por el usuario: claro, oscuro o automatico.</p>
  *
  * @author ares
  */
 public class Sistema_en {
 
     /**
-     * @param args the command line arguments
+     * Clase de arranque: no se instancia.
+     */
+    private Sistema_en() {
+    }
+
+    /**
+     * Inicia la aplicacion: verifica la base de datos y abre la ventana de
+     * inicio de sesion con el tema configurado.
+     *
+     * @param args argumentos de linea de comandos (no se utilizan)
      */
 public static void main(String[] args) {      
     //V_login_user login = new V_login_user();

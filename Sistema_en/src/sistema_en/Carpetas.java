@@ -10,13 +10,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
+ * Utilidades para crear, verificar y mover las carpetas locales que usa la
+ * aplicacion (cotizaciones, imagenes y estructura de trabajo).
  *
  * @author ares
  */
 public class Carpetas {
-    
+
     private static boolean exito_cambiar_carpeta_cotizaciones;
-    
+
+    /**
+     * Clase de utilidad: no se instancia.
+     */
+    private Carpetas() {
+    }
+
+    /**
+     * Crea una carpeta local, incluyendo las carpetas padre que falten.
+     *
+     * @param rutaCarpeta ruta de la carpeta a crear
+     */
     public static void crearCarpetaLocal(String rutaCarpeta) {
         try {
             Path path = Paths.get(rutaCarpeta);
@@ -34,6 +47,12 @@ public class Carpetas {
         }
     }
     
+    /**
+     * Comprueba si una ruta existe y ademas es una carpeta.
+     *
+     * @param rutaCarpeta ruta a verificar
+     * @return {@code true} si la ruta existe y es un directorio
+     */
     public static boolean verificarCarpetaExiste(String rutaCarpeta) {
     Path path = Paths.get(rutaCarpeta);
     
@@ -41,6 +60,14 @@ public class Carpetas {
     return Files.exists(path) && Files.isDirectory(path);
 }
     
+    /**
+     * Mueve la carpeta de cotizaciones desde la ruta antigua a la nueva y, si
+     * no existia, la crea en la ubicacion nueva.
+     *
+     * @param rutaAntigua             ruta anterior de la carpeta base
+     * @param rutaNueva               ruta nueva de la carpeta base
+     * @param nombreCarpetaCotizaciones nombre de la subcarpeta de cotizaciones
+     */
     public static void actualizarRutaCotizaciones(String rutaAntigua, String rutaNueva, String nombreCarpetaCotizaciones) {
     java.nio.file.Path pathAntiguo = java.nio.file.Paths.get(rutaAntigua, nombreCarpetaCotizaciones);
     java.nio.file.Path pathNuevo = java.nio.file.Paths.get(rutaNueva, nombreCarpetaCotizaciones);
@@ -75,18 +102,43 @@ public class Carpetas {
     }
 }
     
+    /**
+     * Indica el resultado de la ultima operacion de cambio de ruta de
+     * cotizaciones.
+     *
+     * @return {@code true} si el ultimo cambio de ruta se completo con exito
+     */
     public static boolean Carpetas_cambio_cotizaciones(){
         
         return exito_cambiar_carpeta_cotizaciones;
         
     }
  
+/**
+ * Utilidades para localizar la carpeta de imagenes del usuario.
+ */
 public class ObtenerImagenes {
+    /**
+     * Clase de utilidad: no se instancia.
+     */
+    private ObtenerImagenes() {
+    }
+
+    /**
+     * Metodo de prueba que imprime la carpeta de imagenes detectada.
+     *
+     * @param args argumentos de linea de comandos (no se utilizan)
+     */
     public static void main(String[] args) {
         Path rutaImagenes = obtenerCarpetaImagenes();
         System.out.println("Ruta: " + rutaImagenes);
     }
 
+    /**
+     * Detecta la carpeta de imagenes del usuario segun el sistema operativo.
+     *
+     * @return ruta de la carpeta de imagenes
+     */
     public static Path obtenerCarpetaImagenes() {
         String userHome = System.getProperty("user.home");
         String os = System.getProperty("os.name").toLowerCase();

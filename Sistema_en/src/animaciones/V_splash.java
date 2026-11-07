@@ -12,13 +12,25 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import sistema_en.Conexion;
 
+/**
+ * Ventana de bienvenida que se muestra mientras la aplicacion verifica la base
+ * de datos y prepara el arranque.
+ *
+ * @author ares
+ */
 public class V_splash extends JWindow {
 
     private static final long MIN_DURACION_MS = 1200;
 
+    /** Etiqueta que muestra el estado del arranque. */
     private final JLabel lb_estado;
+    /** Instante (en nanosegundos) en que se mostro la ventana. */
     private long inicio;
 
+    /**
+     * Construye la pantalla de bienvenida con el titulo, la version de la
+     * aplicacion y una barra de progreso indeterminada.
+     */
     public V_splash() {
         JPanel fondo = new JPanel(new BorderLayout(0, 8));
         fondo.setBorder(BorderFactory.createEmptyBorder(24, 28, 22, 28));
@@ -52,6 +64,10 @@ public class V_splash extends JWindow {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Muestra la ventana y registra el instante de inicio para respetar la
+     * duracion minima de la pantalla de bienvenida.
+     */
     public void mostrar() {
         try {
             SwingUtilities.invokeAndWait(() -> {
@@ -67,6 +83,11 @@ public class V_splash extends JWindow {
         inicio = System.nanoTime();
     }
 
+    /**
+     * Actualiza el texto de estado que se muestra bajo el titulo.
+     *
+     * @param estado mensaje de estado a mostrar
+     */
     public void actualizarEstado(String estado) {
         Runnable cambio = () -> lb_estado.setText(estado);
         if (SwingUtilities.isEventDispatchThread()) {
@@ -76,6 +97,10 @@ public class V_splash extends JWindow {
         }
     }
 
+    /**
+     * Cierra la ventana respetando la duracion minima configurada para que la
+     * pantalla no desaparezca de forma abrupta.
+     */
     public void cerrar() {
         long transcurrido = (System.nanoTime() - inicio) / 1_000_000;
         long resto = MIN_DURACION_MS - transcurrido;

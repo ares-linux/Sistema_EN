@@ -57,16 +57,33 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 /**
+ * Proveedor central de las integraciones con Google: autenticacion OAuth,
+ * Google Drive, Google Sheets, Gmail y Google Calendar.
+ *
+ * <p>Agrupa las operaciones que hablan con las APIs de Google para que las
+ * ventanas no construyan sus propios servicios ni repitan la gestion de
+ * credenciales. Las llamadas de red deben ejecutarse a traves de
+ * {@link EjecutorGoogle}, nunca en el hilo de eventos de Swing.</p>
  *
  * @author ares
  */
 public class GoogleServicesProvider {
 
     private static String url;
+
+    /**
+     * Clase de utilidad: no se instancia.
+     */
+    private GoogleServicesProvider() {
+    }
     
+    /** Nombre que se envia a las APIs de Google para identificar la aplicacion. */
     public static final String APPLICATION_NAME = "Sistema EN";
+    /** Fabrica JSON compartida por los servicios de Google. */
     public static final JsonFactory JSON_FACTORY = com.google.api.client.json.gson.GsonFactory.getDefaultInstance();
+    /** Carpeta donde se guardan los tokens OAuth del usuario. */
     public static final String TOKENS_DIRECTORY_PATH = "tokens";
+    /** Transporte HTTP compartido por los servicios de Google. */
     public static final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
     
     private static final List<String> SCOPES = Arrays.asList(
@@ -76,8 +93,22 @@ public class GoogleServicesProvider {
             CalendarScopes.CALENDAR_EVENTS
     );
     
+    /** Nombre del archivo de credenciales OAuth que debe acompanar al ejecutable. */
     public static final String CREDENTIALS_FILE_PATH = "credentials.json";
 
+    /**
+     * Obtiene el inicializador de peticiones autenticadas con Google.
+     *
+     * <p>Busca el archivo de credenciales, ejecuta el flujo OAuth (abriendo el
+     * navegador la primera vez) y devuelve un inicializador que renueva el
+     * token automaticamente. Si Google revoca el token, desconecta la cuenta y
+     * fuerza una nueva autenticacion.</p>
+     *
+     * @param HTTP_TRANSPORT transporte HTTP a utilizar
+     * @return inicializador de peticiones autenticadas
+     * @throws Exception si no se encuentra el archivo de credenciales o falla
+     *                   la autorizacion
+     */
     public static synchronized com.google.api.client.http.HttpRequestInitializer getCredentials(final HttpTransport HTTP_TRANSPORT) throws Exception {
         java.io.File credentialsFile = UtilidadesRutas.buscarCredenciales();
         if (credentialsFile == null) {
@@ -136,6 +167,12 @@ public class GoogleServicesProvider {
         };
     }
 
+    /**
+     * Crea un cliente autenticado de Google Sheets.
+     *
+     * @return servicio de Sheets listo para usar
+     * @throws Exception si falla la autenticacion
+     */
     public static Sheets getSheetsService() throws Exception {
         final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
         return new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -143,6 +180,12 @@ public class GoogleServicesProvider {
                 .build();
     }
     
+    /**
+     * Crea un cliente autenticado de Gmail.
+     *
+     * @return servicio de Gmail listo para usar
+     * @throws Exception si falla la autenticacion
+     */
     public static Gmail getGmailService() throws Exception {
         final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
         return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -150,6 +193,12 @@ public class GoogleServicesProvider {
                 .build();
     }
     
+    /**
+     * Crea un cliente autenticado de Google Calendar.
+     *
+     * @return servicio de Calendar listo para usar
+     * @throws Exception si falla la autenticacion
+     */
     public static Calendar getCalendarService() throws Exception {
         final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
         return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -157,6 +206,12 @@ public class GoogleServicesProvider {
                 .build();
     }
 
+    /**
+     * Comprueba que la cuenta vinculada tenga un token valido con permisos de
+     * Google Calendar realizando una llamada ligera a la API.
+     *
+     * @return {@code true} si la conexion con Calendar funciona
+     */
     public static boolean verificarConexionCalendar() {
         if (!estaConectado()) return false;
         try {
@@ -174,6 +229,8 @@ public class GoogleServicesProvider {
     /**
      * Calcula el intervalo del evento a partir de las fechas del trabajo.
      *
+     * @param trabajo     trabajo del que se toman las fechas
+     * @param horaDefecto hora a usar cuando el trabajo no define una
      * @return un array con inicio y fin, o null si el trabajo no tiene fecha de inicio
      */
     private static EventDateTime[] calcularIntervalo(Trabajo trabajo, LocalTime horaDefecto) {
@@ -211,6 +268,8 @@ public class GoogleServicesProvider {
      * Arma el evento con los datos que la aplicacion administra. Lo comparten la
      * creacion y la actualizacion, para que las dos rutas no diverjan.
      *
+     * @param trabajo     trabajo del que se toman los datos
+     * @param horaDefecto hora a usar cuando el trabajo no define una
      * @return el evento, o null si el trabajo no tiene fecha de inicio
      */
     private static Event construirEvento(Trabajo trabajo, LocalTime horaDefecto) {
@@ -227,6 +286,13 @@ public class GoogleServicesProvider {
                 .setEnd(intervalo[1]);
     }
 
+    /**
+     * Crea un evento en el calendario principal con los datos del trabajo.
+     *
+     * @param trabajo     trabajo del que se toman fechas, descripcion y estado
+     * @param horaDefecto hora a usar cuando el trabajo no define una
+     * @return id del evento creado, o {@code null} si no se pudo crear
+     */
     public static String crearEventoTrabajo(Trabajo trabajo, LocalTime horaDefecto) {
         try {
             Event evento = construirEvento(trabajo, horaDefecto);
@@ -255,6 +321,9 @@ public class GoogleServicesProvider {
      * manda update. Actualizar a ciegas borraria asistentes, recordatorios y
      * demas campos que la app nunca toco.
      *
+     * @param trabajo     trabajo con los datos actualizados
+     * @param horaDefecto hora a usar cuando el trabajo no define una
+     * @param idEvento    id del evento existente en Google Calendar
      * @return el id del evento actualizado, o null si ya no existe en Google
      *         (por ejemplo si se borro desde el calendario a mano) y hay que crearlo
      */
@@ -294,6 +363,7 @@ public class GoogleServicesProvider {
      * cancelacion: nace en la cotizacion y su fecha de inicio se fija despues,
      * asi que no existe un momento del flujo en el que el evento sobre.
      *
+     * @param idEvento id del evento a eliminar
      * @return true si Google confirmo el borrado
      */
     public static boolean eliminarEventoTrabajo(String idEvento) {
@@ -314,6 +384,9 @@ public class GoogleServicesProvider {
     /**
      * Devuelve el enlace web del evento de un trabajo, para abrirlo en el
      * navegador, o null si el trabajo todavia no tiene evento.
+     *
+     * @param trabajo trabajo del que se consulta el evento
+     * @return enlace HTML del evento, o {@code null} si no existe
      */
     public static String obtenerEnlaceEvento(Trabajo trabajo) {
         if (trabajo == null || trabajo.getId_evento() == null || trabajo.getId_evento().isBlank()) {
@@ -337,6 +410,8 @@ public class GoogleServicesProvider {
      * La tarea no deja propagar ninguna excepcion a proposito: si algo escapara,
      * EjecutorGoogle lo reintentaria por ser un fallo de red y podria crear un
      * segundo evento, que es justo lo que este metodo evita.
+     *
+     * @param trabajo trabajo cuyo evento debe crearse o actualizarse
      */
     public static void crearEventoSiConfigurado(Trabajo trabajo) {
         EjecutorGoogle.ejecutarSilencioso(() -> {
@@ -373,6 +448,9 @@ public class GoogleServicesProvider {
      * Guarda el id del evento, creandolo primero si el trabajo aun no tiene uno.
      * Se ejecuta desde el hilo de Google; la escritura en la base usa su propia
      * conexion, igual que sincronizarTrabajosPendientes con las carpetas de Drive.
+     *
+     * @param trabajo     trabajo a sincronizar
+     * @param horaDefecto hora a usar cuando el trabajo no define una
      */
     private static void sincronizarEventoTrabajo(Trabajo trabajo, LocalTime horaDefecto) {
         TrabajoDAO dao = new TrabajoDAO();
@@ -392,10 +470,25 @@ public class GoogleServicesProvider {
         }
     }
 
+    /**
+     * Lista los archivos de una carpeta de Drive.
+     *
+     * @param idCarpetaDrive id de la carpeta en Drive
+     * @return lista de evidencias encontradas; vacia si no hay conexion o la
+     *         carpeta es nula
+     */
     public static List<Evidencia> listarArchivosDeCarpeta(String idCarpetaDrive) {
         return listarArchivosDeCarpeta(idCarpetaDrive, false);
     }
 
+    /**
+     * Lista los archivos de una carpeta de Drive, con opcion de limitar el
+     * resultado a imagenes.
+     *
+     * @param idCarpetaDrive id de la carpeta en Drive
+     * @param soloImagenes   {@code true} para devolver solo archivos de imagen
+     * @return lista de evidencias encontradas
+     */
     public static List<Evidencia> listarArchivosDeCarpeta(String idCarpetaDrive, boolean soloImagenes) {
         List<Evidencia> lista = new java.util.ArrayList<>();
         if (!estaConectado() || idCarpetaDrive == null) {
@@ -440,6 +533,13 @@ public class GoogleServicesProvider {
         return lista;
     }
 
+    /**
+     * Determina si un archivo de Drive es una imagen, por su MIME o por la
+     * extension de su nombre.
+     *
+     * @param archivo archivo de Drive a evaluar
+     * @return {@code true} si el archivo es una imagen
+     */
     private static boolean esImagen(com.google.api.services.drive.model.File archivo) {
         String mime = archivo.getMimeType();
         if (mime != null && mime.startsWith("image/")) {
@@ -450,6 +550,13 @@ public class GoogleServicesProvider {
                 || nombre.endsWith(".gif") || nombre.endsWith(".webp") || nombre.endsWith(".bmp");
     }
 
+    /**
+     * Sube una imagen local a una carpeta de Google Drive.
+     *
+     * @param rutaLocalImagen ruta de la imagen en el equipo
+     * @param idCarpetaDrive  id de la carpeta destino en Drive
+     * @return id del archivo creado en Drive, o {@code null} si fallo
+     */
     public static String subirImagenACarpeta(String rutaLocalImagen, String idCarpetaDrive) {
         if (!estaConectado()) {
             return null;
@@ -486,6 +593,14 @@ public class GoogleServicesProvider {
         }
     }
 
+    /**
+     * Sube un archivo local a una carpeta de Drive. Si ya existe un archivo con
+     * el mismo nombre en Drive, actualiza su contenido en lugar de duplicarlo.
+     *
+     * @param rutaArchivoLocal ruta del archivo local
+     * @param ruta             id de la carpeta destino en Drive
+     * @return {@code true} si la subida se completo correctamente
+     */
     public static boolean subirArchivo(String rutaArchivoLocal,String ruta) {
         if (!estaConectado()) {
             System.out.println("❌ Error: no hay ninguna cuenta de Google Drive vinculada.");
@@ -555,11 +670,23 @@ public class GoogleServicesProvider {
         return true;
     }
 
+    /**
+     * Indica si hay una cuenta de Google vinculada, comprobando que exista la
+     * carpeta de tokens con contenido.
+     *
+     * @return {@code true} si hay credenciales guardadas
+     */
     public static boolean estaConectado() {
         java.io.File carpetaTokens = UtilidadesRutas.directorioTokens();
         return carpetaTokens.exists() && carpetaTokens.isDirectory() && carpetaTokens.list().length > 0;
     }
 
+    /**
+     * Elimina los tokens guardados y la carpeta de credenciales, cerrando la
+     * sesion de Google de la aplicacion.
+     *
+     * @return {@code true} si la carpeta de tokens se elimino correctamente
+     */
     public static boolean desconectar() {
         java.io.File carpetaTokens = UtilidadesRutas.directorioTokens();
         if (carpetaTokens.exists()) {
@@ -574,6 +701,12 @@ public class GoogleServicesProvider {
         return false;
     }
 
+    /**
+     * Desconecta la cuenta actual y guia al usuario para vincular una nueva,
+     * comprobando al final que el acceso a Drive quede operativo.
+     *
+     * @return {@code true} si la nueva cuenta quedo vinculada
+     */
     public static boolean vincularNuevaCuenta() {
         desconectar();
         try {
@@ -586,6 +719,15 @@ public class GoogleServicesProvider {
         }
     }
     
+    /**
+     * Crea una hoja de calculo en Google Sheets con los datos de una cotizacion,
+     * la mueve a la carpeta del trabajo y le aplica el formato visual.
+     *
+     * @param tituloArchivo nombre de la hoja de calculo
+     * @param datosMatriz   filas y columnas con el contenido de la cotizacion
+     * @param id_trabajo    id del trabajo al que pertenece la cotizacion
+     * @return id de la hoja creada, o {@code null} si fallo
+     */
     public static String crearHojaCotizacion(String tituloArchivo, List<List<Object>> datosMatriz, int id_trabajo) {
         try {
             Sheets service = getSheetsService();
@@ -638,10 +780,25 @@ public class GoogleServicesProvider {
         }
     }
     
+    /**
+     * Devuelve la URL de la ultima hoja de cotizacion creada en Google Sheets.
+     *
+     * @return URL de la hoja, o {@code null} si todavia no se creo ninguna
+     */
     public static String Obtener_url_google_sheets(){
         return url;
     }
     
+    /**
+     * Aplica el formato visual a la hoja de cotizacion: titulos, encabezados,
+     * bordes, formato de moneda y ancho de columnas.
+     *
+     * @param service       servicio de Sheets autenticado
+     * @param spreadsheetId id de la hoja de calculo
+     * @param sheetId       id interno de la pestana
+     * @param datosMatriz   datos usados para ubicar las secciones
+     * @throws Exception si falla la actualizacion por lotes
+     */
     private static void aplicarFormatoCotizacion(
         Sheets service,
         String spreadsheetId,
@@ -954,6 +1111,16 @@ public class GoogleServicesProvider {
                 .execute();
     }
     
+    /**
+     * Busca una carpeta de Drive por nombre dentro de un padre.
+     *
+     * @param driveService  servicio de Drive autenticado
+     * @param nombreCarpeta nombre de la carpeta a buscar
+     * @param parentId      id de la carpeta padre; si es {@code null} se busca
+     *                      en la raiz de Drive
+     * @return id de la carpeta encontrada, o {@code null} si no existe
+     * @throws IOException si falla la consulta a Drive
+     */
     public static String buscarCarpeta(Drive driveService, String nombreCarpeta, String parentId) throws IOException {
         String query = "mimeType = 'application/vnd.google-apps.folder' and name = '" + nombreCarpeta + "' and trashed = false";
         
@@ -975,6 +1142,16 @@ public class GoogleServicesProvider {
         return null;
     }
 
+    /**
+     * Busca una carpeta de Drive por nombre y, si no existe, la crea.
+     *
+     * @param driveService  servicio de Drive autenticado
+     * @param nombreCarpeta nombre de la carpeta
+     * @param parentId      id de la carpeta padre; si es {@code null} se usa la
+     *                      raiz de Drive
+     * @return id de la carpeta encontrada o creada
+     * @throws IOException si falla la consulta o la creacion en Drive
+     */
     public static String buscarOCrearCarpeta(Drive driveService, String nombreCarpeta, String parentId) throws IOException {
         String existente = buscarCarpeta(driveService, nombreCarpeta, parentId);
         if (existente != null) {
@@ -996,6 +1173,14 @@ public class GoogleServicesProvider {
         return carpetaCreada.getId();
     }
 
+    /**
+     * Crea la estructura de carpetas de un trabajo en Drive: la carpeta
+     * maestra "Trabajos", la carpeta especifica del trabajo y sus subcarpetas
+     * "Evidencias" y "Cotizaciones".
+     *
+     * @param nombreTrabajo nombre de la carpeta del trabajo
+     * @return id de la carpeta del trabajo, o {@code null} si fallo
+     */
     public static String crearCarpetaTrabajo(String nombreTrabajo) {
     try {
         final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
@@ -1023,6 +1208,12 @@ public class GoogleServicesProvider {
     }
 }
 
+    /**
+     * Obtiene el id de la carpeta "Base de datos" de Drive, creandola si no
+     * existe.
+     *
+     * @return id de la carpeta, o {@code null} si fallo
+     */
     public static String obtenerIdCarpetaBaseDatos() {
         try {
             final HttpTransport HTTP_TRANSPORT = new com.google.api.client.http.javanet.NetHttpTransport();
@@ -1049,6 +1240,14 @@ public class GoogleServicesProvider {
         return obtenerIdCarpetaEvidencias(idTrabajoCarpeta, true);
     }
 
+    /**
+     * Busca la carpeta "Evidencias" dentro de la carpeta de un trabajo y,
+     * opcionalmente, la crea si no existe.
+     *
+     * @param idTrabajoCarpeta carpeta del trabajo en Drive
+     * @param crearSiNoExiste  {@code true} para crear la carpeta cuando falte
+     * @return id de la carpeta de evidencias, o {@code null} si fallo
+     */
     public static String obtenerIdCarpetaEvidencias(String idTrabajoCarpeta, boolean crearSiNoExiste) {
         if (idTrabajoCarpeta == null || idTrabajoCarpeta.isBlank()) {
             return null;
@@ -1158,6 +1357,14 @@ public class GoogleServicesProvider {
     }
     
     
+    /**
+     * Mueve un archivo de la raiz de Drive a una carpeta destino.
+     *
+     * @param service        servicio de Drive autenticado
+     * @param fileId         id del archivo a mover
+     * @param nuevaCarpetaId id de la carpeta destino
+     * @throws IOException si falla la actualizacion en Drive
+     */
     public static void moverDesdeRaiz(Drive service, String fileId, String nuevaCarpetaId) throws IOException {
         // Usamos "root" para remover el archivo de la raíz de Drive
         Drive.Files.Update update = service.files().update(fileId, null)
@@ -1168,6 +1375,14 @@ public class GoogleServicesProvider {
         update.execute();
     }
     
+    /**
+     * Descarga todos los archivos de una carpeta de Drive a una carpeta local.
+     * Los archivos nativos de Google (Docs, Sheets, Slides) se omiten porque
+     * requieren exportacion.
+     *
+     * @param idCarpetaDrive  id de la carpeta de Drive
+     * @param rutaDestinoLocal carpeta local donde se guardaran los archivos
+     */
     public static void descargarContenidoCarpeta(String idCarpetaDrive, String rutaDestinoLocal) {
     try {
         // 1. Inicializamos el servicio de Drive
@@ -1280,6 +1495,12 @@ public class GoogleServicesProvider {
     return archivoLocal.exists() && archivoLocal.length() > 0;
 }
     
+    /**
+     * Elimina los archivos de una carpeta temporal usada durante la seleccion
+     * de evidencias.
+     *
+     * @param rutaTemporal ruta de la carpeta temporal
+     */
     public static void limpiarCarpetaTemporal(String rutaTemporal) {
     try {
         java.io.File carpetaTemp = new java.io.File(rutaTemporal);
@@ -1296,7 +1517,15 @@ public class GoogleServicesProvider {
     }
 }
     
-public static void guardarEvidenciaSeleccionada(String rutaTemporalOrigen, String rutaCarpetaDefinitiva, String nombreArchivo) {
+    /**
+     * Copia una evidencia desde la carpeta temporal a la carpeta definitiva
+     * del trabajo.
+     *
+     * @param rutaTemporalOrigen     carpeta temporal de origen
+     * @param rutaCarpetaDefinitiva  carpeta definitiva de destino
+     * @param nombreArchivo          nombre del archivo a copiar
+     */
+    public static void guardarEvidenciaSeleccionada(String rutaTemporalOrigen, String rutaCarpetaDefinitiva, String nombreArchivo) {
     try {
         Path origen = Path.of(rutaTemporalOrigen, nombreArchivo);
         Path carpetaDestino = Path.of(rutaCarpetaDefinitiva);
@@ -1369,10 +1598,16 @@ public static void guardarEvidenciaSeleccionada(String rutaTemporalOrigen, Strin
     }
 
     /**
-     * Envia un correo electronico utilizando la API de Gmail.
+     * Envia un correo electronico utilizando la API de Gmail, con tipo,
+     * prioridad y adjuntos opcionales.
+     *
      * @param destinatario direccion de correo del destinatario
-     * @param asunto asunto del correo
-     * @param cuerpo cuerpo del correo en texto/html
+     * @param asunto       asunto del correo
+     * @param cuerpo       cuerpo del correo en texto/html
+     * @param tipo         tipo de solicitud o mensaje
+     * @param prioridad    prioridad del mensaje
+     * @param adjuntos     rutas de archivos adjuntos separadas por punto y coma;
+     *                     puede ser {@code null} o vacio
      * @return true si se envio correctamente, false en caso contrario
      */
     public static boolean enviarCorreo(String destinatario, String asunto, String cuerpo, String tipo, String prioridad, String adjuntos) {

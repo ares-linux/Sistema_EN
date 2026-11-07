@@ -21,6 +21,8 @@ import javax.swing.SwingUtilities;
  *
  * Los resultados y los errores se devuelven siempre en el hilo de eventos, para
  * que el llamador pueda tocar la interfaz sin necesidad de sincronizacion.
+ *
+ * @author ares
  */
 public final class EjecutorGoogle {
 
@@ -40,6 +42,9 @@ public final class EjecutorGoogle {
         return hilo;
     });
 
+    /**
+     * Clase de utilidad: no se instancia.
+     */
     private EjecutorGoogle() {
     }
 
@@ -52,6 +57,11 @@ public final class EjecutorGoogle {
 
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Crea la excepcion con el mensaje que se mostrara al usuario.
+         *
+         * @param mensaje detalle del fallo de conexion
+         */
         public SinConexionException(String mensaje) {
             super(mensaje);
         }
@@ -61,6 +71,7 @@ public final class EjecutorGoogle {
      * Ejecuta una operacion de solo lectura y reintenta una vez ante un fallo
      * de red transitorio.
      *
+     * @param <T>          tipo del resultado
      * @param tarea        operacion a ejecutar en el hilo de Google
      * @param alTerminar   recibe el resultado, en el hilo de eventos
      * @param alFallar     recibe la excepcion, en el hilo de eventos
@@ -78,6 +89,7 @@ public final class EjecutorGoogle {
      * correo de soporte enviado dos veces. Es preferible informar del fallo y
      * que el usuario decida.
      *
+     * @param <T>          tipo del resultado
      * @param tarea        operacion a ejecutar en el hilo de Google
      * @param alTerminar   recibe el resultado, en el hilo de eventos
      * @param alFallar     recibe la excepcion, en el hilo de eventos
@@ -90,6 +102,7 @@ public final class EjecutorGoogle {
      * Ejecuta una operacion sin mostrar ningun dialogo, para tareas automaticas
      * que el usuario no disparo. Los fallos quedan registrados en consola.
      *
+     * @param <T>          tipo del resultado
      * @param tarea        operacion a ejecutar en el hilo de Google
      * @param alTerminar   recibe el resultado, en el hilo de eventos
      */

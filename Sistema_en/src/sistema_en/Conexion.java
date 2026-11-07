@@ -11,8 +11,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Fachada de acceso a la base de datos SQLite del sistema.
+ *
+ * <p>Resuelve la ubicacion del archivo de base de datos (persistida en
+ * {@code base_de_datos.properties}), expone la version de la aplicacion y
+ * entrega las conexiones JDBC utilizadas por la capa de persistencia.</p>
+ *
+ * @author ares
+ */
 public class Conexion {
 
+    /**
+     * Version actual de la aplicacion. Se muestra en la pantalla de
+     * bienvenida y se usa para identificar la compilacion publicada.
+     */
     public static final String VERSION_APP = "1.2.1";
     private static final String ARCHIVO_CONFIG = "base_de_datos.properties";
     private static final String CLAVE_RUTA = "ruta";
@@ -20,6 +33,18 @@ public class Conexion {
 
     private static String rutaMemoria = null;
 
+    /**
+     * Clase de utilidad: no se instancia.
+     */
+    private Conexion() {
+    }
+
+    /**
+     * Devuelve la ruta de la base de datos en uso, leyendola la primera vez y
+     * conservandola en memoria para las siguientes consultas.
+     *
+     * @return ruta completa del archivo de base de datos
+     */
     public static String getRutaBDActual() {
         if (rutaMemoria == null) {
             rutaMemoria = obtenerRutaBD();
@@ -27,6 +52,11 @@ public class Conexion {
         return rutaMemoria;
     }
 
+    /**
+     * Calcula la carpeta de documentos del usuario segun el sistema operativo.
+     *
+     * @return ruta de la carpeta de documentos por defecto
+     */
     public static String rutaCarpetaDocumentosPorDefecto() {
         String home = System.getProperty("user.home");
         boolean windows = System.getProperty("os.name", "").toLowerCase().contains("win");
@@ -40,10 +70,21 @@ public class Conexion {
         return Paths.get(home, carpetaDocumentos).toString();
     }
 
+    /**
+     * Devuelve la ubicacion por defecto del archivo de base de datos.
+     *
+     * @return ruta completa de la base de datos por defecto
+     */
     public static String rutaDefectoBD() {
         return Paths.get(rutaCarpetaDocumentosPorDefecto(), "Bases de datos", "sistema_EN").toString();
     }
 
+    /**
+     * Obtiene la ruta de la base de datos configurada por el usuario. Si no
+     * existe configuracion previa, guarda y devuelve la ruta por defecto.
+     *
+     * @return ruta completa de la base de datos configurada
+     */
     public static String obtenerRutaBD() {
         Properties props = leerArchivoConfig();
         if (props != null) {
@@ -56,6 +97,12 @@ public class Conexion {
         return rutaDefectoBD();
     }
 
+    /**
+     * Devuelve la ruta del archivo de base de datos, usando el valor cacheado
+     * en memoria cuando ya fue resuelto.
+     *
+     * @return ruta completa del archivo de base de datos
+     */
     public static String rutaArchivoBD() {
         if (rutaMemoria != null) {
             return rutaMemoria;
@@ -65,6 +112,13 @@ public class Conexion {
         return ruta;
     }
 
+    /**
+     * Persiste la ruta de la base de datos en el archivo de configuracion del
+     * usuario y actualiza la copia en memoria.
+     *
+     * @param rutaCompleta ruta completa del archivo de base de datos; si es
+     *                     nula o vacia no se realiza ningun cambio
+     */
     public static void guardarRutaBD(String rutaCompleta) {
         if (rutaCompleta == null || rutaCompleta.isBlank()) {
             return;
@@ -79,6 +133,13 @@ public class Conexion {
         rutaMemoria = rutaCompleta;
     }
 
+    /**
+     * Actualiza la ruta de la base de datos a partir de la carpeta base
+     * elegida por el usuario.
+     *
+     * @param baseC carpeta base donde se ubica el archivo de base de datos; si
+     *              es nula o vacia no se realiza ningun cambio
+     */
     public static void actualizarRutaPorBaseC(String baseC) {
         if (baseC == null || baseC.isBlank()) {
             return;
@@ -87,6 +148,11 @@ public class Conexion {
         guardarRutaBD(rutaCompleta);
     }
 
+    /**
+     * Comprueba si el archivo de base de datos existe y no esta vacio.
+     *
+     * @return {@code true} si la base de datos esta disponible
+     */
     public static boolean existeBaseDatos() {
         File f = new File(rutaArchivoBD());
         return f.exists() && f.isFile() && f.length() > 0;
@@ -107,6 +173,12 @@ public class Conexion {
         }
     }
 
+    /**
+     * Abre una conexion JDBC contra la base de datos SQLite configurada.
+     *
+     * @return conexion lista para usar, o {@code null} si el archivo no existe
+     *         o se produce un error al conectar
+     */
     public static Connection conectar() {
         try {
             String ruta = rutaArchivoBD();
@@ -122,6 +194,11 @@ public class Conexion {
         }
     }
 
+    /**
+     * Devuelve el nombre del archivo de base de datos, sin ruta ni extension.
+     *
+     * @return nombre del archivo de base de datos
+     */
     public static String getNombreArchivoBD() {
         return NOMBRE_ARCHIVO_BD;
     }
