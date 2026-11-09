@@ -196,7 +196,7 @@ flowchart TD
 | **Tipo** | `JFrame`, `DISPOSE_ON_CLOSE` |
 | **Ruta** | `src/sistema_en/Ventanas/V_R_Cotizacion.java` |
 | **Título** | ❌ Sin título |
-| **Utilidad** | Editor de cotizaciones **ligadas a un trabajo**: listas de conceptos y materiales, subtotal, IVA 16 % y total. Exporta a PDF y Excel. |
+| **Utilidad** | Editor de cotizaciones **ligadas a un trabajo**: listas de conceptos y materiales, subtotal, IVA configurable (16 % por defecto) y total. Exporta a PDF y Excel. |
 | **Uso** | Se abre desde la ficha de un trabajo (`D_ficha_trabajo`). El menú ya no la ofrece: la opción quedó como «Cotización de prueba» y se sustituyó por `V_R_Cotizacion_independiente`. |
 
 #### `V_R_Cotizacion_independiente` — «Cotización independiente»
@@ -206,7 +206,7 @@ flowchart TD
 | **Tipo** | `JFrame`, `DISPOSE_ON_CLOSE` |
 | **Ruta** | `src/sistema_en/Ventanas/V_R_Cotizacion_independiente.java` |
 | **Título** | ❌ Sin título |
-| **Utilidad** | Cotizaciones para **prospectos sin cliente registrado** (nombre y teléfono libres). Incluye historial, conversión a trabajo real y exportación. |
+| **Utilidad** | Cotizaciones para **prospectos sin cliente registrado** (nombre y teléfono libres). Incluye historial, conversión a trabajo real, IVA configurable y exportación. |
 | **Uso** | Menú *Registros ▾ → Cotizacion independiente*. Abre `D_convertir_trabajo` y `V_historial_c`. |
 
 ### 3.3 Ventanas de consulta

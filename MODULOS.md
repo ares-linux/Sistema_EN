@@ -230,7 +230,7 @@ Emisión de cotizaciones con cálculo de IVA, exportación a PDF y a Google Shee
 **Cálculo de totales** (en `V_R_Cotizacion.calcular_total()`):
 ```
 subtotal = Σ(Tabla_conceptos.precio) + Σ(Tabla_materiales.precio_total)
-iva      = subtotal × 0.16
+iva      = subtotal × (porcentaje_iva / 100)
 total    = subtotal + iva
 ```
 
@@ -243,7 +243,8 @@ total    = subtotal + iva
 - **Google Sheets** → `GoogleServicesProvider.crearHojaCotizacion()`: crea la hoja, la formatea (`BatchUpdateSpreadsheetRequest`, moneda `$#,##0.00`) y la mueve a `Cotizaciones/Excel/` del trabajo.
 
 > **Riesgo:** el botón *"Convertir a trabajo"* (`b_convertir`) no tiene listener implementado.
-> **Riesgo:** el IVA `0.16f` está hardcodeado en la vista; no es configurable.
+> **IVA configurable:** el porcentaje se lee desde `Configuraciones` con la clave
+> `porcentaje_iva` y se aplica en ambas ventanas de cotización.
 
 ---
 
@@ -956,7 +957,7 @@ erDiagram
 | 7 | `D_cambiar_contraseña` | Opera siempre sobre `UsuariosDAO.obtenerHashPorId(1)` / `actualizarContraseña(1, …)`. | Solo funciona con el usuario `id = 1`. |
 | 8 | `BitacoraDAO.obtenerBitacoras()` | Carga evidencias en cascada: una consulta `EvidenciaDAO` por bitácora. | Patrón **N+1**. |
 | 9 | `Exportar_PDF.exportarCotizacionPDF()` | Crea `Document` fuera del `try` y **no cierra el documento en un `finally`**. | Si falla a mitad, queda un `FileOutputStream` sin cerrar y un PDF corrupto. (Sí lo hace bien `exportarInformePDF`.) |
-| 10 | `V_R_Cotizacion.calcular_total()` (línea 1087) | IVA `0.16f` **hardcodeado**. | No configurable pese a existir la tabla `Configuraciones`. |
+| 10 | `V_R_Cotizacion.calcular_total()` | **Resuelto:** el IVA se lee desde `Configuraciones` (`porcentaje_iva`). | Configurable en ambas ventanas de cotización. |
 | 11 | Modelo de dominio | Importes en `float`, formateados con `%.2f` y re-parseados con `Float.parseFloat`. | Acumulación de error de redondeo binario. `BigDecimal` sería lo correcto. |
 | 12 | Estados de negocio | `Cotizacion.estado` (6 valores), `Trabajo.estado` (3 valores) y `Trabajador.sexo` son `String` libre, definidos en `JComboBox` y **replicados en literales SQL** (`TrabajoDAO:152/205/258`, `CotizacionDAO:477`). | Un refactor de nombres rompe consultas silenciosamente. |
 | 13 | `GoogleServicesProvider.estaConectado()` | Heurística basada en el sistema de archivos, sin validar el token. | Puede reportar "conectado" con un token expirado. |
