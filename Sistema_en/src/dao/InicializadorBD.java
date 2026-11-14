@@ -179,7 +179,9 @@ public class InicializadorBD {
         {"automaticamente_ce_excel", "true"},
         {"automaticamente_eventos", "false"},
         {"hora_defecto_calendar", "09:00"},
-        {"recordatorio_informe", "false"}
+        {"recordatorio_informe", "false"},
+        {"porcentaje_iva", "16"},
+        {"intentos_error_sonido", "5"}
     };
 
     /**

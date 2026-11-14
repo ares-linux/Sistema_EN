@@ -123,6 +123,14 @@ public class D_configuraciones extends javax.swing.JDialog {
                     }
                 }
                 break;
+
+            case "porcentaje_iva":
+                t_iva.setText(valor);
+                break;
+
+            case "intentos_error_sonido":
+                t_intentos.setText(valor);
+                break;
         }
     }
     
@@ -605,6 +613,35 @@ public class D_configuraciones extends javax.swing.JDialog {
             String automaticamente_eventos = String.valueOf(ch_automaticamente_eventos.isSelected());
             String recordatorio_informe = String.valueOf(ch_recordatorio_informe.isSelected());
             String hora_defecto = (d_hora_defecto.getTime() != null) ? d_hora_defecto.getTime().toString() : "09:00";
+            String porcentaje_iva = t_iva.getText().trim();
+
+            try {
+                int valor_iva = Integer.parseInt(porcentaje_iva);
+
+                if (valor_iva < 0 || valor_iva > 100) {
+                    JOptionPane.showMessageDialog(this, "El IVA debe estar entre 0 y 100.", "IVA inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Solo se pueden ingresar números enteros.", "Formato inválido", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String intentos_error_sonido = t_intentos.getText().trim();
+
+            try {
+                int valor_intentos = Integer.parseInt(intentos_error_sonido);
+
+                if (valor_intentos < 0 || valor_intentos > 30) {
+                    JOptionPane.showMessageDialog(this, "El numero de intentos debe estar entre 0 y 30.", "Intentos inválido", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Solo se pueden ingresar números enteros.", "Formato inválido", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             
             if (Carpetas.Carpetas_cambio_cotizaciones() == true){
                 carpeta_ce = t_carpeta_c.getText();
@@ -615,7 +652,7 @@ public class D_configuraciones extends javax.swing.JDialog {
             }
             
             ConfiguracionesDAO dao = new ConfiguracionesDAO();
-            boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, carpeta_ce, automaticamente_ce, automaticamente_ce_excel);
+            boolean guardadoExitoso = dao.actualizarConfiguraciones(tema, sonido_error, carpeta_ce, automaticamente_ce, automaticamente_ce_excel, porcentaje_iva, intentos_error_sonido);
             boolean guardadoCalendar = dao.actualizarConfiguracionesCalendar(automaticamente_eventos, recordatorio_informe, hora_defecto);
         
         if (guardadoExitoso && guardadoCalendar) {

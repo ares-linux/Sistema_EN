@@ -968,9 +968,9 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel10">
+                        <Component class="javax.swing.JLabel" name="l_iva">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Iva 16%"/>
+                            <Property name="text" type="java.lang.String" value="IVA 16%"/>
                           </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

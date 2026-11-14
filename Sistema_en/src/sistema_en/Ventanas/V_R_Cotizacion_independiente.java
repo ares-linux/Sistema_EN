@@ -23,6 +23,7 @@ import sistema_en.EjecutorGoogle;
 import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Cotizacion;
 import sistema_en.Objetos.Detalles_cotizacion;
+import utilidades.ConfiguracionIVA;
 import utilidades.Exportar_PDF;
 import sistema_en.Ventanas.Ventanas_consultas.V_historial_c;
 import sistema_en.Ventanas.dialogos.D_convertir_trabajo;
@@ -36,6 +37,7 @@ public class V_R_Cotizacion_independiente extends javax.swing.JFrame {
     
     //Cotizacion cotizacion = new Cotizacion();
     int fila;
+    int valor_iva = 16;
     float total;
     float iva;
     float subtotal;
@@ -782,7 +784,7 @@ boolean subir_pdf;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         P_calculos_automaticos.add(jLabel9, gridBagConstraints);
 
-        jLabel10.setText("Iva 16%");
+        jLabel10.setText("IVA 16%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -838,6 +840,7 @@ boolean subir_pdf;
      * empezar de cero, no retomar nada.
      */
     public void cotizacion_prueba(){
+        obtener_configuraciones();
         id_trabajo_c = SIN_TRABAJO;
         id_cotizacion_c = 0;
         n_cliente = null;
@@ -1023,7 +1026,8 @@ boolean subir_pdf;
     }
     
     private void obtener_configuraciones(){
-        
+        valor_iva = ConfiguracionIVA.PORCENTAJE_POR_DEFECTO;
+
         ConfiguracionesDAO dao = new ConfiguracionesDAO();
         List<String[]> configs = dao.obtenerConfiguraciones();
     
@@ -1048,9 +1052,19 @@ boolean subir_pdf;
             case "automaticamente_ce_excel":
                 abrir_automaticamente_excel = Boolean.parseBoolean(valor);
             break;
+
+            case ConfiguracionIVA.CLAVE:
+                valor_iva = ConfiguracionIVA.parsearPorcentaje(valor);
+            break;
         }
         
         }
+
+        actualizarEtiquetaIva();
+    }
+
+    private void actualizarEtiquetaIva() {
+        jLabel10.setText(ConfiguracionIVA.etiqueta(valor_iva));
     }
     
     private final void config_tablas(){
@@ -1103,7 +1117,8 @@ boolean subir_pdf;
     }
 
     
-    float iva = subtotal * 0.16f;
+    actualizarEtiquetaIva();
+    float iva = ConfiguracionIVA.calcularIva(subtotal, valor_iva);
     float totalGeneral = subtotal + iva;
 
     

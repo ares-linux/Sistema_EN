@@ -26,6 +26,7 @@ import sistema_en.GoogleServicesProvider;
 import sistema_en.Objetos.Cliente;
 import sistema_en.Objetos.Cotizacion;
 import sistema_en.Objetos.Detalles_cotizacion;
+import utilidades.ConfiguracionIVA;
 import utilidades.Exportar_PDF;
 import sistema_en.Objetos.Trabajo;
 
@@ -51,8 +52,9 @@ public class V_R_Cotizacion extends javax.swing.JFrame {
     boolean abrir_automaticamente;
     boolean abrir_automaticamente_excel;
     boolean prueba;
+    int valor_iva = 16;
     String cotizaciones1;
-boolean subir_pdf;
+    boolean subir_pdf;
     private boolean formularioVisible = true;
     
     /**
@@ -67,6 +69,7 @@ boolean subir_pdf;
     }
 
     public int recibirTrabajo(int id_trabajo_i){
+        obtener_configuraciones();
         cargarTrabajo(id_trabajo_i); 
         cargarCotizacion(id_trabajo_i);
         cargarDetalles_cotizacion(id_trabajo_i);
@@ -160,7 +163,7 @@ boolean subir_pdf;
         t_iva = new javax.swing.JTextField();
         t_total = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        l_iva = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         t_ocultarFormulario = new javax.swing.JToggleButton();
 
@@ -849,12 +852,12 @@ boolean subir_pdf;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         P_calculos_automaticos.add(jLabel9, gridBagConstraints);
 
-        jLabel10.setText("Iva 16%");
+        l_iva.setText("IVA 16%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        P_calculos_automaticos.add(jLabel10, gridBagConstraints);
+        P_calculos_automaticos.add(l_iva, gridBagConstraints);
 
         jLabel11.setText("Total");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -954,7 +957,8 @@ boolean subir_pdf;
     }
     
     private void obtener_configuraciones(){
-        
+        valor_iva = ConfiguracionIVA.PORCENTAJE_POR_DEFECTO;
+
         ConfiguracionesDAO dao = new ConfiguracionesDAO();
         List<String[]> configs = dao.obtenerConfiguraciones();
     
@@ -979,9 +983,19 @@ boolean subir_pdf;
             case "automaticamente_ce_excel":
                 abrir_automaticamente_excel = Boolean.parseBoolean(valor);
             break;
+
+            case ConfiguracionIVA.CLAVE:
+                valor_iva = ConfiguracionIVA.parsearPorcentaje(valor);
+            break;
         }
         
         }
+
+        actualizarEtiquetaIva();
+    }
+
+    private void actualizarEtiquetaIva() {
+        l_iva.setText(ConfiguracionIVA.etiqueta(valor_iva));
     }
     
     private final void config_tablas(){
@@ -1080,8 +1094,8 @@ boolean subir_pdf;
         }
     }
 
-    
-    float iva = subtotal * 0.16f;
+    actualizarEtiquetaIva();
+    float iva = ConfiguracionIVA.calcularIva(subtotal, valor_iva);
     float totalGeneral = subtotal + iva;
 
     
@@ -1345,6 +1359,7 @@ private void agregarMaterial() {
         bloquear_tablas();
         bloquear_botones_sistema();
         sincronizarTrabajosPendientesEnSegundoPlano();
+
     }//GEN-LAST:event_formWindowOpened
 
     /**
@@ -2033,6 +2048,7 @@ private void agregarMaterial() {
 
     private void b_nuevo_cActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_nuevo_cActionPerformed
         if ("Nuevo".equals(b_nuevo_c.getText())) {
+            obtener_configuraciones();
             setFormulariosVisibles(true);
             t_concepto.requestFocus();
             desbloquear_text();
@@ -2281,7 +2297,6 @@ System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -2305,6 +2320,7 @@ System.out.println("Filas en la JTable: " + Tabla_cotizaciones.getRowCount());
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JLabel l_iva;
     private javax.swing.JTextField t_cantidad;
     private javax.swing.JTextField t_concepto;
     private javax.swing.JTextField t_fecha_r;

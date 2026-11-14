@@ -402,7 +402,7 @@ Configuración de la aplicación (tema, sonido, carpetas, copias de seguridad) y
 | Tokens de Google | `~/.Sistema_EN/tokens` (permisos `700`) |
 | Credenciales OAuth | `credentials.json` (incluido en el instalador) |
 
-> **Riesgo (bug factual):** `ConfiguracionesDAO.actualizarConfiguraciones()` escribe el valor de `automaticamente_ce_excel` bajo la clave `"automaticamente_ce"`, sobrescribiendo la anterior; la clave `automaticamente_ce_excel` nunca se actualiza desde ese método.
+> **Resuelto:** `ConfiguracionesDAO.actualizarConfiguraciones()` escribe cada valor bajo su clave correcta (`automaticamente_ce` y `automaticamente_ce_excel`) y valida que el batch haya actualizado todas las filas.
 
 ---
 
@@ -948,7 +948,7 @@ erDiagram
 
 | # | Ubicación | Hallazgo | Impacto |
 |---|---|---|---|
-| 1 | `ConfiguracionesDAO.actualizarConfiguraciones()` (línea 49) | El valor de `automaticamente_ce_excel` se escribe bajo la clave `"automaticamente_ce"`. | La clave `automaticamente_ce_excel` nunca se actualiza; la apertura automática de Excel queda rota. |
+| 1 | `ConfiguracionesDAO.actualizarConfiguraciones()` | **Resuelto:** cada valor se escribe bajo su clave correcta y se validan los resultados del batch. | La apertura automática de PDF y Excel ya no se pisan entre sí. |
 | 2 | `InicializadorBD` | No se ejecuta `PRAGMA foreign_keys = ON`. | El `ON DELETE CASCADE` de `Detalles_cotizacion` puede no ejecutarse → detalles huérfanos al eliminar una cotización (`CotizacionDAO.eliminarCotizacion()` no los borra manualmente). |
 | 3 | `InicializadorBD` | No hay ningún `CREATE INDEX`. | `JOIN`/`GROUP BY` sobre `Trabajo.id_cliente`, `Cotizacion.id_trabajo`, `Detalles_cotizacion.id_cotizacion`, `Evidencia.id_bitacora`, `Bitacora.id_trabajo` sin índice. |
 | 4 | `PagoDAO.sumarPagosPorTrabajo()` | Devuelve `int` (`rs.getInt`) en vez de `double`/`float`. | **Trunca los centavos** al calcular el saldo pendiente. |

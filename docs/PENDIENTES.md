@@ -291,3 +291,81 @@ muy antigua.
       reordenar el diálogo de éxito, pero sigue siendo una decisión abierta.
 - [~] Sincronización de los modelos del `.form` con el código: si se cambian por
       código (fuera de las regiones `GEN`), el lienzo del Designer queda desfasado.
+
+---
+
+## L. IVA configurable — pruebas manuales pendientes
+
+Implementación terminada y compilada con `javac --release 17`. Falta validar el flujo
+completo en la aplicación real.
+
+### Persistencia y validación
+
+- [ ] Base nueva: comprobar que `Configuraciones` contiene `porcentaje_iva=16` e
+      `intentos_error_sonido=5`.
+- [ ] Base existente sin `porcentaje_iva`: iniciar la app y verificar que la clave se
+      crea automáticamente con `16` sin perder las demás configuraciones.
+- [ ] Guardar IVA `8`, cerrar `D_configuraciones`, reabrirlo y confirmar que muestra `8`.
+- [ ] Reiniciar la aplicación y confirmar que el valor guardado sigue siendo `8`.
+- [ ] Probar IVA `0` y `100`; ambos deben guardarse y calcular sin errores.
+- [ ] Rechazar vacío, `"   "`, `abc`, `16.5`, `-1` y `101`; el diálogo no debe guardar.
+- [ ] Probar `intentos_error_sonido` en `0`, `30`, `31`, vacío y `-1`; solo `0..30`
+      deben guardarse.
+- [ ] Guardar cambios en Configuraciones y verificar que `automaticamente_ce` y
+      `automaticamente_ce_excel` conservan valores independientes tras reabrir.
+
+### Cálculo y etiquetas
+
+- [ ] Subtotal `100`, IVA `8`: debe mostrar IVA `8.00`, total `108.00` y etiqueta
+      `"IVA 8%"`.
+- [ ] Subtotal `100`, IVA `0`: total `100.00` y etiqueta `"IVA 0%"`.
+- [ ] Subtotal `100`, IVA `16`: total `116.00` y etiqueta `"IVA 16%"`.
+- [ ] Repetir los tres casos con conceptos y materiales mezclados, y con importes
+      decimales (por ejemplo `99.99`).
+- [ ] Verificar que al agregar, editar o eliminar una fila de la tabla se recalcule el
+      IVA y la etiqueta siga mostrando la tasa configurada.
+- [ ] Repetir el cálculo en `V_R_Cotizacion` y en `V_R_Cotizacion_independiente`.
+
+### Refresco de ventanas reutilizadas
+
+- [ ] Cambiar el IVA en Configuraciones y abrir otro trabajo en la misma instancia de
+      `V_R_Cotizacion`; debe usar el valor nuevo.
+- [ ] Con `V_R_Cotizacion` abierta, cambiar el IVA y pulsar **Nuevo**; la etiqueta y el
+      cálculo deben actualizarse.
+- [ ] Cambiar el IVA y abrir una cotización nueva desde el menú; la ventana
+      independiente debe usar el valor nuevo.
+- [ ] En la ventana independiente, probar el refresco después de cancelar, abrir desde
+      el historial y convertir a trabajo.
+- [ ] Abrir una cotización antigua, cambiar el IVA y volver a cargarla; documentar si el
+      importe guardado y la etiqueta actual pueden diferir.
+
+### Exportaciones y regresión
+
+- [ ] Exportar a PDF con IVA `8` y confirmar que el IVA y el total coinciden con la
+      pantalla.
+- [ ] Exportar a Google Sheets y comparar las mismas celdas.
+- [ ] Repetir ambas exportaciones con IVA `0` y `16`.
+- [ ] Verificar que las cotizaciones ya guardadas se cargan sin errores y que el importe
+      de IVA almacenado no cambia solo por abrirlas.
+- [ ] Verificar que el cambio de IVA no altera el respaldo, la ruta de la base ni los
+      datos de clientes/trabajos.
+
+### Casos borde sugeridos
+
+- [ ] Subtotal muy grande (por ejemplo `999999.99`) para observar el redondeo de
+      `float`; si se decide migrar importes a `BigDecimal`, dejar el caso documentado.
+- [ ] IVA `1` y `99` para comprobar que no hay redondeos inesperados en los extremos.
+- [ ] Base con la clave `porcentaje_iva` corrupta (`"abc"`, `"16.0"`, `""`): la ventana
+      debe abrir con `16` y no lanzar excepción.
+- [ ] Dos ventanas de cotización abiertas al mismo tiempo: cambiar el IVA y comprobar
+      que cada una lo refresca al abrir o iniciar una cotización nueva.
+- [ ] Guardar una cotización, cambiar el IVA y editarla: confirmar que el recálculo usa
+      la tasa actual; si se necesita conservar la tasa histórica, planificar la columna
+      `porcentaje_iva` en `Cotizacion`.
+
+### Automatización futura
+
+- [ ] Agregar una prueba unitaria de `ConfiguracionIVA` para `0`, `1`, `16`, `99`,
+      `100`, `null`, `"abc"`, `"16.0"` y `" 8 "`.
+- [ ] Agregar una prueba de integración con una base SQLite temporal que verifique el
+      alta de las claves por defecto y el rechazo de un batch con una clave faltante.

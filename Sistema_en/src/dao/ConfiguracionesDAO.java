@@ -18,7 +18,7 @@ import sistema_en.Conexion;
  */
 
 public class ConfiguracionesDAO {
-    public boolean actualizarConfiguraciones(String tema, String sonido_error, String carpeta_ce, String automaticamente_ce, String automaticamente_ce_excel) {
+    public boolean actualizarConfiguraciones(String tema, String sonido_error, String carpeta_ce, String automaticamente_ce, String automaticamente_ce_excel, String porcentaje_iva, String intentos_error_sonido) {
     String sql = "UPDATE Configuraciones SET valor = ? WHERE clave = ?";
         Connection con = Conexion.conectar();
         
@@ -27,7 +27,6 @@ public class ConfiguracionesDAO {
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             // Desactivamos el auto-commit para asegurar consistencia
             con.setAutoCommit(false);
-
             
             ps.setString(1, tema);
             ps.setString(2, "tema");
@@ -46,7 +45,15 @@ public class ConfiguracionesDAO {
             ps.addBatch();
 
             ps.setString(1, automaticamente_ce_excel);
-            ps.setString(2, "automaticamente_ce");
+            ps.setString(2, "automaticamente_ce_excel");
+            ps.addBatch();
+
+            ps.setString(1, porcentaje_iva);
+            ps.setString(2, "porcentaje_iva");
+            ps.addBatch();
+
+            ps.setString(1, intentos_error_sonido);
+            ps.setString(2, "intentos_error_sonido");
             ps.addBatch();
             
             System.out.println("Tema: " + tema);
@@ -54,9 +61,14 @@ public class ConfiguracionesDAO {
             System.out.println("Carpeta: " + carpeta_ce);
             
             int[] resultados = ps.executeBatch();
-            con.commit();
 
-            return resultados.length > 0;
+            if (!actualizacionesExitosas(resultados)) {
+                con.rollback();
+                return false;
+            }
+
+            con.commit();
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error al actualizar configuraciones: " + e.getMessage());
@@ -104,13 +116,15 @@ public class ConfiguracionesDAO {
             ps.addBatch();
             
             int[] resultados = ps.executeBatch();
-            con.commit();
 
-            if (resultados.length > 0) {
-                Conexion.actualizarRutaPorBaseC(base_c);
+            if (!actualizacionesExitosas(resultados)) {
+                con.rollback();
+                return false;
             }
 
-            return resultados.length > 0;
+            con.commit();
+            Conexion.actualizarRutaPorBaseC(base_c);
+            return true;
 
         } catch (SQLException e) {
             System.err.println("Error al actualizar copias: " + e.getMessage());
@@ -144,8 +158,14 @@ public class ConfiguracionesDAO {
             ps.addBatch();
             
             int[] resultados = ps.executeBatch();
+
+            if (!actualizacionesExitosas(resultados)) {
+                con.rollback();
+                return false;
+            }
+
             con.commit();
-            return resultados.length > 0;
+            return true;
         } catch (SQLException e) {
             System.err.println("Error al actualizar configuraciones de calendar: " + e.getMessage());
             try { con.rollback(); } catch (SQLException ex) { }
@@ -155,6 +175,20 @@ public class ConfiguracionesDAO {
         return false;
     }
     
+    private boolean actualizacionesExitosas(int[] resultados) {
+        if (resultados.length == 0) {
+            return false;
+        }
+
+        for (int resultado : resultados) {
+            if (resultado == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public List<String[]> obtenerConfiguraciones() {
     List<String[]> lista = new ArrayList<>();
     
